@@ -1,0 +1,216 @@
+:root {
+  --green: #00875a;
+  --green-hover: #006b47;
+  --page-bg: #efefef;
+  --text: #111;
+  --muted: #555;
+}
+
+/* PAGE BG */
+body {
+  margin: 0;
+  background: var(--page-bg);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* OUTER WRAPPER (left aligned like your screenshot) */
+.batches-page {
+  padding: 0;
+  /* Remove extra padding as parent has container padding */
+}
+
+/* SECTION TITLES (LEFT, NOT CENTER) */
+.batches-title {
+  margin: 0 0 28px 0;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.batches-title--spaced {
+  margin-top: 70px;
+}
+
+/* GRID (left aligned) */
+.batches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 34px;
+  justify-content: start;
+  align-items: start;
+}
+
+/* CARD — EXACT FIGMA */
+.batch-card {
+  width: 100%;
+  max-width: 400px;
+  height: 264px;
+  border-radius: 16px;
+  background: #fff;
+  padding: 18px;
+  box-sizing: border-box;
+  position: relative;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.10);
+}
+
+/* TOP ROW */
+.batch-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.batch-card__batch {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green);
+}
+
+/* STATUS PILL */
+.batch-card__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.batch-card__status.active {
+  background: #e6f4ef;
+  color: var(--green);
+}
+
+.batch-card__status.completed {
+  background: #ffe6e6;
+  color: #ff4d4d;
+}
+
+.batch-card__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* TITLE */
+.batch-card__title {
+  margin: 16px 0 14px 0;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+/* DETAILS */
+.batch-card__details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.batch-card__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.batch-card__icon {
+  width: 18px;
+  display: inline-flex;
+  justify-content: center;
+  color: var(--green);
+  /* Make icons green */
+  font-size: 18px;
+}
+
+/* ACTIONS pinned bottom */
+.batch-card__actions {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.batch-card__link {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--green);
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: underline;
+  /* Add underline for visibility */
+  text-underline-offset: 4px;
+}
+
+.batch-card__btn {
+  border: none;
+  cursor: pointer;
+  background: var(--green);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 8px 18px;
+  border-radius: 999px;
+}
+
+.batch-card__btn:hover {
+  background: var(--green-hover);
+}
+
+.batch-card__arrow {
+  margin-left: 6px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .batches-page {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .batches-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .batch-card {
+    max-width: 100%;
+    height: auto;
+    min-height: 264px;
+  }
+
+  .batches-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .batches-title--spaced {
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .batch-card__actions {
+    position: relative;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin-top: 20px;
+    gap: 10px;
+  }
+
+  .batch-card {
+    padding: 1.2rem;
+  }
+}

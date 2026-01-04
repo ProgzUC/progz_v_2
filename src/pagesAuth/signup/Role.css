@@ -1,0 +1,171 @@
+.role-container {
+    width: 100%;
+    max-width: 900px;
+    padding: 20px;
+
+}
+
+.role-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.role-selection-group {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.role-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    cursor: pointer;
+    flex: 1;
+    transition: all 0.2s;
+}
+
+.role-option:hover {
+    border-color: #198754;
+    background-color: #f9f9f9;
+}
+
+.role-option.selected {
+    border-color: #198754;
+    background-color: #19875411;
+    /* Very light green */
+    box-shadow: 0 0 0 1px #198754;
+}
+
+.radio-circle {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #555;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.role-option.selected .radio-circle {
+    border-color: #198754;
+}
+
+.radio-inner {
+    width: 10px;
+    height: 10px;
+    background-color: #198754;
+    border-radius: 50%;
+    display: none;
+}
+
+.role-option.selected .radio-inner {
+    display: block;
+}
+
+.role-label {
+    font-size: 18px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* Responsiveness */
+@media (max-width: 700px) {
+    .role-container {
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .role-selection-group {
+        flex-direction: column;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+
+        border-top: 1px solid #ADADAD;
+        padding-top: 20px;
+        width: 100%;
+        gap: 10px;
+    }
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: -30px;
+    /* Pull up closer to the group */
+    margin-bottom: 20px;
+    display: block;
+    font-weight: 500;
+}
+
+.btn {
+    width: 159px;
+    height: 41px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20.5px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #000000;
+    transition: opacity 0.2s;
+
+}
+
+.btn-cancel {
+    background-color: white;
+    color: #000000;
+
+
+}
+
+
+
+
+.btn-cancel:hover {
+    background-color: #d0d0d0;
+}
+
+
+/* Desktop & Tablet Layout Adjustments */
+@media (min-width: 701px) {
+    .role-container {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 60px);
+    }
+
+    .button-group {
+        margin-top: auto;
+        border-top: 1px solid #ADADAD;
+        padding-top: 30px;
+        width: 100%;
+    }
+}
+
+/* Specific Tablet Indentation */
+@media (min-width: 701px) and (max-width: 900px) {
+
+    /* Content Indented */
+    .role-selection-group,
+    .role-title {
+        margin-right: 60px;
+        width: auto;
+    }
+
+    /* Buttons Full Width */
+    .button-group {
+        margin-right: 0;
+        width: 100%;
+        justify-content: flex-end;
+    }
+}

@@ -1,0 +1,87 @@
+{
+    "activeBatches": [
+        {
+            "id": 1,
+            "batchNumber": "Batch - 2",
+            "title": "Full Stack Web Development",
+            "date": "Starts June 15, 2025",
+            "duration": "6 Months Duration",
+            "time": "7:00 PM - 9:00 PM (Mon-Fri)",
+            "status": "active"
+        },
+        {
+            "id": 2,
+            "batchNumber": "Batch - 1",
+            "title": "UI/UX Design Bootcamp",
+            "date": "Starts February 1, 2025",
+            "duration": "3 Months Duration",
+            "time": "6:00 PM - 7:30 PM (Mon-Fri)",
+            "status": "active"
+        },
+        {
+            "id": 3,
+            "batchNumber": "Batch - 1",
+            "title": "DevOps & Cloud Computing",
+            "date": "Starts February 10, 2025",
+            "duration": "4 Months Duration",
+            "time": "7:30 AM - 9:00 AM (Mon-Fri)",
+            "status": "active"
+        },
+        {
+            "id": 4,
+            "batchNumber": "Batch - 2",
+            "title": "Python for Beginners",
+            "date": "Starts July 1, 2025",
+            "duration": "2 Months Duration",
+            "time": "8:30 PM - 10:00 PM (Mon-Fri)",
+            "status": "active"
+        },
+        {
+            "id": 5,
+            "batchNumber": "Batch - 1",
+            "title": "Advanced React Patterns",
+            "date": "Starts March 5, 2025",
+            "duration": "6 Weeks Duration",
+            "time": "9:00 PM - 10:30 PM (Mon-Fri)",
+            "status": "active"
+        }
+    ],
+    "completedBatches": [
+        {
+            "id": 6,
+            "batchNumber": "Batch - 1",
+            "title": "Digital Marketing Pro",
+            "date": "Starts February 15, 2025",
+            "duration": "2 Months Duration",
+            "time": "5:00 PM - 6:30 PM (Mon-Fri)",
+            "status": "completed"
+        },
+        {
+            "id": 7,
+            "batchNumber": "Batch - 1",
+            "title": "Python for Beginners",
+            "date": "Starts March 15, 2025",
+            "duration": "3 Months Duration",
+            "time": "6:00 PM - 8:00 PM (Mon-Fri)",
+            "status": "completed"
+        },
+        {
+            "id": 8,
+            "batchNumber": "Batch - 1",
+            "title": "Full Stack Web Development",
+            "date": "Starts January 20, 2025",
+            "duration": "4 Months Duration",
+            "time": "8:00 PM - 9:30 PM (Mon-Fri)",
+            "status": "completed"
+        },
+        {
+            "id": 9,
+            "batchNumber": "Batch - 1",
+            "title": "Digital Marketing Pro",
+            "date": "Starts February 15, 2025",
+            "duration": "2 Months Duration",
+            "time": "5:00 PM - 6:30 PM (Mon-Fri)",
+            "status": "completed"
+        }
+    ]
+}

@@ -1,0 +1,416 @@
+.create-course-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 4.5rem);
+  padding: 40px 20px;
+  font-family: "Inter", sans-serif;
+  background: #f5f6fa;
+  box-sizing: border-box;
+}
+
+.create-course-container {
+  width: 100%;
+  max-width: 900px;
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.05);
+  margin: auto;
+}
+
+/* HEADER */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.page-header h2 {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+.close-icon {
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+  transition: 0.2s;
+}
+
+.close-icon:hover {
+  color: #222;
+}
+
+.subtitle {
+  font-size: 15px;
+  opacity: 0.7;
+  margin-bottom: 25px;
+}
+
+/* FORM GRID */
+.input-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.input-full {
+  margin-top: 20px;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  outline: none;
+  font-size: 14px;
+  transition: 0.2s;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+/* SECTION TITLES */
+.section-header {
+  margin-top: 35px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header h3 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.add-btn {
+  padding: 8px 14px;
+  background: #1e293b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.add-btn:hover {
+  background: #0f172a;
+}
+
+/* MODULE BOX */
+.module-box {
+  background: #f9fafb;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 20px;
+  border: 1px solid #e5e7eb;
+}
+
+.module-header-wrapper {
+  display: flex;
+  gap: 15px;
+  align-items: flex-start;
+}
+
+.drag-handle {
+  display: flex;
+  align-items: center;
+  color: #9ca3af;
+  cursor: grab;
+  font-size: 20px;
+  padding-top: 30px;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.module-content {
+  flex: 1;
+}
+
+.module-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.module-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.module-title-row input {
+  flex: 1;
+  padding: 10px;
+}
+
+.module-delete {
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+.module-delete:hover {
+  color: #dc2626;
+}
+
+/* ADD SECTION BUTTON */
+.add-section-btn {
+  margin-top: 10px;
+  background: #475569;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.add-section-btn:hover {
+  background: #334155;
+}
+
+/* SECTION BLOCK */
+.section-block {
+  background: #ffffff;
+  padding: 18px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  margin-top: 18px;
+}
+
+.section-header-wrapper {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.drag-handle-sec {
+  display: flex;
+  align-items: center;
+  color: #9ca3af;
+  cursor: grab;
+  font-size: 20px;
+}
+
+.drag-handle-sec:active {
+  cursor: grabbing;
+}
+
+.section-content {
+  flex: 1;
+}
+
+.section-header-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-header-row input {
+  flex: 1;
+}
+
+.section-chevron {
+  cursor: pointer;
+  font-size: 20px;
+  transition: 0.2s;
+}
+
+.section-chevron.rotate {
+  transform: rotate(180deg);
+}
+
+.section-delete {
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+.section-delete:hover {
+  color: #dc2626;
+}
+
+/* SECTION DETAILS (EXPANDED AREA) */
+.section-details {
+  margin-top: 18px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-details input[type="file"] {
+  background: #f1f5f9;
+  border: 1px dashed #cbd5e1;
+  padding: 12px;
+}
+
+.video-add-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.add-video-btn {
+  color: #4f46e5;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.add-video-btn:hover {
+  text-decoration: underline;
+}
+
+.video-item {
+  font-size: 14px;
+  padding: 6px;
+  background: #eef2ff;
+  margin-top: 6px;
+  border-radius: 6px;
+}
+
+/* FOOTER */
+.footer-actions {
+  margin-top: 35px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+
+.cancel-btn,
+.submit-btn {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.cancel-btn {
+  background: #e5e7eb;
+}
+
+.submit-btn {
+  background: #2a7d38;
+  color: white;
+}
+
+.submit-btn:hover {
+  background: #15613b;
+}
+
+/* -----------------------------
+   RESPONSIVE DESIGN
+----------------------------- */
+
+@media (max-width: 850px) {
+  .create-course-page {
+    padding: 1.5rem;
+  }
+
+  .input-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .module-title-row input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .create-course-page {
+    padding: 0;
+  }
+
+  .create-course-container {
+    padding: 1.5rem;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .page-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .section-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .footer-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .submit-btn,
+  .cancel-btn {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .module-box {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .section-block {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+
+  .section-header-row input {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .module-header-wrapper {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .drag-handle {
+    padding-top: 0;
+    justify-content: center;
+    width: 100%;
+    background: #f3f4f6;
+    border-radius: 4px;
+  }
+}

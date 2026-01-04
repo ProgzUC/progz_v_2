@@ -1,0 +1,45 @@
+{
+    "breadcrumb": {
+        "parent": "My Courses",
+        "current": "Introduction of HTML"
+    },
+    "title": "Introduction of HTML",
+    "learningMaterials": {
+        "title": "Learning Materials",
+        "description": "Note: HTML Stands for hypertext markup language. It’s used to structure content on the web. A basic HTML documents has tasks: Create your HTML file: index.html. Use <h1> to <h6>, <p>, <b1>, and <h1> Write a short bio using these tags.",
+        "files": [
+            {
+                "name": "apple_1786259710.jpg",
+                "url": "https://res.cloudinary.com/demo/image/upload/v1/apple_1786259710.jpg"
+            },
+            {
+                "name": "apple_1786259710.jpg",
+                "url": "https://res.cloudinary.com/demo/image/upload/v1/apple_1786259710.jpg"
+            }
+        ]
+    },
+    "codeChallenge": {
+        "title": "Code Challenge",
+        "description": "Note: HTML Stands for hypertext markup language. It’s used to structure content on the web. A basic HTML documents has tasks: Create your HTML file: index.html. Use <h1> to <h6>, <p>, <b1>, and <h1> Write a short bio using these tags.",
+        "files": [
+            {
+                "name": "apple_1786259710.jpg",
+                "url": "https://res.cloudinary.com/demo/image/upload/v1/apple_1786259710.jpg"
+            },
+            {
+                "name": "apple_1786259710.jpg",
+                "url": "https://res.cloudinary.com/demo/image/upload/v1/apple_1786259710.jpg"
+            }
+        ]
+    },
+    "classRecordings": {
+        "title": "Class Recordings",
+        "link": "https://www.youtube.com/watch?v=9xwazD5SyVg",
+        "video": {
+            "thumbnail": "https://raw.githubusercontent.com/coding-with-ai/assets/main/html-thumbnail.jpg",
+            "title": "Introduction of HTML",
+            "duration": "20min",
+            "url": "https://www.youtube.com/watch?v=9xwazD5SyVg"
+        }
+    }
+}

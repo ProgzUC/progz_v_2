@@ -1,0 +1,99 @@
+:root {
+    --primary-green: #00875a;
+    --primary-green-hover: #006b47;
+    --bg-grey: #ebebeb;
+    --text-dark: #1a1a1ad2;
+    --text-muted: #555;
+    --white: #ffffff;
+}
+
+.my-batchs-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--bg-grey);
+    font-family: 'Inter', sans-serif;
+}
+
+.my-batchs-hero {
+    height: 360px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: linear-gradient(180deg, #b8e2d4 0%, var(--bg-grey) 100%);
+    padding: 0 2rem;
+}
+
+.my-batchs-title {
+    font-size: 3rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    max-width: 920px;
+    line-height: 1.05;
+    margin-bottom: 0.8rem;
+
+}
+
+.my-batchs-subtitle {
+    font-size: 1rem;
+    color: #101010;
+    font-weight: 500;
+}
+
+.batches-content {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1rem 2rem 5rem 2rem;
+}
+
+.main-section-title {
+    text-align: center;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--primary-green);
+    margin-bottom: 3rem;
+    margin-top: 0.6rem;
+    letter-spacing: 0.02em;
+}
+
+.batch-section {
+    margin-bottom: 6rem;
+}
+
+.sub-section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 1.8rem;
+    text-align: left;
+}
+
+@media (max-width: 820px) {
+    .my-batchs-hero {
+        height: 280px;
+        padding: 0 1.5rem;
+    }
+
+    .my-batchs-title {
+        font-size: 2rem;
+    }
+
+    .sub-section-title {
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .my-batchs-hero {
+        height: 240px;
+    }
+
+    .my-batchs-title {
+        font-size: 1.6rem;
+    }
+
+    .batches-content {
+        padding: 1rem 0.5rem 3rem 0.5rem;
+    }
+}

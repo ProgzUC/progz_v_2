@@ -1,0 +1,23 @@
+.footer {
+    background-color: var(--bg-dark);
+    color: var(--white);
+    padding: 1.5rem 0;
+    margin-top: auto;
+    text-align: center;
+}
+
+.footer-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: 1rem 0;
+    }
+
+    .footer-container p {
+        font-size: 0.8rem;
+    }
+}

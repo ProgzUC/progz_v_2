@@ -1,0 +1,218 @@
+/* =====================================
+   DASHBOARD LAYOUT
+===================================== */
+
+.dashboard-container {
+  padding: 20px 40px;
+  background: #f8f9fa;
+  width: 100%;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+/* ---------------- HEADER ---------------- */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+}
+
+.dashboard-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #374151;
+}
+
+.dashboard-subtitle {
+  color: #6b7280;
+}
+
+.btn-generate {
+  background: white;
+  border: 1px solid #22c55e;
+  color: #22c55e;
+  padding: 10px 25px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-generate:hover {
+  background: #22c55e;
+  color: white;
+}
+
+/* ---------------- STATS ---------------- */
+.stats-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.stats-card {
+  flex: 1;
+  background: white;
+  padding: 22px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.icon-box {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 23px;
+  margin-bottom: 10px;
+}
+.orange { background: #ffeede; color: #ff6b00; }
+.green { background: #e0f7e9; color: #00a86b; }
+.pink { background: #ffe7f1; color: #ff2b88; }
+
+.stats-card h5 {
+  margin: 8px 0 5px;
+  font-size: 17px;
+  color: #555;
+}
+.value {
+  font-size: 26px;
+  font-weight: 700;
+}
+
+/* ---------------- CHARTS ROW ---------------- */
+.charts-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  position: relative;
+}
+
+.chart-title {
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #374151;
+}
+
+/* ---------------- USER DISTRIBUTION FIX ---------------- */
+.legend-box {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #555;
+}
+.legend-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+}
+.legend-dot.instructors { background: #a5698c; }
+.legend-dot.students { background: #22c55e; }
+.donut-wrapper {
+  position: relative;
+  width: 100%;
+  height: 260px;
+}
+.donut-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+.donut-center h3 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+}
+.donut-center p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* ---------------- TABLES ---------------- */
+.tables-row {
+  display: flex;
+  gap: 20px;
+}
+
+.table-card {
+  flex: 1;
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+}
+
+.table-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-card th {
+  text-align: left;
+  padding-bottom: 10px;
+  color: #6b7280;
+}
+
+.table-card td {
+  padding: 10px 0;
+  border-bottom: 1px solid #f1f1f1;
+}
+.table-card tr:last-child td {
+  border-bottom: none;
+}
+
+.student-avatars {
+  display: flex;
+  gap: 3px;
+}
+.avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+.more-count {
+  background: #f1f1f1;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.edit-btn, .delete-btn {
+  font-size: 18px;
+  cursor: pointer;
+}
+.edit-btn:hover { color: #22c55e; }
+.delete-btn:hover { color: #ef4444; }
+
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width: 900px) {
+  .stats-row,
+  .charts-row,
+  .tables-row {
+    flex-direction: column;
+  }
+}

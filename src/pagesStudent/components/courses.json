@@ -1,0 +1,448 @@
+[
+  {
+    "title": "Core JAVA",
+    "category": "Programming Languages",
+    "img": "/student/card/p1.jpg",
+    "desc": "Core Java is the foundation of Java used for building simple to intermediate applications. It covers OOP, collections, multithreading, and forms the base for learning advanced frameworks.",
+    "salary": "₹3–16 LPA",
+    "roles": "In Demand Roles: Backend Development, Enterprise Apps, Android, Testing, Cloud & Big Data"
+  },
+  {
+    "title": "Advanced JAVA",
+    "category": "Programming Languages",
+    "img": "/student/card/p2.jpg",
+    "desc": "Advanced Java focuses on web technologies like Servlets, JSP, JDBC, and frameworks that help in building enterprise-grade applications.",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Web Apps, Enterprise Systems, API Development, Cloud Integration"
+  },
+  {
+    "title": "Core Python",
+    "category": "Programming Languages",
+    "img": "/student/card/p3.jpg",
+    "desc": "Core Python introduces the basics of Python programming including syntax, data types, loops, functions, and file handling.",
+    "salary": "₹6–15 LPA",
+    "roles": "In Demand Roles: Scripting, Backend Development, Data Analysis, Automation"
+  },
+  {
+    "title": "Data Structures & Algorithms (DSA)",
+    "category": "Programming Languages",
+    "img": "/student/card/p4.jpg",
+    "desc": "In Demand Roles: Scripting, Backend Development, Data Analysis, Automation",
+    "salary": "₹6–25 LPA",
+    "roles": "Java Developer, Android Developer, QA Engineer"
+  },
+  {
+    "title": "Advanced Python",
+    "category": "Programming Languages",
+    "img": "/student/card/p5.jpg",
+    "desc": "DSA focuses on problem-solving using efficient algorithms and data management techniques for coding interviews and competitive programming.",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Competitive Programming, Software Development, Product Companies"
+  },
+  {
+    "title": "C and CPP Programming",
+    "category": "Programming Languages",
+    "img": "/student/card/p6.jpg",
+    "desc": "Learn C and C++ programming from scratch. Master the fundamentals of logic, syntax, object-oriented programming, and efficient problem-solving through practical coding exercises.",
+    "salary": "₹15–18 LPA",
+    "roles": "Frontend Developer, Web Designer"
+  },
+  {
+    "title": "HTML and CSS",
+    "category": "Programming Languages",
+    "img": "/student/card/p7.jpg",
+    "desc": "Master HTML and CSS from scratch. Learn to structure web pages, style them beautifully, and build responsive layouts for modern websites.",
+    "salary": "₹4–18 LPA",
+    "roles": "In Demand Roles: Web Apps, Enterprise Systems, API Development, Cloud Integration"
+  },
+
+     
+
+
+  {
+    "title": "Java Full Stack Development",
+    "category": "Web & App Development",
+    "img": "/student/card2/w1.jpg",
+    "desc": "Become a full stack Java developer by mastering both front-end and back-end technologies. Learn HTML, CSS, JavaScript, Java, Spring Boot, and databases through hands-on projects.",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Web Apps, Enterprise Systems, API Development, Cloud Integration"
+  },
+  {
+    "title": "Angular",
+    "category": "Web & App Development",
+    "img": "/student/card2/w2.jpg",
+    "desc": "Angular is a powerful TypeScript-based frontend framework by Google used to build dynamic, single-page web applications.",
+    "salary": "₹6–20 LPA",
+    "roles": "In Demand Roles: Frontend Development, Enterprise Web Apps, Cloud-Based Solutions"
+  },
+  {
+    "title": "MERN Stack",
+    "category": "Web & App Development",
+    "img": "/student/card2/w3.jpg",
+    "desc": "MERN Stack combines MongoDB, Express.js, React, and Node.js to build scalable full stack web applications.",
+    "salary": "₹6–22 LPA",
+    "roles": "In Demand Roles:  Full Stack Development, Web Apps, Cloud Applications"
+  },
+  {
+    "title": "MEAN Stack",
+    "category": "Web & App Development",
+    "img": "/student/card2/w4.jpg",
+    "desc": "MEAN Stack uses MongoDB, Express.js, Angular, and Node.js for building dynamic and scalable full stack web applications.",
+    "salary": "₹6–20 LPA",
+    "roles": "In Demand Roles:  Full Stack Development, Enterprise Web Apps, Cloud-Based Solutions"
+  },
+  {
+    "title": "React Native",
+    "category": "Web & App Development",
+    "img": "/student/card2/w5.jpg",
+    "desc": "React Native is a framework for building mobile applications using JavaScript and React, supporting both Android and iOS platforms.",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles:  Mobile App Development, Cross-Platform Apps, Startups & Enterprises"
+  },
+  {
+    "title": ".NET + Angular",
+    "category": "Web & App Development",
+    "img": "/student/card2/w6.jpg",
+    "desc": ".NET + Angular combines Microsoft’s backend framework with Angular frontend for enterprise-grade web applications.",
+    "salary": "₹7–22 LPA",
+    "roles": "In Demand Roles:  Enterprise Apps, Web Development, Cloud Integration"
+  },
+  {
+    "title": "React.js",
+    "category": "Web & App Development",
+    "img": "/student/card2/w7.jpg",
+    "desc": "React.js is a popular JavaScript library for building fast, scalable, and interactive user interfaces for web applications.",
+    "salary": "₹6–22 LPA",
+    "roles": "In Demand Roles:  Frontend Development, Single Page Apps, Product Development"
+  },
+  {
+    "title": "Python Fullstack",
+    "category": "Python Stack development combines frameworks like Django/Flask with frontend technologies for full stack solutions.",
+    "img": "/student/card2/w8.jpg",
+    "desc": "In Demand Roles:  Web Applications, APIs, Full Stack Development, Cloud Solutions",
+    "salary": "₹6–18 LPA",
+    "roles": "Flutter Developer, Mobile App Developer"
+  },
+
+  
+
+
+  {
+    "title": "Figma",
+    "category": "UI/UX Designing",
+    "img": "/student/card3/u1.jpg",
+    "desc": "Figma is a collaborative design tool used for UI/UX design, prototyping, and real-time team collaboration in web and mobile projects.",
+    "salary": "₹6–12 LPA",
+    "roles": "In Demand Roles:  UI/UX Design, Prototyping, Wireframing, Collaborative Design"
+  },
+  {
+    "title": "Photoshop",
+    "category": "UI/UX Designing",
+    "img": "/student/card3/u2.jpg",
+    "desc": "Adobe Photoshop is the industry standard for image editing, retouching, and digital art creation.",
+    "salary": "₹3–12 LPA",
+    "roles": "In Demand Roles:  Photo Editing, Web Design, Advertising, Digital Art"
+  },
+  {
+    "title": "Graphic Designing",
+    "category": "UI/UX Designing",
+    "img": "/student/card3/u3.jpg",
+    "desc": "Graphic Designing is the art of creating visual content to communicate ideas through typography, imagery, and layout.",
+    "salary": "₹3–12 LPA",
+    "roles": "In Demand Roles:  Branding, Advertising, Digital Media, UI Assets"
+  },
+  {
+    "title": "Canva",
+    "category": "UI/UX Designing",
+    "img": "/student/card3/u4.jpg",
+    "desc": "Canva is an online graphic design tool used for creating presentations, posters, social media content, and marketing materials.",
+    "salary": "₹3–10 LPA",
+    "roles": "In Demand Roles:  Social Media Design, Marketing, Creative Content"
+  },
+
+ 
+
+
+
+  {
+    "title": "AWS",
+    "category": "Clouds & DevOps",
+    "img": "/student/card4/c1.jpg",
+    "desc": "Amazon Web Services (AWS) is the leading cloud platform providing scalable services like computing, storage, databases, AI, and security.",
+    "salary": "₹6–22 LPA",
+    "roles": "In Demand Roles:  Cloud Architecture, DevOps, Cloud Security, AI/ML Integration"
+  },
+  {
+    "title": "Microsoft Azure",
+    "category": "Clouds & DevOps",
+    "img": "/student/card4/c2.jpg",
+    "desc": "Microsoft Azure is a cloud platform offering services for computing, analytics, storage, and networking to build and manage applications.",
+    "salary": "₹6–20 LPA",
+    "roles": "In Demand Roles:  Cloud Development, Enterprise Apps, Hybrid Cloud Solutions"
+  },
+  {
+    "title": "GCP (Google Cloud / GCR)",
+    "category": "Clouds & DevOps",
+    "img": "/student/card4/c3.jpg",
+    "desc": "Google Cloud Platform (GCP) provides cloud services for app development, data storage, AI, and scalable infrastructure solutions.",
+    "salary": "₹6–20 LPA",
+    "roles": "In Demand Roles:  Cloud Infrastructure, Data Engineering, AI/ML, Scalable Apps"
+  },
+
+  
+
+
+  {
+    "title": "AI & ML",
+    "category": "Data Science",
+    "img": "/student/card5/D1.jpg",
+    "desc": "AI & ML focus on building intelligent systems that can learn from data, recognize patterns, and make predictions.",
+    "salary": "₹7–25 LPA",
+    "roles": "In Demand Roles:  AI Engineering, Data Science, Robotics, Automation"
+  },
+  {
+    "title": "Python and ChatGPT",
+    "category": "Data Science",
+    "img": "/student/card5/D2.jpg",
+    "desc": "Master Python and AI with our Python Plus ChatGPT Training Program — hands-on, industry-ready, and future-focused.",
+    "salary": "₹7–25 LPA",
+    "roles": "In Demand Roles:  AI Engineering, Data Science, Robotics, Automation"
+  },
+  {
+    "title": "SAS",
+    "category": "Data Science",
+    "img": "/student/card5/D3.jpg",
+    "desc": "Master SAS with hands-on training designed for real-world data analytics and business intelligence applications. Join our program to gain in-demand skills and boost your career in analytics.",
+    "salary": "₹6–20 LPA",
+    "roles": "In Demand Roles:  Cloud Development, Enterprise Apps, Hybrid Cloud Solutions"
+  },
+  {
+    "title": "R Programming",
+    "category": "Data Science",
+    "img": "/student/card5/D4.jpg",
+    "desc": "Master R Programming with hands-on training designed for data analysis, visualization, and statistical modeling. Gain industry-ready skills to excel in analytics, research, and data-driven decision making.",
+    "salary": "₹6–20 LPA",
+    "roles": "In Demand Roles:  Cloud Development, Enterprise Apps, Hybrid Cloud Solutions"
+  },
+
+  
+
+
+  {
+    "title": "MongoDB",
+    "category": "Data Base",
+    "img": "/student/card6/DB1.jpg",
+    "desc": "MongoDB is a NoSQL database that stores data in flexible JSON-like documents, making it ideal for modern applications with dynamic schemas.",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Full Stack Development, Big Data, Cloud Applications"
+  },
+  {
+    "title": "MySQL Mastery",
+    "category": "Data Base",
+    "img": "/student/card6/DB2.jpg",
+    "desc": "MySQL is an open-source relational database management system widely used for web applications and enterprise solutions.",
+    "salary": "₹4–16 LPA",
+    "roles": "In Demand Roles: Web Applications, Data Management, Enterprise Systems"
+  },
+  {
+    "title": "MSSQL",
+    "category": "Data Base",
+    "img": "/student/card6/DB3.jpg",
+    "desc": "Microsoft SQL Server (MSSQL) is a relational database system used for enterprise-level data storage, analytics, and BI integration.",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Enterprise Apps, Data Warehousing, Business Intelligence"
+  },
+  {
+    "title": "PostgreSQL",
+    "category": "Data Base",
+    "img": "/student/card6/DB4.jpg",
+    "desc": "PostgreSQL is an advanced open-source relational database known for its reliability, extensibility, and support for complex queries.",
+    "salary": "₹5–17 LPA",
+    "roles": "In Demand Roles: Data Analytics, Web Applications, Cloud Databases"
+  },
+
+ 
+
+
+  {
+    "title": "Power BI ",
+    "category": "Data Visualization",
+    "img": "/student/card7/DV1.jpg",
+    "desc":" Power BI is Microsoft’s business intelligence tool that allows data visualization, reporting, and interactive dashboards.",
+    "salary": "₹5–16 LPA",
+    "roles": "In Demand Roles: Business Intelligence, Dashboarding, Data Visualization"
+  },
+  {
+    "title": "Tableau",
+    "category": "Data Visualization",
+    "img": "/student/card7/DV2.jpg",
+    "desc": "Tableau is a leading BI and data visualization tool that transforms raw data into interactive and shareable insights.",
+    "salary": "₹5–16 LPA",
+    "roles": "In Demand Roles: Data Analytics, BI Solutions, Visualization Engineering"
+  },
+  {
+    "title": "Power Apps",
+    "category": "Data Visualization",
+    "img": "/student/card7/DV3.jpg",
+    "desc": "Master Microsoft Power Apps to design custom business apps without coding. Learn hands-on to automate processes, boost productivity, and transform workflows.",
+    "salary": "₹5–16 LPA",
+    "roles": "In Demand Roles: Data Analytics, BI Solutions, Visualization Engineering"
+  },
+  {
+    "title": "Alteryx",
+    "category": "Data Visualization",
+    "img": "/student/card7/DV4.jpg",
+    "desc": "Master data preparation, blending, and advanced analytics with our hands-on Alteryx training program. Empower your career by learning automation-driven insights for real-world business success.",
+    "salary": "₹5–16 LPA",
+    "roles": "In Demand Roles: Data Analytics, BI Solutions, Visualization Engineering"
+  },
+
+  
+
+
+
+  {
+    "title": "JAVA",
+    "category": "Software Testing",
+    "img": "/student/card8/s1.jpg",
+    "desc": "Learn Core Java from scratch — covering programming fundamentals, OOP, collections, exception handling, and file operations with practical examples.",
+    "salary": "₹5–16 LPA",
+    "roles": "In Demand Roles: Data Analytics, BI Solutions, Visualization Engineering"
+  },
+  {
+    "title": "Selenium",
+    "category": "Software Testing",
+    "img": "/student/card8/s2.jpg",
+    "desc": "Master Selenium for web automation testing — learn setup, locators, waits, frameworks, and real-time project implementation from scratch.",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Full Stack Development, Big Data, Cloud Applications"
+  },
+  {
+    "title": "Playwright",
+    "category": "Software Testing",
+    "img": "/student/card8/s3.jpg",
+    "desc": "Master Playwright end-to-end testing — automate modern web apps with JavaScript/TypeScript, from basics to advanced frameworks.",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Full Stack Development, Big Data, Cloud Applications"
+  },
+  {
+    "title": "Typescript",
+    "category": "Software Testing",
+    "img": "/student/card8/s4.jpg",
+    "desc": "Master testing in TypeScript — write reliable, maintainable, and high-quality tests using Jest, Mocha, and Playwright with TypeScript.",
+    "salary": "₹3–16 LPA",
+    "roles": "In Demand Roles: Full Stack Development, Big Data, Cloud Applications"
+  },
+
+ 
+
+
+  {
+    "title": "CCNA",
+    "category": "Net working",
+    "img": "/student/card9/N1.jpg",
+    "desc": "Cisco Certified Network Associate (CCNA) is a certification in networking fundamentals, routing, switching, and IT infrastructure.",
+    "salary": "₹5–15 LPA",
+    "roles": "In Demand Roles: Networking, IT Infrastructure, System Administrationr"
+  },
+  {
+    "title": "Cyber Security",
+    "category": "Net working",
+    "img": "/student/card9/N2.jpg",
+    "desc": "Cyber Security involves protecting systems, networks, and data from cyber threats and ensuring information security.",
+    "salary": "₹6–20 LPA",
+    "roles": "In Demand Roles: Ethical Hacking, Network Security, Cyber Defense, Cloud Security"
+  },
+  {
+    "title": "Ethical Hacking",
+    "category": "Net working",
+    "img": "/student/card9/N3.jpg",
+    "desc": "Master the art of ethical hacking with hands-on training in cybersecurity tools and real-world simulations.",
+    "salary": "₹6–20 LPA",
+    "roles": "In Demand Roles: Ethical Hacking, Network Security, Cyber Defense, Cloud Security"
+  },
+
+ 
+
+
+  {
+    "title": "SEO",
+    "category": "Digital Marketing",
+    "img": "/student/card10/D1.jpg",
+    "desc": "Master SEO, Social Media, Google Ads, and Analytics with our hands-on Digital Marketing program. Gain real-time skills to boost careers and drive business growth.",
+    "salary": "₹6–20 LPA",
+    "roles": "In Demand Roles: Ethical Hacking, Network Security, Cyber Defense, Cloud Security"
+  },
+  {
+    "title": "Social Media Management",
+    "category": "Digital Marketing",
+    "img": "/student/card10/D2.jpg",
+    "desc": "Master social media marketing and management. Learn to grow brands, engage audiences, and drive results across major platforms like Instagram, Facebook, LinkedIn, and X (Twitter).",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Full Stack Development, Big Data, Cloud Applications"
+  },
+  {
+    "title": "LinkedIn Marketing & Personal Branding",
+    "category": "Digital Marketing",
+    "img": "/student/card10/D3.jpg",
+    "desc": "Master LinkedIn marketing to build your professional brand, grow your network, and generate quality leads. Learn content strategy, analytics, and ad management to boost your visibility..",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Full Stack Development, Big Data, Cloud Applications"
+  },
+  {
+    "title": "Meta Campaigns",
+    "category": "Digital Marketing",
+    "img": "/student/card10/D4.jpg",
+    "desc": "Learn how to create, manage, and optimize ad campaigns on Facebook and Instagram using Meta Ads Manager. Drive traffic, leads, and conversions through data-backed advertising strategies.",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Full Stack Development, Big Data, Cloud Applications"
+  },
+
+  
+
+  
+  {
+    "title": "Medical Coding",
+    "category": "Health Care",
+    "img": "/student/card11/M1.jpg",
+    "desc": "Medical Coding involves translating healthcare diagnoses, procedures, and equipment into standardized codes for billing and records.",
+    "salary": "₹3–8 LPA",
+    "roles": "In Demand Roles: Healthcare IT, Billing, Hospital Administration"
+  },
+  {
+    "title": "Medical Billing",
+    "category": "Health Care",
+    "img": "/student/card11/M2.jpg",
+    "desc": "Medical Billing manages healthcare claims, insurance processes, and payments between patients, providers, and insurers.",
+    "salary": "₹3–7 LPA",
+    "roles": "In Demand Roles: Healthcare Finance, Insurance Claims, Hospital Management"
+  },
+
+  
+
+
+  {
+    "title": "Salesforce Administrator",
+    "category": "CRM",
+    "img": "/student/card12/c1.jpg",
+    "desc": "Master Salesforce Administration with hands-on training, real-time projects, and expert guidance. Build skills to manage, customize, and optimize Salesforce for any business.",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Full Stack Development, Big Data, Cloud Applications"
+  },
+  {
+    "title": "Salesforce Developer",
+    "category": "CRM",
+    "img": "/student/card12/c2.jpg",
+    "desc": "Master Salesforce Development with hands-on training, real-time projects, and expert mentorship. Build in-demand CRM skills to boost your career opportunities.",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Full Stack Development, Big Data, Cloud Applications"
+  },
+  {
+    "title": "Spoken English",
+    "category": "CRM",
+    "img": "/student/card12/c3.jpg",
+    "desc": "Master fluent English with confidence through interactive sessions and real-life conversations. Build communication skills that open global career opportunities.",
+    "salary": "₹5–18 LPA",
+    "roles": "In Demand Roles: Full Stack Development, Big Data, Cloud Applications"
+  }
+]

@@ -1,0 +1,31 @@
+.signup-container {
+    min-height: 100vh;
+    position: relative;
+}
+
+.signup-container .main-content {
+    margin-left: 400px;
+    /* Sidebar width (280) + Left (20) + Gap (20) */
+    padding:0  20px;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+    .signup-container .main-content {
+        margin-left: 250px;
+        /* Increased to 250px to prevent overlap with sidebar (220+10+20) */
+        padding-right: 20px;
+        /* Adjusted for narrower sidebar (220) */
+    }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+    .signup-container .main-content {
+        margin-left: 0;
+        margin-top: 20px;
+        padding: 10px;
+    }
+}

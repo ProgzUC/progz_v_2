@@ -1,0 +1,65 @@
+.ud-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  font-family: "Poppins", sans-serif;
+  color: #333;
+}
+
+/* Back button */
+.ud-back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  color: #444;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+/* Section Title */
+.ud-section-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: #6B7280;
+  margin: 25px 0 18px 0;
+}
+
+/* Row structure */
+.ud-row {
+  display: flex;
+  gap: 40px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+/* Field */
+.ud-field {
+  flex: 1;
+  min-width: 250px;
+}
+
+.ud-field.full {
+  flex-basis: 100%;
+}
+
+.ud-field label {
+  font-size: 13px;
+  color: #7A7A7A;
+}
+
+.ud-field p {
+  border-bottom: 1px solid #E5E7EB;
+  padding: 6px 0;
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .ud-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+}

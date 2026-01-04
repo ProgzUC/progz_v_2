@@ -1,0 +1,201 @@
+/* ==========================================================================
+   HEADER WRAPPER
+   ========================================================================== */
+.header-container {
+  width: 100%;
+  height: 78px;
+  background: #B3B3B3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  z-index: 9999;
+  position: sticky;
+  top: 0;
+}
+
+/* ==========================================================================
+   INNER LAYOUT (Desktop Structure)
+   ========================================================================== */
+.header-inner {
+  width: 100%;
+  max-width: 1440px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+}
+
+/* ==========================================================================
+   BRAND SECTION: LOGO
+   ========================================================================== */
+.logo-img {
+  height: 50px;
+  width: 250px;
+}
+
+/* ==========================================================================
+   NAVIGATION GROUP (Links + Logout)
+   ========================================================================== */
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+/* -------------------- NAV LINKS CONTAINER -------------------- */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+/* -------------------- NAV LINKS -------------------- */
+.nav-links a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  padding: 5px 0;
+}
+
+.nav-links a.active::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  left: 0;
+  bottom: 0;
+  background-color: #198754;
+  border-radius: 2px;
+}
+
+.nav-links a:hover {
+  color: black;
+}
+
+/* ==========================================================================
+   LOGOUT BUTTON
+   ========================================================================== */
+.logout-btn {
+  height: 40px;
+  padding: 0 24px;
+  border-radius: 20px;
+  background: black;
+  color: white;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #333;
+}
+
+/* ==========================================================================
+   HAMBURGER MENU (Mobile Trigger)
+   ========================================================================== */
+.hamburger {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  z-index: 10001;
+  transition: transform 0.3s ease;
+  /* Smooth icon animation */
+}
+
+.hamburger.active {
+  transform: rotate(90deg);
+  /* Optional icon rotation */
+}
+
+/* ==========================================================================
+   RESPONSIVE — TABLET (1024px and below)
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .header-container {
+    width: 100%;
+    left: 0;
+    transform: none;
+  }
+
+  .header-inner {
+    padding: 0 20px;
+  }
+
+  .nav-group {
+    gap: 20px;
+  }
+
+  .nav-links {
+    gap: 20px;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE — MOBILE (700px and below)
+   ========================================================================== */
+@media (max-width: 700px) {
+
+  .header-container {
+    height: 78px;
+    padding: 0;
+  }
+
+  .header-inner {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  /* Mobile Slide-in Navigation */
+  .nav-group {
+    position: fixed;
+    top: 78px;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 78px);
+    background-color: #f9f9f9;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 40px;
+    gap: 30px;
+    transform: translateX(100%);
+    transition: transform 1s ease-in-out;
+    /* Smoother slide animation */
+    z-index: 10000;
+  }
+
+  .nav-group.open {
+    transform: translateX(0);
+  }
+
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 25px;
+  }
+
+  .nav-links a {
+    font-size: 18px;
+  }
+
+  .logout-btn {
+    width: 80%;
+    max-width: 300px;
+  }
+}

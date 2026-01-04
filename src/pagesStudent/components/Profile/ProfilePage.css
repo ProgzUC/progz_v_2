@@ -1,0 +1,459 @@
+/* ============================
+   ROOT WRAPPER
+============================ */
+.profile-root {
+    background-color: #d4d4d4;
+    /* Light grey background */
+    min-height: calc(100vh - 80px);
+    /* Adjusting for header height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.profile-container-outer {
+    width: 100%;
+    max-width: 1300px;
+}
+
+/* ============================
+   DASHBOARD CARD
+============================ */
+.profile-dashboard-card {
+    background: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    position: relative;
+    padding-bottom: 20px;
+}
+
+/* BANNER */
+.profile-banner-gradient {
+    height: 250px;
+    background: linear-gradient(to right, #001f1e 0%, #004d40 40%, #008952 100%);
+    border-radius: 20px 20px 0 0;
+}
+
+/* ============================
+   MAIN LAYOUT
+============================ */
+.profile-main-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 40px;
+    padding: 0 40px;
+    margin-top: -120px;
+    /* Overlap effect */
+}
+
+/* ============================
+   SIDEBAR (INFO)
+============================ */
+.profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.profile-avatar-wrapper {
+    width: 180px;
+    height: 180px;
+    border: 8px solid #ffffff;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.profile-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.profile-detail-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-detail-icon {
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+}
+
+.profile-detail-text {
+    font-size: 15px;
+    color: #444;
+    font-weight: 500;
+}
+
+/* SIDEBAR BUTTONS */
+.profile-action-btns {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 25px;
+}
+
+.profile-btn-edit {
+    background-color: #008952;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.profile-btn-edit:hover {
+    background-color: #006b40;
+}
+
+.profile-btn-password {
+    background-color: white;
+    color: #008952;
+    border: 2px solid #e0e0e0;
+    padding: 10px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.profile-btn-password:hover {
+    background-color: #f5f5f5;
+    border-color: #008952;
+}
+
+.profile-sidebar-divider {
+    border: 0;
+    border-top: 2px solid #ccc;
+    margin: 10px 0 25px 0;
+}
+
+/* SUMMARY STATS */
+.profile-summary-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.profile-summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    font-weight: 500;
+    color: #444;
+}
+
+.profile-summary-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.profile-summary-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.profile-summary-count {
+    color: #222;
+    font-weight: 600;
+}
+
+/* ============================
+   MAIN CONTENT AREA (GRID)
+============================ */
+.profile-courses-main {
+    padding-top: 140px;
+    /* Spacing below banner overlap */
+}
+
+/* TABS */
+.profile-filter-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.profile-tab {
+    background: #9fa3a9;
+    /* Greyer tab color from image */
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.profile-tab.active {
+    background: #3c3c3c;
+    /* Selected tab color */
+}
+
+.profile-tab:hover {
+    opacity: 0.9;
+}
+
+.profile-tab-line {
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 30px;
+}
+
+/* GRID SCROLL Area */
+.profile-courses-grid-scroll {
+    max-height: 750px;
+    overflow-y: auto;
+    padding-right: 20px;
+}
+
+/* CUSTOM SCROLLBAR */
+.profile-courses-grid-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.profile-courses-grid-scroll::-webkit-scrollbar-track {
+    background: #eee;
+    border-radius: 10px;
+}
+
+.profile-courses-grid-scroll::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 10px;
+}
+
+.profile-courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 30px;
+}
+
+/* ============================
+   COURSE CARD
+============================ */
+.profile-course-card {
+    background: #3c3c3c;
+    /* Dark card color from image */
+    color: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-course-card-top {
+    position: relative;
+    height: 200px;
+}
+
+.profile-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-card-overlay-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.profile-course-card-body {
+    padding: 20px;
+}
+
+.profile-course-card-body h3 {
+    font-size: 18px;
+    margin: 0 0 5px 0;
+    font-weight: 600;
+}
+
+.profile-card-author {
+    font-size: 13px;
+    color: #ccc;
+    margin-bottom: 15px;
+}
+
+/* PROGRESS BAR */
+.profile-card-progress-area {
+    margin-bottom: 15px;
+}
+
+.profile-card-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 5px;
+    color: #eee;
+}
+
+.profile-card-progress-track {
+    height: 6px;
+    background: #222;
+    /* Dark track */
+    border-radius: 10px;
+}
+
+.profile-card-progress-fill {
+    height: 100%;
+    background: white;
+    /* Matches white fill from image */
+    border-radius: 10px;
+}
+
+/* FOOTER */
+.profile-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #555;
+    padding-top: 15px;
+}
+
+.profile-lesson-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #ddd;
+}
+
+.profile-card-icon {
+    width: 16px;
+    height: 16px;
+}
+
+.profile-view-cert {
+    background: #008952;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+/* ============================
+   MODALS (PRESERVED)
+============================ */
+.profile-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5000;
+}
+
+.profile-modal-box {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+}
+
+.profile-modal-box h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-input-row {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.profile-input-row label {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.profile-input-row input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.profile-modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.profile-cancel-btn {
+    flex: 1;
+    padding: 10px;
+    background: #eee;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.profile-save-btn {
+    flex: 1;
+    padding: 10px;
+    background: #008952;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* ============================
+   RESPONSIVE
+============================ */
+@media (max-width: 1024px) {
+    .profile-main-layout {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+    }
+
+    .profile-sidebar {
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-courses-main {
+        padding-top: 20px;
+    }
+
+    .profile-courses-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}

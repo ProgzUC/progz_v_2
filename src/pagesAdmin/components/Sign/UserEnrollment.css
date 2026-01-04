@@ -1,0 +1,541 @@
+/* Main Page Layout */
+.user-enrollment-page {
+  display: flex;
+  flex-direction: row;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff;
+  font-family: 'Poppins', sans-serif; /* Changed font */
+  padding: 20px;
+  /* Padding around the whole layout to create the 'floating' look */
+  box-sizing: border-box;
+  overflow: hidden;
+  /* No scroll on desktop */
+}
+
+/* Sidebar Styles - Floating Card Look */
+.sidebar {
+  position: relative;
+  width: 30%;
+  /* Fixed width percentage */
+  min-width: 300px;
+  max-width: 380px;
+  background: #B8E0D2;
+  padding: 40px 30px;
+  /* Reduced padding to fit content */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 30px;
+  /* Rounded corners as per image */
+  margin-right: 40px;
+  /* Spacing between sidebar and form */
+}
+
+
+.sidebar-header h1 {
+  font-size: 40px;
+  /* Slightly smaller to save space */
+  font-weight: 600;
+  font-style: semibold;
+  color: #545454;
+  margin: 0 0 8px 0;
+}
+
+.sidebar-header h2 {
+  font-size: 32px;
+  font-weight: 600;
+  color: #3B3B3B;
+  margin: 40px 0 40px 0;
+}
+
+/* Steps Container */
+/* Steps Container */
+.steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 0;
+ 
+}
+
+/* MUCH larger spacing between steps */
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative;
+  padding-bottom: 55px;   /* increased from 60 → 90 */
+}
+
+.step-item:last-child {
+  padding-bottom: 0;
+}
+
+/* Taller vertical line */
+.step-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 15px;
+  top: 45px;          /* aligns the line perfectly */
+  height: 70px;          /* increased from 60 → 90 */
+  width: 4px;
+  background-color: #9CA3AF;
+  z-index: 0;
+}
+
+
+.step-indicator {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #9CA3AF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  font-size: 16px;
+  color: white;
+  z-index: 1;
+  flex-shrink: 0;
+  margin-bottom: 30px;
+}
+
+.step-item.active .step-indicator,
+.step-item.completed .step-indicator {
+  background-color: #198754;
+}
+
+.step-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 35px;
+}
+
+/* Content Area Styles */
+.content-area {
+  flex: 1;
+  padding: 20px 0;
+  /* Vertical padding reduced */
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+  /* No internal scroll on desktop if possible */
+  height: 100%;
+  box-sizing: border-box;
+  justify-content: center;
+  /* Center content vertically */
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+ 
+  /* Reduced margin */
+  color: #000;
+}
+
+.details-form {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Distribute space */
+  height: 100%;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 40px;
+  row-gap: 16px;
+  
+  /* Compact row gap */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  /* Compact gap */
+}
+
+.form-group.full-width {
+  grid-column: span 2;
+}
+
+.form-group label {
+  font-size: 13px;
+  /* Slightly smaller font */
+  font-weight: 600;
+  color: #333;
+}
+
+.form-control {
+  background: #EFEFEF;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 10px 14px;
+  /* Compact padding */
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  transition: all 0.2s;
+}
+
+.form-control:focus {
+  background: #FFFFFF;
+  border-color: #198754;
+  box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.1);
+}
+
+textarea.form-control {
+  min-height: 80px;
+  /* Reduced height */
+  resize: none;
+}
+
+/* Form Actions */
+.form-actions {
+  margin-top: -60px;   /* moves even more up */
+  display: flex;
+  justify-content: flex-end;
+  gap: 20px;
+  padding-top: 0px;
+  border-top: 1px solid #eee;
+}
+.btn-cancel,
+.btn-next,
+.btn-submit {
+  padding: 8px 30px;
+  /* Compact buttons */
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 15px;
+  margin-bottom: 50px;
+
+}
+
+.btn-cancel {
+  border: 1px solid #ccc;
+  background: white;
+  color: #333;
+   
+}
+
+.btn-next,
+.btn-submit {
+  border: none;
+  background: #198754;
+  color: white;
+  
+    
+}
+
+/* Validation Styles */
+.error-message {
+  color: #dc3545;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+/* Role Selection Styles */
+.role-container {
+  width: 100%;
+}
+
+.role-selection {
+  display: flex;
+  gap: 40px;
+  margin-top: 20px;
+}
+
+.role-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.role-radio {
+  display: none;
+}
+
+.role-custom-radio {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #666;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.role-radio:checked+.role-custom-radio {
+  border-color: #198754;
+}
+
+.role-radio:checked+.role-custom-radio::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  background-color: #198754;
+  border-radius: 50%;
+}
+
+.role-label {
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+
+
+/* Responsive Breakpoints */
+
+/* Tablet (max-width: 1024px) */
+@media (max-width: 1024px) {
+  .user-enrollment-page {
+    flex-direction: column;
+    height: auto;
+    overflow-y: auto;
+    /* Allow scroll */
+    padding: 20px;
+  }
+
+  .sidebar {
+    width: 100%;
+    max-width: none;
+    min-height: auto;
+    padding: 30px;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    height: auto;
+    margin-right: 0;
+    margin-bottom: 30px;
+    border-radius: 20px;
+  }
+
+  .steps-container {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+    overflow-x: auto;
+  }
+
+  .step-item {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+    min-width: 80px;
+    padding-bottom: 0;
+    align-items: center;
+  }
+
+  .step-item:not(:last-child)::after {
+    display: none;
+  }
+
+  .step-label {
+    font-size: 14px;
+    margin-top: 0;
+  }
+
+  .content-area {
+    padding: 0;
+    height: auto;
+    overflow-y: visible;
+  }
+
+  /* Keep 2 columns on tablet as requested */
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+  }
+
+  .form-group.full-width {
+    grid-column: span 2;
+  }
+
+  .btn-cancel,
+.btn-next,
+.btn-submit{
+  margin-top: 100px;
+}
+
+ .steps-container {
+        display: flex;
+        flex-direction: row !important;
+        justify-content: space-between;
+        align-items: flex-start;
+        width: 100%;
+        padding: 10px 0;
+        gap: 0;
+    }
+
+    /* Step item becomes column */
+    .step-item {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        width: 33% !important;
+        position: relative;
+    }
+
+    /* Circle on top (OK) */
+    .step-indicator {
+        margin-bottom: 10px !important;
+        width: 45px !important;
+        height: 45px !important;
+        z-index: 2;
+    }
+
+    /* Convert vertical line → horizontal connector between circles */
+    .step-line {
+        width: 70% !important;
+        height: 4px !important;
+        background: #9CA3AF !important;
+        left: 120px !important;
+        position: relative;
+        top: -40px !important;   /* moves line between circles */
+        z-index: 1;
+       
+    }
+
+    /* Last item should not show connector */
+    .step-item:last-child .step-line {
+        display: none !important;
+    }
+
+    /* Labels under the circles */
+    .step-label {
+        margin-top: 10px !important;
+        text-align: center !important;
+        font-weight: 600;
+        font-size: 14px !important;
+        max-width: 120px;
+    }
+}
+
+/* Mobile (max-width: 700px) */
+@media (max-width: 700px) {
+  .user-enrollment-page {
+    padding: 10px;
+  }
+
+  .sidebar {
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr; /* Stack fields */
+  }
+
+  .form-group.full-width {
+    grid-column: span 1;
+  }
+
+  /* ------- BUTTON FIX (Cancel ABOVE Next) ------- */
+  .form-actions {
+    display: flex;
+    flex-direction: row;   /* Horizontal layout */
+    justify-content: center;  /* Center buttons */
+    gap: 12px;                 /* Space between buttons */
+    width: 100%;
+    align-items: center;
+  }
+
+  .btn-cancel {
+    order: 1;
+   
+    position: relative !important;  /* reset any previous positioning */
+}
+
+
+  .btn-next,
+  .btn-submit {
+    order: 2;                    /* comes second */
+    position: relative;
+   
+    
+  }
+  
+  .btn-cancel,
+  .btn-next,
+  .btn-submit {
+    width: 70%;        /* Each button takes roughly half width */
+    margin-top: 90px;     /* Remove vertical margin */
+    position: relative !important; /* Reset previous positioning */
+  }
+
+  /* ------- STEPS HORIZONTAL IN MOBILE ------- */
+
+  .steps-container {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+    padding: 10px 0;
+    gap: 0;
+  }
+
+  .step-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 33% !important;
+    position: relative;
+  }
+
+  /* Circle on top */
+  .step-indicator {
+    margin-bottom: 10px !important;
+    width: 45px !important;
+    height: 45px !important;
+    z-index: 2;
+  }
+
+  /* Horizontal connecting line */
+  .step-line {
+    width: 50% !important;
+    height: 4px !important;
+    background: #9CA3AF !important;
+    position: absolute !important;
+    top: 22px !important;           /* aligns between circles */
+    left: 105px !important;
+    transform: translateX(-50%);
+    z-index: 1;
+  }
+
+  /* Hide line after last item */
+  .step-item:last-child .step-line {
+    display: none !important;
+  }
+
+  /* Labels below circles */
+  .step-label {
+    margin-top: 10px !important;
+    text-align: center !important;
+    font-weight: 600;
+    font-size: 14px !important;
+    max-width: 130px;
+  }
+}

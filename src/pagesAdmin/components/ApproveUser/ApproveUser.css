@@ -1,0 +1,147 @@
+/* Approve Users Page */
+.approve-users-page {
+  padding: 30px 40px;
+  background-color: #E8E8E8;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 600;
+  color: #6B6B6B;
+  margin: 0 0 30px 0;
+}
+
+/* Card Styling */
+.pending-registrations-card {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 30px 35px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.card-header {
+  font-size: 18px;
+  font-weight: 600;
+  color: #8B8B8B;
+  margin: 0 0 25px 0;
+}
+
+/* Table Styling */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table thead th {
+  font-size: 14px;
+  font-weight: 500;
+  color: #A8A8A8;
+  text-align: left;
+  padding: 0 15px 18px 15px;
+  border-bottom: 1px solid #EEEEEE;
+}
+
+.users-table tbody tr {
+  border-bottom: 1px solid #F5F5F5;
+  transition: background-color 0.2s;
+}
+
+.users-table tbody tr:hover {
+  background-color: #FAFAFA;
+}
+
+.users-table tbody td {
+  padding: 20px 15px;
+  font-size: 14px;
+  color: #7A7A7A;
+}
+
+.user-name {
+  font-weight: 400;
+}
+
+.user-email {
+  color: #8B8B8B;
+}
+
+.user-date {
+  color: #A8A8A8;
+}
+
+/* Action Icons */
+.action-icons {
+  text-align: right;
+  padding-right: 20px !important;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  margin-left: 12px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-btn:hover {
+  background-color: #F5F5F5;
+}
+
+.view-btn {
+  color: #7A7A7A;
+}
+
+.view-btn:hover {
+  color: #5A5A5A;
+}
+
+.approve-btn {
+  color: #22C55E;
+}
+
+.approve-btn:hover {
+  background-color: #DCFCE7;
+}
+
+.reject-btn {
+  color: #EF4444;
+}
+
+.reject-btn:hover {
+  background-color: #FEE2E2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .approve-users-page {
+    padding: 20px;
+  }
+
+  .pending-registrations-card {
+    padding: 20px;
+  }
+
+  .users-table {
+    font-size: 13px;
+  }
+
+  .users-table thead th,
+  .users-table tbody td {
+    padding: 12px 8px;
+  }
+
+  .icon-btn {
+    margin-left: 6px;
+  }
+}

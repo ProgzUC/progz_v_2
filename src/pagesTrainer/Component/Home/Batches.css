@@ -1,0 +1,333 @@
+.batches-section-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* MAIN LAYOUT */
+.batches-dashboard-layout {
+    display: flex;
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem 60px 2rem;
+    align-items: flex-start;
+}
+
+/* LEFT SIDE - GRID */
+.batches-batch-grid {
+    flex: 1;
+    /* Takes available space */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 columns as shown */
+    gap: 30px;
+}
+
+/* COURSE CARD */
+.batches-batch-card {
+    background: #fff;
+    border-radius: 24px;
+    /* More rounded */
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+}
+
+.batches-batch-tag {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 1rem;
+     background: #e6f4ef;
+    color: #00875a;
+}
+
+.batches-batch-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+    color: #111;
+}
+
+.batches-batch-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.batches-batch-info-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Progress Bar */
+.batches-progress-container {
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+.batches-progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    color: #888;
+}
+
+.batches-progress-bar {
+    height: 8px;
+    background: #F3F4F6;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.batches-progress-fill {
+    height: 100%;
+    background: #00875a;
+    border-radius: 999px;
+}
+
+/* Footer Avatar & Button */
+.batches-batch-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.batches-student-avatars {
+    display: flex;
+}
+
+.batches-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f3f3f3;
+    border: 2px solid #fff;
+    margin-left: -10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: #555;
+}
+
+.batches-avatar:first-child {
+    margin-left: 0;
+}
+
+.batches-arrow-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #e6f4ef;
+    color: #00875a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.batches-arrow-btn:hover {
+    background: #00875a;
+    color: #fff;
+}
+
+
+/* RIGHT SIDEBAR */
+.batches-sidebar {
+    width: 360px;
+    flex-shrink: 0;
+}
+
+.batches-sidebar-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 1.5rem;
+    /* No shadow in screenshot, or very subtle */
+}
+
+.batches-sidebar-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: #111;
+}
+
+/* Sidebar Item */
+.batches-class-card {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    border-radius: 16px;
+    background: #fff;
+    /* Default */
+}
+
+.batches-class-card.live {
+    background: #e6f4ef;
+    /* Light Green Bg for Live */
+}
+
+/* Upcoming items look transparent/white in screenshot? Or just simplified. 
+   Screenshot shows 'Upcoming' items just cleanly listed. Let's make them white with light border or plain. */
+.batches-class-card:not(.live) {
+    background: #fff;
+}
+
+.batches-class-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.batches-status-tag {
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.batches-status-tag.live {
+    color: #00875a;
+}
+
+.batches-status-tag.upcoming {
+    color: #888;
+}
+
+.batches-student-count {
+    font-size: 13px;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.batches-class-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #111;
+}
+
+.batches-class-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.batches-class-time {
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.batches-join-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.batches-join-btn.active {
+    background: #00875a;
+    color: #fff;
+}
+
+.batches-join-btn.disabled {
+    background: #E5E7EB;
+    color: #6B7280;
+}
+
+@media (max-width: 1200px) {
+    .batches-active-section {
+        padding: 3rem 1.5rem;
+    }
+
+    .batches-dashboard-layout {
+        flex-direction: column;
+        align-items: center;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+    }
+
+    .batches-batch-grid {
+        width: 100%;
+    }
+
+    .batches-sidebar {
+        width: 100%;
+        margin-top: 3rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .batches-active-section {
+        padding: 2rem 0;
+    }
+
+    .batches-dashboard-layout {
+        padding: 0 0.5rem 60px 0.5rem;
+    }
+
+    .batches-section-title {
+        font-size: 1.8rem;
+        margin-bottom: 2rem;
+        padding: 0 1.5rem;
+        text-align: center;
+    }
+
+    .batches-batch-grid {
+        grid-template-columns: 1fr;
+        padding: 0 0.5rem;
+        gap: 20px;
+    }
+
+    .batches-batch-card {
+        padding: 1.5rem;
+    }
+
+    .batches-batch-title {
+        font-size: 1.2rem;
+    }
+
+    .batches-sidebar {
+        padding: 0 1.5rem;
+    }
+
+    .batches-sidebar-card {
+        padding: 1.25rem;
+    }
+
+    .batches-sidebar-title {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .batches-batch-info {
+        flex-direction: column;
+        gap: 10px;
+        
+    }
+
+    .batches-class-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .batches-join-btn {
+        width: 100%;
+    }
+}

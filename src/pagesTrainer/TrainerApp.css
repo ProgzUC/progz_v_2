@@ -1,0 +1,69 @@
+:root {
+  --primary-color: #00875a;
+  --bg-dark: #303030;
+  --bg-light: #e4e4e4;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666;
+  --white: #ffffff;
+  --border-radius-lg: 20px;
+  --border-radius-md: 12px;
+  --border-radius-sm: 8px;
+  --transition: all 0.3s ease;
+}
+
+.trainer-app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.trainer-app button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+.trainer-app .container {
+  max-width: 1440px;
+ 
+  padding: 0 4rem;
+}
+
+/* Hide Scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+
+
+.trainer-app main {
+  flex: 1;
+}
+
+.trainer-app .main-content {
+  margin-top: 4.5rem;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .trainer-app .main-content {
+    margin-top: 3rem;
+  }
+}
+@media (max-width: 1024px) {
+  .trainer-app .container {
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .trainer-app .container {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .trainer-app .container {
+    padding: 0 1rem;
+  }
+}
