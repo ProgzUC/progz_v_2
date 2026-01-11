@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./Courses.css";
 import { useNavigate } from "react-router-dom";
 
+
 const avatar = "https://i.pravatar.cc/40";
 
 const initialCourses = [
