@@ -1,14 +1,53 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { triggerManualSync } from "../../../api/axiosInstance";
+import Swal from "sweetalert2";
 import "./Sidebar.css";
 
 const Sidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [syncLoading, setSyncLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Perform any cleanup here if needed (e.g., localStorage.clear())
-    navigate("/login");
+    Swal.fire({
+      title: "Logout?",
+      text: "Are you sure you want to logout?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, logout!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.clear(); // Clear all user data/tokens
+        navigate("/", { replace: true }); // Redirect to login/home
+      }
+    });
+  };
+
+  const handleSync = async () => {
+    if (syncLoading) return;
+    setSyncLoading(true);
+    try {
+      await triggerManualSync();
+      Swal.fire({
+        title: "Sync Completed",
+        text: "Data synced successfully from Zen.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      console.error("Sync failed:", error);
+      Swal.fire({
+        title: "Sync Failed",
+        text: error.message || "Unable to sync data.",
+        icon: "error",
+      });
+    } finally {
+      setSyncLoading(false);
+    }
   };
 
   // Apply collapsed class to layout wrapper
@@ -118,15 +157,14 @@ const Sidebar = () => {
 
         <div className="menu-divider"></div>
 
-        <NavLink
-          to="/admin/sync"
-          className={({ isActive }) =>
-            isActive ? "menu-item active" : "menu-item"
-          }
+        <div
+          className="menu-item"
+          onClick={handleSync}
+          style={{ cursor: syncLoading ? "wait" : "pointer" }}
         >
-          <i className="bi bi-arrow-repeat"></i>
-          {!collapsed && <span>Sync from Zen</span>}
-        </NavLink>
+          <i className={`bi ${syncLoading ? "bi-arrow-repeat spin-icon" : "bi-arrow-repeat"}`}></i>
+          {!collapsed && <span>{syncLoading ? "Syncing..." : "Sync from Zen"}</span>}
+        </div>
 
         <div
           className="menu-item"

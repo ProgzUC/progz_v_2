@@ -177,7 +177,7 @@ const EditCourse = () => {
           <h2>Edit Course</h2>
           <i
             className="bi bi-x-lg close-icon"
-            onClick={() => navigate("/dashboard/courses")}
+            onClick={() => navigate("/admin/courses")}
           ></i>
         </div>
 

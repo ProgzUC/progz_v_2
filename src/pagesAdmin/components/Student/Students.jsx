@@ -1,23 +1,19 @@
 import React, { useState } from "react";
 import "./Students.css";
+import Loader from "../../../components/common/Loader/Loader";
+import { useAllUsers, useDeleteUser } from "../../../hooks/useAdminUsers";
 import { FaTrash, FaEdit, FaEye } from "react-icons/fa";
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 const Students = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  const [students, setStudents] = useState([
-    { name: "Tharun", id: "N/A", email: "tharun@progz.tech", mobile: "9176612167", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Adhirt Magesh", id: "N/A", email: "adhirtmagesh@gmail.com", mobile: "9080273814", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Sanjana", id: "N/A", email: "sanjana@progz.tech", mobile: "9176773381", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Pushpa kala", id: "N/A", email: "pushpakala@progz.tech", mobile: "8838160544", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Preethi", id: "N/A", email: "preethi@progz.tech", mobile: "9176982417", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Roshini", id: "N/A", email: "roshini@progz.tech", mobile: "6381342036", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Shanmuga sundari", id: "N/A", email: "shanmugasundari@progz.tech", mobile: "7358568378", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Dhanush", id: "N/A", email: "dhanush@progz.tech", mobile: "8610671096", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Lakshmi", id: "N/A", email: "lakshmi@progz.tech", mobile: "9500003639", qualification: "Not specified\nN/A • 0 years" },
-  ]);
+  // const [students, setStudents] = useState([...]); // Removed static data
+  const { data: allUsers = [], isLoading, isError } = useAllUsers();
+
+  const students = allUsers.filter((user) => user.role === "student");
 
   // Pagination
   const itemsPerPage = 6;
@@ -34,9 +30,31 @@ const Students = () => {
     currentPage * itemsPerPage
   );
 
+  const { mutate: deleteUser } = useDeleteUser();
+
+  const handleDelete = (user) => {
+    Swal.fire({
+      title: 'Delete Student?',
+      text: `Are you sure you want to delete ${user.name}? This action cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteUser(user._id || user.id);
+        Swal.fire('Deleted!', 'Student has been deleted.', 'success');
+      }
+    });
+  };
+
   const changePage = (page) => {
     if (page >= 1 && page <= totalPages) setCurrentPage(page);
   };
+
+  if (isLoading) return <Loader />;
+  if (isError) return <div>Error loading students</div>;
 
 
 
@@ -55,7 +73,7 @@ const Students = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <button className="students-add-btn" onClick={() => navigate("/dashboard/add-student")}>
+          <button className="students-add-btn" onClick={() => navigate("/admin/add-student")}>
             + Add Students
           </button>
         </div>
@@ -88,20 +106,20 @@ const Students = () => {
                 <td>{s.mobile}</td>
 
                 <td>
-                  {s.qualification.split("\n").map((line, i) => (
+                  {(s.qualification || "Not specified").split("\n").map((line, i) => (
                     <div key={i}>{line}</div>
                   ))}
                 </td>
 
                 <td className="actions">
-                  <FaTrash className="icon delete" />
+                  <FaTrash className="icon delete" onClick={() => handleDelete(s)} />
                   <FaEdit
                     className="icon edit"
-                    onClick={() => navigate("/dashboard/student-preview", { state: { student: s, initialEditMode: true } })}
+                    onClick={() => navigate("/admin/student-preview", { state: { student: s, initialEditMode: true } })}
                   />
                   <FaEye
                     className="icon view"
-                    onClick={() => navigate("/dashboard/student-preview", { state: { student: s, initialEditMode: false } })}
+                    onClick={() => navigate("/admin/student-preview", { state: { student: s, initialEditMode: false } })}
                   />
                 </td>
               </tr>
