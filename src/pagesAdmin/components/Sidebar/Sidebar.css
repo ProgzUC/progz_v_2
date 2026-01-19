@@ -67,10 +67,12 @@
 .sidebar-header {
   display: flex;
   align-items: center;
-  justify-content: start;
-  /* Center content */
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  /* Prevent wrapping to next line */
   gap: 12px;
   width: 100%;
+  min-height: 40px;
 }
 
 .sidebar-logo {
@@ -78,6 +80,8 @@
   height: 40px;
   object-fit: contain;
   pointer-events: none;
+  flex-shrink: 0;
+  /* Prevent logo from shrinking */
 }
 
 .sidebar-title {
@@ -85,7 +89,15 @@
   font-weight: 600;
   color: #333;
   white-space: nowrap;
-  /* Prevent wrapping */
+  /* Prevent text wrapping */
+  flex-shrink: 0;
+  /* Prevent title from shrinking */
+  min-width: 0;
+  /* Allow proper flex behavior */
+  margin: 0;
+  /* Remove default h3 margins */
+  line-height: 1.2;
+  /* Prevent extra vertical space */
 }
 
 
