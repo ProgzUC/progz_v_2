@@ -20,8 +20,10 @@ const Batches = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedBatch, setSelectedBatch] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [batchToDelete, setBatchToDelete] = useState(null);
     const [filterStatus, setFilterStatus] = useState("All");
-    const itemsPerPage = 3;
+    const itemsPerPage = 5;
 
     const filteredBatches = batches.filter(batch =>
         filterStatus === "All" || batch.status === filterStatus
@@ -47,6 +49,22 @@ const Batches = () => {
     const closeModal = () => {
         setShowModal(false);
         setSelectedBatch(null);
+    };
+
+    const handleDelete = (id) => {
+        setBatchToDelete(id);
+        setShowDeleteModal(true);
+    };
+
+    const confirmDelete = () => {
+        setBatches(batches.filter(batch => batch.id !== batchToDelete));
+        setShowDeleteModal(false);
+        setBatchToDelete(null);
+    };
+
+    const cancelDelete = () => {
+        setShowDeleteModal(false);
+        setBatchToDelete(null);
     };
 
     const getStatusClass = (status) => {
@@ -131,7 +149,10 @@ const Batches = () => {
                                         </span>
                                     </td>
                                     <td>
-                                        <FaTrash className="delete-icon" />
+                                        <FaTrash
+                                            className="delete-icon"
+                                            onClick={() => handleDelete(batch.id)}
+                                        />
                                     </td>
                                 </tr>
                             ))}
@@ -180,6 +201,20 @@ const Batches = () => {
                             </ul>
                         </div>
                         <button className="close-btn" onClick={closeModal}>X</button>
+                    </div>
+                </div>
+            )}
+
+            {/* Delete Confirmation Modal */}
+            {showDeleteModal && (
+                <div className="modal-overlay" onClick={cancelDelete}>
+                    <div className="delete-modal-box" onClick={(e) => e.stopPropagation()}>
+                        <h3>Confirm Delete</h3>
+                        <p>Are you sure you want to delete this batch? This action cannot be undone.</p>
+                        <div className="delete-modal-actions">
+                            <button className="cancel-btn" onClick={cancelDelete}>Cancel</button>
+                            <button className="confirm-btn" onClick={confirmDelete}>Delete</button>
+                        </div>
                     </div>
                 </div>
             )}

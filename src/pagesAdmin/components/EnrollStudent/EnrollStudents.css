@@ -22,6 +22,7 @@
   font-size: 32px;
   font-weight: 700;
   margin-bottom: 40px;
+  color: #999;
 }
 
 .section {
@@ -32,6 +33,8 @@
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 15px;
+  color: #999 !important;
+ 
 }
 
 /* Flex row for title */
@@ -81,6 +84,7 @@
   border: 1px solid #eaeaea;
   margin-bottom: 15px;
   font-size: 15px;
+  color: #999;
 }
 
 /* Batch dropdown + link */

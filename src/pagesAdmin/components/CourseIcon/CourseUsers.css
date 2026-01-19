@@ -7,169 +7,311 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'inter', sans-serif;
   padding: 20px;
   z-index: 9999;
 }
 
 .manage-card {
-  background: linear-gradient(180deg, #ddf8ea 0%, #f6fff9 100%);
+  background: linear-gradient(180deg, #e6f9f0 0%, #ffffff 100%);
   width: 100%;
-  max-width: 650px;
-  padding: 50px 45px;
-  border-radius: 22px;
-  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
+  max-width: 620px;
+  padding: 40px 35px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   position: relative;
-  animation: fadeIn 0.25s ease-in-out;
 }
 
-/* Fade animation */
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-    transform: scale(.97);
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Close button */
 /* Close button */
 .close-btn {
   position: absolute;
-  top: 24px;
-  right: 28px;
-  background: #f0f0f0;
+  top: -3px;
+  right: 16px;
+  background: none;
   border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-size: 20px;
-  cursor: pointer;
-  color: #333;
-  transition: .2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.close-btn:hover {
-  background: #e0e0e0;
-}
-
-/* Titles */
-.title {
   font-size: 32px;
-  font-weight: 500;
-  margin-top: 0;
-  margin-bottom: 15px;
-  color: #999;
-  letter-spacing: -0.5px;
+  cursor: pointer;
+  color: #008F4C;
+  text-align: right;
+}
+
+/* Headings */
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 0;
+  /* closer to subtitle */
 }
 
 .subtitle {
-  font-size: 18px;
-  color: #666;
-  margin-bottom: 40px;
-  font-weight: 400;
-}
-
-/* Select input */
-.input-group {
-  margin-bottom: 35px;
-}
-
-.label-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.label-row label {
-  font-size: 16px;
-  font-weight: 500;
-  color: #111;
-}
-
-.add-link {
-  color: #008f4c;
   font-size: 15px;
-  cursor: pointer;
-  font-weight: 600;
-  text-decoration: underline;
+  color: #777777;
+  /* color */
+  margin-top: 5px;
+  /* down 5px */
+  margin-bottom: 28px;
+}
+
+/* Labels */
+.section-label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: block;
+}
+
+/* Input group */
+.input-group {
+  margin-bottom: 28px;
+}
+
+/* MAIN ROW FIX */
+.select-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
 }
 
 /* Select */
 .custom-select-wrapper {
   position: relative;
+  flex: 1;
+  /* input wider */
 }
 
 .custom-select {
   width: 100%;
-  padding: 16px 20px;
-  border: 1px solid #c0c0c0;
-  border-radius: 12px;
-  font-size: 16px;
-  background: #fff;
+  height: 44px;
+  padding: 0 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
   appearance: none;
-  color: #aaa;
-  outline: none;
+  background: #FFFFFF;
+  /* Explicit white */
+  color: #333;
+  cursor: pointer;
+}
+
+.custom-select option {
+  color: #000;
+  /* options to be black */
+}
+
+.custom-select.placeholder {
+  color: #777777;
+  /* color */
+  /* Placeholder styling */
 }
 
 .custom-select:focus {
-  border-color: #00a862;
+  outline: none;
+  border-color: #ddd;
+  /* Remove separate highlight color */
+  box-shadow: none;
 }
 
-/* Dropdown arrow */
 .arrow-down {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%) rotate(45deg);
   border: solid #666;
   border-width: 0 2px 2px 0;
-  display: inline-block;
-  padding: 5px;
-  position: absolute;
-  right: 24px;
-  top: 45%;
-  transform: translateY(-50%) rotate(45deg);
+  padding: 3px;
   pointer-events: none;
 }
 
-/* Current instructors */
-.current-instructors-section label {
+/* ADD BUTTON FIX */
+.add-btn {
+  margin-left: auto;
+  min-width: 110px;
+  height: 36px;
+  background: #FFFFFF;
+  /* Explicit white */
+  color: #008F4C;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-btn:hover {
+  background: #fff;
+  /* removes black hover */
+  border-color: #008F4C;
+}
+
+/* Instructor list */
+.instructor-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.instructor-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 14px;
+}
+
+.instructor-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.instructor-name {
   font-size: 15px;
   font-weight: 500;
-  color: #111;
+  color: #000;
 }
 
-.empty-msg {
+.instructor-email {
   font-size: 13px;
-  margin-top: 6px;
-  color: #888;
+  color: #777;
+  margin-top: 2px;
 }
 
-/* Footer button */
+/* Remove button */
+.remove-btn {
+  min-width: 110px;
+  height: 36px;
+  background: #FFFFFF;
+  /* Explicit white */
+  color: rgb(231, 77, 77);
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.remove-btn:hover {
+  background: #fff;
+  border-color: rgb(231, 77, 77);
+}
+
+
+/* Empty State */
+.empty-msg {
+  color: #999;
+  font-size: 14px;
+  font-style: normal;
+
+  font-family: 'Inter', sans-serif;
+
+  margin-top: 10px;
+}
+
+/* Footer */
 .card-footer {
   display: flex;
   justify-content: flex-end;
-  margin-top: 50px;
+  margin-top: 22px;
 }
 
-.continue-btn {
-  background: #ffffff;
+.done-btn {
+  min-width: 110px;
+  height: 36px;
+  background: #FFFFFF;
+  /* Explicit white */
+  color: #008F4C;
   border: 1px solid #e0e0e0;
-  padding: 14px 44px;
-  border-radius: 12px;
-  font-size: 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  color: #008f4c;
-  font-weight: 600;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  transition: .2s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.continue-btn:hover {
-  background: #f7fffb;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+.done-btn:hover {
+  background: #fff;
+  border-color: #008F4C;
+}
+
+/* Mobile & Tablet Adjustments */
+@media (max-width: 600px) {
+  .manage-card {
+    padding: 24px 20px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    /* Ensure scrolling if content is tall */
+  }
+
+  /* Stack the Add Instructor row */
+  .select-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .custom-select-wrapper {
+    width: 100%;
+  }
+
+  /*  Add button  width  */
+  .add-btn {
+    width: 100%;
+    margin-left: 0;
+    height: 44px;
+
+  }
+
+  /* Adjust Instructor List items */
+  .instructor-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    /*  separator for clarity in stacked view */
+    margin-bottom: 10px;
+    padding-bottom: 15px;
+    /* Increase spacing */
+  }
+
+  /* Remove border */
+  .instructor-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .instructor-info {
+    width: 100%;
+  }
+
+  /* Ensure text doesn't overflow */
+  .instructor-email {
+    word-break: break-word;
+  }
+
+  /* Remove button full width */
+  .remove-btn {
+    width: 100%;
+    height: 40px;
+
+  }
+
+  /* Adjust Footer */
+  .card-footer {
+    justify-content: stretch;
+    margin-top: 20px;
+  }
+
+  .done-btn {
+    width: 100%;
+    height: 44px;
+  }
 }
