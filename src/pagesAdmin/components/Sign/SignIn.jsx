@@ -14,7 +14,7 @@ const SignIn = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     // TODO: Add real authentication logic here
-    navigate("/dashboard/overview");
+    navigate("/admin/overview");
   };
 
   return (

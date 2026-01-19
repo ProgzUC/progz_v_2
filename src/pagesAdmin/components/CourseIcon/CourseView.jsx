@@ -75,7 +75,7 @@ const CourseView = () => {
             </div>
           </div>
 
-          <button className="cv-edit-btn" onClick={() => navigate(`/dashboard/edit-course/${id}`)}>
+          <button className="cv-edit-btn" onClick={() => navigate(`/admin/edit-course/${id}`)}>
             Edit
           </button>
         </div>

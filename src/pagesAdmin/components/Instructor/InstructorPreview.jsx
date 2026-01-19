@@ -161,7 +161,9 @@ const InstructorPreview = ({ instructor, onCancel }) => {
                         <label>Education</label>
                         <input
                             type="text"
-                            className={`ip-input ${isEditing ? 'editable' : ''}`}
+                            value={formData.qualification || ''}
+                            onChange={(e) => setFormData({ ...formData, qualification: e.target.value })}
+                            className={`ep-input ${isEditing ? 'editable' : ''}`}
                             readOnly={!isEditing}
                         />
                     </div>

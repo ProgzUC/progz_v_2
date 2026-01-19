@@ -6,16 +6,20 @@ import {
   Draggable
 } from "@hello-pangea/dnd";
 import "./CreateCourse.css";
+import { uploadToCloudinary } from "../../../utils/cloudinary";
+import api from "../../../api/axiosInstance";
 
 const CreateCourse = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const [course, setCourse] = useState({
-    name: "",
+    courseName: "",
     courseId: "",
-    description: "",
-    duration: "",
-    instructor: "",
+    courseDescription: "",
+    courseDuration: "",
+    instructor: "", // This will be handled by backend mostly but keeping field if needed
+    thumbnail: null, // File object
     modules: [
       {
         title: "",
@@ -136,18 +140,90 @@ const CreateCourse = () => {
     const link = prompt("Enter video link");
     if (!link) return;
 
-    updateSectionField(mIndex, sIndex, "videos", [
-      ...course.modules[mIndex].sections[sIndex].videos,
-      link,
-    ]);
+    const updated = [...course.modules];
+    // VideoReferences in schema is array of strings
+    updated[mIndex].sections[sIndex].videos.push(link);
+    setCourse({ ...course, modules: updated });
   };
 
   // =================
   // SUBMIT
   // =================
 
-  const handleSubmit = () => {
-    navigate("/dashboard/course-created", { state: { course } });
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      // 1. Upload Thumbnail
+      let thumbnailData = null;
+      if (course.thumbnail instanceof File) {
+        thumbnailData = await uploadToCloudinary(course.thumbnail);
+      } else {
+        // If it's already a URL or object (unlikely in create flow but good practice)
+        thumbnailData = course.thumbnail;
+      }
+
+      // 2. Process Modules & Sections (Upload files)
+      // We need to map over modules and sections and perform async uploads
+      const processedModules = await Promise.all(
+        course.modules.map(async (mod) => {
+          const processedSections = await Promise.all(
+            mod.sections.map(async (sec) => {
+              // Upload Learning Material
+              let materialData = null;
+              if (sec.materialFile instanceof File) {
+                materialData = await uploadToCloudinary(sec.materialFile);
+              }
+
+              // Upload Challenge File
+              let challengeData = null;
+              if (sec.challengeFile instanceof File) {
+                challengeData = await uploadToCloudinary(sec.challengeFile);
+              }
+
+              return {
+                sectionName: sec.title,
+                learningMaterialNotes: sec.notes,
+                learningMaterialFile: materialData, // Object { url, publicId, ... }
+                codeChallengeInstructions: sec.challengeInstructions,
+                codeChallengeFile: challengeData,   // Object
+                videoReferences: sec.videos,
+              };
+            })
+          );
+
+          return {
+            title: mod.title,
+            sections: processedSections,
+          };
+        })
+      );
+
+      // 3. Construct Final Payload
+      // Note: Backend expects 'courseName', 'courseDescription', etc.
+      // And 'thumbnail' as object { url, publicId }
+      const payload = {
+        courseName: course.courseName, // Changed from name to courseName in state
+        courseId: course.courseId,
+        courseDescription: course.courseDescription, // Changed from description
+        courseDuration: course.courseDuration, // Changed from duration
+        // instructor: course.instructor, // Let backend assign current user or send if needed
+        thumbnail: thumbnailData ? { url: thumbnailData.url, publicId: thumbnailData.publicId } : null,
+        modules: processedModules,
+      };
+
+      console.log("Submitting Course Payload:", payload);
+
+      // 4. Send to Backend
+      await api.post("/courses", payload);
+
+      alert("Course created successfully!");
+      navigate("/admin/courses"); // Redirect to courses list
+    } catch (error) {
+      console.error("Error creating course:", error);
+      alert("Failed to create course. Please check console.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -157,19 +233,22 @@ const CreateCourse = () => {
           <h2>Create Course</h2>
           <i
             className="bi bi-x-lg close-icon"
-            onClick={() => navigate("/dashboard/courses")}
+            onClick={() => navigate("/admin/courses")}
           ></i>
         </div>
 
         <p className="subtitle">Build your modules and sections</p>
+
+        {loading && <div className="loading-overlay">Creating Course... Please wait...</div>}
 
         {/* BASIC FIELDS */}
         <div className="input-grid">
           <div>
             <label>Course Name</label>
             <input
-              value={course.name}
-              onChange={(e) => updateField("name", e.target.value)}
+              value={course.courseName}
+              onChange={(e) => updateField("courseName", e.target.value)}
+              placeholder="e.g. Advanced React"
             />
           </div>
 
@@ -178,6 +257,7 @@ const CreateCourse = () => {
             <input
               value={course.courseId}
               onChange={(e) => updateField("courseId", e.target.value)}
+              placeholder="e.g. REACT_ADV_001"
             />
           </div>
         </div>
@@ -185,26 +265,34 @@ const CreateCourse = () => {
         <div className="input-full">
           <label>Course Description</label>
           <textarea
-            value={course.description}
-            onChange={(e) => updateField("description", e.target.value)}
+            value={course.courseDescription}
+            onChange={(e) => updateField("courseDescription", e.target.value)}
           />
         </div>
 
         <div className="input-grid">
+          {/* Thumbnail Upload */}
           <div>
-            <label>Instructor</label>
+            <label>Thumbnail Image</label>
             <input
-              value={course.instructor}
-              onChange={(e) => updateField("instructor", e.target.value)}
+              type="file"
+              accept="image/*"
+              onChange={(e) => updateField("thumbnail", e.target.files[0])}
             />
+            {course.thumbnail && course.thumbnail instanceof File && (
+              <div className="file-preview-mini">
+                <img src={URL.createObjectURL(course.thumbnail)} alt="Preview" className="preview-image-mini" style={{ height: '50px', marginTop: '5px' }} />
+                <span>{course.thumbnail.name}</span>
+              </div>
+            )}
           </div>
 
           <div>
             <label>Duration (Hours)</label>
             <input
               type="number"
-              value={course.duration}
-              onChange={(e) => updateField("duration", e.target.value)}
+              value={course.courseDuration}
+              onChange={(e) => updateField("courseDuration", e.target.value)}
             />
           </div>
         </div>
@@ -242,7 +330,7 @@ const CreateCourse = () => {
                           </div>
 
                           <div className="module-content">
-                            <label className="module-label">Modules {mIndex + 1}</label>
+                            <label className="module-label">Module {mIndex + 1}</label>
                             <div className="module-title-row">
                               <input
                                 value={module.title}
@@ -312,28 +400,30 @@ const CreateCourse = () => {
                                                 placeholder="Enter section name"
                                               />
 
-                                              <i
-                                                className={`bi bi-chevron-down section-chevron ${section.expanded
+                                              <div className="section-actions">
+                                                <i
+                                                  className={`bi bi-chevron-down section-chevron ${section.expanded
                                                     ? "rotate"
                                                     : ""
-                                                  }`}
-                                                onClick={() =>
-                                                  toggleSection(
-                                                    mIndex,
-                                                    sIndex
-                                                  )
-                                                }
-                                              ></i>
+                                                    }`}
+                                                  onClick={() =>
+                                                    toggleSection(
+                                                      mIndex,
+                                                      sIndex
+                                                    )
+                                                  }
+                                                ></i>
 
-                                              <i
-                                                className="bi bi-trash section-delete"
-                                                onClick={() =>
-                                                  removeSection(
-                                                    mIndex,
-                                                    sIndex
-                                                  )
-                                                }
-                                              ></i>
+                                                <i
+                                                  className="bi bi-trash section-delete"
+                                                  onClick={() =>
+                                                    removeSection(
+                                                      mIndex,
+                                                      sIndex
+                                                    )
+                                                  }
+                                                ></i>
+                                              </div>
                                             </div>
                                           </div>
                                         </div>
@@ -496,13 +586,13 @@ const CreateCourse = () => {
         <div className="footer-actions">
           <button
             className="cancel-btn"
-            onClick={() => navigate("/dashboard/courses")}
+            onClick={() => navigate("/admin/courses")}
           >
             Cancel
           </button>
 
-          <button className="submit-btn" onClick={handleSubmit}>
-            Create Course
+          <button className="submit-btn" onClick={handleSubmit} disabled={loading}>
+            {loading ? "Creating..." : "Create Course"}
           </button>
         </div>
       </div>

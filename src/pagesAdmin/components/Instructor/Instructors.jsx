@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 import "./Instructors.css";
+import Loader from "../../../components/common/Loader/Loader";
+import { useAllUsers, useDeleteUser } from "../../../hooks/useAdminUsers";
 import { FaTrash, FaEdit, FaEye } from "react-icons/fa";
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 const Instructors = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
 
-  const [instructors, setInstructors] = useState([
-    { name: "Annoushka", email: "annoushkagungee@gmail.com", mobile: "7756049377", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Chandrasekar", email: "dcsekars_2000@yahoo.com", mobile: "9586134636", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Chirag", email: "chiragsaraswat2@gmail.com", mobile: "8171419031", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Dinesh", email: "dineshjh107@gmail.com", mobile: "9994030296", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Gowtham", email: "gowthamts18@gmail.com", mobile: "8015456653", qualification: "Not specified\nN/A • 0 years" },
-    { name: "Janani", email: "hello@jimhealthcare.in", mobile: "8925310132", qualification: "Not specified\nN/A • 0 years" },
-  ]);
+  // const [instructors, setInstructors] = useState([...]); // Removed static data
+  const { data: allUsers = [], isLoading, isError } = useAllUsers();
+
+  const instructors = allUsers.filter((user) => user.role === "trainer");
 
   const itemsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,9 +29,31 @@ const Instructors = () => {
     currentPage * itemsPerPage
   );
 
+  const { mutate: deleteUser } = useDeleteUser();
+
+  const handleDelete = (user) => {
+    Swal.fire({
+      title: 'Delete Instructor?',
+      text: `Are you sure you want to delete ${user.name}? This action cannot be undone.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteUser(user._id || user.id);
+        Swal.fire('Deleted!', 'Instructor has been deleted.', 'success');
+      }
+    });
+  };
+
   const changePage = (num) => {
     if (num >= 1 && num <= totalPages) setCurrentPage(num);
   };
+
+  if (isLoading) return <Loader />;
+  if (isError) return <div>Error loading instructors</div>;
 
   return (
     <div className="inst-page">
@@ -49,7 +70,7 @@ const Instructors = () => {
             onChange={(e) => setSearch(e.target.value)}
           />
 
-          <button className="inst-add-btn" onClick={() => navigate("/dashboard/add-instructor")}>
+          <button className="inst-add-btn" onClick={() => navigate("/admin/add-instructor")}>
             + Add Instructors
           </button>
         </div>
@@ -77,20 +98,20 @@ const Instructors = () => {
                 <td>{item.mobile}</td>
 
                 <td>
-                  {item.qualification.split("\n").map((line, idx) => (
+                  {(item.qualification || "Not specified").split("\n").map((line, idx) => (
                     <div key={idx}>{line}</div>
                   ))}
                 </td>
 
                 <td className="actions">
-                  <FaTrash className="icon delete" />
+                  <FaTrash className="icon delete" onClick={() => handleDelete(item)} />
                   <FaEdit
                     className="icon edit"
-                    onClick={() => navigate("/dashboard/instructor-preview", { state: { instructor: item, initialEditMode: true } })}
+                    onClick={() => navigate("/admin/instructor-preview", { state: { instructor: item, initialEditMode: true } })}
                   />
                   <FaEye
                     className="icon view"
-                    onClick={() => navigate("/dashboard/instructor-preview", { state: { instructor: item, initialEditMode: false } })}
+                    onClick={() => navigate("/admin/instructor-preview", { state: { instructor: item, initialEditMode: false } })}
                   />
                 </td>
               </tr>

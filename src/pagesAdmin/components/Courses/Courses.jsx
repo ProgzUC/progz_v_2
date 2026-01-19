@@ -6,14 +6,14 @@ import { useNavigate } from "react-router-dom";
 const avatar = "https://i.pravatar.cc/40";
 
 const initialCourses = [
-  { id: 1, name: "RPA", students: [avatar, avatar, avatar, avatar], more: 5 },
-  { id: 2, name: "AWS", students: [avatar, avatar, avatar, avatar], more: 6 },
-  { id: 3, name: "AWS & DevOps", students: [avatar, avatar, avatar, avatar], more: 4 },
-  { id: 4, name: "Azure", students: [avatar, avatar, avatar, avatar], more: 3 },
-  { id: 5, name: "DevOps", students: [avatar, avatar, avatar, avatar], more: 5 },
-  { id: 6, name: "DevOps", students: [avatar, avatar, avatar, avatar], more: 5 },
-  { id: 7, name: "AWS & DevOps", students: [avatar, avatar, avatar, avatar], more: 4 },
-  { id: 8, name: "Azure", students: [avatar, avatar, avatar, avatar], more: 3 },
+  { id: 1, name: "RPA",  more: 5 },
+  { id: 2, name: "AWS",  more: 6 },
+  { id: 3, name: "AWS & DevOps",  more: 4 },
+  { id: 4, name: "Azure",  more: 3 },
+  { id: 5, name: "DevOps",  more: 5 },
+  { id: 6, name: "DevOps",  more: 5 },
+  { id: 7, name: "AWS & DevOps",  more: 4 },
+  { id: 8, name: "Azure",  more: 3 },
 ];
 
 const Courses = () => {
@@ -42,15 +42,15 @@ const Courses = () => {
 
   // ----------------------------- ACTION HANDLERS -----------------------------
   const viewHandler = (course) => {
-    navigate(`/dashboard/course/${course.id}`);
+    navigate(`/admin/course/${course.id}`);
   };
 
   const editHandler = (course) => {
-    navigate(`/dashboard/edit-course/${course.id}`);
+    navigate(`/admin/edit-course/${course.id}`);
   };
 
   const usersHandler = (course) => {
-    navigate(`/dashboard/course-users/${course.id}`);
+    navigate(`/admin/course-users/${course.id}`);
   };
 
   const deleteHandler = (course) => {
@@ -94,7 +94,7 @@ const Courses = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button className="create-btn" onClick={() => navigate("/dashboard/create-course")}>
+          <button className="create-btn" onClick={() => navigate("/admin/create-course")}>
             + Create New Course
           </button>
         </div>
@@ -122,14 +122,14 @@ const Courses = () => {
               {paginated.map((course) => (
                 <tr key={course.id}>
                   <td>{course.name}</td>
-                  <td>-</td>
+                  <td></td>
 
                   <td>
                     <div className="avatar-group">
-                      {course.students.map((img, i) => (
+                      {/* {course.students.map((img, i) => (
                         <img src={img} key={i} className="avatar" />
-                      ))}
-                      <span className="more-tag">+{course.more}</span>
+                      ))} */}
+                      <span className="more-tag">{course.more}</span>
                     </div>
                   </td>
 
