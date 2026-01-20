@@ -1,0 +1,177 @@
+/* Recycle Bin Page */
+.recycle-bin-page {
+    padding: 40px 50px;
+    background-color: #ddd9d5;
+    /* Match other admin pages */
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+.page-title {
+    font-size: 32px;
+    font-weight: 500;
+    color: #7a7a7a;
+    margin: 0 0 30px 0;
+}
+
+/* Card Styling */
+.recycle-bin-card {
+    background: #FFFFFF;
+    border-radius: 16px;
+    padding: 30px 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    min-height: 400px;
+}
+
+.card-header {
+    font-size: 18px;
+    font-weight: 600;
+    color: #8B8B8B;
+    margin: 0 0 25px 0;
+}
+
+/* Table Styling */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.bin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bin-table thead th {
+    text-align: left;
+    font-size: 13px;
+    font-weight: 400;
+    color: #bbb;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #f0f0f0;
+    padding: 0 15px 18px 15px;
+}
+
+.bin-table tbody tr {
+    border-bottom: 1px solid #f5f5f5;
+    transition: background-color 0.2s;
+}
+
+.bin-table tbody tr:hover {
+    background-color: transparent;
+}
+
+.bin-table tbody td {
+    padding: 20px 15px;
+    font-size: 14px;
+    color: #666;
+}
+
+.item-name {
+    font-weight: 400;
+    color: #999;
+}
+
+.item-type {
+    text-transform: capitalize;
+    font-weight: 500;
+}
+
+.item-type.user {
+    color: #108a5d;
+    /* Greenish for users */
+}
+
+.item-type.course {
+    color: #3b82f6;
+    /* Blueish for courses */
+}
+
+.deleted-date {
+    color: #bbb;
+    font-size: 13px;
+}
+
+/* Action Icons */
+.action-icons {
+    text-align: right;
+    padding-right: 20px !important;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    margin-left: 12px;
+    border-radius: 4px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    background-color: #F5F5F5;
+}
+
+.restore-btn {
+    color: #22C55E;
+    /* Green for restore */
+}
+
+.restore-btn:hover {
+    background-color: #DCFCE7;
+}
+
+.delete-btn {
+    color: #EF4444;
+    /* Red for permanent delete */
+}
+
+.delete-btn:hover {
+    background-color: #FEE2E2;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 0;
+    color: #aaa;
+}
+
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 15px;
+    color: #ddd;
+}
+
+.empty-state p {
+    font-size: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .recycle-bin-page {
+        padding: 20px;
+    }
+
+    .recycle-bin-card {
+        padding: 20px;
+    }
+
+    .bin-table {
+        font-size: 13px;
+    }
+
+    .bin-table thead th,
+    .bin-table tbody td {
+        padding: 12px 8px;
+    }
+
+    .icon-btn {
+        margin-left: 6px;
+    }
+}

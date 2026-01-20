@@ -153,6 +153,16 @@ const Sidebar = () => {
           {!collapsed && <span>Approve Users</span>}
         </NavLink>
 
+        <NavLink
+          to="/admin/recycle-bin"
+          className={({ isActive }) =>
+            isActive ? "menu-item active" : "menu-item"
+          }
+        >
+          <i className="bi bi-trash"></i>
+          {!collapsed && <span>Recycle Bin</span>}
+        </NavLink>
+
         <div className="menu-spacer"></div>
 
         <div className="menu-divider"></div>

@@ -10,6 +10,7 @@ import TrainerApp from "./pagesTrainer/TrainerApp"
 import StudentApp from "./pagesStudent/StudentApp"
 import AdminApp from "./pagesAdmin/AdminApp"
 
+
 const getAuthData = () => {
   const token =
     localStorage.getItem("accessToken") ||
@@ -50,16 +51,18 @@ const App = () => {
             path="/admin/*"
             element={
               <ProtectedRoute allowedRoles={["admin"]}>
-                <AdminApp/>
+                <AdminApp />
               </ProtectedRoute>
             }
           />
+
+          
 
           <Route
             path="/trainer-dashboard"
             element={
               <ProtectedRoute allowedRoles={["trainer"]}>
-                <TrainerApp/>
+                <TrainerApp />
               </ProtectedRoute>
             }
           />

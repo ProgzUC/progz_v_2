@@ -157,5 +157,15 @@ export const triggerManualSync = () =>
 export const registerUser = (payload) =>
   axiosInstance.post("/users/register", payload).then((res) => res.data);
 
+/* Recycle Bin APIs */
+export const fetchBinItems = () =>
+  axiosInstance.get("/bin").then((res) => res.data);
+
+export const restoreBinItem = (id) =>
+  axiosInstance.post(`/bin/${id}/restore`).then((res) => res.data);
+
+export const permanentlyDeleteBinItem = (id) =>
+  axiosInstance.delete(`/bin/${id}`).then((res) => res.data);
+
 export default axiosInstance;
 
