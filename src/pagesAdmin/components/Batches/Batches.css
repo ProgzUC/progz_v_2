@@ -212,6 +212,35 @@
     color: #ef4444;
 }
 
+.bulk-delete-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fee2e2;
+    padding: 10px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 10px;
+}
+
+.bulk-delete-btn:hover {
+    background-color: #fee2e2;
+    transform: translateY(-1px);
+}
+
+.batch-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: #10a358;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
 .batches-pagination {
     display: flex;
     justify-content: center;
@@ -363,65 +392,4 @@
 
 .modal-students-list li:last-child {
     border-bottom: none;
-}
-
-/* Delete Modal Styles */
-.delete-modal-box {
-    background: white;
-    padding: 25px;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 400px;
-    position: relative;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.delete-modal-box h3 {
-    margin-top: 0;
-    color: #333;
-    font-size: 20px;
-    margin-bottom: 12px;
-}
-
-.delete-modal-box p {
-    color: #666;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 25px;
-}
-
-.delete-modal-actions {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-}
-
-.delete-modal-actions button {
-    padding: 10px 24px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    border: none;
-}
-
-.cancel-btn {
-    background-color: #f3f4f6;
-    color: #4b5563;
-}
-
-.cancel-btn:hover {
-    background-color: #e5e7eb;
-}
-
-.confirm-btn {
-    background-color: #ef4444;
-    color: white;
-}
-
-.confirm-btn:hover {
-    background-color: #dc2626;
-    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }

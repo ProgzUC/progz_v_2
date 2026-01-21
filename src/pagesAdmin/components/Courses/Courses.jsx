@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import "./Courses.css";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 const avatar = "https://i.pravatar.cc/40";
 
 const initialCourses = [
-  { id: 1, name: "RPA",  more: 5 },
-  { id: 2, name: "AWS",  more: 6 },
-  { id: 3, name: "AWS & DevOps",  more: 4 },
-  { id: 4, name: "Azure",  more: 3 },
-  { id: 5, name: "DevOps",  more: 5 },
-  { id: 6, name: "DevOps",  more: 5 },
-  { id: 7, name: "AWS & DevOps",  more: 4 },
-  { id: 8, name: "Azure",  more: 3 },
+  { id: 1, name: "RPA", more: 5 },
+  { id: 2, name: "AWS", more: 6 },
+  { id: 3, name: "AWS & DevOps", more: 4 },
+  { id: 4, name: "Azure", more: 3 },
+  { id: 5, name: "DevOps", more: 5 },
+  { id: 6, name: "DevOps", more: 5 },
+  { id: 7, name: "AWS & DevOps", more: 4 },
+  { id: 8, name: "Azure", more: 3 },
 ];
 
 const Courses = () => {
@@ -54,10 +55,29 @@ const Courses = () => {
   };
 
   const deleteHandler = (course) => {
-    const confirmed = window.confirm(`Are you sure you want to delete "${course.name}"?`);
-    if (!confirmed) return;
-
-    setCourses((prev) => prev.filter((c) => c.id !== course.id));
+    Swal.fire({
+      title: "Delete Course?",
+      text: `Are you sure you want to delete "${course.name}"? This action cannot be undone.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete!",
+      background: "#fff",
+      color: "#333",
+      borderRadius: "15px"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setCourses((prev) => prev.filter((c) => c.id !== course.id));
+        Swal.fire({
+          title: "Deleted!",
+          text: `"${course.name}" has been deleted successfully.`,
+          icon: "success",
+          confirmButtonColor: "#28a745",
+          timer: 1500
+        });
+      }
+    });
   };
   // ---------------------------------------------------------------------------
 

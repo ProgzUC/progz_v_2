@@ -3,6 +3,7 @@ import "./Batches.css";
 import "../Modal.css";
 import { FaTrash } from "react-icons/fa";
 import { MdFilterList } from "react-icons/md";
+import Swal from "sweetalert2";
 
 const Batches = () => {
     const [batches, setBatches] = useState([
@@ -20,8 +21,7 @@ const Batches = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedBatch, setSelectedBatch] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [batchToDelete, setBatchToDelete] = useState(null);
+    const [selectedIds, setSelectedIds] = useState([]);
     const [filterStatus, setFilterStatus] = useState("All");
     const itemsPerPage = 5;
 
@@ -51,20 +51,74 @@ const Batches = () => {
         setSelectedBatch(null);
     };
 
-    const handleDelete = (id) => {
-        setBatchToDelete(id);
-        setShowDeleteModal(true);
+    const toggleSelectAll = () => {
+        if (selectedIds.length === paginatedBatches.length) {
+            setSelectedIds([]);
+        } else {
+            setSelectedIds(paginatedBatches.map(batch => batch.id));
+        }
     };
 
-    const confirmDelete = () => {
-        setBatches(batches.filter(batch => batch.id !== batchToDelete));
-        setShowDeleteModal(false);
-        setBatchToDelete(null);
+    const toggleSelect = (id) => {
+        setSelectedIds(prev =>
+            prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+        );
     };
 
-    const cancelDelete = () => {
-        setShowDeleteModal(false);
-        setBatchToDelete(null);
+    const handleDeleteSelected = () => {
+        if (selectedIds.length === 0) return;
+
+        Swal.fire({
+            title: "Delete multiple batches?",
+            text: `Are you sure you want to delete ${selectedIds.length} selected batches?`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: "Yes, delete them!",
+            background: "#fff",
+            color: "#333",
+            borderRadius: "15px"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setBatches(batches.filter(batch => !selectedIds.includes(batch.id)));
+                setSelectedIds([]);
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Selected batches have been deleted.",
+                    icon: "success",
+                    confirmButtonColor: "#28a745",
+                    timer: 1500
+                });
+            }
+        });
+    };
+
+    const handleDelete = (batch) => {
+        Swal.fire({
+            title: "Delete Batch?",
+            text: `Are you sure you want to delete "${batch.name}"? This action cannot be undone.`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete!",
+            background: "#fff",
+            color: "#333",
+            borderRadius: "15px"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setBatches(batches.filter(b => b.id !== batch.id));
+                setSelectedIds(prev => prev.filter(i => i !== batch.id));
+                Swal.fire({
+                    title: "Deleted!",
+                    text: `"${batch.name}" has been deleted successfully.`,
+                    icon: "success",
+                    confirmButtonColor: "#28a745",
+                    timer: 1500
+                });
+            }
+        });
     };
 
     const getStatusClass = (status) => {
@@ -85,12 +139,19 @@ const Batches = () => {
             <div className="batches-stats-row">
                 <div className="stat-card">
                     <span className="stat-label">Total Batches</span>
-                    <span className="stat-value">22</span>
+                    <span className="stat-value">{batches.length}</span>
                 </div>
                 <div className="stat-card">
                     <span className="stat-label">Active Batches</span>
-                    <span className="stat-value">14</span>
+                    <span className="stat-value">{batches.filter(b => b.status === "Active").length}</span>
                 </div>
+
+                {selectedIds.length > 0 && (
+                    <button className="bulk-delete-btn" onClick={handleDeleteSelected}>
+                        <FaTrash /> Delete Selected ({selectedIds.length})
+                    </button>
+                )}
+
                 <div className="filter-controls">
                     <MdFilterList className="filter-icon" />
                     <select
@@ -115,16 +176,32 @@ const Batches = () => {
                     <table className="batches-table">
                         <thead>
                             <tr>
+                                <th style={{ width: "40px" }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={paginatedBatches.length > 0 && selectedIds.length === paginatedBatches.length}
+                                        onChange={toggleSelectAll}
+                                        className="batch-checkbox"
+                                    />
+                                </th>
                                 <th>Batch</th>
                                 <th>Student</th>
                                 <th>Instructor</th>
                                 <th>Status</th>
-                                <th></th>
+                                <th style={{ textAlign: "right", paddingRight: "20px" }}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {paginatedBatches.map((batch) => (
                                 <tr key={batch.id}>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedIds.includes(batch.id)}
+                                            onChange={() => toggleSelect(batch.id)}
+                                            className="batch-checkbox"
+                                        />
+                                    </td>
                                     <td>
                                         <div className="batch-name-cell">
                                             {batch.name}
@@ -148,10 +225,10 @@ const Batches = () => {
                                             {batch.status}
                                         </span>
                                     </td>
-                                    <td>
+                                    <td style={{ textAlign: "right", paddingRight: "20px" }}>
                                         <FaTrash
                                             className="delete-icon"
-                                            onClick={() => handleDelete(batch.id)}
+                                            onClick={() => handleDelete(batch)}
                                         />
                                     </td>
                                 </tr>
@@ -205,19 +282,7 @@ const Batches = () => {
                 </div>
             )}
 
-            {/* Delete Confirmation Modal */}
-            {showDeleteModal && (
-                <div className="modal-overlay" onClick={cancelDelete}>
-                    <div className="delete-modal-box" onClick={(e) => e.stopPropagation()}>
-                        <h3>Confirm Delete</h3>
-                        <p>Are you sure you want to delete this batch? This action cannot be undone.</p>
-                        <div className="delete-modal-actions">
-                            <button className="cancel-btn" onClick={cancelDelete}>Cancel</button>
-                            <button className="confirm-btn" onClick={confirmDelete}>Delete</button>
-                        </div>
-                    </div>
-                </div>
-            )}
+
         </div>
     );
 };
