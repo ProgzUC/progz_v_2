@@ -7,7 +7,7 @@ import { FaFacebook, FaApple } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import pattern from "../../assets/login/pattern.png";
 import "./Auth.css";
-import { login, forgotPassword } from "../../api/axiosInstance";
+import { login, forgotPassword } from "../../api/authApi";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -85,7 +85,7 @@ const SignIn = () => {
     }
 
     setLoading(true);
-    try{
+    try {
       forgotPassword({ email: forgotEmail });
     } catch (err) {
       setError(err.response?.data?.msg || "Password reset failed");
@@ -132,9 +132,11 @@ const SignIn = () => {
         <div className="popup-icon">✅</div>
         <h3>Success</h3>
         <p>{msg}</p>
-        <button onClick={() => { setSuccessMessage("")
-        if (onAction) onAction();  }} className="login-btn popup-btn">
-          { actionName || "Close"}
+        <button onClick={() => {
+          setSuccessMessage("")
+          if (onAction) onAction();
+        }} className="login-btn popup-btn">
+          {actionName || "Close"}
         </button>
       </div>
     </div>

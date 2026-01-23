@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchTrainerProfile } from "../api/axiosInstance";
+import { fetchTrainerProfile } from "../api/trainerApi";
 
 export const useTrainerProfile = () =>
   useQuery({

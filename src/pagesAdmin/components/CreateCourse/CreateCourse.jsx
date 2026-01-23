@@ -27,13 +27,14 @@ const CreateCourse = () => {
           {
             title: "",
             expanded: false,
-            materialFile: null,
+            materialFiles: [],        // MULTIPLE
             notes: "",
-            challengeFile: null,
+            challengeFiles: [],       // MULTIPLE
             challengeInstructions: "",
             videos: [],
           },
         ],
+
       },
     ],
   });
@@ -108,14 +109,15 @@ const CreateCourse = () => {
     updated[mIndex].sections.push({
       title: "",
       expanded: false,
-      materialFile: null,
+      materialFiles: [],
       notes: "",
-      challengeFile: null,
+      challengeFiles: [],
       challengeInstructions: "",
       videos: [],
     });
     setCourse({ ...course, modules: updated });
   };
+
 
   const removeSection = (mIndex, sIndex) => {
     const updated = [...course.modules];
@@ -153,39 +155,40 @@ const CreateCourse = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      // 1. Upload Thumbnail
+      // 1. Thumbnail (single)
       let thumbnailData = null;
       if (course.thumbnail instanceof File) {
-        thumbnailData = await uploadToCloudinary(course.thumbnail);
-      } else {
-        // If it's already a URL or object (unlikely in create flow but good practice)
-        thumbnailData = course.thumbnail;
+        thumbnailData = await uploadToCloudinary(
+          course.thumbnail,
+          "courses/thumbnails"
+        );
       }
 
-      // 2. Process Modules & Sections (Upload files)
-      // We need to map over modules and sections and perform async uploads
+      // 2. Modules & Sections
       const processedModules = await Promise.all(
         course.modules.map(async (mod) => {
           const processedSections = await Promise.all(
             mod.sections.map(async (sec) => {
-              // Upload Learning Material
-              let materialData = null;
-              if (sec.materialFile instanceof File) {
-                materialData = await uploadToCloudinary(sec.materialFile);
-              }
+              // Upload multiple learning materials
+              const materialUploads = await Promise.all(
+                (sec.materialFiles || []).map((f) =>
+                  uploadToCloudinary(f, "courses/materials")
+                )
+              );
 
-              // Upload Challenge File
-              let challengeData = null;
-              if (sec.challengeFile instanceof File) {
-                challengeData = await uploadToCloudinary(sec.challengeFile);
-              }
+              // Upload multiple challenge files
+              const challengeUploads = await Promise.all(
+                (sec.challengeFiles || []).map((f) =>
+                  uploadToCloudinary(f, "courses/challenges")
+                )
+              );
 
               return {
                 sectionName: sec.title,
                 learningMaterialNotes: sec.notes,
-                learningMaterialFile: materialData, // Object { url, publicId, ... }
+                learningMaterialFile: materialUploads, // ARRAY
                 codeChallengeInstructions: sec.challengeInstructions,
-                codeChallengeFile: challengeData,   // Object
+                codeChallengeFile: challengeUploads,   // ARRAY
                 videoReferences: sec.videos,
               };
             })
@@ -198,29 +201,24 @@ const CreateCourse = () => {
         })
       );
 
-      // 3. Construct Final Payload
-      // Note: Backend expects 'courseName', 'courseDescription', etc.
-      // And 'thumbnail' as object { url, publicId }
       const payload = {
-        courseName: course.courseName, // Changed from name to courseName in state
+        courseName: course.courseName,
         courseId: course.courseId,
-        courseDescription: course.courseDescription, // Changed from description
-        courseDuration: course.courseDuration, // Changed from duration
-        // instructor: course.instructor, // Let backend assign current user or send if needed
-        thumbnail: thumbnailData ? { url: thumbnailData.url, publicId: thumbnailData.publicId } : null,
+        courseDescription: course.courseDescription,
+        courseDuration: Number(course.courseDuration),
+        thumbnail: thumbnailData
+          ? { url: thumbnailData.url, publicId: thumbnailData.publicId }
+          : null,
         modules: processedModules,
       };
 
-      console.log("Submitting Course Payload:", payload);
-
-      // 4. Send to Backend
       await api.post("/courses", payload);
 
       alert("Course created successfully!");
-      navigate("/admin/courses"); // Redirect to courses list
-    } catch (error) {
-      console.error("Error creating course:", error);
-      alert("Failed to create course. Please check console.");
+      navigate("/admin/courses");
+    } catch (err) {
+      console.error(err);
+      alert(err.message || "Upload failed");
     } finally {
       setLoading(false);
     }
@@ -436,53 +434,38 @@ const CreateCourse = () => {
                                             </label>
                                             <input
                                               type="file"
+                                              multiple
                                               onChange={(e) =>
                                                 updateSectionField(
                                                   mIndex,
                                                   sIndex,
-                                                  "materialFile",
-                                                  e.target.files[0]
+                                                  "materialFiles",
+                                                  Array.from(e.target.files)
                                                 )
                                               }
                                             />
 
                                             {/* PREVIEW */}
-                                            {section.materialFile && (
-                                              <div className="file-preview">
-                                                <p>
-                                                  Selected:{" "}
-                                                  {
-                                                    section
-                                                      .materialFile
-                                                      .name
-                                                  }
-                                                </p>
-
-                                                {section.materialFile.type.includes(
-                                                  "image"
-                                                ) && (
-                                                    <img
-                                                      src={URL.createObjectURL(
-                                                        section.materialFile
-                                                      )}
-                                                      className="preview-image"
-                                                    />
-                                                  )}
-
-                                                {section.materialFile.type.includes(
-                                                  "video"
-                                                ) && (
-                                                    <video
-                                                      controls
-                                                      className="preview-video"
-                                                    >
-                                                      <source
-                                                        src={URL.createObjectURL(
-                                                          section.materialFile
-                                                        )}
+                                            {section.materialFiles && section.materialFiles.length > 0 && (
+                                              <div className="file-preview-list">
+                                                {section.materialFiles.map((file, idx) => (
+                                                  <div key={idx} className="file-preview">
+                                                    <p>Selected: {file.name}</p>
+                                                    {file.type.includes("image") && (
+                                                      <img
+                                                        src={URL.createObjectURL(file)}
+                                                        className="preview-image"
                                                       />
-                                                    </video>
-                                                  )}
+                                                    )}
+                                                    {file.type.includes("video") && (
+                                                      <video controls className="preview-video">
+                                                        <source
+                                                          src={URL.createObjectURL(file)}
+                                                        />
+                                                      </video>
+                                                    )}
+                                                  </div>
+                                                ))}
                                               </div>
                                             )}
 
@@ -506,15 +489,33 @@ const CreateCourse = () => {
                                             </label>
                                             <input
                                               type="file"
+                                              multiple
                                               onChange={(e) =>
                                                 updateSectionField(
                                                   mIndex,
                                                   sIndex,
-                                                  "challengeFile",
-                                                  e.target.files[0]
+                                                  "challengeFiles",
+                                                  Array.from(e.target.files)
                                                 )
                                               }
                                             />
+
+                                            {/* CHALLENGE FILES PREVIEW */}
+                                            {section.challengeFiles && section.challengeFiles.length > 0 && (
+                                              <div className="file-preview-list">
+                                                {section.challengeFiles.map((file, idx) => (
+                                                  <div key={idx} className="file-preview">
+                                                    <p>Selected: {file.name}</p>
+                                                    {file.type.includes("image") && (
+                                                      <img
+                                                        src={URL.createObjectURL(file)}
+                                                        className="preview-image"
+                                                      />
+                                                    )}
+                                                  </div>
+                                                ))}
+                                              </div>
+                                            )}
 
                                             <label>
                                               Challenge Instructions

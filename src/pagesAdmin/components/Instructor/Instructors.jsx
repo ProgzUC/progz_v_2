@@ -95,7 +95,7 @@ const Instructors = () => {
               <tr key={index}>
                 <td>{item.name}</td>
                 <td>{item.email}</td>
-                <td>{item.mobile}</td>
+                <td>{item.phone}</td>
 
                 <td>
                   {(item.qualification || "Not specified").split("\n").map((line, idx) => (

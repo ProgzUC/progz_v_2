@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchPendingUsers, fetchAllUsers, approveUser, rejectUser, deleteUser } from "../api/axiosInstance";
+import { fetchPendingUsers, fetchAllUsers, approveUser, rejectUser, deleteUser } from "../api/userApi";
 
 export const usePendingUsers = () =>
     useQuery({

@@ -1,34 +1,42 @@
-import axios from "axios";
 
-export const uploadToCloudinary = async (file) => {
+
+
+export const uploadToCloudinary = async (file, folder = "courses") => {
+    const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+    const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
     if (!file) return null;
-
-    const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-    const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
-
-    if (!cloudName || !uploadPreset) {
+    if (!CLOUD_NAME || !UPLOAD_PRESET) {
         console.error("Cloudinary configuration missing");
         throw new Error("Cloudinary configuration missing");
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", uploadPreset);
-
-    try {
-        const response = await axios.post(
-            `https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`,
-            formData
-        );
-
-        return {
-            url: response.data.secure_url,
-            publicId: response.data.public_id,
-            fileType: response.data.resource_type,
-            originalName: response.data.original_filename
-        };
-    } catch (error) {
-        console.error("Cloudinary upload failed:", error);
-        throw error;
+    if (file.size > 10 * 1024 * 1024) {
+        throw new Error(`${file.name} exceeds 10MB limit`);
     }
+
+    const fd = new FormData();
+    fd.append("file", file);
+    fd.append("upload_preset", UPLOAD_PRESET);
+    fd.append("folder", folder);
+
+    const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`,
+        {
+            method: "POST",
+            body: fd,
+        }
+    );
+
+    if (!res.ok) {
+        throw new Error("Cloudinary upload failed");
+    }
+
+    const data = await res.json();
+
+    return {
+        url: data.secure_url,
+        publicId: data.public_id,
+        fileType: data.resource_type,
+        originalName: file.name,
+    };
 };

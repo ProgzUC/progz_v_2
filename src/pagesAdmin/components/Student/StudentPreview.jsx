@@ -84,25 +84,31 @@ const StudentPreview = ({ student, onCancel }) => {
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         />
                     </div>
-                    <div className="ep-form-group">
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            value="" // Empty in screenshot usually or hidden
-                            placeholder="" // Screenshot shows blank grey input
-                            readOnly={!isEditing}
-                            className={`ep-input ${isEditing ? 'editable' : ''}`}
-                        />
-                    </div>
-                    <div className="ep-form-group">
-                        <label>Confirm Password</label>
-                        <input
-                            type="password"
-                            value=""
-                            readOnly={!isEditing}
-                            className={`ep-input ${isEditing ? 'editable' : ''}`}
-                        />
-                    </div>
+                    {isEditing && (
+                        <>
+                            <div className="ep-form-group">
+                                <label>Password</label>
+                                <input
+                                    type="password"
+                                    value={formData.password || ''}
+                                    placeholder="Enter password"
+                                    readOnly={!isEditing}
+                                    className={`ep-input ${isEditing ? 'editable' : ''}`}
+                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                />
+                            </div>
+                            <div className="ep-form-group">
+                                <label>Confirm Password</label>
+                                <input
+                                    type="password"
+                                    value={formData.confirmPassword || ''}
+                                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                                    readOnly={!isEditing}
+                                    className={`ep-input ${isEditing ? 'editable' : ''}`}
+                                />
+                            </div>
+                        </>
+                    )}
                     <div className="ep-form-group">
                         <label>Phone</label>
                         <input
@@ -179,7 +185,6 @@ const StudentPreview = ({ student, onCancel }) => {
                         <label>Employment Status</label>
                         <div className="select-wrapper">
                             <input type="text" className={`ep-input ${isEditing ? 'editable' : ''}`} readOnly={!isEditing} />
-                            <i className="bi bi-chevron-down select-icon"></i>
                         </div>
                     </div>
                     <div className="ep-form-group full-width">

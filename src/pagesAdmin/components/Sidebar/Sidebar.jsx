@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { triggerManualSync } from "../../../api/axiosInstance";
+import { triggerManualSync } from "../../../api/userApi";
 import Swal from "sweetalert2";
 import "./Sidebar.css";
 

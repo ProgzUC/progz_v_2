@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { registerUser } from '../../api/axiosInstance';
+import { registerUser } from '../../api/userApi';
 import LeftSidebar from './LeftSidebar';
 import PersonalDetails from './PersonalDetails';
 import Role from './Role';

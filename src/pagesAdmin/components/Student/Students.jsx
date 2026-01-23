@@ -103,7 +103,7 @@ const Students = () => {
                 </td>
 
                 <td>{s.email}</td>
-                <td>{s.mobile}</td>
+                <td>{s.phone}</td>
 
                 <td>
                   {(s.qualification || "Not specified").split("\n").map((line, i) => (

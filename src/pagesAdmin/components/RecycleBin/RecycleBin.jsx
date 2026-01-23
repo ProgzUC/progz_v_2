@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import { fetchBinItems, restoreBinItem, permanentlyDeleteBinItem } from "../../../api/axiosInstance";
+import { fetchBinItems, restoreBinItem, permanentlyDeleteBinItem } from "../../../api/userApi";
 import Loader from "../../../components/common/Loader/Loader";
 import "./RecycleBin.css";
 
@@ -116,14 +116,14 @@ const RecycleBin = () => {
                                 binItems.map((item) => (
                                     <tr key={item._id || item.id}>
                                         <td>
-                                            <span className={`item-type ${item.type?.toLowerCase()}`}>
-                                                {item.data.name || "Unknown"}
+                                            <span className={`item-type ${item.itemType?.toLowerCase()}`}>
+                                                {item.itemType || "Unknown"}
                                             </span>
                                         </td>
-                                        <td className="item-name">{item.data.name|| "N/A"}</td>
+                                        <td className="item-name">{item.itemRefName || item.data?.name || "N/A"}</td>
                                         <td className="deleted-date">
-                                            {item.deletedAt
-                                                ? new Date(item.deletedAt).toLocaleDateString("en-US", {
+                                            {item.createdAt
+                                                ? new Date(item.createdAt).toLocaleDateString("en-US", {
                                                     year: 'numeric',
                                                     month: 'short',
                                                     day: 'numeric'

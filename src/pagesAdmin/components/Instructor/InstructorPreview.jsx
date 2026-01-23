@@ -84,12 +84,14 @@ const InstructorPreview = ({ instructor, onCancel }) => {
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         />
                     </div>
-                    <div className="ip-form-group">
-                        <label>Password</label>
-                        <input
-                            type="password"
-                            value=""
-                            placeholder=""
+                    {isEditing && (
+                        <>
+                        <div className="ip-form-group">
+                            <label>Password</label>
+                            <input
+                                type="password"
+                                value=""
+                                placeholder=""
                             readOnly={!isEditing}
                             className={`ip-input ${isEditing ? 'editable' : ''}`}
                         />
@@ -103,11 +105,14 @@ const InstructorPreview = ({ instructor, onCancel }) => {
                             className={`ip-input ${isEditing ? 'editable' : ''}`}
                         />
                     </div>
+                        
+                        </>   
+                    )}
                     <div className="ip-form-group">
                         <label>Phone</label>
                         <input
                             type="text"
-                            value={formData.mobile}
+                            value={formData.phone}
                             readOnly={!isEditing}
                             className={`ip-input ${isEditing ? 'editable' : ''}`}
                             onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
@@ -179,7 +184,7 @@ const InstructorPreview = ({ instructor, onCancel }) => {
                         <label>Employment Status</label>
                         <div className="select-wrapper">
                             <input type="text" className={`ip-input ${isEditing ? 'editable' : ''}`} readOnly={!isEditing} />
-                            <i className="bi bi-chevron-down select-icon"></i>
+                            
                         </div>
                     </div>
                     <div className="ip-form-group full-width">
