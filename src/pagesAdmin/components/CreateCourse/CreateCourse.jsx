@@ -14,6 +14,33 @@ import Loader from "../../../components/common/Loader/Loader";
 const CreateCourse = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  // Helper to extract YouTube ID
+  const getYouTubeId = (url) => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!course.courseName.trim()) newErrors.courseName = "Course Name is required";
+    if (!course.courseDescription.trim()) newErrors.courseDescription = "Course Description is required";
+    if (!course.courseDuration) newErrors.courseDuration = "Duration is required";
+    if (!course.thumbnail) newErrors.thumbnail = "Thumbnail Image is required";
+
+    course.modules.forEach((mod, mIndex) => {
+      if (!mod.title.trim()) newErrors[`module-${mIndex}`] = "Module Name is required";
+      mod.sections.forEach((sec, sIndex) => {
+        if (!sec.title.trim()) newErrors[`section-${mIndex}-${sIndex}`] = "Section Name is required";
+      });
+    });
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const [course, setCourse] = useState({
     courseName: "",
@@ -43,6 +70,9 @@ const CreateCourse = () => {
 
   const updateField = (field, value) => {
     setCourse((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: null }));
+    }
   };
 
   // ===============
@@ -100,6 +130,9 @@ const CreateCourse = () => {
     const updated = [...course.modules];
     updated[index].title = value;
     setCourse({ ...course, modules: updated });
+    if (errors[`module-${index}`]) {
+      setErrors((prev) => ({ ...prev, [`module-${index}`]: null }));
+    }
   };
 
   // =================
@@ -138,11 +171,30 @@ const CreateCourse = () => {
     const updated = [...course.modules];
     updated[mIndex].sections[sIndex][field] = value;
     setCourse({ ...course, modules: updated });
+    if (field === "title" && errors[`section-${mIndex}-${sIndex}`]) {
+      setErrors((prev) => ({ ...prev, [`section-${mIndex}-${sIndex}`]: null }));
+    }
+  };
+
+  const removeSectionFile = (mIndex, sIndex, field, fileIndex) => {
+    const updated = [...course.modules];
+    const currentFiles = updated[mIndex].sections[sIndex][field] || [];
+    updated[mIndex].sections[sIndex][field] = currentFiles.filter((_, i) => i !== fileIndex);
+    setCourse({ ...course, modules: updated });
   };
 
   const addVideo = (mIndex, sIndex) => {
-    const link = prompt("Enter video link");
+    const link = prompt("Enter video link (YouTube only)");
     if (!link) return;
+
+    if (!getYouTubeId(link)) {
+      Swal.fire({
+        title: "Invalid URL",
+        text: "Please enter a valid YouTube URL (youtube.com or youtu.be)",
+        icon: "error"
+      });
+      return;
+    }
 
     const updated = [...course.modules];
     // VideoReferences in schema is array of strings
@@ -155,6 +207,14 @@ const CreateCourse = () => {
   // =================
 
   const handleSubmit = async () => {
+    if (!validateForm()) {
+      Swal.fire({
+        title: "Validation Error",
+        text: "Please fill all required fields correctly.",
+        icon: "warning",
+      });
+      return;
+    }
     setLoading(true);
     try {
       // 1. Thumbnail (single)
@@ -216,8 +276,6 @@ const CreateCourse = () => {
 
       await api.post("/courses", payload);
 
-      await api.post("/courses", payload);
-
       Swal.fire({
         title: "Success!",
         text: "Course created successfully!",
@@ -251,8 +309,6 @@ const CreateCourse = () => {
 
         <p className="subtitle">Build your modules and sections</p>
 
-        <p className="subtitle">Build your modules and sections</p>
-
         {loading && (
           <div className="loading-overlay">
             <Loader />
@@ -269,41 +325,7 @@ const CreateCourse = () => {
               onChange={(e) => updateField("courseName", e.target.value)}
               placeholder="e.g. Advanced React"
             />
-          </div>
-
-          <div>
-            <label>Course ID</label>
-            <input
-              value={course.courseId}
-              onChange={(e) => updateField("courseId", e.target.value)}
-              placeholder="e.g. REACT_ADV_001"
-            />
-          </div>
-        </div>
-
-        <div className="input-full">
-          <label>Course Description</label>
-          <textarea
-            value={course.courseDescription}
-            onChange={(e) => updateField("courseDescription", e.target.value)}
-          />
-        </div>
-
-        <div className="input-grid">
-          {/* Thumbnail Upload */}
-          <div>
-            <label>Thumbnail Image</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => updateField("thumbnail", e.target.files[0])}
-            />
-            {course.thumbnail && course.thumbnail instanceof File && (
-              <div className="file-preview-mini">
-                <img src={URL.createObjectURL(course.thumbnail)} alt="Preview" className="preview-image-mini" style={{ height: '50px', marginTop: '5px' }} />
-                <span>{course.thumbnail.name}</span>
-              </div>
-            )}
+            {errors.courseName && <span className="error-text">{errors.courseName}</span>}
           </div>
 
           <div>
@@ -313,6 +335,38 @@ const CreateCourse = () => {
               value={course.courseDuration}
               onChange={(e) => updateField("courseDuration", e.target.value)}
             />
+            {errors.courseDuration && <span className="error-text">{errors.courseDuration}</span>}
+          </div>
+        </div>
+
+        <div className="input-full">
+          <label>Course Description</label>
+          <textarea
+            value={course.courseDescription}
+            onChange={(e) => updateField("courseDescription", e.target.value)}
+          />
+          {errors.courseDescription && <span className="error-text">{errors.courseDescription}</span>}
+        </div>
+
+        <div className="input-grid">
+          {/* Thumbnail Upload */}
+          <div>
+            <label>Thumbnail Image</label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                updateField("thumbnail", e.target.files[0]);
+                if (errors.thumbnail) setErrors({ ...errors, thumbnail: null });
+              }}
+            />
+            {course.thumbnail && course.thumbnail instanceof File && (
+              <div className="file-preview-mini">
+                <img src={URL.createObjectURL(course.thumbnail)} alt="Preview" className="preview-image-mini" style={{ height: '50px', marginTop: '5px' }} />
+                <span>{course.thumbnail.name}</span>
+              </div>
+            )}
+            {errors.thumbnail && <span className="error-text">{errors.thumbnail}</span>}
           </div>
         </div>
 
@@ -358,6 +412,7 @@ const CreateCourse = () => {
                                 }
                                 placeholder="Enter module name"
                               />
+                              {errors[`module-${mIndex}`] && <span className="error-text">{errors[`module-${mIndex}`]}</span>}
                               <i
                                 className="bi bi-trash module-delete"
                                 onClick={() => removeModule(mIndex)}
@@ -418,6 +473,7 @@ const CreateCourse = () => {
                                                 }
                                                 placeholder="Enter section name"
                                               />
+                                              {errors[`section-${mIndex}-${sIndex}`] && <span className="error-text">{errors[`section-${mIndex}-${sIndex}`]}</span>}
 
                                               <div className="section-actions">
                                                 <i
@@ -456,14 +512,19 @@ const CreateCourse = () => {
                                             <input
                                               type="file"
                                               multiple
-                                              onChange={(e) =>
+                                              accept="image/*,video/*,.pdf,.doc,.docx"
+                                              onChange={(e) => {
+                                                const newFiles = Array.from(e.target.files);
+                                                const existingFiles = section.materialFiles || [];
                                                 updateSectionField(
                                                   mIndex,
                                                   sIndex,
                                                   "materialFiles",
-                                                  Array.from(e.target.files)
-                                                )
-                                              }
+                                                  [...existingFiles, ...newFiles]
+                                                );
+                                                // Reset input value to allow re-selecting same file if needed
+                                                e.target.value = "";
+                                              }}
                                             />
 
                                             {/* PREVIEW */}
@@ -471,15 +532,17 @@ const CreateCourse = () => {
                                               <div className="file-preview-list">
                                                 {section.materialFiles.map((file, idx) => (
                                                   <div key={idx} className="file-preview">
-                                                    <p>Selected: {file.name}</p>
+                                                    <span className="remove-file-btn" onClick={() => removeSectionFile(mIndex, sIndex, "materialFiles", idx)}>×</span>
+                                                    <p style={{ fontSize: '12px', margin: '5px 0' }}>Selected: {file.name}</p>
                                                     {file.type.includes("image") && (
                                                       <img
                                                         src={URL.createObjectURL(file)}
-                                                        className="preview-image"
+                                                        className="preview-image-consistent"
+                                                        alt="preview"
                                                       />
                                                     )}
                                                     {file.type.includes("video") && (
-                                                      <video controls className="preview-video">
+                                                      <video controls className="preview-video" style={{ height: '100px' }}>
                                                         <source
                                                           src={URL.createObjectURL(file)}
                                                         />
@@ -511,14 +574,19 @@ const CreateCourse = () => {
                                             <input
                                               type="file"
                                               multiple
-                                              onChange={(e) =>
+                                              accept="image/*,video/*,.pdf,.doc,.docx"
+                                              onChange={(e) => {
+                                                const newFiles = Array.from(e.target.files);
+                                                const existingFiles = section.challengeFiles || [];
                                                 updateSectionField(
                                                   mIndex,
                                                   sIndex,
                                                   "challengeFiles",
-                                                  Array.from(e.target.files)
-                                                )
-                                              }
+                                                  [...existingFiles, ...newFiles]
+                                                );
+                                                // Reset input value to allow re-selecting same file if needed
+                                                e.target.value = "";
+                                              }}
                                             />
 
                                             {/* CHALLENGE FILES PREVIEW */}
@@ -526,11 +594,13 @@ const CreateCourse = () => {
                                               <div className="file-preview-list">
                                                 {section.challengeFiles.map((file, idx) => (
                                                   <div key={idx} className="file-preview">
-                                                    <p>Selected: {file.name}</p>
+                                                    <span className="remove-file-btn" onClick={() => removeSectionFile(mIndex, sIndex, "challengeFiles", idx)}>×</span>
+                                                    <p style={{ fontSize: '12px', margin: '5px 0' }}>Selected: {file.name}</p>
                                                     {file.type.includes("image") && (
                                                       <img
                                                         src={URL.createObjectURL(file)}
-                                                        className="preview-image"
+                                                        className="preview-image-consistent"
+                                                        alt="preview"
                                                       />
                                                     )}
                                                   </div>
@@ -574,14 +644,27 @@ const CreateCourse = () => {
 
                                             {/* VIDEO LIST */}
                                             {section.videos.map(
-                                              (v, i) => (
-                                                <p
-                                                  className="video-item"
-                                                  key={i}
-                                                >
-                                                  {v}
-                                                </p>
-                                              )
+                                              (v, i) => {
+                                                const params = getYouTubeId(v);
+                                                return (
+                                                  <div key={i} className="video-item-wrapper" style={{ marginTop: '10px' }}>
+                                                    {params ? (
+                                                      <iframe
+                                                        width="100%"
+                                                        height="200"
+                                                        src={`https://www.youtube.com/embed/${params}`}
+                                                        title="YouTube video player"
+                                                        frameBorder="0"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowFullScreen
+                                                        style={{ borderRadius: '8px' }}
+                                                      ></iframe>
+                                                    ) : (
+                                                      <p className="video-item error-text">Invalid Video Link: {v}</p>
+                                                    )}
+                                                  </div>
+                                                );
+                                              }
                                             )}
                                           </div>
                                         )}

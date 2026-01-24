@@ -366,3 +366,43 @@ textarea {
     width: 100%;
   }
 }
+
+/* ERROR TEXT */
+.error-text {
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+/* CONSISTENT IMAGE PREVIEW */
+.preview-image-consistent {
+  height: 50px;
+  margin-top: 5px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* FILE REMOVE BUTTON */
+.file-preview {
+  position: relative;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.remove-file-btn {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid white;
+}
