@@ -14,6 +14,8 @@
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+  /* For loader positioning */
 }
 
 /* HEADER */
@@ -43,6 +45,124 @@
   font-size: 15px;
   opacity: 0.7;
   margin-bottom: 25px;
+}
+
+/* LOADING OVERLAY CUSTOM */
+.cc-loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+}
+
+/* ... existing loader-book styles hidden ... */
+
+/* ... existing styles ... */
+
+/* IMAGE COMPONENT WRAPPER */
+.image-preview-wrapper {
+  cursor: zoom-in;
+  transition: opacity 0.2s;
+  width: 100%;
+  height: 60px;
+  /* Reduced to fit in card */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-preview-wrapper:hover {
+  opacity: 0.9;
+}
+
+/* MEDIA PREVIEW (Images/Videos) updated to match PDF card */
+.file-preview-media {
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100px;
+  height: 110px;
+  /* Match PDF Card Height */
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.file-preview-media:hover {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.preview-image-consistent {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-top: 0;
+}
+
+/* QUANTUM SPINNER LOADER */
+.loader-quantum {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.loader-quantum div {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 3px solid transparent;
+  border-top-color: #4f46e5;
+  animation: quantumSpin 1.5s linear infinite;
+}
+
+.loader-quantum div:nth-child(1) {
+  border-top-color: #4f46e5;
+  border-bottom-color: #4f46e5;
+  animation-duration: 1.5s;
+}
+
+.loader-quantum div:nth-child(2) {
+  width: 70%;
+  height: 70%;
+  border-top-color: #ec4899;
+  border-right-color: #ec4899;
+  animation-duration: 2s;
+  animation-direction: reverse;
+}
+
+.loader-quantum div:nth-child(3) {
+  width: 40%;
+  height: 40%;
+  border-top-color: #06b6d4;
+  border-bottom-color: #06b6d4;
+  animation-duration: 1s;
+}
+
+@keyframes quantumSpin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* FORM GRID */
@@ -84,6 +204,35 @@ select:focus {
 textarea {
   height: 120px;
   resize: vertical;
+}
+
+/* THUMBNAIL PREVIEW MINI */
+.file-preview-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  width: fit-content;
+}
+
+.file-preview-mini span {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 8px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+  font-weight: 500;
+}
+
+.preview-image-mini {
+  /* Used for thumbnail */
+  /* Keeps inline style height of 50px but we can refine here if needed */
+  border-radius: 4px;
+  border: 1px solid #e5e7eb;
 }
 
 /* SECTION TITLES */
@@ -383,13 +532,66 @@ textarea {
   border-radius: 4px;
 }
 
-/* FILE REMOVE BUTTON */
-.file-preview {
-  position: relative;
-  display: inline-block;
-  margin-right: 10px;
+/* FILE PREVIEW LIST & ITEMS */
+.file-preview-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 10px;
+  align-items: flex-start;
 }
 
+.file-preview {
+  position: relative;
+  margin-right: 0;
+  display: flex;
+}
+
+/* MEDIA PREVIEW (Images/Videos) - Handled at top of file */
+
+.file-name-media {
+  font-size: 11px;
+  color: #6b7280;
+  margin-top: 5px;
+  text-align: center;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* CHIP PREVIEW (Docs/Files) */
+.file-preview-chip {
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  /* Pill */
+  padding: 6px 14px;
+  align-items: center;
+  height: 32px;
+}
+
+.file-preview-chip .remove-file-btn {
+  top: -6px;
+  right: -6px;
+  width: 16px;
+  height: 16px;
+  font-size: 9px;
+  background: #ef4444;
+  border: 1px solid white;
+}
+
+.file-chip-text {
+  font-size: 13px;
+  color: #374151;
+  font-weight: 500;
+  max-width: 180px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* GENERIC REMOVE BTN */
 .remove-file-btn {
   position: absolute;
   top: -5px;
@@ -405,4 +607,157 @@ textarea {
   align-items: center;
   cursor: pointer;
   border: 1px solid white;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ENHANCED PREVIEWS */
+
+/* PDF CARD */
+.pdf-preview-card {
+  position: relative;
+  width: 100px;
+  height: 110px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.pdf-preview-card:hover {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.pdf-icon-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pdf-filename {
+  font-size: 11px;
+  color: #555;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  text-align: center;
+}
+
+/* VIDEO PREVIEW */
+.video-item-wrapper {
+  position: relative;
+  width: 200px;
+  height: 115px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #000;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.video-item-wrapper:hover {
+  transform: scale(1.02);
+}
+
+.video-preview-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: black;
+}
+
+.video-preview-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.9;
+}
+
+.remove-video-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 22px;
+  height: 22px;
+  background: #ef4444;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 20;
+  border: 1px solid white;
+}
+
+.remove-video-btn:hover {
+  background: #dc2626;
+}
+
+/* IMAGE COMPONENT WRAPPER - Handled at top of file */
+
+/* LIGHTBOX OVERLAY */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.2s;
+}
+
+.lightbox-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox-image {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: 4px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-content iframe {
+  width: 80vw;
+  height: 80vh;
+  max-width: 1000px;
+  background: #000;
+}
+
+.lightbox-close {
+  position: absolute;
+  top: -40px;
+  right: -10px;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.lightbox-close:hover {
+  color: #ff4d4f;
 }
