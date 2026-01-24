@@ -4,8 +4,11 @@ import {
     fetchCourseById,
     createCourse,
     updateCourse,
-    deleteCourse
+    deleteCourse,
+    fetchCourseVersions,
+    rollbackCourse
 } from "../api/courseApi";
+
 
 export const useCourses = () =>
     useQuery({
@@ -51,6 +54,24 @@ export const useDeleteCourse = () => {
         mutationFn: deleteCourse,
         onSuccess: () => {
             queryClient.invalidateQueries(["courses"]);
+        },
+    });
+};
+
+export const useCourseVersions = (courseId) =>
+    useQuery({
+        queryKey: ["courseVersions", courseId],
+        queryFn: () => fetchCourseVersions(courseId),
+        enabled: !!courseId,
+    });
+
+export const useRollbackCourse = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ courseId, versionId }) => rollbackCourse(courseId, versionId),
+        onSuccess: (data, variables) => {
+            queryClient.invalidateQueries(["courses", variables.courseId]);
+            queryClient.invalidateQueries(["courseVersions", variables.courseId]);
         },
     });
 };

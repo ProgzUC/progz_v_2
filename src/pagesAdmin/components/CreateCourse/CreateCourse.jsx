@@ -8,6 +8,8 @@ import {
 import "./CreateCourse.css";
 import { uploadToCloudinary } from "../../../utils/cloudinary";
 import api from "../../../api/axiosInstance";
+import Swal from "sweetalert2";
+import Loader from "../../../components/common/Loader/Loader";
 
 const CreateCourse = () => {
   const navigate = useNavigate();
@@ -214,11 +216,23 @@ const CreateCourse = () => {
 
       await api.post("/courses", payload);
 
-      alert("Course created successfully!");
+      await api.post("/courses", payload);
+
+      Swal.fire({
+        title: "Success!",
+        text: "Course created successfully!",
+        icon: "success",
+        timer: 1500,
+        showConfirmButton: false
+      });
       navigate("/admin/courses");
     } catch (err) {
       console.error(err);
-      alert(err.message || "Upload failed");
+      Swal.fire({
+        title: "Error!",
+        text: err.message || "Upload failed",
+        icon: "error",
+      });
     } finally {
       setLoading(false);
     }
@@ -237,7 +251,14 @@ const CreateCourse = () => {
 
         <p className="subtitle">Build your modules and sections</p>
 
-        {loading && <div className="loading-overlay">Creating Course... Please wait...</div>}
+        <p className="subtitle">Build your modules and sections</p>
+
+        {loading && (
+          <div className="loading-overlay">
+            <Loader />
+            <p style={{ marginTop: "10px", fontWeight: "500", color: "#333" }}>Creating Course...</p>
+          </div>
+        )}
 
         {/* BASIC FIELDS */}
         <div className="input-grid">

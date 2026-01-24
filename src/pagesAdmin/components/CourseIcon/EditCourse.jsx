@@ -6,55 +6,59 @@ import {
   Draggable
 } from "@hello-pangea/dnd";
 import "../CreateCourse/CreateCourse.css"; // Reuse styling
-import "./EditCourse.css"; // Empty for now, generic overrides
+import { uploadToCloudinary } from "../../../utils/cloudinary";
+import { useCourse, useUpdateCourse, useRollbackCourse } from "../../../hooks/useCourses";
+import Swal from "sweetalert2";
+import Loader from "../../../components/common/Loader/Loader";
+import VersionHistory from "./VersionHistory";
 
 const EditCourse = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const { data: fetchedCourse, isLoading: isFetching, isError, error } = useCourse(id);
+  const { mutate: updateCourseMutation } = useUpdateCourse();
+  const { mutate: rollbackCourseMutation } = useRollbackCourse();
 
-  // Initial Mock Data (Simulating a fetched course)
-  const initialData = {
-    name: "RPA Automation",
-    courseId: "CRS-RPA-001",
-    description: "Learn robotic process automation from scratch.",
-    duration: "40",
-    instructor: "John Doe",
-    modules: [
-      {
-        title: "Introduction to RPA",
-        sections: [
-          {
-            title: "What is RPA?",
-            expanded: false,
-            materialFile: null,
-            notes: "Basic concepts.",
-            challengeFile: null,
-            challengeInstructions: "Define RPA in your own words.",
-            videos: ["https://youtu.be/example1"],
-          },
-          {
-            title: "RPA Tools",
-            expanded: false,
-            materialFile: null,
-            notes: "Overview of UiPath, BluePrism.",
-            challengeFile: null,
-            challengeInstructions: "",
-            videos: [],
-          },
-        ],
-      },
-      {
-        title: "Advanced Workflow",
-        sections: [],
-      },
-    ],
-  };
+  const [loading, setLoading] = useState(false);
+  const [course, setCourse] = useState(null);
+  const [showHistory, setShowHistory] = useState(false);
 
-  const [course, setCourse] = useState(initialData);
+  useEffect(() => {
+    if (fetchedCourse) {
+      setCourse({
+        courseName: fetchedCourse.courseName || "",
+        courseId: fetchedCourse.courseId || "",
+        courseDescription: fetchedCourse.courseDescription || "",
+        courseDuration: fetchedCourse.courseDuration || "",
+        instructor: fetchedCourse.instructor?.[0]?.firstName || "", // Simple display for now
+        thumbnail: fetchedCourse.thumbnail || null,
+        modules: fetchedCourse.modules.map(mod => ({
+          title: mod.title,
+          sections: mod.sections.map(sec => ({
+            title: sec.sectionName,
+            expanded: false,
+            // Existing files (saved)
+            savedMaterialFiles: sec.learningMaterialFile || [],
+            savedChallengeFiles: sec.codeChallengeFile || [],
+            // New uploads
+            materialFiles: [],
+            challengeFiles: [],
+            notes: sec.learningMaterialNotes || "",
+            challengeInstructions: sec.codeChallengeInstructions || "",
+            videos: sec.videoReferences || []
+          }))
+        }))
+      });
+    }
+  }, [fetchedCourse]);
 
   const updateField = (field, value) => {
     setCourse((prev) => ({ ...prev, [field]: value }));
   };
+
+  if (isFetching) return <Loader />;
+  if (isError) return <div className="error-state">Error: {error?.message}</div>;
+  if (!course) return null;
 
   // ===============
   // DRAG & DROP
@@ -164,10 +168,139 @@ const EditCourse = () => {
   // SUBMIT
   // =================
 
-  const handleSave = () => {
-    console.log("Saving Course Updates:", course);
-    // Logic to update backend would go here
-    navigate(-1);
+  const handleRollback = (versionId) => {
+    setLoading(true);
+    rollbackCourseMutation({ courseId: id, versionId }, {
+      onSuccess: () => {
+        Swal.fire({
+          title: "Reverted!",
+          text: "Course has been reverted to the selected version.",
+          icon: "success",
+          timer: 1500,
+          showConfirmButton: false
+        });
+        setLoading(false);
+        setShowHistory(false);
+      },
+      onError: (err) => {
+        Swal.fire("Error", err.message || "Rollback failed", "error");
+        setLoading(false);
+      }
+    });
+  };
+
+  const handleSave = async () => {
+    setLoading(true);
+    try {
+      // 1. Thumbnail (single)
+      let thumbnailData = course.thumbnail;
+      if (course.thumbnail instanceof File) {
+        thumbnailData = await uploadToCloudinary(
+          course.thumbnail,
+          "courses/thumbnails"
+        );
+        // Normalize structure if needed, or just pass { url, publicId }
+        thumbnailData = { url: thumbnailData.url, publicId: thumbnailData.publicId };
+      }
+
+      // 2. Modules & Sections
+      const processedModules = await Promise.all(
+        course.modules.map(async (mod) => {
+          const processedSections = await Promise.all(
+            mod.sections.map(async (sec) => {
+              // Upload NEW learning materials
+              const newMaterialUploads = await Promise.all(
+                (sec.materialFiles || []).map((f) =>
+                  uploadToCloudinary(f, "courses/materials")
+                )
+              );
+              // Normalize new uploads to match schema { url, publicId, ... }
+              const formattedNewMaterials = newMaterialUploads.map(f => ({
+                url: f.url,
+                publicId: f.publicId,
+                fileType: f.format,
+                originalName: f.original_filename
+              }));
+
+              // Combine SAVED + NEW
+              const finalMaterials = [...(sec.savedMaterialFiles || []), ...formattedNewMaterials];
+
+              // Upload NEW challenge files
+              const newChallengeUploads = await Promise.all(
+                (sec.challengeFiles || []).map((f) =>
+                  uploadToCloudinary(f, "courses/challenges")
+                )
+              );
+              const formattedNewChallenges = newChallengeUploads.map(f => ({
+                url: f.url,
+                publicId: f.publicId,
+                fileType: f.format,
+                originalName: f.original_filename
+              }));
+
+              const finalChallenges = [...(sec.savedChallengeFiles || []), ...formattedNewChallenges];
+
+              return {
+                sectionName: sec.title,
+                learningMaterialNotes: sec.notes,
+                learningMaterialFile: finalMaterials, // ARRAY of objects
+                codeChallengeInstructions: sec.challengeInstructions,
+                codeChallengeFile: finalChallenges,   // ARRAY of objects
+                videoReferences: sec.videos,
+              };
+            })
+          );
+
+          return {
+            title: mod.title,
+            sections: processedSections,
+          };
+        })
+      );
+
+      const payload = {
+        courseName: course.courseName, // state uses courseName
+        courseId: course.courseId,
+        courseDescription: course.courseDescription,
+        courseDuration: Number(course.courseDuration),
+        thumbnail: thumbnailData, // Object or null
+        // Instructor update is tricky if we only have a string. 
+        // For now, we might leave instructor as is, or not send it if not changed properly.
+        // If we want to support updating instructor, we need the ID, not just the name. 
+        // Skipping instructor update in payload to prevent breaking it, unless we implement full picker.
+        modules: processedModules,
+      };
+
+      updateCourseMutation({ id, data: payload }, {
+        onSuccess: () => {
+          Swal.fire({
+            title: "Updated!",
+            text: "Course updated successfully!",
+            icon: "success",
+            timer: 1500,
+            showConfirmButton: false
+          });
+          navigate("/admin/courses");
+        },
+        onError: (err) => {
+          Swal.fire({
+            title: "Error!",
+            text: err.message || "Update failed",
+            icon: "error",
+          });
+        }
+      });
+
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        title: "Error!",
+        text: err.message || "Upload failed",
+        icon: "error",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -175,21 +308,38 @@ const EditCourse = () => {
       <div className="create-course-container">
         <div className="page-header">
           <h2>Edit Course</h2>
-          <i
-            className="bi bi-x-lg close-icon"
-            onClick={() => navigate("/admin/courses")}
-          ></i>
+          <div className="header-actions" style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+            <i
+              className="bi bi-clock-history"
+              title="Version History"
+              style={{ cursor: 'pointer', fontSize: '20px', color: '#555' }}
+              onClick={() => setShowHistory(true)}
+            ></i>
+            <i
+              className="bi bi-x-lg close-icon"
+              onClick={() => navigate("/admin/courses")}
+            ></i>
+          </div>
         </div>
 
         <p className="subtitle">Update your modules and sections</p>
+
+        <p className="subtitle">Update your modules and sections</p>
+
+        {loading && (
+          <div className="loading-overlay">
+            <Loader />
+            <p style={{ marginTop: "10px", fontWeight: "500", color: "#333" }}>Updating Course...</p>
+          </div>
+        )}
 
         {/* BASIC FIELDS */}
         <div className="input-grid">
           <div>
             <label>Course Name</label>
             <input
-              value={course.name}
-              onChange={(e) => updateField("name", e.target.value)}
+              value={course.courseName}
+              onChange={(e) => updateField("courseName", e.target.value)}
             />
           </div>
 
@@ -207,17 +357,19 @@ const EditCourse = () => {
         <div className="input-full">
           <label>Course Description</label>
           <textarea
-            value={course.description}
-            onChange={(e) => updateField("description", e.target.value)}
+            value={course.courseDescription}
+            onChange={(e) => updateField("courseDescription", e.target.value)}
           />
         </div>
 
         <div className="input-grid">
           <div>
-            <label>Instructor</label>
+            <label>Instructor (Read Only)</label>
             <input
               value={course.instructor}
-              onChange={(e) => updateField("instructor", e.target.value)}
+              disabled
+              style={{ backgroundColor: "#f0f0f0", cursor: "not-allowed" }}
+            // onChange={(e) => updateField("instructor", e.target.value)}
             />
           </div>
 
@@ -225,8 +377,8 @@ const EditCourse = () => {
             <label>Duration (Hours)</label>
             <input
               type="number"
-              value={course.duration}
-              onChange={(e) => updateField("duration", e.target.value)}
+              value={course.courseDuration}
+              onChange={(e) => updateField("courseDuration", e.target.value)}
             />
           </div>
         </div>
@@ -336,8 +488,8 @@ const EditCourse = () => {
 
                                               <i
                                                 className={`bi bi-chevron-down section-chevron ${section.expanded
-                                                    ? "rotate"
-                                                    : ""
+                                                  ? "rotate"
+                                                  : ""
                                                   }`}
                                                 onClick={() =>
                                                   toggleSection(
@@ -366,55 +518,40 @@ const EditCourse = () => {
                                             <label>
                                               Learning Material File
                                             </label>
+
+                                            {/* Existing Files */}
+                                            {section.savedMaterialFiles && section.savedMaterialFiles.length > 0 && (
+                                              <div className="file-existing-list">
+                                                <p style={{ fontSize: "12px", color: "#666", marginBottom: "5px" }}>Current Files:</p>
+                                                {section.savedMaterialFiles.map((f, i) => (
+                                                  <div key={i} className="file-preview-mini">
+                                                    <a href={f.url} target="_blank" rel="noopener noreferrer">{f.originalName || "File " + (i + 1)}</a>
+                                                  </div>
+                                                ))}
+                                              </div>
+                                            )}
+
                                             <input
                                               type="file"
+                                              multiple
                                               onChange={(e) =>
                                                 updateSectionField(
                                                   mIndex,
                                                   sIndex,
-                                                  "materialFile",
-                                                  e.target.files[0]
+                                                  "materialFiles", // New uploads
+                                                  Array.from(e.target.files)
                                                 )
                                               }
                                             />
 
-                                            {/* PREVIEW */}
-                                            {section.materialFile && (
-                                              <div className="file-preview">
-                                                <p>
-                                                  Selected:{" "}
-                                                  {
-                                                    section
-                                                      .materialFile
-                                                      .name
-                                                  }
-                                                </p>
-
-                                                {section.materialFile.type.includes(
-                                                  "image"
-                                                ) && (
-                                                    <img
-                                                      src={URL.createObjectURL(
-                                                        section.materialFile
-                                                      )}
-                                                      className="preview-image"
-                                                    />
-                                                  )}
-
-                                                {section.materialFile.type.includes(
-                                                  "video"
-                                                ) && (
-                                                    <video
-                                                      controls
-                                                      className="preview-video"
-                                                    >
-                                                      <source
-                                                        src={URL.createObjectURL(
-                                                          section.materialFile
-                                                        )}
-                                                      />
-                                                    </video>
-                                                  )}
+                                            {/* PREVIEW NEW UPLOADS */}
+                                            {section.materialFiles && section.materialFiles.length > 0 && (
+                                              <div className="file-preview-list">
+                                                {section.materialFiles.map((file, idx) => (
+                                                  <div key={idx} className="file-preview">
+                                                    <p>Selected: {file.name}</p>
+                                                  </div>
+                                                ))}
                                               </div>
                                             )}
 
@@ -436,14 +573,27 @@ const EditCourse = () => {
                                             <label>
                                               Challenge File
                                             </label>
+                                            {/* Existing Files */}
+                                            {section.savedChallengeFiles && section.savedChallengeFiles.length > 0 && (
+                                              <div className="file-existing-list">
+                                                <p style={{ fontSize: "12px", color: "#666", marginBottom: "5px" }}>Current Files:</p>
+                                                {section.savedChallengeFiles.map((f, i) => (
+                                                  <div key={i} className="file-preview-mini">
+                                                    <a href={f.url} target="_blank" rel="noopener noreferrer">{f.originalName || "File " + (i + 1)}</a>
+                                                  </div>
+                                                ))}
+                                              </div>
+                                            )}
+
                                             <input
                                               type="file"
+                                              multiple
                                               onChange={(e) =>
                                                 updateSectionField(
                                                   mIndex,
                                                   sIndex,
-                                                  "challengeFile",
-                                                  e.target.files[0]
+                                                  "challengeFiles",
+                                                  Array.from(e.target.files)
                                                 )
                                               }
                                             />
@@ -523,11 +673,18 @@ const EditCourse = () => {
             Cancel
           </button>
 
-          <button className="submit-btn" onClick={handleSave}>
-            Save Changes
+          <button className="submit-btn" onClick={handleSave} disabled={loading}>
+            {loading ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </div>
+
+      <VersionHistory
+        courseId={id}
+        isOpen={showHistory}
+        onClose={() => setShowHistory(false)}
+        onRollback={handleRollback}
+      />
     </div>
   );
 };

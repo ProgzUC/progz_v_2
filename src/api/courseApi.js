@@ -25,3 +25,13 @@ export const deleteCourse = async (courseId) => {
   const response = await axiosInstance.delete(`/courses/${courseId}`);
   return response.data;
 };
+
+export const fetchCourseVersions = async (courseId) => {
+  const response = await axiosInstance.get(`/courses/${courseId}/versions`);
+  return response.data;
+};
+
+export const rollbackCourse = async (courseId, versionId) => {
+  const response = await axiosInstance.post(`/courses/${courseId}/rollback/${versionId}`);
+  return response.data;
+};

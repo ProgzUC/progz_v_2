@@ -2,33 +2,22 @@ import React, { useState } from "react";
 import "./Courses.css";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-
-
-const avatar = "https://i.pravatar.cc/40";
-
-const initialCourses = [
-  { id: 1, name: "RPA", more: 5 },
-  { id: 2, name: "AWS", more: 6 },
-  { id: 3, name: "AWS & DevOps", more: 4 },
-  { id: 4, name: "Azure", more: 3 },
-  { id: 5, name: "DevOps", more: 5 },
-  { id: 6, name: "DevOps", more: 5 },
-  { id: 7, name: "AWS & DevOps", more: 4 },
-  { id: 8, name: "Azure", more: 3 },
-];
+import { useCourses, useDeleteCourse } from "../../../hooks/useCourses";
+import Loader from "../../../components/common/Loader/Loader";
 
 const Courses = () => {
   const navigate = useNavigate();
-  const [courses, setCourses] = useState(initialCourses);
-  const [activeTab, setActiveTab] = useState("all");
+  const { data: coursesList, isLoading, isError, error } = useCourses();
+  const { mutate: deleteCourseMutation } = useDeleteCourse();
+
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Filter courses based on active tab and search term
+  const courses = coursesList || [];
+
+  // Filter courses based on search term
   const filteredCourses = courses.filter((course) => {
-    const matchesSearch = course.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesTab = activeTab === "all" || (activeTab === "live" && course.id <= 4); // Example: first 4 courses are "live"
-    return matchesSearch && matchesTab;
+    return course.courseName?.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
   const rowsPerPage = 7;
@@ -36,28 +25,28 @@ const Courses = () => {
   const paginated = filteredCourses.slice(start, start + rowsPerPage);
   const totalPages = Math.ceil(filteredCourses.length / rowsPerPage);
 
-  // Reset to page 1 when tab or search changes
+  // Reset to page 1 when search changes
   React.useEffect(() => {
     setPage(1);
-  }, [activeTab, searchTerm]);
+  }, [searchTerm]);
 
   // ----------------------------- ACTION HANDLERS -----------------------------
   const viewHandler = (course) => {
-    navigate(`/admin/course/${course.id}`);
+    navigate(`/admin/course/${course._id}`);
   };
 
   const editHandler = (course) => {
-    navigate(`/admin/edit-course/${course.id}`);
+    navigate(`/admin/edit-course/${course._id}`);
   };
 
   const usersHandler = (course) => {
-    navigate(`/admin/course-users/${course.id}`);
+    navigate(`/admin/course-users/${course._id}`);
   };
 
   const deleteHandler = (course) => {
     Swal.fire({
       title: "Delete Course?",
-      text: `Are you sure you want to delete "${course.name}"? This action cannot be undone.`,
+      text: `Are you sure you want to delete "${course.courseName}"? This action cannot be undone.`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#d33",
@@ -68,13 +57,24 @@ const Courses = () => {
       borderRadius: "15px"
     }).then((result) => {
       if (result.isConfirmed) {
-        setCourses((prev) => prev.filter((c) => c.id !== course.id));
-        Swal.fire({
-          title: "Deleted!",
-          text: `"${course.name}" has been deleted successfully.`,
-          icon: "success",
-          confirmButtonColor: "#28a745",
-          timer: 1500
+        deleteCourseMutation(course._id, {
+          onSuccess: () => {
+            Swal.fire({
+              title: "Deleted!",
+              text: `"${course.courseName}" has been deleted successfully.`,
+              icon: "success",
+              confirmButtonColor: "#28a745",
+              timer: 1500
+            });
+          },
+          onError: (err) => {
+            Swal.fire({
+              title: "Error!",
+              text: err.message || "Failed to delete course.",
+              icon: "error",
+              confirmButtonColor: "#d33",
+            });
+          }
         });
       }
     });
@@ -86,23 +86,6 @@ const Courses = () => {
       <h1 className="course-title">Course Management</h1>
 
       <div className="top-row">
-        {/* TABS */}
-        <div className="tabs">
-          <button
-            className={`tab-btn ${activeTab === "all" ? "active" : ""}`}
-            onClick={() => setActiveTab("all")}
-          >
-            All Courses
-          </button>
-
-          <button
-            className={`tab-btn ${activeTab === "live" ? "active" : ""}`}
-            onClick={() => setActiveTab("live")}
-          >
-            Live Courses
-          </button>
-        </div>
-
         {/* SEARCH & CREATE BUTTON */}
         <div className="search-actions">
           <div className="search-box">
@@ -122,71 +105,102 @@ const Courses = () => {
 
       {/* CONTENT CARD */}
       <div className="content-card">
-        <h2 className="card-title">
-          {activeTab === "all" ? "All Courses" : "Live Courses"}
-        </h2>
+        <h2 className="card-title">All Courses</h2>
 
-        {/* TABLE */}
-        <div className="table-responsive">
-          <table className="course-table">
-            <thead>
-              <tr>
-                <th>Courses</th>
-                <th>Instructors</th>
-                <th>Enrolled</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
+        {isLoading ? (
+          <Loader />
+        ) : isError ? (
+          <div style={{ textAlign: "center", padding: "40px", color: "red" }}>
+            Error loading courses: {error?.message || "Something went wrong"}
+          </div>
+        ) : (
+          <>
+            {/* TABLE */}
+            <div className="table-responsive">
+              <table className="course-table">
+                <thead>
+                  <tr>
+                    <th>Courses</th>
+                    <th>Instructors</th>
+                    <th>Enrolled</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
 
-            <tbody>
-              {paginated.map((course) => (
-                <tr key={course.id}>
-                  <td>{course.name}</td>
-                  <td></td>
+                <tbody>
+                  {paginated.length > 0 ? (
+                    paginated.map((course) => (
+                      <tr key={course._id}>
+                        <td>{course.courseName}</td>
+                        <td>
+                          <div className="avatar-group">
+                            {course.instructor && course.instructor.length > 0 ? (
+                              course.instructor.map((inst, i) => (
+                                <img
+                                  key={inst._id || i}
+                                  src={inst.profilePicture?.url || "https://ui-avatars.com/api/?name=" + (inst.firstName || inst.name || "T") + "&background=random"}
+                                  className="avatar"
+                                  title={inst.name || `${inst.firstName || ""} ${inst.lastName || ""}`}
+                                  alt="instructor"
+                                />
+                              ))
+                            ) : (
+                              <span style={{ fontSize: "12px", color: "#999" }}>No Instructors</span>
+                            )}
+                          </div>
+                        </td>
 
-                  <td>
-                    <div className="avatar-group">
-                      {/* {course.students.map((img, i) => (
-                        <img src={img} key={i} className="avatar" />
-                      ))} */}
-                      <span className="more-tag">{course.more}</span>
-                    </div>
-                  </td>
+                        <td>
+                          <div className="avatar-group">
+                            <span className="more-tag">{course.enrolledStudents?.length || 0}</span>
+                          </div>
+                        </td>
 
-                  <td className="actions-cell">
-                    <div className="actions-row">
-                      <i className="bi bi-eye" onClick={() => viewHandler(course)}></i>
-                      <i className="bi bi-pencil" onClick={() => editHandler(course)}></i>
-                      <i className="bi bi-people" onClick={() => usersHandler(course)}></i>
-                      <i className="bi bi-trash" onClick={() => deleteHandler(course)}></i>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                        <td className="actions-cell">
+                          <div className="actions-row">
+                            <i className="bi bi-eye" onClick={() => viewHandler(course)}></i>
+                            <i className="bi bi-pencil" onClick={() => editHandler(course)}></i>
+                            <i className="bi bi-people" onClick={() => usersHandler(course)}></i>
+                            <i className="bi bi-trash" onClick={() => deleteHandler(course)}></i>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="4" style={{ textAlign: "center", padding: "30px" }}>
+                        No courses found.
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
 
-        {/* PAGINATION */}
-        <div className="pagination">
-          <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-            &lt;
-          </button>
+            {/* PAGINATION */}
+            {filteredCourses.length > 0 && (
+              <div className="pagination">
+                <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+                  &lt;
+                </button>
 
-          {Array.from({ length: totalPages }, (_, i) => (
-            <button
-              key={i}
-              className={page === i + 1 ? "active" : ""}
-              onClick={() => setPage(i + 1)}
-            >
-              {i + 1}
-            </button>
-          ))}
+                {Array.from({ length: totalPages }, (_, i) => (
+                  <button
+                    key={i}
+                    className={page === i + 1 ? "active" : ""}
+                    onClick={() => setPage(i + 1)}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
 
-          <button disabled={page === totalPages} onClick={() => setPage(page + 1)}>
-            &gt;
-          </button>
-        </div>
+                <button disabled={page === totalPages} onClick={() => setPage(page + 1)}>
+                  &gt;
+                </button>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

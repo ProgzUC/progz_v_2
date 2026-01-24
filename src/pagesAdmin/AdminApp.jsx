@@ -1,6 +1,6 @@
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import Sidebar from "./components/Sidebar/Sidebar.jsx";
-import {  Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./AdminApp.css";
 import Overview from "./components/Overview/Overview.jsx";
 import Courses from "./components/Courses/Courses.jsx";
@@ -15,7 +15,7 @@ import StudentPreview from "./components/Student/StudentPreview.jsx";
 import InstructorPreview from "./components/Instructor/InstructorPreview.jsx";
 import CourseView from "./components/CourseIcon/CourseView.jsx";
 import EditCourse from "./components/CourseIcon/EditCourse.jsx";
-import CourseUsers from "./components/CourseIcon/CourseUsers.jsx";
+import CourseTrainers from "./components/CourseIcon/CourseTrainers.jsx";
 import Batches from "./components/Batches/Batches.jsx";
 import RecycleBin from "./components/RecycleBin/RecycleBin.jsx";
 
@@ -28,58 +28,58 @@ import UserDetailView from "./components/ApproveUser/UserDetailView.jsx";
 export default function AdminApp() {
   return (
     <ThemeProvider>
-    
-        <Routes>
- {/* <Route path="/" element={<Navigate to="/overview" replace />} /> */}
-          {/* AUTH ROUTES */}
-          {/* <Route path="/login" element={<SignIn />} />
+
+      <Routes>
+        {/* <Route path="/" element={<Navigate to="/overview" replace />} /> */}
+        {/* AUTH ROUTES */}
+        {/* <Route path="/login" element={<SignIn />} />
           <Route path="/signup" element={<UserEnrollment />} /> */}
 
-          
-         
 
-          {/* Dashboard wrapper with sidebar */}
 
-          <Route
-            path="/*"
-            element={
-              <div className="layout">
-                <Sidebar />
-                <div className="content">
-                  <Routes>
-                    <Route path="/" element={<Navigate to="overview" replace />} />
 
-                    <Route path="overview" element={<Overview />} />
-                    <Route path="courses" element={<Courses />} />
+        {/* Dashboard wrapper with sidebar */}
 
-                    {/* ⭐⭐ FIXED ROUTES ⭐⭐ */}
-                    <Route path="course/:id" element={<CourseView />} />
-                    <Route path="edit-course/:id" element={<EditCourse />} />
-                    <Route path="course-users/:id" element={<CourseUsers />} />
-                    {/* -------------------------------- */}
+        <Route
+          path="/*"
+          element={
+            <div className="layout">
+              <Sidebar />
+              <div className="content">
+                <Routes>
+                  <Route path="/" element={<Navigate to="overview" replace />} />
 
-                    <Route path="students" element={<Students />} />
-                    <Route path="instructors" element={<Instructors />} />
-                    <Route path="enroll" element={<EnrollStudents />} />
-                    <Route path="approve-users" element={<ApproveUser />} />
-                    <Route path="user-detail-view" element={<UserDetailView />} />
-                    <Route path="sync" element={<SyncFromZen />} />
-                    <Route path="course-builder" element={<CourseBuilder />} />
-                    <Route path="create-course" element={<CreateCourse />} />
-                    <Route path="add-instructor" element={<UserEnrollment subtitle="Add Instructor" />} />
-                    <Route path="add-student" element={<UserEnrollment subtitle="Add Student" />} />
-                    <Route path="student-preview" element={<StudentPreview />} />
-                    <Route path="batches" element={<Batches />} />
-                    <Route path="instructor-preview" element={<InstructorPreview />} />
-                    <Route path="recycle-bin" element={<RecycleBin />} />
-                  </Routes>
-                </div>
+                  <Route path="overview" element={<Overview />} />
+                  <Route path="courses" element={<Courses />} />
+
+                  {/* ⭐⭐ FIXED ROUTES ⭐⭐ */}
+                  <Route path="course/:id" element={<CourseView />} />
+                  <Route path="edit-course/:id" element={<EditCourse />} />
+                  <Route path="course-users/:id" element={<CourseTrainers />} />
+                  {/* -------------------------------- */}
+
+                  <Route path="students" element={<Students />} />
+                  <Route path="instructors" element={<Instructors />} />
+                  <Route path="enroll" element={<EnrollStudents />} />
+                  <Route path="approve-users" element={<ApproveUser />} />
+                  <Route path="user-detail-view" element={<UserDetailView />} />
+                  <Route path="sync" element={<SyncFromZen />} />
+                  <Route path="course-builder" element={<CourseBuilder />} />
+                  <Route path="create-course" element={<CreateCourse />} />
+                  <Route path="add-instructor" element={<UserEnrollment subtitle="Add Instructor" />} />
+                  <Route path="add-student" element={<UserEnrollment subtitle="Add Student" />} />
+                  <Route path="student-preview" element={<StudentPreview />} />
+                  <Route path="batches" element={<Batches />} />
+                  <Route path="instructor-preview" element={<InstructorPreview />} />
+                  <Route path="recycle-bin" element={<RecycleBin />} />
+                </Routes>
               </div>
-            }
-          />
+            </div>
+          }
+        />
 
-        </Routes>
-  
+      </Routes>
+
     </ThemeProvider>
   );
 }
