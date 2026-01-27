@@ -10,7 +10,7 @@
 }
 
 /* Title */
-.category-title {
+.student-category-page .category-title {
   text-align: center;
   font-size: 40px;
   font-weight: 600;
@@ -86,7 +86,7 @@
 /* COURSE CARD */
 /* ------------------------------------------------------ */
 
-.course-card {
+.student-category-page .course-card {
   background: #9A9A9A;
   border-radius: 20px;
   padding-bottom: 20px;
@@ -102,16 +102,16 @@
   /* ← ADD THIS */
 }
 
-.course-card:hover {
+.student-category-page .course-card:hover {
   background: #BCBCBC;
   transform: translateY(-5px);
 }
 
 /* Hover: Make text white */
-.course-card:hover .course-title,
-.course-card:hover .course-desc,
-.course-card:hover .course-roles,
-.course-card:hover .course-salary {
+.student-category-page .course-card:hover .course-title,
+.student-category-page .course-card:hover .course-desc,
+.student-category-page .course-card:hover .course-roles,
+.student-category-page .course-card:hover .course-salary {
   color: #ffffff !important;
 }
 
@@ -191,7 +191,7 @@
   transition: 0.2s ease;
 }
 
-.course-card:hover .arrow-btn {
+.student-category-page .course-card:hover .arrow-btn {
   background: #fff;
   color: #0d6b29;
   border: 2px solid #0d6b29;

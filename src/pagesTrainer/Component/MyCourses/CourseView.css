@@ -1,5 +1,5 @@
 /* Main Container */
-.course-view-page {
+.trainer-course-view-page {
   font-family: 'Poppins', sans-serif;
   background: white;
   min-height: 100vh;
@@ -308,4 +308,113 @@
   .cv-list-item {
     padding: 12px 20px;
   }
+}
+
+/* Section Wrapper */
+.cv-section-wrapper {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.cv-section-wrapper:last-child {
+  border-bottom: none;
+}
+
+.cv-list-item.active {
+  background-color: #f9f9f9;
+  font-weight: 500;
+  color: #0FA958;
+  /* Green active state */
+}
+
+/* Expanded Details */
+.cv-section-details {
+  background-color: #fafafa;
+  padding: 15px 20px;
+  border-top: 1px solid #eee;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cv-detail-block {
+  margin-bottom: 15px;
+}
+
+.cv-detail-block:last-child {
+  margin-bottom: 0;
+}
+
+.cv-detail-block h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cv-detail-block p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* File Links */
+.cv-file-list,
+.cv-video-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cv-file-list li,
+.cv-video-list li {
+  margin-bottom: 8px;
+}
+
+.cv-file-list li a,
+.cv-video-list li a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #0FA958;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: opacity 0.2s;
+}
+
+.cv-file-list li a:hover,
+.cv-video-list li a:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.cv-file-list li i,
+.cv-video-list li i {
+  font-size: 16px;
+}
+
+.challenge-block {
+  background: #fff;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+}
+
+.cv-detail-empty {
+  font-size: 13px;
+  color: #999;
+  font-style: italic;
 }

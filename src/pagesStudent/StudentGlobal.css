@@ -1,0 +1,243 @@
+/* ================================
+   STUDENT GLOBAL STYLES
+   ================================ */
+
+/* CSS Variables for Student Theme */
+:root {
+    /* Primary Colors */
+    --student-primary: #3b82f6;
+    --student-primary-hover: #2563eb;
+    --student-primary-light: #dbeafe;
+
+    /* Background Colors */
+    --student-bg: #f8fafc;
+    --student-card-bg: #ffffff;
+    --student-page-bg: #f1f5f9;
+
+    /* Text Colors */
+    --student-text: #1e293b;
+    --student-text-muted: #64748b;
+    --student-text-light: #94a3b8;
+
+    /* Border & Divider */
+    --student-border: #e2e8f0;
+    --student-divider: #f1f5f9;
+
+    /* Status Colors */
+    --student-success: #10b981;
+    --student-warning: #f59e0b;
+    --student-error: #ef4444;
+    --student-info: #06b6d4;
+
+    /* Shadows */
+    --student-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+    --student-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+    --student-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
+
+    /* Spacing */
+    --student-spacing-xs: 8px;
+    --student-spacing-sm: 12px;
+    --student-spacing-md: 20px;
+    --student-spacing-lg: 32px;
+    --student-spacing-xl: 48px;
+
+    /* Border Radius */
+    --student-radius-sm: 6px;
+    --student-radius-md: 12px;
+    --student-radius-lg: 16px;
+    --student-radius-xl: 24px;
+
+    /* Transitions */
+    --student-transition: 0.2s ease;
+}
+
+/* ================================
+   UTILITY CLASSES
+   ================================ */
+
+.student-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--student-spacing-lg);
+}
+
+.student-card {
+    background: var(--student-card-bg);
+    border-radius: var(--student-radius-lg);
+    padding: var(--student-spacing-lg);
+    box-shadow: var(--student-shadow-md);
+    transition: var(--student-transition);
+}
+
+.student-card:hover {
+    box-shadow: var(--student-shadow-lg);
+    transform: translateY(-2px);
+}
+
+.student-btn-primary {
+    background: var(--student-primary);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: var(--student-radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--student-transition);
+}
+
+.student-btn-primary:hover {
+    background: var(--student-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--student-shadow-md);
+}
+
+.student-btn-secondary {
+    background: white;
+    color: var(--student-primary);
+    border: 2px solid var(--student-primary);
+    padding: 12px 24px;
+    border-radius: var(--student-radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--student-transition);
+}
+
+.student-btn-secondary:hover {
+    background: var(--student-primary-light);
+}
+
+/* ================================
+   TYPOGRAPHY
+   ================================ */
+
+.student-heading-1 {
+    font-size: 36px;
+    font-weight: 700;
+    color: var(--student-text);
+    margin-bottom: var(--student-spacing-md);
+    line-height: 1.2;
+}
+
+.student-heading-2 {
+    font-size: 28px;
+    font-weight: 600;
+    color: var(--student-text);
+    margin-bottom: var(--student-spacing-sm);
+    line-height: 1.3;
+}
+
+.student-heading-3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--student-text);
+    margin-bottom: var(--student-spacing-sm);
+    line-height: 1.4;
+}
+
+.student-text-muted {
+    color: var(--student-text-muted);
+}
+
+.student-text-light {
+    color: var(--student-text-light);
+}
+
+/* ================================
+   STATUS BADGES
+   ================================ */
+
+.student-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.student-badge-success {
+    background: #d1fae5;
+    color: var(--student-success);
+}
+
+.student-badge-warning {
+    background: #fef3c7;
+    color: var(--student-warning);
+}
+
+.student-badge-error {
+    background: #fee2e2;
+    color: var(--student-error);
+}
+
+.student-badge-info {
+    background: #cffafe;
+    color: var(--student-info);
+}
+
+.student-badge-primary {
+    background: var(--student-primary-light);
+    color: var(--student-primary);
+}
+
+/* ================================
+   PROGRESS BAR
+   ================================ */
+
+.student-progress-bar {
+    width: 100%;
+    height: 8px;
+    background: var(--student-divider);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.student-progress-fill {
+    height: 100%;
+    background: var(--student-primary);
+    border-radius: 999px;
+    transition: width 0.3s ease;
+}
+
+/* ================================
+   RESPONSIVE UTILITIES
+   ================================ */
+
+@media (max-width: 1200px) {
+    .student-container {
+        padding: 0 var(--student-spacing-md);
+    }
+}
+
+@media (max-width: 768px) {
+    .student-container {
+        padding: 0 var(--student-spacing-sm);
+    }
+
+    .student-heading-1 {
+        font-size: 30px;
+    }
+
+    .student-heading-2 {
+        font-size: 24px;
+    }
+
+    .student-heading-3 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .student-container {
+        padding: 0 var(--student-spacing-xs);
+    }
+
+    .student-heading-1 {
+        font-size: 26px;
+    }
+
+    .student-heading-2 {
+        font-size: 22px;
+    }
+}

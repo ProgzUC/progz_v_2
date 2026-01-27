@@ -1,21 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./ProfilePage.css";
+import { useStudentProfile, useUpdateStudentProfile, useChangePassword } from "../../../hooks/useStudentProfile";
+import { useStudentCourses } from "../../../hooks/useStudentCourses";
+import Loader from "../../../components/common/Loader/Loader";
+import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
 
-// Images
-import course1 from "/student/course1.jpg";
-import course2 from "/student/course2.jpg";
-import course3 from "/student/course3.jpg";
-import course4 from "/student/course4.jpg";
-import profileImage from "/student/pexels-andrea-piacquadio-3769021.jpg";
-import phoneIcon from "/student/phoneicon.png";
-import locationIcon from "/student/location.png";
-import degreeIcon from "/student/degree.png";
-import jobIcon from "/student/job.png";
-import ongoingIcon from "/student/time.png";
-import completedIcon from "/student/completed.png";
-import lessonIcon from "/student/lesson_icon.png";
+/* ============================
+   USER INITIALS AVATAR
+============================ */
+const UserAvatar = ({ name }) => {
+    const initials = (name || "User")
+        .split(' ')
+        .map(word => word[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
 
-const STORAGE_KEY = "app_stored_password";
+    return (
+        <div className="profile-avatar-wrapper">
+            <div className="profile-initials-avatar">{initials}</div>
+        </div>
+    );
+};
 
 /* ============================
    EDIT PROFILE MODAL COMPONENT
@@ -25,66 +31,44 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
     const [currentPwdInput, setCurrentPwdInput] = useState("");
     const [newPwdInput, setNewPwdInput] = useState("");
     const [confirmPwdInput, setConfirmPwdInput] = useState("");
-    const [storedPassword, setStoredPassword] = useState("1234");
     const [error, setError] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
-    const [saving, setSaving] = useState(false);
 
-    useEffect(() => {
-        const saved = localStorage.getItem(STORAGE_KEY);
-        if (saved) {
-            setStoredPassword(saved);
-        } else {
-            localStorage.setItem(STORAGE_KEY, storedPassword);
-        }
-        setError("");
-        setSuccessMsg("");
-        setCurrentPwdInput("");
-        setNewPwdInput("");
-        setConfirmPwdInput("");
-    }, [mode]);
+    const updateProfile = useUpdateStudentProfile();
+    const changePassword = useChangePassword();
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (file) {
-            const imageURL = URL.createObjectURL(file);
-            setForm({ ...form, profileImage: imageURL });
-        }
-    };
-
     const handlePasswordSave = () => {
         setError("");
         setSuccessMsg("");
-        setSaving(true);
 
-        if (currentPwdInput !== storedPassword) {
-            setError("Current password doesn't match.");
-            setSaving(false);
+        if (!currentPwdInput || !newPwdInput || !confirmPwdInput) {
+            setError("All password fields are required.");
             return;
         }
 
-        if (!newPwdInput || newPwdInput !== confirmPwdInput) {
+        if (newPwdInput !== confirmPwdInput) {
             setError("New passwords do not match.");
-            setSaving(false);
             return;
         }
 
-        try {
-            localStorage.setItem(STORAGE_KEY, newPwdInput);
-            setStoredPassword(newPwdInput);
-            setSuccessMsg("Password changed successfully!");
-            setTimeout(() => {
-                setSaving(false);
-                onClose();
-            }, 900);
-        } catch (err) {
-            setError("Failed to update password. Try again.");
-            setSaving(false);
-        }
+        changePassword.mutate({
+            currentPassword: currentPwdInput,
+            newPassword: newPwdInput
+        }, {
+            onSuccess: () => {
+                setSuccessMsg("Password changed successfully!");
+                setTimeout(() => {
+                    onClose();
+                }, 900);
+            },
+            onError: (err) => {
+                setError(err?.response?.data?.message || "Failed to update password. Try again.");
+            }
+        });
     };
 
     const handleSave = () => {
@@ -94,13 +78,19 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
             handlePasswordSave();
             return;
         }
-        setSaving(true);
-        onSave(form);
-        setTimeout(() => {
-            setSaving(false);
-            onClose();
-        }, 200);
+
+        updateProfile.mutate(form, {
+            onSuccess: () => {
+                onSave(form);
+                onClose();
+            },
+            onError: (err) => {
+                setError(err?.response?.data?.message || "Failed to update profile.");
+            }
+        });
     };
+
+    const saving = updateProfile.isPending || changePassword.isPending;
 
     return (
         <div className="profile-modal-overlay" role="dialog" aria-modal="true">
@@ -108,13 +98,6 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                 <h2>{mode === "password" ? "Change Password" : "Edit Profile"}</h2>
                 {mode !== "password" && (
                     <>
-                        <div className="profile-edit-section">
-                            <img src={form.profileImage} alt="Preview" className="profile-preview-img" />
-                            <label className="profile-upload-label">
-                                Upload New Photo
-                                <input type="file" accept="image/*" onChange={handleImageChange} />
-                            </label>
-                        </div>
                         <div className="profile-input-row">
                             <label>Phone Number</label>
                             <input type="text" name="phone" value={form.phone || ""} onChange={handleChange} />
@@ -129,14 +112,14 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                         </div>
                         <div className="profile-input-row">
                             <label>Job Title</label>
-                            <input type="text" name="job" value={form.job || ""} onChange={handleChange} />
+                            <input type="text" name="jobTitle" value={form.jobTitle || ""} onChange={handleChange} />
                         </div>
                     </>
                 )}
                 {mode === "password" && (
                     <>
                         <div className="profile-input-row">
-                            <label>Enter Password</label>
+                            <label>Current Password</label>
                             <input type="password" value={currentPwdInput} onChange={(e) => setCurrentPwdInput(e.target.value)} placeholder="Current password" />
                         </div>
                         <div className="profile-input-row">
@@ -165,41 +148,34 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
 /* ============================
    INFO COMPONENT
 ============================ */
-const Info = ({ ongoingCount, completedCount }) => {
+const Info = ({ profile, ongoingCount, completedCount }) => {
     const [isModelOpen, setIsModelOpen] = useState(false);
     const [modalMode, setModalMode] = useState("edit");
-    const [user, setUser] = useState({
-        phone: "9176612167",
-        location: "Chennai, Tamil Nadu, India, 600001",
-        education: "Bachelor's in Computer Science",
-        job: "Bachelor's in Computer Science",
-        profileImage: profileImage,
-    });
+
+    if (!profile) return null;
 
     return (
         <div className="profile-sidebar">
             <div className="profile-header-meta">
-                <div className="profile-avatar-wrapper">
-                    <img src={user.profileImage} alt="Profile" className="profile-avatar-img" />
-                </div>
+                <UserAvatar name={profile.name} />
             </div>
 
             <div className="profile-details-list">
                 <div className="profile-detail-item">
-                    <img src={phoneIcon} className="profile-detail-icon" alt="phone" />
-                    <span className="profile-detail-text">{user.phone}</span>
+                    <img src="/student/phoneicon.png" className="profile-detail-icon" alt="phone" />
+                    <span className="profile-detail-text">{profile.phone || "Not provided"}</span>
                 </div>
                 <div className="profile-detail-item">
-                    <img src={locationIcon} className="profile-detail-icon" alt="location" />
-                    <span className="profile-detail-text">{user.location}</span>
+                    <img src="/student/location.png" className="profile-detail-icon" alt="location" />
+                    <span className="profile-detail-text">{profile.location || "Not provided"}</span>
                 </div>
                 <div className="profile-detail-item">
-                    <img src={degreeIcon} className="profile-detail-icon" alt="degree" />
-                    <span className="profile-detail-text">{user.education}</span>
+                    <img src="/student/degree.png" className="profile-detail-icon" alt="degree" />
+                    <span className="profile-detail-text">{profile.education || "Not provided"}</span>
                 </div>
                 <div className="profile-detail-item">
-                    <img src={jobIcon} className="profile-detail-icon" alt="job" />
-                    <span className="profile-detail-text">{user.job}</span>
+                    <img src="/student/job.png" className="profile-detail-icon" alt="job" />
+                    <span className="profile-detail-text">{profile.jobTitle || "Not provided"}</span>
                 </div>
             </div>
 
@@ -217,14 +193,14 @@ const Info = ({ ongoingCount, completedCount }) => {
             <div className="profile-summary-section">
                 <div className="profile-summary-item">
                     <div className="profile-summary-left">
-                        <img src={ongoingIcon} className="profile-summary-icon" alt="ongoing" />
+                        <img src="/student/time.png" className="profile-summary-icon" alt="ongoing" />
                         <span>Ongoing Courses</span>
                     </div>
                     <span className="profile-summary-count">{ongoingCount.toString().padStart(2, '0')}</span>
                 </div>
                 <div className="profile-summary-item">
                     <div className="profile-summary-left">
-                        <img src={completedIcon} className="profile-summary-icon" alt="completed" />
+                        <img src="/student/completed.png" className="profile-summary-icon" alt="completed" />
                         <span>Completed Courses</span>
                     </div>
                     <span className="profile-summary-count">{completedCount.toString().padStart(2, '0')}</span>
@@ -233,10 +209,10 @@ const Info = ({ ongoingCount, completedCount }) => {
 
             {isModelOpen && (
                 <EditProfileModel
-                    currentData={user}
+                    currentData={profile}
                     mode={modalMode}
                     onClose={() => setIsModelOpen(false)}
-                    onSave={(updated) => setUser(updated)}
+                    onSave={() => { }}
                 />
             )}
         </div>
@@ -250,7 +226,7 @@ const CourseGrid = ({ courses }) => {
     const [filter, setFilter] = useState("ongoing");
 
     const filteredCourses = courses.filter((course) => {
-        const progress = Math.round((course.completed / course.total) * 100);
+        const progress = course.progressPercentage || 0;
         if (filter === "completed") return progress === 100;
         if (filter === "ongoing") return progress < 100;
         return true;
@@ -283,21 +259,25 @@ const CourseGrid = ({ courses }) => {
             <div className="profile-courses-grid-scroll">
                 <div className="profile-courses-grid">
                     {filteredCourses.map((c) => {
-                        const progress = Math.round((c.completed / c.total) * 100);
+                        const progress = c.progressPercentage || 0;
                         const isCompleted = progress === 100;
 
                         return (
-                            <div key={c.id} className="profile-course-card">
+                            <div key={c.courseId || c.id} className="profile-course-card">
                                 <div className="profile-course-card-top">
-                                    <img src={c.img} alt={c.title} className="profile-card-image" />
+                                    <ImageWithFallback
+                                        src={c.courseImage || c.img}
+                                        alt={c.courseName || c.title}
+                                        className="profile-card-image"
+                                        fallbackText={c.courseName || c.title}
+                                    />
                                     <div className="profile-card-overlay-btn">
-                                        {/* Matches the small icon in corner */}
                                         <span>{"< >"}</span>
                                     </div>
                                 </div>
                                 <div className="profile-course-card-body">
-                                    <h3>{c.title}</h3>
-                                    <p className="profile-card-author">{c.author}</p>
+                                    <h3>{c.courseName || c.title}</h3>
+                                    <p className="profile-card-author">{c.instructor || c.author}</p>
 
                                     <div className="profile-card-progress-area">
                                         <div className="profile-card-progress-label">
@@ -311,8 +291,8 @@ const CourseGrid = ({ courses }) => {
 
                                     <div className="profile-card-footer">
                                         <div className="profile-lesson-info">
-                                            <img src={lessonIcon} alt="lessons" className="profile-card-icon" />
-                                            <span>{c.completed} of {c.total} Lessons</span>
+                                            <img src="/student/lesson_icon.png" alt="lessons" className="profile-card-icon" />
+                                            <span>{c.completedLessons || 0} of {c.totalLessons || 0} Lessons</span>
                                         </div>
                                         {isCompleted && (
                                             <button className="profile-view-cert" onClick={handleCertificate}>
@@ -335,16 +315,16 @@ const CourseGrid = ({ courses }) => {
    MAIN PROFILE PAGE
 ============================ */
 const ProfilePage = () => {
-    const courses = [
-        { id: 1, title: "Fullstack MERN Development", author: "David Clark", completed: 8, total: 12, img: course1 },
-        { id: 2, title: "Python of Beginners", author: "Lisa Davis", completed: 7, total: 15, img: course2 },
-        { id: 3, title: "UI UX ( Figma )", author: "Lisa", completed: 9, total: 13, img: course3 },
-        { id: 4, title: "Database Design & SQL", author: "Mark", completed: 9, total: 13, img: course4 },
-    ];
+    const { data: profile, isLoading: profileLoading } = useStudentProfile();
+    const { data: coursesData, isLoading: coursesLoading } = useStudentCourses();
 
-    // Using hardcoded counts to match reference image exactly
-    const completedCount = 3;
-    const ongoingCount = 2;
+    if (profileLoading || coursesLoading) {
+        return <Loader message="Loading profile..." />;
+    }
+
+    const courses = coursesData?.enrolledCourses || [];
+    const completedCount = courses.filter(c => (c.progressPercentage || 0) === 100).length;
+    const ongoingCount = courses.filter(c => (c.progressPercentage || 0) < 100).length;
 
     return (
         <div className="profile-root">
@@ -352,7 +332,11 @@ const ProfilePage = () => {
                 <div className="profile-dashboard-card">
                     <div className="profile-banner-gradient" />
                     <div className="profile-main-layout">
-                        <Info ongoingCount={ongoingCount} completedCount={completedCount} />
+                        <Info
+                            profile={profile}
+                            ongoingCount={ongoingCount}
+                            completedCount={completedCount}
+                        />
                         <CourseGrid courses={courses} />
                     </div>
                 </div>

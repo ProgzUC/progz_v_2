@@ -15,7 +15,7 @@ const Instructors = () => {
 
   const instructors = allUsers.filter((user) => user.role === "trainer");
 
-  const itemsPerPage = 6;
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
   const filtered = instructors.filter((i) =>
@@ -56,7 +56,7 @@ const Instructors = () => {
   if (isError) return <div>Error loading instructors</div>;
 
   return (
-    <div className="inst-page">
+    <div className="admin-instructors-page">
 
       <div className="inst-header">
         <h2>Instructor Management</h2>

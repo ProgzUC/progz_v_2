@@ -1,0 +1,205 @@
+/* ================================
+   TRAINER GLOBAL STYLES
+   ================================ */
+
+/* CSS Variables for Trainer Theme */
+:root {
+    /* Primary Colors */
+    --trainer-primary: #00875a;
+    --trainer-primary-hover: #006b47;
+    --trainer-primary-light: #e6f4ef;
+
+    /* Background Colors */
+    --trainer-bg: #efefef;
+    --trainer-card-bg: #ffffff;
+    --trainer-page-bg: #f5f6fa;
+
+    /* Text Colors */
+    --trainer-text: #111;
+    --trainer-text-muted: #555;
+    --trainer-text-light: #888;
+
+    /* Border & Divider */
+    --trainer-border: #e5e7eb;
+    --trainer-divider: #f1f1f1;
+
+    /* Status Colors */
+    --trainer-success: #22c55e;
+    --trainer-warning: #f59e0b;
+    --trainer-error: #ef4444;
+    --trainer-info: #3b82f6;
+
+    /* Shadows */
+    --trainer-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --trainer-shadow-md: 0 4px 15px rgba(0, 0, 0, 0.08);
+    --trainer-shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.1);
+
+    /* Spacing */
+    --trainer-spacing-xs: 8px;
+    --trainer-spacing-sm: 12px;
+    --trainer-spacing-md: 20px;
+    --trainer-spacing-lg: 30px;
+    --trainer-spacing-xl: 40px;
+
+    /* Border Radius */
+    --trainer-radius-sm: 8px;
+    --trainer-radius-md: 12px;
+    --trainer-radius-lg: 16px;
+    --trainer-radius-xl: 24px;
+
+    /* Transitions */
+    --trainer-transition: 0.2s ease;
+}
+
+/* ================================
+   UTILITY CLASSES
+   ================================ */
+
+.trainer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--trainer-spacing-lg);
+}
+
+.trainer-card {
+    background: var(--trainer-card-bg);
+    border-radius: var(--trainer-radius-lg);
+    padding: var(--trainer-spacing-lg);
+    box-shadow: var(--trainer-shadow-md);
+}
+
+.trainer-btn-primary {
+    background: var(--trainer-primary);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--trainer-radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--trainer-transition);
+}
+
+.trainer-btn-primary:hover {
+    background: var(--trainer-primary-hover);
+    transform: translateY(-1px);
+}
+
+.trainer-btn-secondary {
+    background: white;
+    color: var(--trainer-primary);
+    border: 1px solid var(--trainer-primary);
+    padding: 10px 20px;
+    border-radius: var(--trainer-radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--trainer-transition);
+}
+
+.trainer-btn-secondary:hover {
+    background: var(--trainer-primary-light);
+}
+
+/* ================================
+   TYPOGRAPHY
+   ================================ */
+
+.trainer-heading-1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--trainer-text);
+    margin-bottom: var(--trainer-spacing-md);
+}
+
+.trainer-heading-2 {
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--trainer-text);
+    margin-bottom: var(--trainer-spacing-sm);
+}
+
+.trainer-heading-3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--trainer-text);
+    margin-bottom: var(--trainer-spacing-sm);
+}
+
+.trainer-text-muted {
+    color: var(--trainer-text-muted);
+}
+
+.trainer-text-light {
+    color: var(--trainer-text-light);
+}
+
+/* ================================
+   STATUS BADGES
+   ================================ */
+
+.trainer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.trainer-badge-success {
+    background: #e6f4ef;
+    color: var(--trainer-success);
+}
+
+.trainer-badge-warning {
+    background: #fef3c7;
+    color: var(--trainer-warning);
+}
+
+.trainer-badge-error {
+    background: #fee2e2;
+    color: var(--trainer-error);
+}
+
+.trainer-badge-info {
+    background: #dbeafe;
+    color: var(--trainer-info);
+}
+
+/* ================================
+   RESPONSIVE UTILITIES
+   ================================ */
+
+@media (max-width: 1200px) {
+    .trainer-container {
+        padding: 0 var(--trainer-spacing-md);
+    }
+}
+
+@media (max-width: 768px) {
+    .trainer-container {
+        padding: 0 var(--trainer-spacing-sm);
+    }
+
+    .trainer-heading-1 {
+        font-size: 28px;
+    }
+
+    .trainer-heading-2 {
+        font-size: 20px;
+    }
+
+    .trainer-heading-3 {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .trainer-container {
+        padding: 0 var(--trainer-spacing-xs);
+    }
+
+    .trainer-heading-1 {
+        font-size: 24px;
+    }
+}

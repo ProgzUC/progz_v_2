@@ -43,7 +43,7 @@
     margin: 0;
 }
 
-.back-btn {
+.trainer-profile-page .back-btn {
     background: none;
     border: none;
     cursor: pointer;
@@ -56,7 +56,7 @@
     padding: 0;
 }
 
-.back-btn:hover {
+.trainer-profile-page .back-btn:hover {
     color: #111827;
 }
 
@@ -67,7 +67,7 @@
     margin-bottom: 2rem;
 }
 
-.profile-card {
+.trainer-profile-page .profile-card {
     background-color: var(--card-bg);
     border-radius: 1.5rem;
     padding: 2.5rem;

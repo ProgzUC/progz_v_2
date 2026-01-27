@@ -3,12 +3,25 @@ import {
     FaArrowLeft,
     FaCamera,
     FaSave,
-    FaTimes
+    FaTimes,
+    FaUser
 } from 'react-icons/fa';
 import './Profile.css';
-const EditProfile = ({ profileData, onCancel, onSave, onBack }) => {
-    const [formData, setFormData] = useState(profileData);
+import { useTrainerProfile, useUpdateTrainerProfile } from '../../../hooks/useTrainerProfile';
+import Loader from '../../../components/common/Loader/Loader';
+
+const EditProfile = ({ onCancel, onBack }) => {
+    const { data: profileData, isLoading } = useTrainerProfile();
+    const updateProfile = useUpdateTrainerProfile();
+    const [formData, setFormData] = useState(profileData || {});
     const fileInputRef = React.useRef(null);
+
+    // Update formData when profileData loads
+    React.useEffect(() => {
+        if (profileData) {
+            setFormData(profileData);
+        }
+    }, [profileData]);
 
     const handleImageClick = () => {
         fileInputRef.current.click();
@@ -21,10 +34,7 @@ const EditProfile = ({ profileData, onCancel, onSave, onBack }) => {
             reader.onloadend = () => {
                 setFormData(prev => ({
                     ...prev,
-                    personalDetails: {
-                        ...prev.personalDetails,
-                        avatar: reader.result
-                    }
+                    avatar: reader.result
                 }));
             };
             reader.readAsDataURL(file);
@@ -33,27 +43,24 @@ const EditProfile = ({ profileData, onCancel, onSave, onBack }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name.includes('.')) {
-            const [section, field] = name.split('.');
-            setFormData(prev => ({
-                ...prev,
-                [section]: {
-                    ...prev[section],
-                    [field]: value
-                }
-            }));
-        } else {
-            setFormData(prev => ({
-                ...prev,
-                [name]: value
-            }));
-        }
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSave(formData);
+        updateProfile.mutate(formData, {
+            onSuccess: () => {
+                onCancel(); // Close edit mode on success
+            }
+        });
     };
+
+    if (isLoading) {
+        return <Loader message="Loading profile..." />;
+    }
 
     return (
         <div className="profile-wrapper">
@@ -67,7 +74,11 @@ const EditProfile = ({ profileData, onCancel, onSave, onBack }) => {
                     <div className="profile-sidebar">
                         <div className="avatar-section">
                             <div className="avatar-wrapper" onClick={handleImageClick} style={{ cursor: 'pointer' }}>
-                                <img src={formData.personalDetails.avatar} alt="Avatar" className="avatar-img" />
+                                {formData.avatar ? (
+                                    <img src={formData.avatar} alt="Avatar" className="avatar-img" />
+                                ) : (
+                                    <FaUser className="avatar-img" style={{ fontSize: '60px', color: '#ccc' }} />
+                                )}
                                 <div className="edit-avatar-badge">
                                     <FaCamera size={12} />
                                 </div>
@@ -79,8 +90,8 @@ const EditProfile = ({ profileData, onCancel, onSave, onBack }) => {
                                     onChange={handleFileChange}
                                 />
                             </div>
-                            <h2 className="profile-name">{formData.personalDetails.fullName}</h2>
-                            <span className="profile-role-badge">{formData.personalDetails.role}</span>
+                            <h2 className="profile-name">{formData.name}</h2>
+                            <span className="profile-role-badge">{formData.role}</span>
                         </div>
                     </div>
 
@@ -99,70 +110,63 @@ const EditProfile = ({ profileData, onCancel, onSave, onBack }) => {
                                         <label>Full Name</label>
                                         <input
                                             type="text"
-                                            name="personalDetails.fullName"
-                                            value={formData.personalDetails.fullName}
-                                            onChange={handleChange}
+                                            name="name"
+                                            value={formData.name || ''}
+                                            disabled
+                                            style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
                                         />
+                                        <small style={{ color: '#666', fontSize: '12px' }}>Only admin can edit this field</small>
                                     </div>
                                     <div className="form-group">
                                         <label>Email Address</label>
                                         <input
                                             type="email"
-                                            name="personalDetails.email"
-                                            value={formData.personalDetails.email}
-                                            onChange={handleChange}
+                                            name="email"
+                                            value={formData.email || ''}
+                                            disabled
+                                            style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
                                         />
+                                        <small style={{ color: '#666', fontSize: '12px' }}>Only admin can edit this field</small>
                                     </div>
                                     <div className="form-group">
                                         <label>Mobile Number</label>
                                         <input
                                             type="text"
-                                            name="personalDetails.mobileNumber"
-                                            value={formData.personalDetails.mobileNumber}
-                                            onChange={handleChange}
+                                            name="phone"
+                                            value={formData.phone || ''}
+                                            disabled
+                                            style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
                                         />
+                                        <small style={{ color: '#666', fontSize: '12px' }}>Only admin can edit this field</small>
                                     </div>
+
                                     <div className="form-group">
                                         <label>Alternate Mobile Number</label>
                                         <input
                                             type="text"
-                                            name="personalDetails.alternateMobileNumber"
-                                            value={formData.personalDetails.alternateMobileNumber || ''}
+                                            name="altPhone"
+                                            value={formData.altPhone || ''}
                                             onChange={handleChange}
+                                            placeholder="Enter alternate phone"
                                         />
                                     </div>
                                     <div className="form-group">
                                         <label>Date of Birth</label>
                                         <input
                                             type="date"
-                                            name="personalDetails.dateOfBirth"
-                                            value={formData.personalDetails.dateOfBirth}
+                                            name="dob"
+                                            value={formData.dob || ''}
                                             onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Password</label>
-                                        <input
-                                            type="password"
-                                            name="personalDetails.password"
-                                            value={formData.personalDetails.password}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Confirm Password</label>
-                                        <input
-                                            type="password"
-                                            placeholder="************"
                                         />
                                     </div>
                                     <div className="form-group">
                                         <label>Gender</label>
                                         <select
-                                            name="personalDetails.gender"
-                                            value={formData.personalDetails.gender}
+                                            name="gender"
+                                            value={formData.gender || ''}
                                             onChange={handleChange}
                                         >
+                                            <option value="">Select Gender</option>
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                             <option value="Other">Other</option>
@@ -172,36 +176,10 @@ const EditProfile = ({ profileData, onCancel, onSave, onBack }) => {
                                         <label>Address</label>
                                         <input
                                             type="text"
-                                            name="personalDetails.address"
-                                            value={formData.personalDetails.address}
+                                            name="address"
+                                            value={formData.address || ''}
                                             onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>City</label>
-                                        <input
-                                            type="text"
-                                            name="personalDetails.city"
-                                            value={formData.personalDetails.city}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>State</label>
-                                        <input
-                                            type="text"
-                                            name="personalDetails.state"
-                                            value={formData.personalDetails.state}
-                                            onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Country</label>
-                                        <input
-                                            type="text"
-                                            name="personalDetails.country"
-                                            value={formData.personalDetails.country}
-                                            onChange={handleChange}
+                                            placeholder="Enter your address"
                                         />
                                     </div>
                                 </div>
@@ -216,62 +194,78 @@ const EditProfile = ({ profileData, onCancel, onSave, onBack }) => {
 
                                 <div className="form-grid">
                                     <div className="form-group">
+                                        <label>Role</label>
+                                        <input
+                                            type="text"
+                                            name="role"
+                                            value={formData.role || ''}
+                                            disabled
+                                            style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
+                                        />
+                                        <small style={{ color: '#666', fontSize: '12px' }}>Only admin can edit this field</small>
+                                    </div>
+                                    <div className="form-group">
                                         <label>Education</label>
                                         <input
                                             type="text"
-                                            name="educationEmployment.education"
-                                            value={formData.educationEmployment.education}
+                                            name="education"
+                                            value={formData.education || ''}
                                             onChange={handleChange}
+                                            placeholder="e.g. B.Tech in Computer Science"
                                         />
                                     </div>
                                     <div className="form-group">
                                         <label>University/School</label>
                                         <input
                                             type="text"
-                                            name="educationEmployment.university"
-                                            value={formData.educationEmployment.university}
+                                            name="university"
+                                            value={formData.university || ''}
                                             onChange={handleChange}
+                                            placeholder="Enter university name"
                                         />
                                     </div>
                                     <div className="form-group">
                                         <label>Profession</label>
                                         <input
                                             type="text"
-                                            name="educationEmployment.profession"
-                                            value={formData.educationEmployment.profession}
+                                            name="profession"
+                                            value={formData.profession || ''}
                                             onChange={handleChange}
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Skills</label>
-                                        <input
-                                            type="text"
-                                            name="educationEmployment.skills"
-                                            value={formData.educationEmployment.skills || ''}
-                                            onChange={handleChange}
-                                            placeholder="e.g. React, Node.js, UI/UX"
+                                            placeholder="e.g. Software Developer"
                                         />
                                     </div>
                                     <div className="form-group">
                                         <label>Experience</label>
                                         <input
                                             type="text"
-                                            name="educationEmployment.experience"
-                                            value={formData.educationEmployment.experience}
+                                            name="experience"
+                                            value={formData.experience || ''}
                                             onChange={handleChange}
+                                            placeholder="e.g. 5 years"
                                         />
                                     </div>
                                     <div className="form-group">
                                         <label>Employment Status</label>
                                         <select
-                                            name="educationEmployment.employmentStatus"
-                                            value={formData.educationEmployment.employmentStatus}
+                                            name="employmentStatus"
+                                            value={formData.employmentStatus || ''}
                                             onChange={handleChange}
                                         >
+                                            <option value="">Select Status</option>
                                             <option value="Work">Work</option>
                                             <option value="Student">Student</option>
                                             <option value="Unemployed">Unemployed</option>
                                         </select>
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Skills</label>
+                                        <input
+                                            type="text"
+                                            name="skills"
+                                            value={formData.skills || ''}
+                                            onChange={handleChange}
+                                            placeholder="e.g. React, Node.js, Python"
+                                        />
                                     </div>
                                 </div>
                             </section>

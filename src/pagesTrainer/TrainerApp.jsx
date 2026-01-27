@@ -11,9 +11,11 @@ import BatchDetails from './Component/MyBatchs/BatchDetails'
 import Profile from './Component/Profile/Profile'
 import EditProfile from './Component/Profile/EditProfile'
 import initialProfileData from './Component/Profile/profileData.json'
+import './TrainerGlobal.css'
 import './TrainerApp.css'
 import Footer from './Component/Navbar/Footer'
 import { useTrainerBootstrap } from '../hooks/useTrainerBootstrap'
+import Loader from '../components/common/Loader/Loader'
 
 function TrainerApp() {
   const [activeTab, setActiveTab] = React.useState('home');
@@ -23,9 +25,9 @@ function TrainerApp() {
   const [isEditingProfile, setIsEditingProfile] = React.useState(false);
   const [profileData, setProfileData] = React.useState(initialProfileData);
 
-  const {data, isLoading, isError,error} = useTrainerBootstrap();
+  const { data, isLoading, isError, error } = useTrainerBootstrap();
 
-  if (isLoading) return <p>Loading dashboard...</p>;
+  if (isLoading) return <Loader />;
   if (isError) {
     console.error("BOOTSTRAP ERROR:", error);
     return <p>Failed to load</p>;
@@ -57,9 +59,9 @@ function TrainerApp() {
         {activeTab === 'home' && (
           <>
             <Home trainer={data.trainer}
-                  stats={data.stats}
+              stats={data.stats}
             />
-            <Active data={data}/>
+            <Active data={data} />
           </>
         )}
         {activeTab === 'batches' && (

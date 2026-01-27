@@ -33,7 +33,7 @@ function CategoryPage() {
   };
 
   return (
-    <div className="category-container">
+    <div className="category-container student-category-page">
       <CourseBanner />
 
 

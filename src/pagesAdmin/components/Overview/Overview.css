@@ -2,7 +2,7 @@
    DASHBOARD LAYOUT
 ===================================== */
 
-.dashboard-container {
+.admin-overview-page {
   padding: 20px 40px;
   background: #f8f9fa;
   width: 100%;
@@ -11,24 +11,24 @@
 }
 
 /* ---------------- HEADER ---------------- */
-.dashboard-header {
+.admin-overview-page .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 35px;
 }
 
-.dashboard-title {
+.admin-overview-page .dashboard-title {
   font-size: 32px;
   font-weight: 700;
   color: #374151;
 }
 
-.dashboard-subtitle {
+.admin-overview-page .dashboard-subtitle {
   color: #6b7280;
 }
 
-.btn-generate {
+.admin-overview-page .btn-generate {
   background: white;
   border: 1px solid #22c55e;
   color: #22c55e;
@@ -38,19 +38,19 @@
   cursor: pointer;
 }
 
-.btn-generate:hover {
+.admin-overview-page .btn-generate:hover {
   background: #22c55e;
   color: white;
 }
 
 /* ---------------- STATS ---------------- */
-.stats-row {
+.admin-overview-page .stats-row {
   display: flex;
   gap: 20px;
   margin-bottom: 25px;
 }
 
-.stats-card {
+.admin-overview-page .stats-card {
   flex: 1;
   background: white;
   padding: 22px;
@@ -58,7 +58,7 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.icon-box {
+.admin-overview-page .icon-box {
   width: 50px;
   height: 50px;
   border-radius: 14px;
@@ -69,40 +69,40 @@
   margin-bottom: 10px;
 }
 
-.orange {
+.admin-overview-page .orange {
   background: #ffeede;
   color: #ff6b00;
 }
 
-.green {
+.admin-overview-page .green {
   background: #e0f7e9;
   color: #00a86b;
 }
 
-.pink {
+.admin-overview-page .pink {
   background: #ffe7f1;
   color: #ff2b88;
 }
 
-.stats-card h5 {
+.admin-overview-page .stats-card h5 {
   margin: 8px 0 5px;
   font-size: 17px;
   color: #555;
 }
 
-.value {
+.admin-overview-page .value {
   font-size: 26px;
   font-weight: 700;
 }
 
 /* ---------------- CHARTS ROW ---------------- */
-.charts-row {
+.admin-overview-page .charts-row {
   display: flex;
   gap: 20px;
   margin-bottom: 25px;
 }
 
-.chart-card {
+.admin-overview-page .chart-card {
   background: white;
   border-radius: 20px;
   padding: 25px;
@@ -111,47 +111,47 @@
   position: relative;
 }
 
-.chart-title {
+.admin-overview-page .chart-title {
   margin-bottom: 10px;
   font-weight: 600;
   color: #374151;
 }
 
 /* ---------------- USER DISTRIBUTION FIX ---------------- */
-.legend-box {
+.admin-overview-page .legend-box {
   display: flex;
   gap: 20px;
   margin-bottom: 10px;
 }
 
-.legend-item {
+.admin-overview-page .legend-item {
   display: flex;
   align-items: center;
   gap: 6px;
   color: #555;
 }
 
-.legend-dot {
+.admin-overview-page .legend-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
 }
 
-.legend-dot.instructors {
+.admin-overview-page .legend-dot.instructors {
   background: #a5698c;
 }
 
-.legend-dot.students {
+.admin-overview-page .legend-dot.students {
   background: #22c55e;
 }
 
-.donut-wrapper {
+.admin-overview-page .donut-wrapper {
   position: relative;
   width: 100%;
   height: 260px;
 }
 
-.donut-center {
+.admin-overview-page .donut-center {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -160,25 +160,25 @@
   pointer-events: none;
 }
 
-.donut-center h3 {
+.admin-overview-page .donut-center h3 {
   margin: 0;
   font-size: 28px;
   font-weight: 700;
 }
 
-.donut-center p {
+.admin-overview-page .donut-center p {
   margin: 0;
   font-size: 14px;
   color: #666;
 }
 
 /* ---------------- TABLES ---------------- */
-.tables-row {
+.admin-overview-page .tables-row {
   display: flex;
   gap: 20px;
 }
 
-.table-card {
+.admin-overview-page .table-card {
   flex: 1;
   background: white;
   padding: 25px;
@@ -186,32 +186,32 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
-.table-card table {
+.admin-overview-page .table-card table {
   width: 100%;
   border-collapse: collapse;
 }
 
-.table-card th {
+.admin-overview-page .table-card th {
   text-align: left;
   padding-bottom: 10px;
   color: #6b7280;
 }
 
-.table-card td {
+.admin-overview-page .table-card td {
   padding: 10px 0;
   border-bottom: 1px solid #f1f1f1;
 }
 
-.table-card tr:last-child td {
+.admin-overview-page .table-card tr:last-child td {
   border-bottom: none;
 }
 
-.student-avatars {
+.admin-overview-page .student-avatars {
   display: flex;
   gap: 3px;
 }
 
-.avatar {
+.admin-overview-page .avatar {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -219,7 +219,7 @@
   border: 2px solid #fff;
 }
 
-.more-count {
+.admin-overview-page .more-count {
   background: #f1f1f1;
   padding: 3px 8px;
   border-radius: 12px;
@@ -227,23 +227,23 @@
   font-weight: 600;
 }
 
-.actions {
+.admin-overview-page .actions {
   display: flex;
   gap: 10px;
   justify-content: center;
 }
 
-.edit-btn,
-.delete-btn {
+.admin-overview-page .edit-btn,
+.admin-overview-page .delete-btn {
   font-size: 18px;
   cursor: pointer;
 }
 
-.edit-btn:hover {
+.admin-overview-page .edit-btn:hover {
   color: #22c55e;
 }
 
-.delete-btn:hover {
+.admin-overview-page .delete-btn:hover {
   color: #ef4444;
 }
 

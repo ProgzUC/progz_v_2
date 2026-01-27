@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 export default function Hero() {
   return (
     <section
-      className="hero-container"
+      className="hero-container student-hero-section"
       style={{ backgroundImage: `url(${heroImage})` }}
     >
       <div className="hero-overlay" />

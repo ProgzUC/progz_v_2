@@ -59,7 +59,7 @@ const Students = () => {
 
 
   return (
-    <div className="students-page">
+    <div className="admin-students-page">
       {/* TOP HEADER */}
       <div className="students-header">
         <h2>Student Management</h2>

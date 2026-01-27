@@ -1,7 +1,7 @@
 /* ================================
    SIDEBAR MAIN CONTAINER
    ================================ */
-.sidebar-container {
+.admin-sidebar {
   width: 280px;
   background: #ffffff;
   height: 100vh;
@@ -21,12 +21,12 @@
 
 
 /* COLLAPSED STATE */
-.sidebar-container.collapsed {
+.admin-sidebar.collapsed {
   width: 85px;
 }
 
 /* Rotate arrow when collapsed */
-.sidebar-container.collapsed .collapse-btn i {
+.admin-sidebar.collapsed .collapse-btn i {
   transform: rotate(180deg);
 }
 
@@ -34,7 +34,7 @@
 /* ================================
    COLLAPSE BUTTON
    ================================ */
-.collapse-btn {
+.admin-sidebar .collapse-btn {
   position: absolute;
   top: 20px;
   right: -15px;
@@ -53,7 +53,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.collapse-btn i {
+.admin-sidebar .collapse-btn i {
   color: #555;
   font-size: 14px;
   /* Adjust icon size */
@@ -64,7 +64,7 @@
 /* ================================
    LOGO & TITLE
    ================================ */
-.sidebar-header {
+.admin-sidebar .sidebar-header {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -75,7 +75,7 @@
   min-height: 40px;
 }
 
-.sidebar-logo {
+.admin-sidebar .sidebar-logo {
   width: 40px;
   height: 40px;
   object-fit: contain;
@@ -84,7 +84,7 @@
   /* Prevent logo from shrinking */
 }
 
-.sidebar-title {
+.admin-sidebar .sidebar-title {
   font-size: 20px;
   font-weight: 600;
   color: #333;
@@ -107,7 +107,7 @@
 /* ================================
    MENU ITEMS
    ================================ */
-.sidebar-menu {
+.admin-sidebar .sidebar-menu {
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -115,7 +115,7 @@
   margin-top: 20px;
 }
 
-.menu-item {
+.admin-sidebar .menu-item {
   display: flex;
   align-items: center;
   padding: 12px 18px;
@@ -131,40 +131,40 @@
   font-weight: 500;
 }
 
-.menu-item i {
+.admin-sidebar .menu-item i {
   font-size: 20px;
   /* Larger icons */
   color: #6b7280;
 }
 
 /* Hover Effect */
-.menu-item:hover {
+.admin-sidebar .menu-item:hover {
   background: #f3f4f6;
   color: #111827;
 }
 
-.menu-item:hover i {
+.admin-sidebar .menu-item:hover i {
   color: #111827;
 }
 
 /* Active Page Style */
-.menu-item.active {
+.admin-sidebar .menu-item.active {
   background: #108a5d;
   /* Green from image */
   color: white;
   font-weight: 600;
 }
 
-.menu-item.active i {
+.admin-sidebar .menu-item.active i {
   color: white;
 }
 
-.menu-divider {
+.admin-sidebar .menu-divider {
   margin: 20px 0;
   border-top: 1px solid #e5e7eb;
 }
 
-.menu-spacer {
+.admin-sidebar .menu-spacer {
   flex-grow: 1;
 }
 
@@ -172,7 +172,7 @@
 /* ================================
    PROFILE (BOTTOM)
    ================================ */
-.sidebar-profile {
+.admin-sidebar .sidebar-profile {
   margin-top: auto;
   display: flex;
   align-items: center;
@@ -187,36 +187,36 @@
   transition: 0.2s;
 }
 
-.sidebar-profile:hover {
+.admin-sidebar .sidebar-profile:hover {
   background: #f9fafb;
 }
 
-.profile-img {
+.admin-sidebar .profile-img {
   width: 42px;
   height: 42px;
   border-radius: 50%;
   object-fit: cover;
 }
 
-.profile-info {
+.admin-sidebar .profile-info {
   flex: 1;
 }
 
 /* Text inside Profile */
-.welcome-text {
+.admin-sidebar .welcome-text {
   font-size: 12px;
   color: #6b7280;
   margin: 0;
 }
 
-.profile-name {
+.admin-sidebar .profile-name {
   font-size: 15px;
   font-weight: 700;
   color: #111827;
   margin: 0;
 }
 
-.profile-arrow {
+.admin-sidebar .profile-arrow {
   font-size: 14px;
   color: #9ca3af;
 }
@@ -224,7 +224,7 @@
 /* ================================
    ANIMATION
    ================================ */
-.spin-icon {
+.admin-sidebar .spin-icon {
   animation: spin 1s linear infinite;
 }
 

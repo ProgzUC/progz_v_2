@@ -1,11 +1,44 @@
 import React from 'react';
 import './MyCourses.css';
-import coursesData from './myCoursesData.json';
 import { BsBook, BsPeople } from 'react-icons/bs';
 import { FaArrowLeft } from 'react-icons/fa';
 import { BiPlus, BiEdit, BiDotsHorizontalRounded } from 'react-icons/bi';
+import { useTrainerCourses } from '../../../hooks/useTrainerCourses';
+import Loader from '../../../components/common/Loader/Loader';
 
 const MyCourses = ({ onManageCourse, onCreateNew, onBack }) => {
+    const { data: courses, isLoading, isError } = useTrainerCourses();
+
+    if (isLoading) {
+        return (
+            <div className="my-courses-container trainer-myCourses">
+                <div className="header-section">
+                    <div className="back-title">
+                        <button className="back-btn" onClick={onBack}><FaArrowLeft /></button>
+                        <h1>My Courses</h1>
+                    </div>
+                </div>
+                <Loader message="Loading courses..." />
+            </div>
+        );
+    }
+
+    if (isError) {
+        return (
+            <div className="my-courses-container trainer-myCourses">
+                <div className="header-section">
+                    <div className="back-title">
+                        <button className="back-btn" onClick={onBack}><FaArrowLeft /></button>
+                        <h1>My Courses</h1>
+                    </div>
+                </div>
+                <p style={{ textAlign: 'center', padding: '40px', color: '#e74c3c' }}>Error loading courses. Please try again.</p>
+            </div>
+        );
+    }
+
+    const coursesData = courses || [];
+
     return (
         <div className="my-courses-container trainer-myCourses">
             <div className="header-section">
@@ -18,37 +51,50 @@ const MyCourses = ({ onManageCourse, onCreateNew, onBack }) => {
                 </button>
             </div>
 
-            <div className="courses-grid">
-                {coursesData.map((course) => (
-                    <div key={course.id} className="course-card">
-                        <div
-                            className="card-header-bg"
-                            style={{ backgroundColor: course.color }}
-                        >
-                            <button className="menu-dots">
-                                <BiDotsHorizontalRounded />
-                            </button>
-                        </div>
-                        <div className="card-content">
-                            <h3>{course.title}</h3>
-                            <div className="course-stats">
-                                <span className="stat-item">
-                                    <BsBook /> {Array.isArray(course.modules) ? course.modules.length : course.modules} Modules
-                                </span>
-                                <span className="stat-item">
-                                    <BsPeople /> {course.students} Students
-                                </span>
-                            </div>
-                            <button
-                                className="manage-course-btn"
-                                onClick={() => onManageCourse(course)}
+            {coursesData.length === 0 ? (
+                <p style={{ textAlign: 'center', padding: '40px', color: '#666' }}>
+                    No courses found. Create your first course!
+                </p>
+            ) : (
+                <div className="courses-grid">
+                    {coursesData.map((course, index) => (
+                        <div key={course.courseId} className="course-card">
+                            <div
+                                className="card-header-bg"
+                                style={{
+                                    backgroundImage: course.thumbnail
+                                        ? `url(${course.thumbnail.url})`
+                                        : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    backgroundRepeat: 'no-repeat'
+                                }}
                             >
-                                <BiEdit /> Manage Course
-                            </button>
+                                <button className="menu-dots">
+                                    <BiDotsHorizontalRounded />
+                                </button>
+                            </div>
+                            <div className="card-content">
+                                <h3>{course.courseName}</h3>
+                                <div className="course-stats">
+                                    <span className="stat-item">
+                                        <BsBook /> {course.totalSections || 0} Sections
+                                    </span>
+                                    <span className="stat-item">
+                                        <BsPeople /> {course.totalStudents || 0} Students
+                                    </span>
+                                </div>
+                                <button
+                                    className="manage-course-btn"
+                                    onClick={() => onManageCourse(course)}
+                                >
+                                    <BiEdit /> Manage Course
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };

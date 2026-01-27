@@ -42,7 +42,7 @@
 }
 
 /* Content block for text */
-.banner-content {
+.student-course-banner .banner-content {
   text-align: center;
   color: rgb(250, 249, 249); /* White text color */
   max-width: 600px; /* Limit the width of the text block */
@@ -51,7 +51,7 @@
 }
 
 /* Heading style */
-.banner-content h1 {
+.student-course-banner .banner-content h1 {
   font-size: 3em; /* Large, prominent heading */
   font-weight: bold;
   margin-bottom: 0.5em;
@@ -59,7 +59,7 @@
 }
 
 /* Paragraph style */
-.banner-content p {
+.student-course-banner .banner-content p {
   font-size: 1.2em; /* Readable paragraph size */
   opacity: 0.9; /* Slightly less opaque than the heading */
 }

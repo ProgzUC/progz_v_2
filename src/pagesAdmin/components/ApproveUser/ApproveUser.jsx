@@ -70,7 +70,7 @@ const ApproveUser = () => {
   if (isError) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="approve-users-page">
+    <div className="admin-approve-user-page">
       <h1 className="page-title">Approve Users</h1>
 
       <div className="pending-registrations-card">

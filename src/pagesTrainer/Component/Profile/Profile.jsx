@@ -15,12 +15,14 @@ import {
 } from 'react-icons/fa';
 import './Profile.css';
 import { useTrainerProfile } from '../../../hooks/useTrainerProfile';
+import Loader from '../../../components/common/Loader/Loader';
+
 const Profile = ({ onEdit, onBack }) => {
     const { data: profileData, isLoading } = useTrainerProfile();
 
 
     if (isLoading) {
-        return <p>Loading profile...</p>;
+        return <Loader message="Loading profile..." />;
     }
 
     return (
@@ -35,9 +37,9 @@ const Profile = ({ onEdit, onBack }) => {
                     <div className="profile-sidebar">
                         <div className="avatar-section">
                             <div className="avatar-wrapper">
-                                
-                                    <FaUser className="avatar-img"/>
-                                
+
+                                <FaUser className="avatar-img" />
+
                                 {/* <img src={personalDetails.avatar} alt="Avatar" className="avatar-img" /> */}
                             </div>
                             <h2 className="profile-name">{profileData.name}</h2>
@@ -94,28 +96,28 @@ const Profile = ({ onEdit, onBack }) => {
                                     <div className="detail-icon"><FaPhone /></div>
                                     <div className="detail-content">
                                         <span className="detail-label">Alternate Mobile Number</span>
-                                        <span className="detail-value"></span>
+                                        <span className="detail-value">{profileData.altPhone || ''}</span>
                                     </div>
                                 </div>
                                 <div className="detail-box">
                                     <div className="detail-icon"><FaCalendarAlt /></div>
                                     <div className="detail-content">
                                         <span className="detail-label">Date of Birth</span>
-                                        <span className="detail-value">yts</span>
+                                        <span className="detail-value">{profileData.dob || ''}</span>
                                     </div>
                                 </div>
                                 <div className="detail-box">
                                     <div className="detail-icon"><FaUser /></div>
                                     <div className="detail-content">
                                         <span className="detail-label">Gender</span>
-                                        <span className="detail-value">yts</span>
+                                        <span className="detail-value">{profileData.gender || ''}</span>
                                     </div>
                                 </div>
                                 <div className="detail-box address-box">
                                     <div className="detail-icon"><FaMapMarkerAlt /></div>
                                     <div className="detail-content">
                                         <span className="detail-label">Address</span>
-                                        <span className="detail-value">YTS</span>
+                                        <span className="detail-value">{profileData.address || ''}</span>
                                     </div>
                                 </div>
                             </div>
@@ -140,42 +142,42 @@ const Profile = ({ onEdit, onBack }) => {
                                     <div className="detail-icon"><FaGraduationCap /></div>
                                     <div className="detail-content">
                                         <span className="detail-label">Education</span>
-                                        <span className="detail-value"></span>
+                                        <span className="detail-value">{profileData.education || ''}</span>
                                     </div>
                                 </div>
                                 <div className="detail-box">
                                     <div className="detail-icon"><FaMapMarkerAlt /></div>
                                     <div className="detail-content">
                                         <span className="detail-label">University/School</span>
-                                        <span className="detail-value"></span>
+                                        <span className="detail-value">{profileData.university || ''}</span>
                                     </div>
                                 </div>
                                 <div className="detail-box">
                                     <div className="detail-icon"><FaBriefcase /></div>
                                     <div className="detail-content">
                                         <span className="detail-label">Profession</span>
-                                        <span className="detail-value"></span>
+                                        <span className="detail-value">{profileData.profession || ''}</span>
                                     </div>
                                 </div>
                                 <div className="detail-box">
                                     <div className="detail-icon"><FaBriefcase /></div>
                                     <div className="detail-content">
                                         <span className="detail-label">Experience</span>
-                                        <span className="detail-value"></span>
+                                        <span className="detail-value">{profileData.experience || ''}</span>
                                     </div>
                                 </div>
                                 <div className="detail-box">
                                     <div className="detail-icon"><FaIdBadge /></div>
                                     <div className="detail-content">
                                         <span className="detail-label">Employment Status</span>
-                                        <span className="detail-value"></span>
+                                        <span className="detail-value">{profileData.employmentStatus || ''}</span>
                                     </div>
                                 </div>
                                 <div className="detail-box address-box">
                                     <div className="detail-icon"><FaEdit /></div>
                                     <div className="detail-content">
                                         <span className="detail-label">Skills</span>
-                                        <span className="detail-value">YTS</span>
+                                        <span className="detail-value">{profileData.skills || ''}</span>
                                     </div>
                                 </div>
                             </div>

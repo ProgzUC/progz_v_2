@@ -1,5 +1,5 @@
 /* Recycle Bin Page */
-.recycle-bin-page {
+.admin-recycle-bin-page {
     padding: 40px 50px;
     background-color: #ddd9d5;
     /* Match other admin pages */
@@ -7,7 +7,7 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.page-title {
+.admin-recycle-bin-page .page-title {
     font-size: 32px;
     font-weight: 500;
     color: #7a7a7a;
@@ -15,7 +15,7 @@
 }
 
 /* Card Styling */
-.recycle-bin-card {
+.admin-recycle-bin-page .recycle-bin-card {
     background: #FFFFFF;
     border-radius: 16px;
     padding: 30px 25px;
@@ -23,7 +23,7 @@
     min-height: 400px;
 }
 
-.card-header {
+.admin-recycle-bin-page .card-header {
     font-size: 18px;
     font-weight: 600;
     color: #8B8B8B;
@@ -31,17 +31,17 @@
 }
 
 /* Table Styling */
-.table-container {
+.admin-recycle-bin-page .table-container {
     width: 100%;
     overflow-x: auto;
 }
 
-.bin-table {
+.admin-recycle-bin-page .bin-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.bin-table thead th {
+.admin-recycle-bin-page .bin-table thead th {
     text-align: left;
     font-size: 13px;
     font-weight: 400;
@@ -51,53 +51,53 @@
     padding: 0 15px 18px 15px;
 }
 
-.bin-table tbody tr {
+.admin-recycle-bin-page .bin-table tbody tr {
     border-bottom: 1px solid #f5f5f5;
     transition: background-color 0.2s;
 }
 
-.bin-table tbody tr:hover {
+.admin-recycle-bin-page .bin-table tbody tr:hover {
     background-color: transparent;
 }
 
-.bin-table tbody td {
+.admin-recycle-bin-page .bin-table tbody td {
     padding: 20px 15px;
     font-size: 14px;
     color: #666;
 }
 
-.item-name {
+.admin-recycle-bin-page .item-name {
     font-weight: 400;
     color: #999;
 }
 
-.item-type {
+.admin-recycle-bin-page .item-type {
     text-transform: capitalize;
     font-weight: 500;
 }
 
-.item-type.user {
+.admin-recycle-bin-page .item-type.user {
     color: #108a5d;
     /* Greenish for users */
 }
 
-.item-type.course {
+.admin-recycle-bin-page .item-type.course {
     color: #3b82f6;
     /* Blueish for courses */
 }
 
-.deleted-date {
+.admin-recycle-bin-page .deleted-date {
     color: #bbb;
     font-size: 13px;
 }
 
 /* Action Icons */
-.action-icons {
+.admin-recycle-bin-page .action-icons {
     text-align: right;
     padding-right: 20px !important;
 }
 
-.icon-btn {
+.admin-recycle-bin-page .icon-btn {
     background: none;
     border: none;
     cursor: pointer;
@@ -110,30 +110,30 @@
     justify-content: center;
 }
 
-.icon-btn:hover {
+.admin-recycle-bin-page .icon-btn:hover {
     background-color: #F5F5F5;
 }
 
-.restore-btn {
+.admin-recycle-bin-page .restore-btn {
     color: #22C55E;
     /* Green for restore */
 }
 
-.restore-btn:hover {
+.admin-recycle-bin-page .restore-btn:hover {
     background-color: #DCFCE7;
 }
 
-.delete-btn {
+.admin-recycle-bin-page .delete-btn {
     color: #EF4444;
     /* Red for permanent delete */
 }
 
-.delete-btn:hover {
+.admin-recycle-bin-page .delete-btn:hover {
     background-color: #FEE2E2;
 }
 
 /* Empty State */
-.empty-state {
+.admin-recycle-bin-page .empty-state {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -142,13 +142,13 @@
     color: #aaa;
 }
 
-.empty-state i {
+.admin-recycle-bin-page .empty-state i {
     font-size: 48px;
     margin-bottom: 15px;
     color: #ddd;
 }
 
-.empty-state p {
+.admin-recycle-bin-page .empty-state p {
     font-size: 16px;
 }
 

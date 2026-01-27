@@ -14,25 +14,25 @@ body {
 }
 
 /* OUTER WRAPPER (left aligned like your screenshot) */
-.batches-page {
+.trainer-active-batches-page {
   padding: 0;
   /* Remove extra padding as parent has container padding */
 }
 
 /* SECTION TITLES (LEFT, NOT CENTER) */
-.batches-title {
+.trainer-active-batches-page .batches-title {
   margin: 0 0 28px 0;
   font-size: 28px;
   font-weight: 800;
   color: var(--text);
 }
 
-.batches-title--spaced {
+.trainer-active-batches-page .batches-title--spaced {
   margin-top: 70px;
 }
 
 /* GRID (left aligned) */
-.batches-grid {
+.trainer-active-batches-page .batches-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 34px;
@@ -41,7 +41,7 @@ body {
 }
 
 /* CARD — EXACT FIGMA */
-.batch-card {
+.trainer-active-batches-page .batch-card {
   width: 100%;
   max-width: 400px;
   height: 264px;
@@ -54,20 +54,20 @@ body {
 }
 
 /* TOP ROW */
-.batch-card__top {
+.trainer-active-batches-page .batch-card__top {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.batch-card__batch {
+.trainer-active-batches-page .batch-card__batch {
   font-size: 13px;
   font-weight: 700;
   color: var(--green);
 }
 
 /* STATUS PILL */
-.batch-card__status {
+.trainer-active-batches-page .batch-card__status {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -77,17 +77,17 @@ body {
   font-weight: 700;
 }
 
-.batch-card__status.active {
+.trainer-active-batches-page .batch-card__status.active {
   background: #e6f4ef;
   color: var(--green);
 }
 
-.batch-card__status.completed {
+.trainer-active-batches-page .batch-card__status.completed {
   background: #ffe6e6;
   color: #ff4d4d;
 }
 
-.batch-card__dot {
+.trainer-active-batches-page .batch-card__dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -95,7 +95,7 @@ body {
 }
 
 /* TITLE */
-.batch-card__title {
+.trainer-active-batches-page .batch-card__title {
   margin: 16px 0 14px 0;
   font-size: 18px;
   font-weight: 800;
@@ -104,14 +104,14 @@ body {
 }
 
 /* DETAILS */
-.batch-card__details {
+.trainer-active-batches-page .batch-card__details {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 4px;
 }
 
-.batch-card__row {
+.trainer-active-batches-page .batch-card__row {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -120,7 +120,7 @@ body {
   font-weight: 500;
 }
 
-.batch-card__icon {
+.trainer-active-batches-page .batch-card__icon {
   width: 18px;
   display: inline-flex;
   justify-content: center;
@@ -130,7 +130,7 @@ body {
 }
 
 /* ACTIONS pinned bottom */
-.batch-card__actions {
+.trainer-active-batches-page .batch-card__actions {
   position: absolute;
   left: 18px;
   right: 18px;
@@ -140,7 +140,7 @@ body {
   align-items: center;
 }
 
-.batch-card__link {
+.trainer-active-batches-page .batch-card__link {
   border: none;
   background: none;
   padding: 0;
@@ -153,7 +153,7 @@ body {
   text-underline-offset: 4px;
 }
 
-.batch-card__btn {
+.trainer-active-batches-page .batch-card__btn {
   border: none;
   cursor: pointer;
   background: var(--green);
@@ -164,11 +164,11 @@ body {
   border-radius: 999px;
 }
 
-.batch-card__btn:hover {
+.trainer-active-batches-page .batch-card__btn:hover {
   background: var(--green-hover);
 }
 
-.batch-card__arrow {
+.trainer-active-batches-page .batch-card__arrow {
   margin-left: 6px;
 }
 

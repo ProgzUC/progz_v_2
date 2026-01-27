@@ -45,19 +45,19 @@
     color: #666;
 }
 
-.form-group {
+.trainer-edit-course-page .form-group {
     margin-bottom: 20px;
 }
 
-.form-group label {
+.trainer-edit-course-page .form-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: 500;
     color: #444;
 }
 
-.form-group input,
-.form-group textarea {
+.trainer-edit-course-page .form-group input,
+.trainer-edit-course-page .form-group textarea {
     width: 100%;
     padding: 10px;
     border: 1px solid #ddd;
@@ -65,7 +65,7 @@
     font-size: 14px;
 }
 
-.form-group textarea {
+.trainer-edit-course-page .form-group textarea {
     min-height: 100px;
     resize: vertical;
 }
@@ -89,7 +89,7 @@
 }
 
 .cancel-btn,
-.save-btn {
+.trainer-edit-course-page .save-btn {
     padding: 10px 20px;
     border-radius: 6px;
     font-weight: 500;
@@ -107,12 +107,12 @@
     background: #e1e2e6;
 }
 
-.save-btn {
+.trainer-edit-course-page .save-btn {
     background: #2a7d38;
     color: white;
 }
 
-.save-btn:hover {
+.trainer-edit-course-page .save-btn:hover {
     background: #15613b;
 }
 

@@ -1,5 +1,5 @@
 /* MAIN PAGE LAYOUT */
-.create-course-page {
+.admin-create-course-page {
   display: flex;
   justify-content: center;
   padding: 30px;
@@ -7,7 +7,7 @@
   background: #f5f6fa;
 }
 
-.create-course-container {
+.admin-create-course-page .create-course-container {
   width: 100%;
   max-width: 900px;
   background: #ffffff;
@@ -19,36 +19,36 @@
 }
 
 /* HEADER */
-.page-header {
+.admin-create-course-page .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.page-header h2 {
+.admin-create-course-page .page-header h2 {
   font-size: 26px;
   font-weight: 700;
 }
 
-.close-icon {
+.admin-create-course-page .close-icon {
   font-size: 20px;
   cursor: pointer;
   color: #555;
   transition: 0.2s;
 }
 
-.close-icon:hover {
+.admin-create-course-page .close-icon:hover {
   color: #222;
 }
 
-.subtitle {
+.admin-create-course-page .subtitle {
   font-size: 15px;
   opacity: 0.7;
   margin-bottom: 25px;
 }
 
 /* LOADING OVERLAY CUSTOM */
-.cc-loading-overlay {
+.admin-create-course-page .cc-loading-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -68,7 +68,7 @@
 /* ... existing styles ... */
 
 /* IMAGE COMPONENT WRAPPER */
-.image-preview-wrapper {
+.admin-create-course-page .image-preview-wrapper {
   cursor: zoom-in;
   transition: opacity 0.2s;
   width: 100%;
@@ -79,12 +79,12 @@
   justify-content: center;
 }
 
-.image-preview-wrapper:hover {
+.admin-create-course-page .image-preview-wrapper:hover {
   opacity: 0.9;
 }
 
 /* MEDIA PREVIEW (Images/Videos) updated to match PDF card */
-.file-preview-media {
+.admin-create-course-page .file-preview-media {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
@@ -98,12 +98,12 @@
   transition: 0.2s;
 }
 
-.file-preview-media:hover {
+.admin-create-course-page .file-preview-media:hover {
   border-color: #ef4444;
   background: #fef2f2;
 }
 
-.preview-image-consistent {
+.admin-create-course-page .preview-image-consistent {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -112,79 +112,28 @@
 }
 
 /* QUANTUM SPINNER LOADER */
-.loader-quantum {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80px;
-  height: 80px;
-  position: relative;
-  margin-bottom: 20px;
-}
 
-.loader-quantum div {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 3px solid transparent;
-  border-top-color: #4f46e5;
-  animation: quantumSpin 1.5s linear infinite;
-}
-
-.loader-quantum div:nth-child(1) {
-  border-top-color: #4f46e5;
-  border-bottom-color: #4f46e5;
-  animation-duration: 1.5s;
-}
-
-.loader-quantum div:nth-child(2) {
-  width: 70%;
-  height: 70%;
-  border-top-color: #ec4899;
-  border-right-color: #ec4899;
-  animation-duration: 2s;
-  animation-direction: reverse;
-}
-
-.loader-quantum div:nth-child(3) {
-  width: 40%;
-  height: 40%;
-  border-top-color: #06b6d4;
-  border-bottom-color: #06b6d4;
-  animation-duration: 1s;
-}
-
-@keyframes quantumSpin {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
 
 /* FORM GRID */
-.input-grid {
+.admin-create-course-page .input-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
 
-.input-full {
+.admin-create-course-page .input-full {
   margin-top: 20px;
 }
 
-label {
+.admin-create-course-page label {
   font-weight: 600;
   margin-bottom: 8px;
   display: block;
 }
 
-input,
-textarea,
-select {
+.admin-create-course-page input,
+.admin-create-course-page textarea,
+.admin-create-course-page select {
   width: 100%;
   padding: 12px;
   border-radius: 8px;
@@ -195,19 +144,19 @@ select {
 }
 
 input:focus,
-textarea:focus,
-select:focus {
+.admin-create-course-page textarea:focus,
+.admin-create-course-page select:focus {
   border-color: #6366f1;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
 }
 
-textarea {
+.admin-create-course-page textarea {
   height: 120px;
   resize: vertical;
 }
 
 /* THUMBNAIL PREVIEW MINI */
-.file-preview-mini {
+.admin-create-course-page .file-preview-mini {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -216,7 +165,7 @@ textarea {
   width: fit-content;
 }
 
-.file-preview-mini span {
+.admin-create-course-page .file-preview-mini span {
   font-size: 12px;
   color: #6b7280;
   margin-top: 8px;
@@ -228,7 +177,7 @@ textarea {
   font-weight: 500;
 }
 
-.preview-image-mini {
+.admin-create-course-page .preview-image-mini {
   /* Used for thumbnail */
   /* Keeps inline style height of 50px but we can refine here if needed */
   border-radius: 4px;
@@ -236,19 +185,19 @@ textarea {
 }
 
 /* SECTION TITLES */
-.section-header {
+.admin-create-course-page .section-header {
   margin-top: 35px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.section-header h3 {
+.admin-create-course-page .section-header h3 {
   font-size: 20px;
   font-weight: 700;
 }
 
-.add-btn {
+.admin-create-course-page .add-btn {
   padding: 8px 14px;
   background: #1e293b;
   color: white;
@@ -258,12 +207,12 @@ textarea {
   transition: 0.2s;
 }
 
-.add-btn:hover {
+.admin-create-course-page .add-btn:hover {
   background: #0f172a;
 }
 
 /* MODULE BOX */
-.module-box {
+.admin-create-course-page .module-box {
   background: #f9fafb;
   padding: 20px;
   border-radius: 10px;
@@ -277,7 +226,7 @@ textarea {
   align-items: flex-start;
 }
 
-.drag-handle {
+.admin-create-course-page .drag-handle {
   display: flex;
   align-items: center;
   color: #9ca3af;
@@ -286,15 +235,15 @@ textarea {
   padding-top: 30px;
 }
 
-.drag-handle:active {
+.admin-create-course-page .drag-handle:active {
   cursor: grabbing;
 }
 
-.module-content {
+.admin-create-course-page .module-content {
   flex: 1;
 }
 
-.module-label {
+.admin-create-course-page .module-label {
   display: block;
   font-size: 13px;
   font-weight: 500;
@@ -302,31 +251,31 @@ textarea {
   margin-bottom: 8px;
 }
 
-.module-title-row {
+.admin-create-course-page .module-title-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 10px;
 }
 
-.module-title-row input {
+.admin-create-course-page .module-title-row input {
   flex: 1;
   padding: 10px;
 }
 
-.module-delete {
+.admin-create-course-page .module-delete {
   color: #ef4444;
   cursor: pointer;
   font-size: 18px;
   transition: 0.2s;
 }
 
-.module-delete:hover {
+.admin-create-course-page .module-delete:hover {
   color: #dc2626;
 }
 
 /* ADD SECTION BUTTON */
-.add-section-btn {
+.admin-create-course-page .add-section-btn {
   margin-top: 10px;
   background: #475569;
   color: white;
@@ -337,12 +286,12 @@ textarea {
   transition: 0.2s;
 }
 
-.add-section-btn:hover {
+.admin-create-course-page .add-section-btn:hover {
   background: #334155;
 }
 
 /* SECTION BLOCK */
-.section-block {
+.admin-create-course-page .section-block {
   background: #ffffff;
   padding: 18px;
   border-radius: 10px;
@@ -350,13 +299,13 @@ textarea {
   margin-top: 18px;
 }
 
-.section-header-wrapper {
+.admin-create-course-page .section-header-wrapper {
   display: flex;
   gap: 15px;
   align-items: center;
 }
 
-.drag-handle-sec {
+.admin-create-course-page .drag-handle-sec {
   display: flex;
   align-items: center;
   color: #9ca3af;
@@ -364,47 +313,47 @@ textarea {
   font-size: 20px;
 }
 
-.drag-handle-sec:active {
+.admin-create-course-page .drag-handle-sec:active {
   cursor: grabbing;
 }
 
-.section-content {
+.admin-create-course-page .section-content {
   flex: 1;
 }
 
-.section-header-row {
+.admin-create-course-page .section-header-row {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.section-header-row input {
+.admin-create-course-page .section-header-row input {
   flex: 1;
 }
 
-.section-chevron {
+.admin-create-course-page .section-chevron {
   cursor: pointer;
   font-size: 20px;
   transition: 0.2s;
 }
 
-.section-chevron.rotate {
+.admin-create-course-page .section-chevron.rotate {
   transform: rotate(180deg);
 }
 
-.section-delete {
+.admin-create-course-page .section-delete {
   color: #ef4444;
   cursor: pointer;
   font-size: 18px;
   transition: 0.2s;
 }
 
-.section-delete:hover {
+.admin-create-course-page .section-delete:hover {
   color: #dc2626;
 }
 
 /* SECTION DETAILS (EXPANDED AREA) */
-.section-details {
+.admin-create-course-page .section-details {
   margin-top: 18px;
   animation: fadeIn 0.3s ease;
 }
@@ -421,30 +370,30 @@ textarea {
   }
 }
 
-.section-details input[type="file"] {
+.admin-create-course-page .section-details input[type="file"] {
   background: #f1f5f9;
   border: 1px dashed #cbd5e1;
   padding: 12px;
 }
 
-.video-add-row {
+.admin-create-course-page .video-add-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 12px;
 }
 
-.add-video-btn {
+.admin-create-course-page .add-video-btn {
   color: #4f46e5;
   cursor: pointer;
   font-weight: 600;
 }
 
-.add-video-btn:hover {
+.admin-create-course-page .add-video-btn:hover {
   text-decoration: underline;
 }
 
-.video-item {
+.admin-create-course-page .video-item {
   font-size: 14px;
   padding: 6px;
   background: #eef2ff;
@@ -453,15 +402,15 @@ textarea {
 }
 
 /* FOOTER */
-.footer-actions {
+.admin-create-course-page .footer-actions {
   margin-top: 35px;
   display: flex;
   justify-content: flex-end;
   gap: 15px;
 }
 
-.cancel-btn,
-.submit-btn {
+.admin-create-course-page .cancel-btn,
+.admin-create-course-page .submit-btn {
   padding: 12px 20px;
   border-radius: 8px;
   border: none;
@@ -470,16 +419,16 @@ textarea {
   font-weight: 600;
 }
 
-.cancel-btn {
+.admin-create-course-page .cancel-btn {
   background: #e5e7eb;
 }
 
-.submit-btn {
+.admin-create-course-page .submit-btn {
   background: #2a7d38;
   color: white;
 }
 
-.submit-btn:hover {
+.admin-create-course-page .submit-btn:hover {
   background: #15613b;
 }
 
@@ -517,7 +466,7 @@ textarea {
 }
 
 /* ERROR TEXT */
-.error-text {
+.admin-create-course-page .error-text {
   color: #ef4444;
   font-size: 12px;
   margin-top: 5px;
@@ -525,7 +474,7 @@ textarea {
 }
 
 /* CONSISTENT IMAGE PREVIEW */
-.preview-image-consistent {
+.admin-create-course-page .preview-image-consistent {
   height: 50px;
   margin-top: 5px;
   object-fit: cover;
@@ -533,7 +482,7 @@ textarea {
 }
 
 /* FILE PREVIEW LIST & ITEMS */
-.file-preview-list {
+.admin-create-course-page .file-preview-list {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
@@ -541,7 +490,7 @@ textarea {
   align-items: flex-start;
 }
 
-.file-preview {
+.admin-create-course-page .file-preview {
   position: relative;
   margin-right: 0;
   display: flex;
@@ -549,7 +498,7 @@ textarea {
 
 /* MEDIA PREVIEW (Images/Videos) - Handled at top of file */
 
-.file-name-media {
+.admin-create-course-page .file-name-media {
   font-size: 11px;
   color: #6b7280;
   margin-top: 5px;
@@ -561,7 +510,7 @@ textarea {
 }
 
 /* CHIP PREVIEW (Docs/Files) */
-.file-preview-chip {
+.admin-create-course-page .file-preview-chip {
   background: #f1f5f9;
   border: 1px solid #e2e8f0;
   border-radius: 20px;
@@ -571,7 +520,7 @@ textarea {
   height: 32px;
 }
 
-.file-preview-chip .remove-file-btn {
+.admin-create-course-page .file-preview-chip .remove-file-btn {
   top: -6px;
   right: -6px;
   width: 16px;
@@ -581,7 +530,7 @@ textarea {
   border: 1px solid white;
 }
 
-.file-chip-text {
+.admin-create-course-page .file-chip-text {
   font-size: 13px;
   color: #374151;
   font-weight: 500;
@@ -592,7 +541,7 @@ textarea {
 }
 
 /* GENERIC REMOVE BTN */
-.remove-file-btn {
+.admin-create-course-page .remove-file-btn {
   position: absolute;
   top: -5px;
   right: -5px;
@@ -614,7 +563,7 @@ textarea {
 /* ENHANCED PREVIEWS */
 
 /* PDF CARD */
-.pdf-preview-card {
+.admin-create-course-page .pdf-preview-card {
   position: relative;
   width: 100px;
   height: 110px;
@@ -630,19 +579,19 @@ textarea {
   transition: 0.2s;
 }
 
-.pdf-preview-card:hover {
+.admin-create-course-page .pdf-preview-card:hover {
   border-color: #ef4444;
   background: #fef2f2;
 }
 
-.pdf-icon-wrapper {
+.admin-create-course-page .pdf-icon-wrapper {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.pdf-filename {
+.admin-create-course-page .pdf-filename {
   font-size: 11px;
   color: #555;
   white-space: nowrap;
@@ -653,7 +602,7 @@ textarea {
 }
 
 /* VIDEO PREVIEW */
-.video-item-wrapper {
+.admin-create-course-page .video-item-wrapper {
   position: relative;
   width: 200px;
   height: 115px;
@@ -665,11 +614,11 @@ textarea {
   transition: transform 0.2s;
 }
 
-.video-item-wrapper:hover {
+.admin-create-course-page .video-item-wrapper:hover {
   transform: scale(1.02);
 }
 
-.video-preview-iframe {
+.admin-create-course-page .video-preview-iframe {
   position: absolute;
   top: 0;
   left: 0;
@@ -679,14 +628,14 @@ textarea {
   background: black;
 }
 
-.video-preview-thumb {
+.admin-create-course-page .video-preview-thumb {
   width: 100%;
   height: 100%;
   object-fit: cover;
   opacity: 0.9;
 }
 
-.remove-video-btn {
+.admin-create-course-page .remove-video-btn {
   position: absolute;
   top: 5px;
   right: 5px;
@@ -704,14 +653,14 @@ textarea {
   border: 1px solid white;
 }
 
-.remove-video-btn:hover {
+.admin-create-course-page .remove-video-btn:hover {
   background: #dc2626;
 }
 
 /* IMAGE COMPONENT WRAPPER - Handled at top of file */
 
 /* LIGHTBOX OVERLAY */
-.lightbox-overlay {
+.admin-create-course-page .lightbox-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -725,7 +674,7 @@ textarea {
   animation: fadeIn 0.2s;
 }
 
-.lightbox-content {
+.admin-create-course-page .lightbox-content {
   position: relative;
   max-width: 90%;
   max-height: 90%;
@@ -734,21 +683,21 @@ textarea {
   align-items: center;
 }
 
-.lightbox-image {
+.admin-create-course-page .lightbox-image {
   max-width: 100%;
   max-height: 90vh;
   border-radius: 4px;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
 }
 
-.lightbox-content iframe {
+.admin-create-course-page .lightbox-content iframe {
   width: 80vw;
   height: 80vh;
   max-width: 1000px;
   background: #000;
 }
 
-.lightbox-close {
+.admin-create-course-page .lightbox-close {
   position: absolute;
   top: -40px;
   right: -10px;
@@ -758,6 +707,6 @@ textarea {
   transition: 0.2s;
 }
 
-.lightbox-close:hover {
+.admin-create-course-page .lightbox-close:hover {
   color: #ff4d4f;
 }

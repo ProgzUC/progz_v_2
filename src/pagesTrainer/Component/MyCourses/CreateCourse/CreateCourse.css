@@ -1,4 +1,4 @@
-.create-course-page {
+.trainer-create-course-page {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,13 +20,13 @@
 }
 
 /* HEADER */
-.page-header {
+.trainer-create-course-page .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.page-header h2 {
+.trainer-create-course-page .page-header h2 {
   font-size: 26px;
   font-weight: 700;
 }

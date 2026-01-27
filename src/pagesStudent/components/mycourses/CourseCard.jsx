@@ -1,20 +1,26 @@
 import React, { useState } from "react";
 import "./CourseCard.css";
 import Introduction from "../Introduction/Introduction";
+import { useStudentCourses, useCourseProgress } from "../../../hooks/useStudentCourses";
+import Loader from "../../../components/common/Loader/Loader";
+import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
 
 /* ----------------------------------------------
-   PROGRESS CALCULATOR
+   PROGRESS CALCULATOR (for client-side data)
 ---------------------------------------------- */
-function getProgress(course) {
+function getProgress(modules) {
+    if (!modules || modules.length === 0) return { done: 0, total: 0, percent: 0 };
+
     let total = 0;
     let done = 0;
 
-    Object.values(course.lessons).forEach((tab) => {
-        total += tab.length;
-        done += tab.filter((l) => !l.isLocked).length;
+    modules.forEach((module) => {
+        const sections = module.sections || [];
+        total += sections.length;
+        done += sections.filter(s => s.isCompleted).length;
     });
 
-    const percent = Math.round((done / total) * 100);
+    const percent = total > 0 ? Math.round((done / total) * 100) : 0;
     return { done, total, percent };
 }
 
@@ -22,32 +28,37 @@ function getProgress(course) {
    LARGE COURSE CARD (RIGHT SIDE)
 ---------------------------------------------- */
 function LargeCourseCard({ course }) {
-    const { done, total, percent } = getProgress(course);
+    const progress = course.progressPercentage || 0;
 
     return (
         <div className="large-card ">
-            <img className="large-thumb" src={course.image} alt={course.title} />
+            <ImageWithFallback
+                src={course.courseImage}
+                alt={course.courseName}
+                className="large-thumb"
+                fallbackText={course.courseName}
+            />
 
             <div className="large-content">
-                <span className="large-category">{course.tag}</span>
+                <span className="large-category">{course.category}</span>
 
-                <h2 className="large-title">{course.title}</h2>
-                <p className="large-author">{course.author}</p>
+                <h2 className="large-title">{course.courseName}</h2>
+                <p className="large-author">{course.instructor}</p>
 
                 <div className="large-progress-bar">
                     <div
                         className="large-progress-fill"
-                        style={{ width: `${percent}%` }}
+                        style={{ width: `${progress}%` }}
                     />
                 </div>
 
                 <div className="large-bottom-row">
-                    <span className="large-percent">{percent}%</span>
+                    <span className="large-percent">{progress}%</span>
 
                     <div className="large-lessons">
                         <i className="bi bi-book lesson-icon"></i>
                         <span>
-                            {done} of {total} Lessons
+                            {course.completedLessons || 0} of {course.totalLessons || 0} Lessons
                         </span>
                     </div>
                 </div>
@@ -109,110 +120,73 @@ function LessonRow({ number, title, isLocked, onOpen }) {
 }
 
 /* ----------------------------------------------
-   MAIN DASHBOARD
+   MAIN MY COURSES PAGE
 ---------------------------------------------- */
-export default function Dashboard() {
-    const courses = [
-        {
-            id: 1,
-            image: "/student/mycourse.png",
-            tag: "Development",
-            title: "Mern Stack",
-            author: "Bravis",
-            description: "MERN Stack from basics to advanced.",
+export default function MyCourses() {
+    const { data: coursesData, isLoading: listLoading, isError } = useStudentCourses();
+    const courses = coursesData?.enrolledCourses || [];
 
-            tabs: ["HTML", "CSS", "JavaScript"],
-
-            lessons: {
-                HTML: [
-                    { number: 1, title: "Introduction of HTML", isLocked: false },
-                    { number: 2, title: "HTML Text Formatting and Comments", isLocked: false },
-                    { number: 3, title: "Lists, Links, and Images", isLocked: true },
-                    { number: 4, title: "Tables and iframes", isLocked: true }
-                ],
-
-                CSS: [
-                    { number: 1, title: "Basics of CSS", isLocked: false },
-                    { number: 2, title: "Selectors and Styling", isLocked: false },
-                    { number: 3, title: "Box Model and Positioning", isLocked: true },
-                    { number: 4, title: "Flexbox and Grid", isLocked: true }
-                ],
-
-                JavaScript: [
-                    { number: 1, title: "Introduction to JavaScript", isLocked: false },
-                    { number: 2, title: "Variables, Data Types, and Operators", isLocked: false },
-                    { number: 3, title: "Functions and Events", isLocked: true },
-                    { number: 4, title: "DOM Manipulation", isLocked: true }
-                ]
-            }
-        },
-
-        {
-            id: 2,
-            image: "/student/mycourse2.png",
-            tag: "Marketing",
-            title: "Digital Marketing",
-            author: "Bravis",
-            description: "Grow your marketing skills.",
-
-            tabs: ["SEO", "SEM", "Social Media"],
-
-            lessons: {
-                SEO: [
-                    { number: 1, title: "Basics of SEO", isLocked: false },
-                    { number: 2, title: "Keyword Research", isLocked: false },
-                    { number: 3, title: "On-page Optimization", isLocked: true },
-                    { number: 4, title: "Backlink Building", isLocked: true }
-                ],
-
-                SEM: [
-                    { number: 1, title: "Google Ads Overview", isLocked: false },
-                    { number: 2, title: "Campaign Types", isLocked: false },
-                    { number: 3, title: "Targeting & Bidding", isLocked: true }
-                ],
-
-                "Social Media": [
-                    { number: 1, title: "Understanding Platforms", isLocked: false },
-                    { number: 2, title: "Content Strategy", isLocked: false },
-                    { number: 3, title: "Analytics & Growth", isLocked: true }
-                ]
-            }
-        },
-
-        {
-            id: 3,
-            image: "/student/mycourse3.png",
-            tag: "Design",
-            title: "UI/UX Designing",
-            author: "Bravis",
-            description: "Learn UI/UX with hands-on templates and case studies.",
-
-            tabs: ["Figma", "Prototyping", "Wireframes"],
-
-            lessons: {
-                Figma: [
-                    { number: 1, title: "What is Figma?", isLocked: false },
-                    { number: 2, title: "Frames, Shapes & Layers", isLocked: false },
-                    { number: 3, title: "Auto Layout Basics", isLocked: true }
-                ],
-
-                Prototyping: [
-                    { number: 1, title: "Prototype Fundamentals", isLocked: false },
-                    { number: 2, title: "Interactions & Animations", isLocked: true }
-                ],
-
-                Wireframes: [
-                    { number: 1, title: "Understanding Wireframes", isLocked: false },
-                    { number: 2, title: "Low-fidelity Wireframes", isLocked: true }
-                ]
-            }
-        }
-    ];
-
-    const [selectedCourse, setSelectedCourse] = useState(courses[0]);
-    const [activeTab, setActiveTab] = useState(selectedCourse.tabs[0]);
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [activeTab, setActiveTab] = useState("");
     const [showMobileDetails, setShowMobileDetails] = useState(false);
     const [viewLesson, setViewLesson] = useState(null);
+
+    // Fetch details for selected course to get modules/sections
+    const { data: courseDetails, isLoading: detailsLoading } = useCourseProgress(selectedCourse?.courseId);
+
+    // Merge list data with detailed data
+    const displayCourse = selectedCourse ? {
+        ...selectedCourse,
+        modules: courseDetails?.course?.modules || [],
+        enrolledAt: courseDetails?.enrollmentDate || selectedCourse.enrolledAt,
+        lessonProgress: courseDetails?.lessonProgress || []
+    } : null;
+
+    // Set initial selected course from list
+    React.useEffect(() => {
+        if (courses.length > 0 && !selectedCourse) {
+            setSelectedCourse(courses[0]);
+        }
+    }, [courses, selectedCourse]);
+
+    // Update active tab when course details load or course changes
+    React.useEffect(() => {
+        if (displayCourse?.modules?.length > 0) {
+            // Only set if not already set or if switching courses
+            if (!activeTab || !displayCourse.modules.find(m => (m.moduleName || m.title) === activeTab)) {
+                setActiveTab(displayCourse.modules[0].moduleName || displayCourse.modules[0].title);
+            }
+        }
+    }, [displayCourse?.courseId, courseDetails, activeTab]);
+
+    if (listLoading) {
+        return <Loader message="Loading your courses..." />;
+    }
+
+    if (isError) {
+        return (
+            <div className="container-fluid student-mycourses-page">
+                <div className="error-message" style={{ textAlign: 'center', padding: '40px', color: '#dc3545' }}>
+                    Error loading courses. Please try again later.
+                </div>
+            </div>
+        );
+    }
+
+    if (courses.length === 0) {
+        return (
+            <div className="container-fluid student-mycourses-page">
+                <div className="empty-message" style={{ textAlign: 'center', padding: '40px' }}>
+                    <h3>No courses enrolled yet</h3>
+                    <p>Browse available courses and enroll to get started!</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (!displayCourse) {
+        return <Loader message="Loading..." />;
+    }
 
     return (
         <div className={`container-fluid student-mycourses-page ${showMobileDetails ? 'mobile-show-details' : ''}`}>
@@ -226,49 +200,52 @@ export default function Dashboard() {
 
                             <div className="card-container ms-auto mt-4 ">
                                 {courses.map((course, index) => {
-                                    const { done, total, percent } = getProgress(course);
+                                    const progress = course.progressPercentage || 0;
+                                    const completedLessons = course.completedLessons || 0;
+                                    const totalLessons = course.totalLessons || 0;
+                                    const isSelected = displayCourse?.courseId === course.courseId;
 
                                     return (
-                                        <React.Fragment key={course.id}>
+                                        <React.Fragment key={course.courseId}>
                                             <div
-                                                className="course-card"
+                                                className={`course-card ${isSelected ? 'selected-card' : ''}`}
                                                 onClick={() => {
                                                     setSelectedCourse(course);
-                                                    setActiveTab(course.tabs[0]);
                                                     setShowMobileDetails(true);
-                                                    setViewLesson(null); // Reset lesson view when switching courses
+                                                    setViewLesson(null);
                                                 }}
                                                 style={{ cursor: "pointer" }}
                                             >
                                                 <div className="card-content">
-                                                    <img
+                                                    <ImageWithFallback
+                                                        src={course.courseImage}
+                                                        alt={course.courseName}
                                                         className="course-thumb"
-                                                        src={course.image}
-                                                        alt={course.title}
+                                                        fallbackText={course.courseName}
                                                     />
 
                                                     <div className="card-details">
                                                         <div className="tag-box">
-                                                            <span className="tag-text">{course.tag}</span>
+                                                            <span className="tag-text">{course.category || "Course"}</span>
                                                         </div>
 
-                                                        <h3 className="course-title">{course.title}</h3>
-                                                        <p className="author">{course.author}</p>
+                                                        <h3 className="course-title">{course.courseName}</h3>
+                                                        <p className="author">{course.instructor}</p>
 
                                                         <div className="progress-bar">
                                                             <div
                                                                 className="progress-fill"
-                                                                style={{ width: `${percent}%` }}
+                                                                style={{ width: `${progress}%` }}
                                                             />
                                                         </div>
 
                                                         <div className="bottom-row">
-                                                            <span className="percent">{percent}%</span>
+                                                            <span className="percent">{progress}%</span>
 
                                                             <div className="lessons">
                                                                 <i className="bi bi-book lesson-icon"></i>
                                                                 <span className="lesson-text">
-                                                                    {done} of {total} Lessons
+                                                                    {completedLessons} of {totalLessons} Lessons
                                                                 </span>
                                                             </div>
                                                         </div>
@@ -289,7 +266,7 @@ export default function Dashboard() {
 
                 {/* RIGHT SIDE */}
                 <div className="col-8 right-section">
-                    {viewLesson === "Introduction of HTML" ? (
+                    {viewLesson ? (
                         <div className="lesson-content-view">
                             <button
                                 className="btn btn-dark mb-3"
@@ -308,28 +285,50 @@ export default function Dashboard() {
                                 <i className="bi bi-arrow-left"></i> Back to Courses
                             </button>
 
-                            <LargeCourseCard course={selectedCourse} />
+                            <LargeCourseCard course={displayCourse} />
 
-                            <CourseTabs
-                                tabs={selectedCourse.tabs}
-                                activeTab={activeTab}
-                                setActiveTab={(tab) => {
-                                    setActiveTab(tab);
-                                    setViewLesson(null);
-                                }}
-                            />
+                            {detailsLoading ? (
+                                <Loader message="Loading curriculum..." />
+                            ) : displayCourse.modules && displayCourse.modules.length > 0 ? (
+                                <>
+                                    <CourseTabs
+                                        tabs={displayCourse.modules.map(m => m.moduleName || m.title)}
+                                        activeTab={activeTab}
+                                        setActiveTab={(tab) => {
+                                            setActiveTab(tab);
+                                            setViewLesson(null);
+                                        }}
+                                    />
 
-                            <TabsDivider />
+                                    <TabsDivider />
 
-                            {selectedCourse.lessons[activeTab].map((lesson) => (
-                                <LessonRow
-                                    key={lesson.number}
-                                    number={lesson.number}
-                                    title={lesson.title}
-                                    isLocked={lesson.isLocked}
-                                    onOpen={() => setViewLesson(lesson.title)}
-                                />
-                            ))}
+                                    {displayCourse.modules.find(m => (m.moduleName || m.title) === activeTab)?.sections.map((section, idx, allSections) => {
+                                        // Use enriched section data if available from details
+                                        const sectionTitle = section.sectionName || section.title;
+
+                                        // Logic from details API might differ in property naming
+                                        const isCompleted = section.isCompleted;
+
+                                        // Sequential locking logic
+                                        const previousSectionCompleted = idx === 0 || allSections[idx - 1]?.isCompleted;
+                                        const isLocked = !isCompleted && !previousSectionCompleted;
+
+                                        return (
+                                            <LessonRow
+                                                key={idx}
+                                                number={idx + 1}
+                                                title={sectionTitle}
+                                                isLocked={isLocked}
+                                                onOpen={() => setViewLesson(sectionTitle)}
+                                            />
+                                        );
+                                    })}
+                                </>
+                            ) : (
+                                <p style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
+                                    No modules available for this course yet.
+                                </p>
+                            )}
                         </>
                     )}
                 </div>

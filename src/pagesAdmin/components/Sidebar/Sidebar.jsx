@@ -64,7 +64,7 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`sidebar-container ${collapsed ? "collapsed" : ""}`}
+      className={`admin-sidebar ${collapsed ? "collapsed" : ""}`}
       data-collapsed={collapsed}
     >
       {/* Collapse Button */}

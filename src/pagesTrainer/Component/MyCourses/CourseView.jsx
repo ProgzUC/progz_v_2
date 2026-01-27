@@ -1,58 +1,44 @@
 import React, { useState } from "react";
-
 import { FaBook } from "react-icons/fa";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import "./CourseView.css";
+import { useCourse } from "../../../hooks/useCourses";
+import Loader from "../../../components/common/Loader/Loader";
 
 const CourseView = ({ courseData, onBack, onEdit }) => {
+  // Use courseData._id or courseData.courseId to fetch full details
+  // Admin uses _id usually, let's try _id first then courseId
+  const courseId = courseData?._id || courseData?.courseId;
+  const { data: fullCourse, isLoading, isError, error } = useCourse(courseId);
+
   const [selectedModule, setSelectedModule] = useState(null);
+  const [expandedSection, setExpandedSection] = useState(null);
 
-  // Helper to generate dummy modules
-  const generateModules = (count) => {
-    return Array.from({ length: count }, (_, i) => ({
-      id: i,
-      name: `Module - ${i + 1}`,
-      sections: [
-        { name: "Introduction" },
-        { name: "Core Concepts" },
-        { name: "Practical Application" },
-        { name: "Summary & Quiz" },
-      ]
-    }));
-  };
+  if (isLoading) return <Loader message="Loading course details..." />;
+  if (isError) return <div className="error-state">Error: {error?.message || "Failed to load course"}</div>;
+  if (!fullCourse) return <div className="error-state">Course not found</div>;
 
-  // Determine what modules to show
-  // 1. If courseData.modules is an array, use it directly.
-  // 2. If it's a number, generate that many dummy modules.
-  // 3. Otherwise, fall back to a default set of 3 modules.
-  let modulesToRender = [];
-  if (Array.isArray(courseData?.modules)) {
-    modulesToRender = courseData.modules;
-  } else if (typeof courseData?.modules === 'number') {
-    modulesToRender = generateModules(courseData.modules);
-  } else {
-    modulesToRender = generateModules(4); // Default to 4 if nothing provided
-  }
-
-  // Create formatted ID
-  const formattedId = courseData?.courseId ||
-    (courseData?.id
-      ? `CRS-${(courseData?.title || "GEN").substr(0, 3).toUpperCase().replace(/\s/g, '')}-00${courseData.id}`
-      : "CRS-RPA-001");
-
-  // Merge passed data with safe defaults
-  const course = {
-    title: courseData?.title || "RPA",
-    courseId: formattedId,
-    lessonsCount: modulesToRender.length * 4, // estimate
-    progress: courseData?.progress || 0,
-    description: courseData?.description || "This course covers the fundamentals and advanced topics necessary to master the subject. Click on modules below to expand details.",
-    modules: modulesToRender
-  };
+  const course = fullCourse; // Use the fetched full details
 
   const handleModuleClick = (moduleId) => {
-    setSelectedModule(selectedModule === moduleId ? null : moduleId);
+    if (selectedModule === moduleId) {
+      setSelectedModule(null);
+    } else {
+      setSelectedModule(moduleId);
+    }
+    setExpandedSection(null); // Reset section selection when module changes
   };
+
+  const toggleSection = (idx) => {
+    setExpandedSection(expandedSection === idx ? null : idx);
+  }
+
+  // Calculate stats
+  const lessonsCount = course.modules?.reduce((acc, mod) => acc + (mod.sections?.length || 0), 0) || 0;
+
+  // Create formatted ID if not present
+  const displayId = course.courseId ||
+    (course._id ? `CRS-${(course.courseName || "GEN").substr(0, 3).toUpperCase().replace(/\s/g, '')}-001` : "N/A");
 
   return (
     <div className="course-view-page">
@@ -60,7 +46,7 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
       {/* HEADER SECTION */}
       <div className="cv-header-container">
         <div className="cv-header-bg">
-          <span className="cv-header-id">Course ID: {course.courseId}</span>
+          <span className="cv-header-id">Course ID: {displayId}</span>
         </div>
 
         <div className="cv-header-content">
@@ -69,13 +55,10 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
           </div>
 
           <div className="cv-title-block">
-            <h1>{course.title}</h1>
+            <h1>{course.courseName}</h1>
             <div className="cv-meta-row">
-              <span className="cv-lessons">{course.lessonsCount} lessons</span>
-              <div className="cv-progress-container">
-                <div className="cv-progress-bar" style={{ width: `${course.progress}%` }}></div>
-              </div>
-              <span className="cv-progress-text">{course.progress}%</span>
+              <span className="cv-lessons">{lessonsCount} lessons</span>
+              <span className="cv-lessons">{course.modules?.length || 0} Modules</span>
             </div>
           </div>
 
@@ -91,7 +74,7 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
         {/* DESCRIPTION */}
         <div className="cv-section-title">Course Description</div>
         <div className="cv-description-box">
-          {course.description ? <p style={{ padding: '20px', color: '#666' }}>{course.description}</p> : null}
+          {course.courseDescription || "No description available."}
         </div>
 
         {/* COLUMNS */}
@@ -104,20 +87,23 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
             </div>
 
             <div className="cv-list">
-              {course.modules.map((mod, index) => (
+              {course.modules?.map((mod, index) => (
                 <div
-                  className={`cv-list-item ${selectedModule === (mod.id ?? index) ? 'active' : ''}`}
-                  key={mod.id ?? index}
-                  onClick={() => handleModuleClick(mod.id ?? index)}
+                  className={`cv-list-item ${selectedModule === index ? 'active' : ''}`}
+                  key={index}
+                  onClick={() => handleModuleClick(index)}
                 >
-                  <span>{mod.name || `Module - ${index + 1}`}</span>
-                  {selectedModule === (mod.id ?? index) ? (
+                  <span>{mod.title}</span>
+                  {selectedModule === index ? (
                     <BiChevronUp className="cv-list-icon" />
                   ) : (
                     <BiChevronDown className="cv-list-icon" />
                   )}
                 </div>
               ))}
+              {(!course.modules || course.modules.length === 0) && (
+                <div className="cv-empty-state">No modules found</div>
+              )}
             </div>
           </div>
 
@@ -127,24 +113,97 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
               <span>Sections</span>
             </div>
 
-            {selectedModule !== null ? (
+            {selectedModule !== null && course.modules?.[selectedModule] ? (
               <div className="cv-list">
-                {/* Find the module by matching id or index */}
-                {(() => {
-                  const activeMod = course.modules.find((m, i) => (m.id ?? i) === selectedModule);
-                  const sections = activeMod?.sections || [];
-
-                  return sections.length > 0 ? (
-                    sections.map((sec, idx) => (
-                      <div className="cv-list-item" key={idx}>
-                        <span>{sec.name}</span>
-                        <BiChevronDown className="cv-list-icon" />
+                {course.modules[selectedModule].sections && course.modules[selectedModule].sections.length > 0 ? (
+                  course.modules[selectedModule].sections.map((sec, idx) => (
+                    <div key={idx} className="cv-section-wrapper">
+                      <div
+                        className={`cv-list-item ${expandedSection === idx ? 'active' : ''}`}
+                        onClick={() => toggleSection(idx)}
+                      >
+                        <span>{sec.sectionName}</span>
+                        {expandedSection === idx ? (
+                          <BiChevronUp className="cv-list-icon" />
+                        ) : (
+                          <BiChevronDown className="cv-list-icon" />
+                        )}
                       </div>
-                    ))
-                  ) : (
-                    <div className="cv-empty-state">No sections available</div>
-                  );
-                })()}
+
+                      {/* EXPANDED SECTION DETAILS */}
+                      {expandedSection === idx && (
+                        <div className="cv-section-details">
+                          {/* Learning Material Notes */}
+                          {sec.learningMaterialNotes && (
+                            <div className="cv-detail-block">
+                              <h4>Notes:</h4>
+                              <p>{sec.learningMaterialNotes}</p>
+                            </div>
+                          )}
+
+                          {/* Learning Material Files */}
+                          {sec.learningMaterialFile && sec.learningMaterialFile.length > 0 && (
+                            <div className="cv-detail-block">
+                              <h4>Materials:</h4>
+                              <ul className="cv-file-list">
+                                {sec.learningMaterialFile.map((file, i) => (
+                                  <li key={i}>
+                                    <a href={file.url} target="_blank" rel="noopener noreferrer">
+                                      <i className="bi bi-file-earmark-text"></i> {file.originalName || "Download File"}
+                                    </a>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {/* Video References */}
+                          {sec.videoReferences && sec.videoReferences.length > 0 && (
+                            <div className="cv-detail-block">
+                              <h4>Videos:</h4>
+                              <ul className="cv-video-list">
+                                {sec.videoReferences.map((vid, i) => (
+                                  <li key={i}>
+                                    <a href={vid} target="_blank" rel="noopener noreferrer">
+                                      <i className="bi bi-play-circle"></i> {vid}
+                                    </a>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+
+                          {/* Code Challenge */}
+                          {(sec.codeChallengeInstructions || (sec.codeChallengeFile && sec.codeChallengeFile.length > 0)) && (
+                            <div className="cv-detail-block challenge-block">
+                              <h4>Code Challenge:</h4>
+                              {sec.codeChallengeInstructions && <p>{sec.codeChallengeInstructions}</p>}
+
+                              {sec.codeChallengeFile && sec.codeChallengeFile.length > 0 && (
+                                <ul className="cv-file-list">
+                                  {sec.codeChallengeFile.map((file, i) => (
+                                    <li key={i}>
+                                      <a href={file.url} target="_blank" rel="noopener noreferrer">
+                                        <i className="bi bi-code-square"></i> {file.originalName || "Challenge File"}
+                                      </a>
+                                    </li>
+                                  ))}
+                                </ul>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Empty State if nothing */}
+                          {!sec.learningMaterialNotes && (!sec.learningMaterialFile || sec.learningMaterialFile.length === 0) && (!sec.videoReferences || sec.videoReferences.length === 0) && !sec.codeChallengeInstructions && (!sec.codeChallengeFile || sec.codeChallengeFile.length === 0) && (
+                            <div className="cv-detail-empty">No content in this section.</div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="cv-empty-state">No sections in this module</div>
+                )}
               </div>
             ) : (
               <div className="cv-empty-state">

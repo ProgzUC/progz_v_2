@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Overview.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -6,6 +6,8 @@ import EditCourseModel from "../EditCourseModal/EditCourseModel";
 import DeleteConfirm from "../DeleteConfirm/DeleteConfirm";
 import StudentListModal from "../StudentListModal/StudentListModal";
 import Pagination from "../Pagiation/Pagination";
+import Loader from "../../../components/common/Loader/Loader";
+import { useAdminDashboard } from "../../../hooks/useAdminStats";
 
 import {
   BarChart,
@@ -18,79 +20,22 @@ import {
   Cell,
 } from "recharts";
 
-import { motion } from "framer-motion"; // eslint-disable-line no-unused-vars
+import { motion } from "framer-motion";
 
 const avatar = "https://i.pravatar.cc/40";
 
-const stats = {
-  courses: 63,
-  instructors: 49,
-  students: 233,
-};
-
-const monthlyEnrollments = [
-  { month: "Jan", value: 25 },
-  { month: "Feb", value: 32 },
-  { month: "Mar", value: 45 },
-  { month: "Apr", value: 30 },
-  { month: "May", value: 22 },
-  { month: "Jun", value: 28 },
-  { month: "Jul", value: 40 },
-  { month: "Aug", value: 58 },
-  { month: "Sep", value: 43 },
-  { month: "Oct", value: 27 },
-  { month: "Nov", value: 36 },
-  { month: "Dec", value: 30 },
-];
-
-const userDistribution = [
-  { name: "Instructors", value: 35 },
-  { name: "Students", value: 65 },
-];
-
-const initialCourses = [
-  {
-    id: 1,
-    course: "RPA",
-    instructor: "John",
-    date: "12/11/2025",
-    studentsList: [avatar, avatar, avatar, avatar],
-    more: 5,
-  },
-  {
-    id: 2,
-    course: "AWS",
-    instructor: "Mezin",
-    date: "18/11/2025",
-    studentsList: [avatar, avatar, avatar, avatar],
-    more: 10,
-  },
-  {
-    id: 3,
-    course: "AWS & DevOps",
-    instructor: "Akshay",
-    date: "22/11/2025",
-    studentsList: [avatar, avatar, avatar, avatar],
-    more: 6,
-  },
-  {
-    id: 4,
-    course: "Azure",
-    instructor: "Deepak",
-    date: "29/11/2025",
-    studentsList: [avatar, avatar, avatar, avatar],
-    more: 1,
-  },
-];
-
-const initialStudents = [
-  { name: "Sanjay", email: "sanjay@xyz.com", date: "25/11/2025" },
-  { name: "Mezin", email: "mezin@xyz.com", date: "14/11/2025" },
-  { name: "Akshay", email: "akshay@xyz.com", date: "11/11/2025" },
-];
-
 const Overview = () => {
-  const [courses, setCourses] = useState(initialCourses);
+  const {
+    stats,
+    enrollments,
+    userDistribution,
+    recentCourses,
+    recentStudents,
+    isLoading
+  } = useAdminDashboard();
+
+  // Local state for pagination and table actions
+  const [coursesList, setCoursesList] = useState([]);
   const [page, setPage] = useState(1);
   const rowsPerPage = 3;
 
@@ -98,33 +43,45 @@ const Overview = () => {
   const [deleteItem, setDeleteItem] = useState(null);
   const [studentPopup, setStudentPopup] = useState(null);
 
-  const totalPages = Math.ceil(courses.length / rowsPerPage);
+  // Sync recentCourses from API to local state for manipulation (edit/delete)
+  useEffect(() => {
+    if (recentCourses && recentCourses.length > 0) {
+      setCoursesList(recentCourses);
+    }
+  }, [recentCourses]);
 
-  const paginatedData = courses.slice(
+  const totalPages = Math.ceil(coursesList.length / rowsPerPage);
+
+  const paginatedData = coursesList.slice(
     (page - 1) * rowsPerPage,
     page * rowsPerPage
   );
 
   const handleSaveEdit = (updatedCourse) => {
-    setCourses((prev) =>
+    setCoursesList((prev) =>
       prev.map((c) => (c.id === updatedCourse.id ? updatedCourse : c))
     );
     setEditItem(null);
   };
 
   const handleDelete = (id) => {
-    setCourses((prev) => prev.filter((c) => c.id !== id));
+    setCoursesList((prev) => prev.filter((c) => c.id !== id));
     setDeleteItem(null);
   };
 
-  const percentStudents = Math.round(
-    (userDistribution[1].value /
-      (userDistribution[0].value + userDistribution[1].value)) *
-    100
-  );
+  // Calculate percentage safely
+  const totalUsers = userDistribution.reduce((acc, curr) => acc + curr.value, 0);
+  const studentData = userDistribution.find(d => d.name === "Students");
+  const percentStudents = totalUsers > 0 && studentData
+    ? Math.round((studentData.value / totalUsers) * 100)
+    : 0;
+
+  if (isLoading) {
+    return <Loader message="Loading dashboard..." />;
+  }
 
   return (
-    <div className="dashboard-container">
+    <div className="admin-overview-page">
 
       {/* Header */}
       <div className="dashboard-header">
@@ -145,19 +102,19 @@ const Overview = () => {
         <motion.div className="stats-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="icon-box orange"><i className="bi bi-book"></i></div>
           <h5>Total Courses</h5>
-          <p className="value">{stats.courses}</p>
+          <p className="value">{stats?.courses || 0}</p>
         </motion.div>
 
         <motion.div className="stats-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="icon-box green"><i className="bi bi-person-video"></i></div>
           <h5>Total Instructor</h5>
-          <p className="value">{stats.instructors}</p>
+          <p className="value">{stats?.instructors || 0}</p>
         </motion.div>
 
         <motion.div className="stats-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="icon-box pink"><i className="bi bi-mortarboard"></i></div>
           <h5>Total Students</h5>
-          <p className="value">{stats.students}</p>
+          <p className="value">{stats?.students || 0}</p>
         </motion.div>
       </div>
 
@@ -169,7 +126,7 @@ const Overview = () => {
           <h5 className="chart-title">Monthly Enrollments</h5>
 
           <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={monthlyEnrollments}>
+            <BarChart data={enrollments}>
               <XAxis dataKey="month" />
               <Tooltip />
               <Bar dataKey="value" fill="#22C55E" radius={[10, 10, 0, 0]} />
@@ -250,10 +207,14 @@ const Overview = () => {
                   <td>{c.date}</td>
 
                   <td>
-                    <div className="student-avatars" onClick={() => setStudentPopup(c.studentsList)}>
-                      {c.studentsList.slice(0, 4).map((img, idx) => (
-                        <img key={idx} src={img} className="avatar" />
-                      ))}
+                    <div className="student-avatars" onClick={() => c.studentsList?.length > 0 && setStudentPopup(c.studentsList)}>
+                      {c.studentsList && c.studentsList.length > 0 ? (
+                        c.studentsList.slice(0, 4).map((img, idx) => (
+                          <img key={idx} src={img || avatar} className="avatar" />
+                        ))
+                      ) : (
+                        <span style={{ fontSize: '12px', color: '#999' }}>No students</span>
+                      )}
                       {c.more > 0 && <span className="more-count">+{c.more}</span>}
                     </div>
                   </td>
@@ -284,13 +245,21 @@ const Overview = () => {
             </thead>
 
             <tbody>
-              {initialStudents.map((s, i) => (
-                <tr key={i}>
-                  <td>{s.name}</td>
-                  <td>{s.email}</td>
-                  <td>{s.date}</td>
+              {recentStudents && recentStudents.length > 0 ? (
+                recentStudents.map((s, i) => (
+                  <tr key={i}>
+                    <td>{s.name}</td>
+                    <td>{s.email}</td>
+                    <td>{s.date}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="3" style={{ textAlign: 'center', padding: '20px', color: '#999' }}>
+                    No recent students found
+                  </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

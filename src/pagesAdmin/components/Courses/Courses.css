@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
 /* PAGE */
-.courses-wrapper {
+.admin-courses-page {
   background: #ddd9d5;
   padding: 40px 50px;
   min-height: 100vh;
@@ -10,7 +10,7 @@
 }
 
 /* TITLE */
-.course-title {
+.admin-courses-page .course-title {
   font-size: 32px;
   font-weight: 500;
   color: #7a7a7a;
@@ -18,7 +18,7 @@
 }
 
 /* TOP BAR */
-.top-row {
+.admin-courses-page .top-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -30,7 +30,7 @@
 
 
 /* SEARCH + BUTTON */
-.search-actions {
+.admin-courses-page .search-actions {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -38,11 +38,11 @@
   flex-wrap: wrap;
 }
 
-.search-box {
+.admin-courses-page .search-box {
   position: relative;
 }
 
-.search-box input {
+.admin-courses-page .search-box input {
   padding: 11px 20px 11px 40px;
   border-radius: 8px;
   border: 1px solid #d0d0d0;
@@ -54,12 +54,12 @@
   transition: border-color 0.2s;
 }
 
-.search-box input:focus {
+.admin-courses-page .search-box input:focus {
   border-color: #0FA958;
   box-shadow: 0 0 0 3px rgba(15, 169, 88, 0.1);
 }
 
-.search-box i {
+.admin-courses-page .search-box i {
   position: absolute;
   left: 14px;
   top: 50%;
@@ -68,7 +68,7 @@
   font-size: 16px;
 }
 
-.create-btn {
+.admin-courses-page .create-btn {
   background: white;
   color: #0FA958;
   border: 1px solid #0FA958;
@@ -84,14 +84,14 @@
   transition: all 0.2s;
 }
 
-.create-btn:hover {
+.admin-courses-page .create-btn:hover {
   background: #f5fdf9;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(15, 169, 88, 0.15);
 }
 
 /* CONTENT CARD */
-.content-card {
+.admin-courses-page .content-card {
   background: white;
   padding: 30px 35px;
   border-radius: 16px;
@@ -100,7 +100,7 @@
   overflow: hidden;
 }
 
-.card-title {
+.admin-courses-page .card-title {
   font-size: 20px;
   font-weight: 500;
   color: #999;
@@ -108,20 +108,20 @@
 }
 
 /* TABLE RESPONSIVE WRAPPER */
-.table-responsive {
+.admin-courses-page .table-responsive {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 
 /* TABLE */
-.course-table {
+.admin-courses-page .course-table {
   width: 100%;
   border-collapse: collapse;
   min-width: 800px;
 }
 
-.course-table thead th {
+.admin-courses-page .course-table thead th {
   text-align: left;
   color: #bbb;
   font-weight: 400;
@@ -130,44 +130,44 @@
   border-bottom: 1px solid #f0f0f0;
 }
 
-.course-table tbody tr {
+.admin-courses-page .course-table tbody tr {
   border-bottom: 1px solid #f5f5f5;
   transition: background 0.2s;
 }
 
-.course-table tbody tr:hover {
+.admin-courses-page .course-table tbody tr:hover {
   background: #fafafa;
 }
 
-.course-table tbody tr:last-child {
+.admin-courses-page .course-table tbody tr:last-child {
   border-bottom: none;
 }
 
-.course-table tbody td {
+.admin-courses-page .course-table tbody td {
   padding: 20px 10px;
   vertical-align: middle;
   color: #666;
   font-size: 14px;
 }
 
-.course-table tbody td:first-child {
+.admin-courses-page .course-table tbody td:first-child {
   color: #999;
   font-weight: 400;
 }
 
-.course-table th:last-child,
-.course-table td:last-child {
+.admin-courses-page .course-table th:last-child,
+.admin-courses-page .course-table td:last-child {
   text-align: right;
   padding-right: 20px;
 }
 
 /* AVATARS */
-.avatar-group {
+.admin-courses-page .avatar-group {
   display: flex;
   align-items: center;
 }
 
-.avatar {
+.admin-courses-page .avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
@@ -177,11 +177,11 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.avatar:first-child {
+.admin-courses-page .avatar:first-child {
   margin-left: 0;
 }
 
-.more-tag {
+.admin-courses-page .more-tag {
   background: #f0f0f0;
   color: #666;
   width: 32px;
@@ -199,27 +199,27 @@
 }
 
 /* ACTION ICONS */
-.actions-row {
+.admin-courses-page .actions-row {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   gap: 18px;
 }
 
-.actions-row i {
+.admin-courses-page .actions-row i {
   font-size: 18px;
   color: #aaa;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.actions-row i:hover {
+.admin-courses-page .actions-row i:hover {
   color: #0FA958;
   transform: scale(1.1);
 }
 
 /* PAGINATION */
-.pagination {
+.admin-courses-page .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -227,7 +227,7 @@
   gap: 10px;
 }
 
-.pagination button {
+.admin-courses-page .pagination button {
   background: white;
   border: none;
   color: #666;
@@ -242,18 +242,18 @@
   transition: all 0.2s;
 }
 
-.pagination button.active {
+.admin-courses-page .pagination button.active {
   background: #0FA958;
   color: white;
   box-shadow: 0 2px 5px rgba(15, 169, 88, 0.3);
 }
 
-.pagination button:disabled {
+.admin-courses-page .pagination button:disabled {
   color: #ddd;
   cursor: not-allowed;
 }
 
-.pagination button:hover:not(.active):not(:disabled) {
+.admin-courses-page .pagination button:hover:not(.active):not(:disabled) {
   background: #f5f5f5;
 }
 

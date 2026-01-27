@@ -22,6 +22,16 @@ const EditCourse = () => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState(null);
   const [showHistory, setShowHistory] = useState(false);
+  const [lightbox, setLightbox] = useState({ isOpen: false, type: "", src: "" });
+  const [hoveredVideo, setHoveredVideo] = useState(null);
+
+  // Helper to extract YouTube ID
+  const getYouTubeId = (url) => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
 
   useEffect(() => {
     if (fetchedCourse) {
@@ -152,6 +162,17 @@ const EditCourse = () => {
     const updated = [...course.modules];
     updated[mIndex].sections[sIndex][field] = value;
     setCourse({ ...course, modules: updated });
+  };
+
+  const removeSectionFile = (mIndex, sIndex, field, fileIndex) => {
+    const updated = [...course.modules];
+    const currentFiles = updated[mIndex].sections[sIndex][field] || [];
+    updated[mIndex].sections[sIndex][field] = currentFiles.filter((_, i) => i !== fileIndex);
+    setCourse({ ...course, modules: updated });
+  };
+
+  const openLightbox = (type, src) => {
+    setLightbox({ isOpen: true, type, src });
   };
 
   const addVideo = (mIndex, sIndex) => {
@@ -534,24 +555,77 @@ const EditCourse = () => {
                                             <input
                                               type="file"
                                               multiple
-                                              onChange={(e) =>
+                                              accept="image/*,video/*,.pdf,.doc,.docx"
+                                              onChange={(e) => {
+                                                const newFiles = Array.from(e.target.files);
+                                                const existingFiles = section.materialFiles || [];
                                                 updateSectionField(
                                                   mIndex,
                                                   sIndex,
                                                   "materialFiles", // New uploads
-                                                  Array.from(e.target.files)
-                                                )
-                                              }
+                                                  [...existingFiles, ...newFiles]
+                                                );
+                                                e.target.value = ""; // Reset
+                                              }}
                                             />
 
                                             {/* PREVIEW NEW UPLOADS */}
                                             {section.materialFiles && section.materialFiles.length > 0 && (
                                               <div className="file-preview-list">
-                                                {section.materialFiles.map((file, idx) => (
-                                                  <div key={idx} className="file-preview">
-                                                    <p>Selected: {file.name}</p>
-                                                  </div>
-                                                ))}
+                                                {section.materialFiles.map((file, idx) => {
+                                                  const isImage = file.type.includes("image");
+                                                  const isVideo = file.type.includes("video");
+                                                  const isPdf = file.type.includes("pdf");
+
+                                                  if (isPdf) {
+                                                    return (
+                                                      <div key={idx} className="pdf-preview-card" onClick={() => window.open(URL.createObjectURL(file), "_blank")}>
+                                                        <span
+                                                          className="remove-file-btn"
+                                                          onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            removeSectionFile(mIndex, sIndex, "materialFiles", idx);
+                                                          }}
+                                                        >×</span>
+                                                        <div className="pdf-icon-wrapper">
+                                                          <i className="bi bi-file-earmark-pdf text-danger" style={{ fontSize: "24px" }}></i>
+                                                        </div>
+                                                        <span className="pdf-filename" title={file.name}>{file.name}</span>
+                                                      </div>
+                                                    )
+                                                  }
+
+                                                  const isMedia = isImage || isVideo;
+                                                  return (
+                                                    <div key={idx} className={`file-preview ${isMedia ? 'file-preview-media' : 'file-preview-chip'}`}>
+                                                      <span className="remove-file-btn" onClick={() => removeSectionFile(mIndex, sIndex, "materialFiles", idx)}>×</span>
+
+                                                      {/* MEDIA PREVIEW */}
+                                                      {isMedia ? (
+                                                        <>
+                                                          {isImage && (
+                                                            <div className="image-preview-wrapper" onClick={() => openLightbox("image", URL.createObjectURL(file))}>
+                                                              <img
+                                                                src={URL.createObjectURL(file)}
+                                                                className="preview-image-consistent"
+                                                                alt="preview"
+                                                              />
+                                                            </div>
+                                                          )}
+                                                          {isVideo && (
+                                                            <video controls className="preview-video" style={{ height: '50px', marginTop: '5px', borderRadius: '4px' }}>
+                                                              <source src={URL.createObjectURL(file)} />
+                                                            </video>
+                                                          )}
+                                                          <p className="file-name-media" title={file.name}>{file.name}</p>
+                                                        </>
+                                                      ) : (
+                                                        /* FILE CHIP */
+                                                        <span className="file-chip-text" title={file.name}>{file.name}</span>
+                                                      )}
+                                                    </div>
+                                                  );
+                                                })}
                                               </div>
                                             )}
 
@@ -588,15 +662,79 @@ const EditCourse = () => {
                                             <input
                                               type="file"
                                               multiple
-                                              onChange={(e) =>
+                                              accept="image/*,video/*,.pdf,.doc,.docx"
+                                              onChange={(e) => {
+                                                const newFiles = Array.from(e.target.files);
+                                                const existingFiles = section.challengeFiles || [];
                                                 updateSectionField(
                                                   mIndex,
                                                   sIndex,
                                                   "challengeFiles",
-                                                  Array.from(e.target.files)
-                                                )
-                                              }
+                                                  [...existingFiles, ...newFiles]
+                                                );
+                                                e.target.value = "";
+                                              }}
                                             />
+
+                                            {/* CHALLENGE FILES PREVIEW */}
+                                            {section.challengeFiles && section.challengeFiles.length > 0 && (
+                                              <div className="file-preview-list">
+                                                {section.challengeFiles.map((file, idx) => {
+                                                  const isImage = file.type.includes("image");
+                                                  const isVideo = file.type.includes("video");
+                                                  const isPdf = file.type.includes("pdf");
+
+                                                  if (isPdf) {
+                                                    return (
+                                                      <div key={idx} className="pdf-preview-card" onClick={() => window.open(URL.createObjectURL(file), "_blank")}>
+                                                        <span
+                                                          className="remove-file-btn"
+                                                          onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            removeSectionFile(mIndex, sIndex, "challengeFiles", idx);
+                                                          }}
+                                                        >×</span>
+                                                        <div className="pdf-icon-wrapper">
+                                                          <i className="bi bi-file-earmark-pdf text-danger" style={{ fontSize: "24px" }}></i>
+                                                        </div>
+                                                        <span className="pdf-filename" title={file.name}>{file.name}</span>
+                                                      </div>
+                                                    )
+                                                  }
+
+                                                  const isMedia = isImage || isVideo;
+                                                  return (
+                                                    <div key={idx} className={`file-preview ${isMedia ? 'file-preview-media' : 'file-preview-chip'}`}>
+                                                      <span className="remove-file-btn" onClick={() => removeSectionFile(mIndex, sIndex, "challengeFiles", idx)}>×</span>
+
+                                                      {/* MEDIA PREVIEW */}
+                                                      {isMedia ? (
+                                                        <>
+                                                          {isImage && (
+                                                            <div className="image-preview-wrapper" onClick={() => openLightbox("image", URL.createObjectURL(file))}>
+                                                              <img
+                                                                src={URL.createObjectURL(file)}
+                                                                className="preview-image-consistent"
+                                                                alt="preview"
+                                                              />
+                                                            </div>
+                                                          )}
+                                                          {isVideo && (
+                                                            <video controls className="preview-video" style={{ height: '50px', marginTop: '5px', borderRadius: '4px' }}>
+                                                              <source src={URL.createObjectURL(file)} />
+                                                            </video>
+                                                          )}
+                                                          <p className="file-name-media" title={file.name}>{file.name}</p>
+                                                        </>
+                                                      ) : (
+                                                        /* FILE CHIP */
+                                                        <span className="file-chip-text" title={file.name}>{file.name}</span>
+                                                      )}
+                                                    </div>
+                                                  );
+                                                })}
+                                              </div>
+                                            )}
 
                                             <label>
                                               Challenge Instructions
@@ -632,17 +770,56 @@ const EditCourse = () => {
                                               </span>
                                             </div>
 
-                                            {/* VIDEO LIST */}
-                                            {section.videos.map(
-                                              (v, i) => (
-                                                <p
-                                                  className="video-item"
-                                                  key={i}
-                                                >
-                                                  {v}
-                                                </p>
-                                              )
-                                            )}
+                                            <div className="video-list-container" style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+                                              {section.videos.map(
+                                                (v, i) => {
+                                                  const params = getYouTubeId(v);
+                                                  const isHovered = hoveredVideo?.mIndex === mIndex && hoveredVideo?.sIndex === sIndex && hoveredVideo?.vIndex === i;
+
+                                                  return (
+                                                    <div
+                                                      key={i}
+                                                      className="video-item-wrapper"
+                                                      onMouseEnter={() => setHoveredVideo({ mIndex, sIndex, vIndex: i })}
+                                                      onMouseLeave={() => setHoveredVideo(null)}
+                                                      onClick={() => openLightbox("video", params)}
+                                                    >
+                                                      <span
+                                                        className="remove-video-btn"
+                                                        onClick={(e) => {
+                                                          e.stopPropagation();
+                                                          const updatedVideos = section.videos.filter((_, vidIdx) => vidIdx !== i);
+                                                          updateSectionField(mIndex, sIndex, "videos", updatedVideos);
+                                                        }}
+                                                      >×</span>
+
+                                                      {params ? (
+                                                        <>
+                                                          {isHovered ? (
+                                                            <iframe
+                                                              className="video-preview-iframe"
+                                                              src={`https://www.youtube.com/embed/${params}?autoplay=1&mute=1&controls=0&modestbranding=1`}
+                                                              title="YouTube video player"
+                                                              frameBorder="0"
+                                                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                              style={{ pointerEvents: 'none' }}
+                                                            ></iframe>
+                                                          ) : (
+                                                            <img
+                                                              src={`https://img.youtube.com/vi/${params}/mqdefault.jpg`}
+                                                              alt="Video Thumbnail"
+                                                              className="video-preview-thumb"
+                                                            />
+                                                          )}
+                                                        </>
+                                                      ) : (
+                                                        <p className="video-item error-text" style={{ fontSize: '12px' }}>Invalid: {v}</p>
+                                                      )}
+                                                    </div>
+                                                  );
+                                                }
+                                              )}
+                                            </div>
                                           </div>
                                         )}
                                       </div>

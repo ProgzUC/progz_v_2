@@ -313,7 +313,7 @@ const CreateCourse = () => {
   };
 
   return (
-    <div className="create-course-page">
+    <div className="admin-create-course-page">
       <div className="create-course-container">
         <div className="page-header">
           <h2>Create Course</h2>
@@ -325,16 +325,7 @@ const CreateCourse = () => {
 
         <p className="subtitle">Build your modules and sections</p>
 
-        {loading && (
-          <div className="cc-loading-overlay">
-            <div className="loader-quantum">
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-            <p style={{ marginTop: "15px", fontWeight: "600", color: "#4b5563", fontSize: "14px" }}>Creating Course...</p>
-          </div>
-        )}
+        {loading && <Loader />}
 
         {/* BASIC FIELDS */}
         <div className="input-grid">

@@ -1,25 +1,25 @@
-.batches-page {
+.admin-batches-page {
     padding: 20px 40px;
     background-color: #f7f7f7;
     min-height: 100vh;
     font-family: 'Poppins', sans-serif;
 }
 
-.batches-header-main h1 {
+.admin-batches-page .batches-header-main h1 {
     font-size: 28px;
     color: #666;
     font-weight: 600;
     margin-bottom: 20px;
 }
 
-.batches-stats-row {
+.admin-batches-page .batches-stats-row {
     display: flex;
     align-items: center;
     gap: 15px;
     margin-bottom: 20px;
 }
 
-.stat-card {
+.admin-batches-page .stat-card {
     background: white;
     padding: 12px 24px;
     border-radius: 16px;
@@ -30,19 +30,19 @@
     gap: 4px;
 }
 
-.stat-label {
+.admin-batches-page .stat-label {
     color: #888;
     font-size: 12px;
     font-weight: 500;
 }
 
-.stat-value {
+.admin-batches-page .stat-value {
     color: #10a358;
     font-size: 24px;
     font-weight: 700;
 }
 
-.filter-controls {
+.admin-batches-page .filter-controls {
     margin-left: auto;
     display: flex;
     align-items: center;
@@ -54,17 +54,17 @@
     transition: all 0.2s;
 }
 
-.filter-controls:hover {
+.admin-batches-page .filter-controls:hover {
     border-color: #e5e7eb;
     box-shadow: none;
 }
 
-.filter-icon {
+.admin-batches-page .filter-icon {
     font-size: 20px;
     color: #6b7280;
 }
 
-.filter-select {
+.admin-batches-page .filter-select {
     border: none;
     background: transparent;
     color: #374151;
@@ -81,37 +81,37 @@
     background-size: 16px;
 }
 
-.filter-select:focus {
+.admin-batches-page .filter-select:focus {
     outline: none !important;
     box-shadow: none !important;
 }
 
-.batches-table-container {
+.admin-batches-page .batches-table-container {
     background: white;
     border-radius: 24px;
     padding: 25px 30px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
 }
 
-.table-responsive {
+.admin-batches-page .table-responsive {
     width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
 }
 
-.table-title {
+.admin-batches-page .table-title {
     color: #888;
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 20px;
 }
 
-.batches-table {
+.admin-batches-page .batches-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.batches-table th {
+.admin-batches-page .batches-table th {
     text-align: left;
     color: #bbb;
     font-weight: 400;
@@ -120,32 +120,32 @@
     border-bottom: 1px solid #f0f0f0;
 }
 
-.batches-table td {
+.admin-batches-page .batches-table td {
     padding: 12px 0;
     border-bottom: 1px solid #f9f9f9;
     color: #666;
     font-size: 14px;
 }
 
-.batch-name-cell {
+.admin-batches-page .batch-name-cell {
     display: flex;
     flex-direction: column;
 }
 
-.view-more {
+.admin-batches-page .view-more {
     font-size: 11px;
     color: #3b82f6;
     cursor: pointer;
     margin-top: 4px;
 }
 
-.instructor-cell {
+.admin-batches-page .instructor-cell {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.avatar {
+.admin-batches-page .avatar {
     width: 32px;
     height: 32px;
     border-radius: 50%;
@@ -158,7 +158,7 @@
     font-weight: 600;
 }
 
-.status-badge {
+.admin-batches-page .status-badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -168,51 +168,51 @@
     font-weight: 500;
 }
 
-.dot {
+.admin-batches-page .dot {
     width: 6px;
     height: 6px;
     border-radius: 50%;
 }
 
-.status-active {
+.admin-batches-page .status-active {
     background-color: #ecfdf5;
     color: #10b981;
 }
 
-.status-active .dot {
+.admin-batches-page .status-active .dot {
     background-color: #10b981;
 }
 
-.status-completed {
+.admin-batches-page .status-completed {
     background-color: #f3f4f6;
     color: #6b7280;
 }
 
-.status-completed .dot {
+.admin-batches-page .status-completed .dot {
     background-color: #6b7280;
 }
 
-.status-inactive {
+.admin-batches-page .status-inactive {
     background-color: #fef2f2;
     color: #ef4444;
 }
 
-.status-inactive .dot {
+.admin-batches-page .status-inactive .dot {
     background-color: #ef4444;
 }
 
-.delete-icon {
+.admin-batches-page .delete-icon {
     color: #bbb;
     cursor: pointer;
     font-size: 18px;
     transition: color 0.2s;
 }
 
-.delete-icon:hover {
+.admin-batches-page .delete-icon:hover {
     color: #ef4444;
 }
 
-.bulk-delete-btn {
+.admin-batches-page .bulk-delete-btn {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -228,12 +228,12 @@
     margin-left: 10px;
 }
 
-.bulk-delete-btn:hover {
+.admin-batches-page .bulk-delete-btn:hover {
     background-color: #fee2e2;
     transform: translateY(-1px);
 }
 
-.batch-checkbox {
+.admin-batches-page .batch-checkbox {
     width: 18px;
     height: 18px;
     accent-color: #10a358;
@@ -241,7 +241,7 @@
     border-radius: 4px;
 }
 
-.batches-pagination {
+.admin-batches-page .batches-pagination {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -249,7 +249,7 @@
     margin-top: 25px;
 }
 
-.page-nav {
+.admin-batches-page .page-nav {
     background: none;
     border: none !important;
     outline: none !important;
@@ -258,7 +258,7 @@
     cursor: pointer;
 }
 
-.page-num {
+.admin-batches-page .page-num {
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -274,12 +274,12 @@
     transition: all 0.2s;
 }
 
-.page-num.active {
+.admin-batches-page .page-num.active {
     background-color: #10a358;
     color: white;
 }
 
-.page-num:hover:not(.active) {
+.admin-batches-page .page-num:hover:not(.active) {
     background-color: #f0f0f0;
 }
 
@@ -288,108 +288,108 @@
    ================================ */
 
 @media (max-width: 1024px) {
-    .batches-page {
+    .admin-batches-page {
         padding: 20px;
     }
 
-    .stat-card {
+    .admin-batches-page .stat-card {
         min-width: 180px;
         padding: 15px 20px;
     }
 
-    .batches-table-container {
+    .admin-batches-page .batches-table-container {
         padding: 20px;
     }
 }
 
 @media (max-width: 768px) {
-    .batches-stats-row {
+    .admin-batches-page .batches-stats-row {
         flex-wrap: wrap;
         gap: 15px;
     }
 
-    .stat-card {
+    .admin-batches-page .stat-card {
         flex: 1 1 calc(50% - 15px);
         min-width: 140px;
         padding: 15px;
     }
 
-    .filter-controls {
+    .admin-batches-page .filter-controls {
         width: 100%;
         justify-content: flex-start;
         margin-top: 10px;
         margin-left: 0;
     }
 
-    .batches-table-container {
+    .admin-batches-page .batches-table-container {
         overflow-x: auto;
         padding: 20px 15px;
     }
 
-    .batches-table {
+    .admin-batches-page .batches-table {
         min-width: 700px;
         /* Force scroll on small screens */
     }
 
-    .batches-header-main h1 {
+    .admin-batches-page .batches-header-main h1 {
         font-size: 26px;
         margin-bottom: 20px;
     }
 }
 
 @media (max-width: 480px) {
-    .stat-card {
+    .admin-batches-page .stat-card {
         flex: 1 1 100%;
     }
 
-    .batches-table-container {
+    .admin-batches-page .batches-table-container {
         padding: 15px;
     }
 
-    .table-title {
+    .admin-batches-page .table-title {
         font-size: 20px;
         margin-bottom: 20px;
     }
 
-    .batches-pagination {
+    .admin-batches-page .batches-pagination {
         gap: 8px;
     }
 
-    .page-num {
+    .admin-batches-page .page-num {
         width: 32px;
         height: 32px;
         font-size: 12px;
     }
 
-    .page-nav {
+    .admin-batches-page .page-nav {
         font-size: 16px;
     }
 }
 
-.modal-students-list {
+.admin-batches-page .modal-students-list {
     margin-top: 15px;
     border-top: 1px solid #eee;
     padding-top: 15px;
 }
 
-.modal-students-list strong {
+.admin-batches-page .modal-students-list strong {
     display: block;
     margin-bottom: 10px;
     color: #444;
 }
 
-.modal-students-list ul {
+.admin-batches-page .modal-students-list ul {
     list-style: none;
     padding: 0;
 }
 
-.modal-students-list li {
+.admin-batches-page .modal-students-list li {
     padding: 8px 0;
     border-bottom: 1px solid #f9f9f9;
     color: #666;
     font-size: 14px;
 }
 
-.modal-students-list li:last-child {
+.admin-batches-page .modal-students-list li:last-child {
     border-bottom: none;
 }

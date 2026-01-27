@@ -82,7 +82,7 @@ const Courses = () => {
   // ---------------------------------------------------------------------------
 
   return (
-    <div className="courses-wrapper">
+    <div className="admin-courses-page">
       <h1 className="course-title">Course Management</h1>
 
       <div className="top-row">

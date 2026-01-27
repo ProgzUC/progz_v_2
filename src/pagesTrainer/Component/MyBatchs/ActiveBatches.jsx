@@ -1,41 +1,79 @@
 import React from "react";
 import "./ActiveBatches.css";
-import batchesData from "./batchesData.json";
+import { useTrainerBatches } from "../../../hooks/useBatches";
 import { HiOutlineCalendar, HiOutlineClock } from "react-icons/hi";
-
 import { BsHourglassSplit } from "react-icons/bs";
+import Loader from "../../../components/common/Loader/Loader";
 
 const ActiveBatches = ({ onViewDetails = () => { } }) => {
-  const { activeBatches, completedBatches } = batchesData;
+  const { data, isLoading, isError } = useTrainerBatches();
+
+  if (isLoading) return <Loader message="Loading batches..." />;
+  if (isError) return <div className="trainer-active-batches-page"><p>Error loading batches.</p></div>;
+
+  const activeBatches = data?.activeBatches || [];
+  const completedBatches = data?.completedBatches || [];
+
+  const formatClassTiming = (timing) => {
+    if (!timing) return "Not Scheduled";
+    if (typeof timing === 'object') {
+      const { startTime, endTime, timezone } = timing;
+      return `${startTime} - ${endTime}`;
+    }
+    return timing;
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "Not set";
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  };
+
+  const calculateDuration = (startDate, endDate) => {
+    if (!startDate || !endDate) return "Duration not set";
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const weeks = Math.floor(diffDays / 7);
+    return weeks > 0 ? `${weeks} week${weeks > 1 ? 's' : ''}` : `${diffDays} day${diffDays > 1 ? 's' : ''}`;
+  };
 
   const BatchCard = ({ batch }) => {
     const isActive = batch.status === "active";
 
+    // Map API fields - backend now returns batchName, courseName, timing directly
+    const batchNumber = batch.batchName || batch.name || "Batch";
+    const title = batch.courseName || "Course Title";
+    const date = formatDate(batch.startDate);
+    const duration = batch.duration || calculateDuration(batch.startDate, batch.endDate);
+    const timing = formatClassTiming(batch.timing);
+
     return (
-      <article className="batch-card" aria-label={batch.title}>
+      <article className="batch-card" aria-label={title}>
         <div className="batch-card__top">
-          <span className="batch-card__batch">{batch.batchNumber}</span>
+          <span className="batch-card__batch">{batchNumber}</span>
 
           <span className={`batch-card__status ${batch.status}`}>
             <span className="batch-card__dot" />
-            {isActive ? "Active" : "Completed"}
+            {isActive ? "Active" : batch.status === "completed" ? "Completed" : batch.status}
           </span>
         </div>
 
-        <h3 className="batch-card__title">{batch.title}</h3>
+        <h3 className="batch-card__title">{title}</h3>
 
         <div className="batch-card__details">
           <div className="batch-card__row">
             <span className="batch-card__icon"><HiOutlineCalendar /></span>
-            <span>{batch.date}</span>
+            <span>{date}</span>
           </div>
           <div className="batch-card__row">
             <span className="batch-card__icon"><BsHourglassSplit /></span>
-            <span>{batch.duration}</span>
+            <span>{duration}</span>
           </div>
           <div className="batch-card__row">
             <span className="batch-card__icon"><HiOutlineClock /></span>
-            <span>{batch.time}</span>
+            <span>{timing}</span>
           </div>
         </div>
 
@@ -56,8 +94,6 @@ const ActiveBatches = ({ onViewDetails = () => { } }) => {
               </button>
             </>
           ) : (
-            /* For completed, only the button on the right, no link on left */
-            /* Use a spacer or flex-end if needed, but flex: space-between works if one item matches */
             <button
               className="batch-card__btn"
               style={{ marginLeft: 'auto' }}
@@ -72,20 +108,20 @@ const ActiveBatches = ({ onViewDetails = () => { } }) => {
   };
 
   return (
-    <section className="batches-page">
+    <section className="trainer-active-batches-page">
       <h2 className="batches-title">Active Batches</h2>
 
       <div className="batches-grid">
-        {activeBatches.map((b) => (
-          <BatchCard key={b.id} batch={b} />
+        {activeBatches.map((b, idx) => (
+          <BatchCard key={b._id || b.id || idx} batch={b} />
         ))}
       </div>
 
       <h2 className="batches-title batches-title--spaced">Completed Batches</h2>
 
       <div className="batches-grid">
-        {completedBatches.map((b) => (
-          <BatchCard key={b.id} batch={b} />
+        {completedBatches.map((b, idx) => (
+          <BatchCard key={b._id || b.id || idx} batch={b} />
         ))}
       </div>
     </section>

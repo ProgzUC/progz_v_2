@@ -12,7 +12,12 @@ const axiosInstance = axios.create({
 // Attach access token from localStorage to each request if present
 axiosInstance.interceptors.request.use((config) => {
   const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  if (token) {
+    console.log("Attaching token to request:", config.url);
+    config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    console.warn("No token found for request:", config.url);
+  }
   return config;
 });
 

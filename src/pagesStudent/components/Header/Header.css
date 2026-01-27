@@ -1,7 +1,7 @@
 /* ==========================================================================
    HEADER WRAPPER
    ========================================================================== */
-.header-container {
+.student-header .header-container {
   width: 100%;
   height: 78px;
   background: #B3B3B3;
@@ -45,14 +45,14 @@
 }
 
 /* -------------------- NAV LINKS CONTAINER -------------------- */
-.nav-links {
+.student-header .nav-links {
   display: flex;
   align-items: center;
   gap: 30px;
 }
 
 /* -------------------- NAV LINKS -------------------- */
-.nav-links a {
+.student-header .nav-links a {
   position: relative;
   display: flex;
   align-items: center;
@@ -64,7 +64,7 @@
   padding: 5px 0;
 }
 
-.nav-links a.active::after {
+.student-header .nav-links a.active::after {
   content: "";
   position: absolute;
   width: 100%;
@@ -75,7 +75,7 @@
   border-radius: 2px;
 }
 
-.nav-links a:hover {
+.student-header .nav-links a:hover {
   color: black;
 }
 

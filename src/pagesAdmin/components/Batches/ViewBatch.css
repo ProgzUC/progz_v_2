@@ -1,0 +1,439 @@
+.view-batch-page {
+    padding: 24px 32px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+}
+
+
+.view-batch-page .view-batch-header {
+    margin-bottom: 24px;
+}
+
+.view-batch-page .back-btn {
+    background: #f3f4f6;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 16px;
+    transition: background 0.2s;
+}
+
+.view-batch-page .back-btn:hover {
+    background: #e5e7eb;
+}
+
+.view-batch-page .header-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.view-batch-page .header-title h1 {
+    margin: 0;
+    font-size: 32px;
+    color: #111827;
+}
+
+.view-batch-page .view-batch-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.view-batch-page .card-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.view-batch-page .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 20px;
+}
+
+.view-batch-page .info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.view-batch-page .info-label {
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.view-batch-page .info-value {
+    font-size: 15px;
+    color: #111827;
+    font-weight: 500;
+}
+
+.view-batch-page .info-value a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+.view-batch-page .info-value a:hover {
+    text-decoration: underline;
+}
+
+/* Trainers */
+.view-batch-page .trainers-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.view-batch-page .trainer-item {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.view-batch-page .trainer-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.view-batch-page .trainer-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.view-batch-page .trainer-info h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #111827;
+}
+
+.view-batch-page .trainer-meta {
+    display: flex;
+    gap: 12px;
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.view-batch-page .current-badge {
+    background: #10b981;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.view-batch-page .assigned-modules {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.view-batch-page .assigned-modules strong {
+    font-size: 13px;
+    color: #374151;
+}
+
+.view-batch-page .assigned-modules ul {
+    margin: 8px 0 0 0;
+    padding-left: 20px;
+}
+
+.view-batch-page .assigned-modules li {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 4px 0;
+}
+
+/* Modules */
+.view-batch-page .modules-list {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.view-batch-page .module-item {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.view-batch-page .module-header {
+    background: #f9fafb;
+    padding: 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+}
+
+.view-batch-page .module-header:hover {
+    background: #f3f4f6;
+}
+
+.view-batch-page .module-title-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.view-batch-page .expand-icon {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.view-batch-page .module-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #111827;
+}
+
+.view-batch-page .module-trainer {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #6b7280;
+    background: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+.view-batch-page .module-content {
+    padding: 16px;
+    background: white;
+}
+
+.view-batch-page .module-description {
+    color: #6b7280;
+    font-size: 14px;
+    margin: 0 0 16px 0;
+}
+
+.view-batch-page .sections-list h4 {
+    font-size: 14px;
+    color: #374151;
+    margin: 0 0 12px 0;
+}
+
+.view-batch-page .section-item {
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: #fafafa;
+}
+
+.view-batch-page .section-item.completed {
+    background: #f0fdf4;
+    border-color: #86efac;
+}
+
+.view-batch-page .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.view-batch-page .section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #111827;
+    font-weight: 500;
+}
+
+.view-batch-page .status-icon {
+    font-size: 16px;
+}
+
+.view-batch-page .status-icon.completed {
+    color: #10b981;
+}
+
+.view-batch-page .status-icon.pending {
+    color: #9ca3af;
+}
+
+.view-batch-page .completion-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    font-size: 12px;
+}
+
+.view-batch-page .completed-by {
+    color: #059669;
+    font-weight: 500;
+}
+
+.view-batch-page .completed-date {
+    color: #6b7280;
+}
+
+/* Students */
+.view-batch-page .students-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+
+    gap: 16px;
+}
+
+.view-batch-page .student-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}
+
+.view-batch-page .student-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.view-batch-page .student-info h4 {
+    margin: 0;
+    font-size: 14px;
+    color: #111827;
+}
+
+.view-batch-page .student-email {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.view-batch-page .empty-message {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+    padding: 20px;
+}
+
+/* Status badges */
+.view-batch-page .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.view-batch-page .status-badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.view-batch-page .status-active {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.view-batch-page .status-active .dot {
+    background: #10b981;
+}
+
+.view-batch-page .status-completed {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.view-batch-page .status-completed .dot {
+    background: #3b82f6;
+}
+
+.view-batch-page .status-upcoming {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.view-batch-page .status-upcoming .dot {
+    background: #f59e0b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .view-batch-page {
+        padding: 16px;
+    }
+
+    .view-batch-page .header-title {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .view-batch-page .header-title h1 {
+        font-size: 24px;
+    }
+
+    .view-batch-page .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .view-batch-page .students-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .view-batch-page .module-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .view-batch-page .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .view-batch-page .completion-info {
+        align-items: flex-start;
+    }
+}

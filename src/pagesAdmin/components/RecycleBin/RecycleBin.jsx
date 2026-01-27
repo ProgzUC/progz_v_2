@@ -86,7 +86,7 @@ const RecycleBin = () => {
     }
 
     return (
-        <div className="recycle-bin-page">
+        <div className="admin-recycle-bin-page">
             <h2 className="page-title">Recycle Bin</h2>
 
             <div className="recycle-bin-card">

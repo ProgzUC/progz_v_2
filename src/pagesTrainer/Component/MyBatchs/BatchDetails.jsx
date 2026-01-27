@@ -1,32 +1,95 @@
 import React from 'react';
 import './BatchDetails.css';
+import { useTrainerBatchDetails, useToggleSectionCompletion } from '../../../hooks/useBatches';
+import Loader from '../../../components/common/Loader/Loader';
 
-const BatchDetails = ({ batch, onBack }) => {
-    // Placeholder data based on screenshot
-    const students = [
-        { id: 1, batch: '01)', name: 'Tharun', email: 'tharun@progz.tech', mobile: '9176612167', qualification: 'Not specified', exp: 'N/A • 0 years' },
-        { id: 2, batch: '01)', name: 'Tharun', email: 'tharun@progz.tech', mobile: '9176612167', qualification: 'Not specified', exp: 'N/A • 0 years' },
-        { id: 3, batch: '01)', name: 'Tharun', email: 'tharun@progz.tech', mobile: '9176612167', qualification: 'Not specified', exp: 'N/A • 0 years' },
-        { id: 4, batch: '01)', name: 'Tharun', email: 'tharun@progz.tech', mobile: '9176612167', qualification: 'Not specified', exp: 'N/A • 0 years' },
-        { id: 5, batch: '01)', name: 'Tharun', email: 'tharun@progz.tech', mobile: '9176612167', qualification: 'Not specified', exp: 'N/A • 0 years' },
-        { id: 6, batch: '01)', name: 'Tharun', email: 'tharun@progz.tech', mobile: '9176612167', qualification: 'Not specified', exp: 'N/A • 0 years' },
-    ];
+const BatchDetails = ({ batch: initialBatch, onBack }) => {
+    // Determine the ID to fetch. initialBatch might be the full object or just have an ID.
+    // Different endpoints return different field names: _id, id, or batchId
+    const batchId = initialBatch?._id || initialBatch?.id || initialBatch?.batchId;
+    const { data: batchDetails, isLoading, isError, error } = useTrainerBatchDetails(batchId);
+    const toggleCompletion = useToggleSectionCompletion();
 
-    const modules = [
-        { id: 1, title: 'Module 1: Course Introduction & Basics', subtitle: 'Foundational concepts and setting up the development environment.' },
-        { id: 2, title: 'Module 1: Course Introduction & Basics', subtitle: 'Foundational concepts and setting up the development environment.' },
-    ];
+    // Debug: Show what we're working with
+    if (!batchId) {
+        return (
+            <div className="error-message">
+                <p>No batch ID found.</p>
+                <p>Received batch object: {JSON.stringify(initialBatch)}</p>
+            </div>
+        );
+    }
 
-    const sections = [
-        { id: 1, title: 'Introduction to Modern Web Development', completed: true, date: 'Completed on Dec 16, 12:00 PM', instructor: 'Completed by Savitha' },
-        { id: 2, title: 'CSS3 Fundamentals & Flexbox', completed: false },
-        { id: 3, title: 'Setting up VS Code & Git', completed: false },
-        { id: 4, title: 'Introduction to Modern Web Development', completed: false },
-        { id: 5, title: 'HTML5 Semantic Structure', completed: false },
-        { id: 6, title: 'Setting up VS Code & Git', completed: false },
-        { id: 7, title: 'CSS3 Fundamentals & Flexbox', completed: false },
-        { id: 8, title: 'HTML5 Semantic Structure', completed: false },
-    ];
+    if (isLoading) return <Loader message="Loading batch details..." />;
+
+    if (isError) {
+        return (
+            <div className="error-message">
+                <p>Error loading batch details.</p>
+                <p>Batch ID: {batchId}</p>
+                <p>Error: {error?.message || 'Unknown error'}</p>
+            </div>
+        );
+    }
+
+    if (!batchDetails) {
+        return (
+            <div className="error-message">
+                <p>Batch not found.</p>
+                <p>Batch ID: {batchId}</p>
+            </div>
+        );
+    }
+
+    // Handle response structure from getTrainerBatchDetails controller
+    // Response is flat: { batchId, batchName, curriculum, students, ... }
+    const batch = batchDetails;
+
+    // Controller returns 'students' and 'curriculum' (modules) at root level
+    const students = batch.students || [];
+    const modules = batch.curriculum || [];
+
+    // Get trainer's assigned modules
+    const assignedModules = batch.trainerAssignment?.assignedModules || [];
+
+    // Controller doesn't return 'course' object, but 'courseName'
+    // So we don't need 'const course = ...' anymore for modules
+
+    // Flatten sections for the right column view and map progress
+    // FILTER: Only show sections from modules assigned to this trainer
+    const allSections = [];
+    modules.forEach((mod, modIdx) => {
+        // Only include modules assigned to this trainer
+        if (!assignedModules.includes(modIdx)) return;
+
+        (mod.sections || []).forEach((sec, secIdx) => {
+            // Find progress
+            const progress = batch.sectionProgress?.find(
+                p => p.moduleIndex === modIdx && p.sectionIndex === secIdx
+            );
+
+            allSections.push({
+                moduleIndex: modIdx,
+                sectionIndex: secIdx,
+                uniqueId: `${modIdx}-${secIdx}`,
+                title: sec.sectionName || sec.title,
+                moduleTitle: mod.title,
+                completed: progress?.isCompleted || false,
+                date: progress?.completionTime ? new Date(progress.completionTime).toLocaleDateString() : null,
+                instructor: progress?.completedBy || null
+            });
+        });
+    });
+
+    // Calculate progress
+    const totalSections = allSections.length;
+    const completedSections = allSections.filter(s => s.completed).length;
+    const progressPercentage = totalSections > 0 ? Math.round((completedSections / totalSections) * 100) : 0;
+
+    const formatDate = (dateStr) => {
+        if (!dateStr) return 'N/A';
+        return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    };
 
     return (
         <div className="batch-details-container">
@@ -37,8 +100,8 @@ const BatchDetails = ({ batch, onBack }) => {
                         <polyline points="12 19 5 12 12 5"></polyline>
                     </svg>
                 </button>
-                <h1 className="header-title">{batch?.title || 'Frontend Development Batch A'}</h1>
-                <span className="status-badge active">Active</span>
+                <h1 className="header-title">{batch.batchName || batch.title}</h1>
+                <span className={`status-badge ${batch.status?.toLowerCase() || 'active'}`}>{batch.status || 'Active'}</span>
             </header>
 
             <div className="stats-row">
@@ -48,7 +111,7 @@ const BatchDetails = ({ batch, onBack }) => {
                     </div>
                     <div className="stat-info">
                         <span className="stat-label">Start Date</span>
-                        <span className="stat-value">{batch?.date?.replace('Starts ', '') || 'Oct 12, 2024'}</span>
+                        <span className="stat-value">{formatDate(batch.startDate)}</span>
                     </div>
                 </div>
                 <div className="stat-card">
@@ -57,7 +120,9 @@ const BatchDetails = ({ batch, onBack }) => {
                     </div>
                     <div className="stat-info">
                         <span className="stat-label">Schedule</span>
-                        <span className="stat-value">Mon, Wed, Fri</span>
+                        <div className="stat-value">
+                            {batch.days ? batch.days.join(', ') : 'Mon, Wed, Fri'}
+                        </div>
                     </div>
                 </div>
                 <div className="stat-card">
@@ -66,7 +131,7 @@ const BatchDetails = ({ batch, onBack }) => {
                     </div>
                     <div className="stat-info">
                         <span className="stat-label">Total Students</span>
-                        <span className="stat-value">24 Enrolled</span>
+                        <span className="stat-value">{students.length} Enrolled</span>
                     </div>
                 </div>
             </div>
@@ -82,28 +147,33 @@ const BatchDetails = ({ batch, onBack }) => {
                     <table className="students-table">
                         <thead>
                             <tr>
-                                <th>Batch</th>
-                                <th>Student</th>
+                                <th>Name</th>
                                 <th>E-mail</th>
                                 <th>Mobile No</th>
                                 <th>Qualification</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {students.map(student => (
-                                <tr key={student.id}>
-                                    <td>{student.batch}</td>
-                                    <td>{student.name}</td>
-                                    <td>{student.email}</td>
-                                    <td>{student.mobile}</td>
-                                    <td>
-                                        <div className="qualification-col">
-                                            <span>{student.qualification}</span>
-                                            <span className="exp-text">{student.exp}</span>
-                                        </div>
+                            {students.length > 0 ? (
+                                students.map((student, idx) => (
+                                    <tr key={student._id || idx}>
+                                        <td>{student.name || student.firstName}</td>
+                                        <td>{student.email}</td>
+                                        <td>{student.phone || student.mobile || 'N/A'}</td>
+                                        <td>
+                                            <div className="qualification-col">
+                                                <span>{student.qualification || 'Not specified'}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="4" style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+                                        No students enrolled yet.
                                     </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     </table>
                 </div>
@@ -113,25 +183,29 @@ const BatchDetails = ({ batch, onBack }) => {
                 <div className="curriculum-col">
                     <div className="column-header">
                         <h2 className="section-title">Curriculum</h2>
-                        <span className="badge-outline">8 Modules Total</span>
+                        <span className="badge-outline">{modules.length} Modules Total</span>
                     </div>
                     <div className="module-list">
-                        {modules.map(module => (
-                            <div key={module.id} className="module-item">
-                                <div className="module-main">
-                                    <div className="module-icon">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                                    </div>
-                                    <div className="module-info">
-                                        <h3 className="module-title">{module.title}</h3>
-                                        <p className="module-subtitle">{module.subtitle}</p>
-                                    </div>
-                                    <div className="module-arrow">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        {modules.length > 0 ? (
+                            modules.map((module, idx) => (
+                                <div key={module._id || idx} className="module-item">
+                                    <div className="module-main">
+                                        <div className="module-icon">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                                        </div>
+                                        <div className="module-info">
+                                            <h3 className="module-title">{module.title || module.moduleName}</h3>
+                                            <p className="module-subtitle">{module.description || `${module.sections?.length || 0} Sections`}</p>
+                                        </div>
+                                        <div className="module-arrow">
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                        ) : (
+                            <p className="empty-message">No curriculum modules found.</p>
+                        )}
                     </div>
                 </div>
 
@@ -145,37 +219,55 @@ const BatchDetails = ({ batch, onBack }) => {
                                 <h2 className="section-title">Sections</h2>
                             </div>
                             <div className="header-right">
-                                <span className="percent-text">13 %</span>
+                                <span className="percent-text">{progressPercentage}%</span>
                                 <span className="completed-label">Completed</span>
                             </div>
                         </div>
                         <div className="progress-bar-container">
-                            <div className="progress-bar" style={{ width: '13%' }}></div>
+                            <div className="progress-bar" style={{ width: `${progressPercentage}%` }}></div>
                         </div>
 
                         <div className="section-items-list">
-                            {sections.map(item => (
-                                <div key={item.id} className={`section-item ${item.completed ? 'completed' : ''}`}>
-                                    <div className="item-radio">
-                                        {item.completed ? (
-                                            <div className="radio-check active">
-                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                            </div>
-                                        ) : (
-                                            <div className="radio-check"></div>
-                                        )}
+                            {allSections.length > 0 ? (
+                                allSections.map((item, idx) => (
+                                    <div key={idx} className={`section-item ${item.completed ? 'completed' : ''}`}>
+                                        <div
+                                            className="item-radio"
+                                            onClick={() => {
+                                                toggleCompletion.mutate({
+                                                    batchId: batch.batchId,
+                                                    moduleIndex: item.moduleIndex,
+                                                    sectionIndex: item.sectionIndex
+                                                }, {
+                                                    onError: (error) => {
+                                                        alert(`Failed to toggle: ${error?.response?.data?.message || error?.message || 'Unknown error'}`);
+                                                    }
+                                                });
+                                            }}
+                                            style={{ cursor: 'pointer' }}
+                                        >
+                                            {item.completed ? (
+                                                <div className="radio-check active">
+                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                </div>
+                                            ) : (
+                                                <div className="radio-check"></div>
+                                            )}
+                                        </div>
+                                        <div className="item-content">
+                                            <span style={{ fontSize: '10px', color: '#999', textTransform: 'uppercase' }}>{item.moduleTitle}</span>
+                                            <h3 className="item-title">{item.title}</h3>
+                                            {item.completed && (
+                                                <div className="completed-info">
+                                                    <p className="completed-date">Completed on {item.date}</p>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
-                                    <div className="item-content">
-                                        <h3 className="item-title">{item.title}</h3>
-                                        {item.completed && (
-                                            <div className="completed-info">
-                                                <p className="completed-date">{item.date}</p>
-                                                <p className="completed-by">( {item.instructor} )</p>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            ))}
+                                ))
+                            ) : (
+                                <p className="empty-message">No sections found in your assigned modules.</p>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -185,3 +277,4 @@ const BatchDetails = ({ batch, onBack }) => {
 };
 
 export default BatchDetails;
+

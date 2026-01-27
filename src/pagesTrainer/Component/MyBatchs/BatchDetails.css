@@ -13,7 +13,7 @@
     margin-bottom: 2.5rem;
 }
 
-.back-btn {
+.trainer-batch-details-page .back-btn {
     background: none;
     border: none;
     color: #555;
@@ -25,7 +25,7 @@
     transition: transform 0.2s;
 }
 
-.back-btn:hover {
+.trainer-batch-details-page .back-btn:hover {
     transform: translateX(-3px);
     color: #000;
 }
@@ -105,7 +105,7 @@
     color: #1a1a1a;
 }
 
-.students-section {
+.trainer-batch-details-page .students-section {
     background: #ffffff;
     border-radius: 16px;
     padding: 2rem;
@@ -113,7 +113,7 @@
     border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.section-title {
+.trainer-batch-details-page .section-title {
     font-size: 1.25rem;
     font-weight: 700;
     margin: 0 0 0.4rem 0;

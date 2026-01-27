@@ -17,6 +17,7 @@ import CourseView from "./components/CourseIcon/CourseView.jsx";
 import EditCourse from "./components/CourseIcon/EditCourse.jsx";
 import CourseTrainers from "./components/CourseIcon/CourseTrainers.jsx";
 import Batches from "./components/Batches/Batches.jsx";
+import ViewBatch from "./components/Batches/ViewBatch.jsx";
 import RecycleBin from "./components/RecycleBin/RecycleBin.jsx";
 
 // AUTH COMPONENTS
@@ -70,6 +71,7 @@ export default function AdminApp() {
                   <Route path="add-student" element={<UserEnrollment subtitle="Add Student" />} />
                   <Route path="student-preview" element={<StudentPreview />} />
                   <Route path="batches" element={<Batches />} />
+                  <Route path="batches/:id" element={<ViewBatch />} />
                   <Route path="instructor-preview" element={<InstructorPreview />} />
                   <Route path="recycle-bin" element={<RecycleBin />} />
                 </Routes>

@@ -75,6 +75,19 @@
     object-fit: cover;
 }
 
+.profile-initials-avatar {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #008952, #004d40);
+    color: white;
+    font-size: 48px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
 .profile-details-list {
     display: flex;
     flex-direction: column;
@@ -433,6 +446,62 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.profile-msg-row {
+    margin: 15px 0;
+    min-height: 20px;
+}
+
+.profile-error-text {
+    color: #dc3545;
+    font-size: 14px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.profile-success-text {
+    color: #28a745;
+    font-size: 14px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.profile-edit-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.profile-preview-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #008952;
+}
+
+.profile-upload-label {
+    background: #008952;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.profile-upload-label input {
+    display: none;
+}
+
+.profile-no-courses {
+    text-align: center;
+    color: #999;
+    font-size: 16px;
+    padding: 40px;
 }
 
 /* ============================

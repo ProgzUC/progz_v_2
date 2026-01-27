@@ -1,67 +1,107 @@
 import React, { useState } from "react";
 import "./EnrollStudents.css";
 
-const students = ["Sanjay", "Mezin", "Akshay", "Deepak"];
-const courses = ["RPA", "AWS", "DevOps", "Azure"];
-const instructors = ["John", "Mezin", "Akshay", "Deepak"];
-const batches = ["Morning", "Afternoon", "Evening"];
+import { useAllUsers } from "../../../hooks/useAdminUsers";
+import { useCourses } from "../../../hooks/useCourses";
+import { useBatches, useCreateBatch, useEnrollStudent } from "../../../hooks/useBatches";
+import Swal from "sweetalert2";
+import Loader from "../../../components/common/Loader/Loader";
+
+import CreateBatchModal from "./CreateBatchModal";
 
 const EnrollStudents = () => {
-  const [courseSections, setCourseSections] = useState([{ id: 1 }]);
-  const [batchList, setBatchList] = useState(batches);
+  // Data Fetching
+  const { data: users, isLoading: usersLoading } = useAllUsers();
+  const { data: coursesData, isLoading: coursesLoading } = useCourses();
+  const { data: batchesData, isLoading: batchesLoading } = useBatches();
+
+  const { mutate: enrollStudentMutation } = useEnrollStudent();
+
+  // Filtered Data
+  const usersArray = Array.isArray(users) ? users : [];
+  const studentsList = usersArray.filter(u => (u.role || "").toLowerCase() === "student");
+  // Instructors list for dropdown in Enrolment section (removed from batch creation logic here as it's now in modal)
+  const instructorsList = usersArray.filter(u => (u.role || "").toLowerCase() === "trainer" || (u.role || "").toLowerCase() === "instructor");
+  const coursesList = coursesData || [];
+  const batchesList = batchesData || [];
+
+  // State
+  const [selectedStudent, setSelectedStudent] = useState("");
+  const [courseSections, setCourseSections] = useState([
+    { id: Date.now(), courseId: "", instructorId: "", batchId: "" }
+  ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newBatch, setNewBatch] = useState({
-    name: "",
-    days: [],
-    startTime: "",
-    endTime: "",
-    link: ""
-  });
 
   const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
+  /* Update Section Field */
+  const updateSection = (id, field, value) => {
+    setCourseSections(prev => prev.map(sec =>
+      sec.id === id ? { ...sec, [field]: value } : sec
+    ));
+  };
+
   const addCourse = () => {
-    setCourseSections([...courseSections, { id: Date.now() }]);
+    setCourseSections([...courseSections, { id: Date.now(), courseId: "", instructorId: "", batchId: "" }]);
   };
 
   const deleteCourse = (id) => {
-    setCourseSections(courseSections.filter((sec) => sec.id !== id));
-  };
-
-  const handleModalChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    if (type === "checkbox") {
-      setNewBatch(prev => {
-        const newDays = checked
-          ? [...prev.days, value]
-          : prev.days.filter(d => d !== value);
-        return { ...prev, days: newDays };
-      });
-    } else {
-      setNewBatch(prev => ({ ...prev, [name]: value }));
+    if (courseSections.length > 1) {
+      setCourseSections(courseSections.filter((sec) => sec.id !== id));
     }
   };
 
-  const createBatch = () => {
-    if (newBatch.name) {
-      setBatchList([...batchList, newBatch.name]);
-      setIsModalOpen(false);
-      setNewBatch({ name: "", days: [], startTime: "", endTime: "", link: "" });
+  const handleEnroll = () => {
+    if (!selectedStudent) {
+      Swal.fire("Error", "Please select a student", "error");
+      return;
     }
+
+    // Validate sections
+    const validSections = courseSections.filter(s => s.courseId && s.batchId);
+    if (validSections.length === 0) {
+      Swal.fire("Error", "Please select at least one Course and Batch", "error");
+      return;
+    }
+
+    const payload = {
+      studentId: selectedStudent,
+      enrollments: validSections.map(s => ({
+        courseId: s.courseId,
+        batchId: s.batchId,
+        instructorId: s.instructorId
+      }))
+    };
+
+    enrollStudentMutation(payload, {
+      onSuccess: () => {
+        Swal.fire("Success", "Student Enrolled Successfully!", "success");
+        // Reset ?
+      },
+      onError: (err) => {
+        Swal.fire("Error", err.response?.data?.message || "Enrollment failed", "error");
+      }
+    });
   };
+
+  if (usersLoading || coursesLoading || batchesLoading) return <Loader />;
 
   return (
-    <div className="enroll-page">
+    <div className="admin-enroll-students-page">
       <div className="enroll-container">
         <h1 className="enroll-title">Enroll a Student</h1>
 
         {/* Student Info */}
         <div className="section">
           <h3 className="section-title">Students Information</h3>
-          <select className="input-select">
-            <option>Select student</option>
-            {students.map((s, i) => (
-              <option key={i}>{s}</option>
+          <select
+            className="input-select"
+            value={selectedStudent}
+            onChange={(e) => setSelectedStudent(e.target.value)}
+          >
+            <option value="">Select student</option>
+            {studentsList.map((s) => (
+              <option key={s._id} value={s._id}>{s.name} ({s.email})</option>
             ))}
           </select>
         </div>
@@ -92,17 +132,25 @@ const EnrollStudents = () => {
               </div>
             </div>
 
-            <select className="input-select">
-              <option>Select course</option>
-              {courses.map((c, i) => (
-                <option key={i}>{c}</option>
+            <select
+              className="input-select"
+              value={section.courseId}
+              onChange={(e) => updateSection(section.id, "courseId", e.target.value)}
+            >
+              <option value="">Select course</option>
+              {coursesList.map((c) => (
+                <option key={c._id} value={c._id}>{c.courseName}</option>
               ))}
             </select>
 
-            <select className="input-select">
-              <option>Select instructor</option>
-              {instructors.map((ins, i) => (
-                <option key={i}>{ins}</option>
+            <select
+              className="input-select"
+              value={section.instructorId}
+              onChange={(e) => updateSection(section.id, "instructorId", e.target.value)}
+            >
+              <option value="">Select instructor</option>
+              {instructorsList.map((ins) => (
+                <option key={ins._id} value={ins._id}>{ins.name}</option>
               ))}
             </select>
 
@@ -118,106 +166,44 @@ const EnrollStudents = () => {
                 Create new batch
               </a>
 
-              <select className="input-select">
-                <option>Select batch</option>
-                {batchList.map((b, i) => (
-                  <option key={i}>{b}</option>
-                ))}
+              <select
+                className="input-select"
+                value={section.batchId}
+                onChange={(e) => updateSection(section.id, "batchId", e.target.value)}
+              >
+                <option value="">Select batch</option>
+                {batchesList
+                  .filter(b => {
+                    if (!section.courseId) return true;
+                    const batchCourseId = b.course?._id || b.course;
+                    return batchCourseId === section.courseId;
+                  })
+                  .map((b) => (
+                    <option key={b._id} value={b._id}>{b.name}</option>
+                  ))}
               </select>
             </div>
           </div>
         ))}
 
         <div className="center-btn">
-          <button className="enroll-btn">Enroll Student</button>
+          <div className="center-btn">
+            <button className="enroll-btn" onClick={handleEnroll}>Enroll Student</button>
+          </div>
         </div>
       </div>
 
-      {/* Create Batch Modal */}
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3 className="modal-title">Create New Batch</h3>
-
-            <div className="modal-field">
-              <label className="modal-label">Batch Name</label>
-              <input
-                type="text"
-                name="name"
-                className="modal-input"
-                value={newBatch.name}
-                onChange={handleModalChange}
-                placeholder="Enter batch name"
-              />
-            </div>
-
-            <div className="modal-field">
-              <label className="modal-label">Select Days</label>
-              <div className="days-checkbox-group">
-                {weekDays.map(day => (
-                  <label key={day} className="day-checkbox">
-                    <input
-                      type="checkbox"
-                      name="days"
-                      value={day}
-                      checked={newBatch.days.includes(day)}
-                      onChange={handleModalChange}
-                    />
-                    {day}
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div className="modal-field" style={{ display: 'flex', gap: '12px' }}>
-              <div style={{ flex: 1 }}>
-                <label className="modal-label">Start Time</label>
-                <input
-                  type="time"
-                  name="startTime"
-                  className="modal-input"
-                  value={newBatch.startTime}
-                  onChange={handleModalChange}
-                />
-              </div>
-              <div style={{ flex: 1 }}>
-                <label className="modal-label">End Time</label>
-                <input
-                  type="time"
-                  name="endTime"
-                  className="modal-input"
-                  value={newBatch.endTime}
-                  onChange={handleModalChange}
-                />
-              </div>
-            </div>
-
-            <div className="modal-field">
-              <label className="modal-label">Gmeet Link</label>
-              <input
-                type="text"
-                name="link"
-                className="modal-input"
-                value={newBatch.link}
-                onChange={handleModalChange}
-                placeholder="https://meet.google.com/..."
-              />
-            </div>
-
-            <div className="modal-actions">
-              <button className="cancel-btn" onClick={() => setIsModalOpen(false)}>
-                Cancel
-              </button>
-              <button className="create-btn" onClick={createBatch}>
-                Create Batch
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <CreateBatchModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        coursesList={coursesList}
+        weekDays={weekDays}
+      />
 
     </div>
   );
 };
 
 export default EnrollStudents;
+
+
