@@ -6,12 +6,14 @@ import vector2 from '/student/vector2.png';
 import vector3 from '/student/vector3.png';
 
 import { Link } from 'react-router-dom';
+import { FaPlay } from "react-icons/fa";
+import { TbBook } from "react-icons/tb";
 
 export default function Hero() {
   return (
     <section
       className="hero-container student-hero-section"
-      style={{ backgroundImage: `url(${heroImage})` }}
+      style={{ '--hero-bg': `url(${heroImage})` }}
     >
       <div className="hero-overlay" />
 
@@ -45,12 +47,28 @@ export default function Hero() {
         </p>
 
         <div className="hero-buttons">
-          <button className="btn btn-primary">▶ Continue Learning</button>
-          <Link to="/browse" className="btn btn-ghost">📚 Browse All Courses</Link>
+          {/* Replaced by absolute positioned buttons below */}
         </div>
       </div>
 
+      {/* Button 1: Continue Learning */}
+      <Link to="/student-dashboard/my-courses" className="student-hero-btn continue-learning-btn">
+        <div className="btn-icon">
+          <FaPlay className="icon-svg" />
+        </div>
+        <span className="btn-text">Continue Learning</span>
+      </Link>
+
+      {/* Button 2: Browse All Courses */}
+      <Link to="/student-dashboard/browse" className="student-hero-btn browse-all-btn">
+        <div className="btn-icon">
+          <TbBook className="icon-svg" />
+        </div>
+        <span className="btn-text">Browse All Courses</span>
+      </Link>
+
+
       <div className="hero-bottom-fade" />
-    </section>
+    </section >
   );
 }

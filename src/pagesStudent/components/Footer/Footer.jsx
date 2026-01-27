@@ -1,24 +1,32 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./Footer.css";
+import { footerSocials, quickLinks, trendingCourses, kidsCourses, careerLinks } from "./FooterLinksConfig";
 
 // Social media icons
-import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa";
-
-// Contact icons
-import { FiPhone, FiMail, FiMapPin } from "react-icons/fi";
+import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin, FaYoutube, FaWhatsapp } from "react-icons/fa";
 
 /* -----------------------------------------
-   SOCIAL MEDIA LINKS (Dynamic with Array)
-   -----------------------------------------
------------------------------------------- */
-const socialLinks = [
-    { name: "Facebook", icon: <FaFacebook />, href: "#" },
-    { name: "Instagram", icon: <FaInstagram />, href: "#" },
-    { name: "Twitter", icon: <FaTwitter />, href: "#" },
-    { name: "LinkedIn", icon: <FaLinkedin />, href: "#" },
-];
+   SOCIAL MEDIA ICONS MAPPING
+   ----------------------------------------- */
+const socialIcons = {
+    facebook: <FaFacebook />,
+    instagram: <FaInstagram />,
+    twitter: <FaTwitter />,
+    linkedin: <FaLinkedin />,
+    youtube: <FaYoutube />,
+    whatsapp: <FaWhatsapp />
+};
 
 const Footer = () => {
+    const navigate = useNavigate();
+
+    const handleNavigation = (path, e) => {
+        if (path.startsWith("http") || path === "#") return;
+        if (e) e.preventDefault();
+        navigate(path);
+    };
+
     return (
         <footer className="student-footer">
             {/* ------------ MAIN FOOTER CONTENT -------------- */}
@@ -35,70 +43,86 @@ const Footer = () => {
 
                     {/* ---- Dynamic Social Media Icons Rendering ---- */}
                     <div className="social-icons">
-                        {socialLinks.map((item, index) => (
+                        {footerSocials.map((social) => (
                             <a
-                                key={index}
-                                href={item.href}
+                                key={social.name}
+                                href={social.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="social-icon"
-                                aria-label={item.name}
+                                aria-label={social.name}
                             >
-                                {/* Social platform icon */}
-                                {item.icon}
+                                {socialIcons[social.name.toLowerCase()] || <FaFacebook />}
                             </a>
                         ))}
                     </div>
                 </div>
 
-                {/* -------- Footer Quick Navigation Links -------- */}
+                {/* -------- Quick Links Section -------- */}
                 <div className="footer-section links-section">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Courses</a></li>
-                        <li><a href="#">Students Reviews</a></li>
-                        <li><a href="#">Instructors</a></li>
+                        {quickLinks.map((link) => (
+                            <li key={link.path}>
+                                <a
+                                    href={link.path}
+                                    onClick={(e) => handleNavigation(link.path, e)}
+                                >
+                                    {link.label}
+                                </a>
+                            </li>
+                        ))}
                     </ul>
                 </div>
 
-                {/* ----------- Course Categories Section ----------- */}
+                {/* ----------- Trending Software Courses Section ----------- */}
                 <div className="footer-section categories-section">
-                    <h3>Popular Categories</h3>
+                    <h3>Trending Software Courses</h3>
                     <ul>
-                        <li><a href="#">Web Development</a></li>
-                        <li><a href="#">Data Science</a></li>
-                        <li><a href="#">AI & Machine Learning</a></li>
-                        <li><a href="#">Cyber Security</a></li>
+                        {trendingCourses.map((course) => (
+                            <li key={course.path}>
+                                <a
+                                    href={course.path}
+                                    onClick={(e) => handleNavigation(course.path, e)}
+                                >
+                                    {course.label}
+                                </a>
+                            </li>
+                        ))}
                     </ul>
                 </div>
 
-                {/* -------- Contact Information Section -------- */}
-                <div className="footer-section contact-section">
-                    <h3>Stay Connected</h3>
-
+                {/* ----------- Kids Courses Section ----------- */}
+                <div className="footer-section kids-section">
+                    <h3>Kids Courses</h3>
                     <ul>
-                        {/* Email Row */}
-                        <li>
-                            <span className="icon">
-                                <FiMail className="contact-icon" />
-                            </span>
-                            <span>admin@urbancode.in</span>
-                        </li>
+                        {kidsCourses.map((course) => (
+                            <li key={course.path}>
+                                <a
+                                    href={course.path}
+                                    onClick={(e) => handleNavigation(course.path, e)}
+                                >
+                                    {course.label}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
 
-                        {/* Phone Row */}
-                        <li>
-                            <span className="icon">
-                                <FiPhone className="contact-icon" />
-                            </span>
-                            <span>+91 98787 98797</span>
-                        </li>
-
-                        {/* Location Row */}
-                        <li>
-                            <span className="icon">
-                                <FiMapPin className="contact-icon" />
-                            </span>
-                            <span>Velachery | Pallikaranai | Chennai</span>
-                        </li>
+                {/* -------- Career Section -------- */}
+                <div className="footer-section career-section">
+                    <h3>Career</h3>
+                    <ul>
+                        {careerLinks.map((link) => (
+                            <li key={link.path}>
+                                <a
+                                    href={link.path}
+                                    onClick={(e) => handleNavigation(link.path, e)}
+                                >
+                                    {link.label}
+                                </a>
+                            </li>
+                        ))}
                     </ul>
                 </div>
             </div>
@@ -107,7 +131,7 @@ const Footer = () => {
             <div className="footer-bottom">
                 {/* Copyright */}
                 <div className="copyright">
-                    &copy; 2023 ProgZ Inc.
+                    Copyright © 2025 ProgZ Edutech Solutions Private Limited. All rights reserved.
                 </div>
 
                 {/* Legal Links */}
@@ -122,3 +146,5 @@ const Footer = () => {
 };
 
 export default Footer;
+
+

@@ -3,7 +3,6 @@ import "./Header.css";
 import { FiMenu, FiX } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
 
-const Logo = "/student/logo.png";
 
 export default function Header({ onLogout }) {
     const [activeIndex, setActiveIndex] = useState(null);
@@ -41,8 +40,8 @@ export default function Header({ onLogout }) {
             <div className="header-inner">
 
                 {/* ----------------------------- BRAND / LOGO SECTION ----------------------------- */}
-                <Link to="/" className="logo-link">
-                    <img src={Logo} alt="Logo" className="logo-img" />
+                <Link to="/student-dashboard/" className="logo-link">
+                    <div className="header-logo">ProgZ</div>
                 </Link>
 
                 {/* ----------------------------- HAMBURGER MENU ICON ----------------------------- */}

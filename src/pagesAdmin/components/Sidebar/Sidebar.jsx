@@ -74,10 +74,7 @@ const Sidebar = () => {
 
       {/* Logo */}
       <div className="sidebar-header">
-        {/* Assuming logo.png is the green circle logo as per previous context or generic placeholder. 
-             If not, I might need to replace it, but I'll keep existing image tag for now. 
-             The user image shows a green circle logo. */}
-        <img src="/admin/logo.png" alt="logo" className="sidebar-logo" />
+        <div className="sidebar-logo-text"><img src="/admin/logo.png" alt="Logo" /></div>
         {!collapsed && <h3 className="sidebar-title">Admin Portal</h3>}
       </div>
 

@@ -1,25 +1,52 @@
 .hero-container {
   position: relative;
   width: 100%;
-  height: 600px;
-  background-size: cover;
-  background-position: center;
-  bottom:0;
+  height: 640px;
+  /* Increased from 600px to accommodate buttons at top:561px + height:51px */
+  /* Increased from 600px to accommodate buttons at top:561px + height:51px */
+  /* Background properties moved to ::before for animation */
+  bottom: 0;
   display: flex;
   align-items: center;
   color: #ffffff;
-  overflow: hidden;          /* FIX horizontal overflow */
+  overflow: hidden;
+  /* Reverted to standard hidden as height now accommodates content */
+}
+
+/* Background Image with Entrance Animation */
+.hero-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--hero-bg);
+  background-size: cover;
+  background-position: center;
+  z-index: 0;
+  /* Behind overlay (z-index: 1) */
+  transform-origin: center center;
+  animation: heroBgZoom 20s ease-out forwards;
+}
+
+@keyframes heroBgZoom {
+  0% {
+    transform: scale(1.2);
+    filter: blur(2px);
+    /* Subtle blur transition */
+  }
+
+  100% {
+    transform: scale(1.0);
+    filter: blur(0px);
+  }
 }
 
 .hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(10,11,13,0.64) 0%,
-    rgba(16,24,40,0.28) 55%,
-    rgba(255,255,255,0) 100%
-  );
+  background: linear-gradient(90deg,
+      rgba(10, 11, 13, 0.64) 0%,
+      rgba(16, 24, 40, 0.28) 55%,
+      rgba(255, 255, 255, 0) 100%);
   z-index: 1;
 }
 
@@ -32,12 +59,14 @@
   background-repeat: no-repeat;
   background-size: contain;
   pointer-events: none;
-  max-width: 100%;        /* prevent overflow */
+  max-width: 100%;
+  /* prevent overflow */
 }
 
 /* Vector 1 */
 .vector-1 {
-  right: 0;               /* previously 8px — safe now */
+  right: 0;
+  /* previously 8px — safe now */
   width: 30%;
   top: -10%;
   z-index: 3;
@@ -48,7 +77,8 @@
 /* Vector 2 */
 .vector-2 {
   right: 0;
-  width: 90%;             /* FIX: was 100% → overflow on absolute */
+  width: 90%;
+  /* FIX: was 100% → overflow on absolute */
   top: 10%;
   z-index: 2;
   background-position: bottom right;
@@ -57,10 +87,12 @@
 
 /* Vector 3 */
 .vector-3 {
-  right: 0;               /* FIX: was -10px → caused horizontal scroll */
+  right: 0;
+  /* FIX: was -10px → caused horizontal scroll */
   width: 10%;
   top: 0%;
-  bottom: 10px;;
+  bottom: 10px;
+  ;
   z-index: 4;
   background-position: bottom right;
 }
@@ -83,10 +115,11 @@
 
 .hero-sub {
   font-size: 16px;
-  color: rgba(255,255,255,0.92);
+  color: rgba(255, 255, 255, 0.92);
   margin: 0 0 22px;
   max-width: 560px;
 }
+
 .hero-buttons {
   display: flex;
   gap: 14px;
@@ -103,13 +136,13 @@
 .btn-primary {
   background: #10b981;
   color: #fff;
-  box-shadow: 0 10px 30px rgba(16,185,129,0.12);
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.12);
 }
 
 .btn-ghost {
   background: #ffffff;
   color: #0f172a;
-  box-shadow: 0 6px 20px rgba(2,6,23,0.06);
+  box-shadow: 0 6px 20px rgba(2, 6, 23, 0.06);
 }
 
 .hero-bottom-fade {
@@ -118,9 +151,10 @@
   right: 0;
   bottom: 0;
   height: 180px;
-  background: linear-gradient(180deg, rgba(255,255,255,0) 0%, #E4E4E4 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #E4E4E4 100%);
   z-index: 6;
 }
+
 /* -------------------------------------------------- */
 /* RESPONSIVE HERO SECTION */
 /* -------------------------------------------------- */
@@ -150,6 +184,34 @@
   .vector-2,
   .vector-3 {
     opacity: 0.5;
+  }
+}
+
+/* Floating Animation Keyframes */
+@keyframes floatY {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* Apply Floating to Vectors (Desktop) */
+@media (min-width: 769px) {
+  .vector-1 {
+    animation: floatY 7s ease-in-out infinite;
+  }
+
+  .vector-2 {
+    animation: floatY 9s ease-in-out 1s infinite;
+  }
+
+  .vector-3 {
+    animation: floatY 8s ease-in-out 2s infinite;
   }
 }
 
@@ -216,4 +278,230 @@
   .btn {
     font-size: 15px;
   }
+}
+
+/* -------------------------------------------------- */
+
+/* -------------------------------------------------- */
+/* NEW HERO BUTTONS (Strict Positioning & Reduced Size) */
+/* -------------------------------------------------- */
+
+.student-hero-btn {
+  position: absolute !important;
+  z-index: 10;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  /* Center content horizontally */
+  gap: 10px;
+  /* Space between icon and text */
+  padding: 0 16px !important;
+  /* Add internal padding */
+  border: none !important;
+  cursor: pointer;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.student-hero-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Button 1: Continue Learning */
+.continue-learning-btn {
+  width: 195px;
+  /* Reduced from 223px */
+  height: 46px;
+  /* Reduced from 51px */
+  left: 60px;
+  top: 450px;
+
+  background: #198754;
+  box-shadow: 0px 4px 8px rgba(25, 135, 84, 0.3);
+  border-radius: 10px;
+  /* Slightly smaller radius */
+}
+
+/* Button 2: Browse All Courses */
+.browse-all-btn {
+  width: 195px;
+  /* Reduced from 223px */
+  height: 46px;
+  /* Reduced from 51px */
+  left: 280px;
+  /* Adjusted left to maintain ~15px gap (120+200+15) */
+  top: 450px;
+
+  background: #FFFFFF;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+}
+
+/* Internal Elements (Flexbox approach for centering) */
+
+/* Remove absolute positioning from children to allow Flexbox to work */
+.student-hero-btn .btn-icon {
+  position: static;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0;
+}
+
+.student-hero-btn .btn-text {
+  position: static;
+  width: auto;
+  height: auto;
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  /* Reduced font size slightly */
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  background: transparent;
+}
+
+/* Specific Colors */
+
+/* Button 1 (Green BG) */
+.continue-learning-btn .btn-text {
+  color: #FFFFFF;
+}
+
+.continue-learning-btn .icon-svg {
+  color: #FFFFFF;
+  font-size: 16px;
+}
+
+/* Button 2 (White BG) */
+.browse-all-btn .btn-text {
+  color: #198754;
+}
+
+.browse-all-btn .icon-svg {
+  color: #198754;
+  font-size: 20px;
+}
+
+/* -------------------------------------------------- */
+/* ATTRACTIVE ANIMATIONS & EFFECTS */
+/* -------------------------------------------------- */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animate Hero Text */
+.student-hero-section .hero-content h1 {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+  /* Premium Text Shadow */
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.hero-sub {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 0.2s forwards;
+}
+
+/* Animate Buttons Entrance */
+.student-hero-btn {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out 0.5s forwards;
+}
+
+/* Shine Effect for Primary Button (Continue Learning) */
+.continue-learning-btn {
+  overflow: hidden;
+  /* Mask the shine sliding through */
+  position: absolute !important;
+  /* Ensure position stays absolute */
+}
+
+/* The Shine Bar */
+.continue-learning-btn::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.4) 50%,
+      rgba(255, 255, 255, 0) 100%);
+  transform: skewX(-25deg);
+  animation: btnShine 4s infinite;
+  /* Periodic shine */
+  pointer-events: none;
+}
+
+@keyframes btnShine {
+  0% {
+    left: -100%;
+  }
+
+  20% {
+    left: 200%;
+  }
+
+  /* Pass through quickly */
+  100% {
+    left: 200%;
+  }
+
+  /* Wait */
+}
+
+/* Subtle Pulse for the Icon in Primary Button */
+.continue-learning-btn .btn-icon {
+  animation: iconPulse 3s infinite ease-in-out;
+}
+
+@keyframes iconPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+/* Enhanced Hover for Buttons */
+/* Enhanced Hover for Buttons */
+.student-hero-btn:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  /* Lift and slight grow */
+  /* Re-assert opacity 1 */
+  opacity: 1;
+}
+
+.continue-learning-btn:hover {
+  box-shadow: 0 10px 25px rgba(25, 135, 84, 0.4) !important;
+  /* Green Glow */
+}
+
+.browse-all-btn:hover {
+  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.5) !important;
+  /* White/Bright Glow */
+  background: #f8f9fa;
+  /* Slight dim on hover */
 }

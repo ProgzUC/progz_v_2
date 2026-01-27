@@ -30,10 +30,22 @@
 /* ==========================================================================
    BRAND SECTION: LOGO
    ========================================================================== */
-.logo-img {
-  height: 50px;
-  width: 250px;
+.header-logo {
+  font-size: 28px;
+  font-weight: 800;
+  color: #333;
+  letter-spacing: -1px;
+  text-transform: none;
+  font-family: 'Inter', sans-serif;
 }
+
+.logo-link {
+  text-decoration: none;
+}
+
+
+
+
 
 /* ==========================================================================
    NAVIGATION GROUP (Links + Logout)
