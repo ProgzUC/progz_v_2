@@ -1,0 +1,328 @@
+/* Container */
+.attendance-history-container {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Header */
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.history-header h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #212529;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.history-header h2 i {
+    color: #198754;
+}
+
+/* Date Filters */
+.date-filters {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.date-filters input[type="date"] {
+    padding: 10px 16px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.date-filters input[type="date"]:focus {
+    border-color: #198754;
+    outline: none;
+}
+
+.clear-filters-btn {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.3s ease;
+}
+
+.clear-filters-btn:hover {
+    background: #c82333;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 80px;
+    margin-bottom: 20px;
+    opacity: 0.3;
+}
+
+.empty-state h3 {
+    font-size: 24px;
+    margin: 0 0 8px 0;
+    color: #495057;
+}
+
+.empty-state p {
+    font-size: 16px;
+    margin: 0;
+}
+
+/* Error State */
+.error-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #dc3545;
+}
+
+.error-state i {
+    font-size: 60px;
+    margin-bottom: 16px;
+}
+
+.error-state p {
+    font-size: 18px;
+    margin: 0;
+}
+
+/* Sessions List */
+.sessions-list {
+    display: grid;
+    gap: 20px;
+}
+
+/* Session Card */
+.session-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.session-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.session-card.active {
+    border: 2px solid #198754;
+}
+
+/* Session Card Header */
+.session-card-header {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.session-card.active .session-card-header {
+    background: linear-gradient(135deg, #d1f2eb 0%, #b8e6d5 100%);
+}
+
+.session-date-info h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #212529;
+    margin: 0 0 4px 0;
+}
+
+.session-date-info p {
+    font-size: 14px;
+    color: #6c757d;
+    margin: 0;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.active-badge {
+    background: #198754;
+    color: #fff;
+}
+
+.completed-badge {
+    background: #6c757d;
+    color: #fff;
+}
+
+/* Session Card Body */
+.session-card-body {
+    padding: 24px;
+}
+
+.session-info-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #495057;
+}
+
+.info-item i {
+    font-size: 18px;
+    color: #198754;
+}
+
+/* Attendance Stats */
+.attendance-stats {
+    display: flex;
+    gap: 20px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.stat-item.present {
+    color: #198754;
+}
+
+.stat-item.late {
+    color: #ffc107;
+}
+
+.stat-item.absent {
+    color: #dc3545;
+}
+
+.stat-item i {
+    font-size: 18px;
+}
+
+/* Session Notes */
+.session-notes {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    border-radius: 8px;
+}
+
+.session-notes i {
+    font-size: 20px;
+    color: #856404;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.session-notes p {
+    font-size: 14px;
+    color: #856404;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .attendance-history-container {
+        padding: 20px 15px;
+    }
+
+    .history-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .history-header h2 {
+        font-size: 24px;
+    }
+
+    .date-filters {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .date-filters input[type="date"],
+    .clear-filters-btn {
+        width: 100%;
+    }
+
+    .session-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .session-info-row {
+        grid-template-columns: 1fr;
+    }
+
+    .attendance-stats {
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .history-header h2 {
+        font-size: 20px;
+    }
+
+    .session-card-header {
+        padding: 16px;
+    }
+
+    .session-card-body {
+        padding: 16px;
+    }
+
+    .empty-state i {
+        font-size: 60px;
+    }
+
+    .empty-state h3 {
+        font-size: 20px;
+    }
+}
