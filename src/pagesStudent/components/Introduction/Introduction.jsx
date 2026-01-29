@@ -1,11 +1,8 @@
 import React from "react";
 import "./introduction.css";
-import introductionData from "./IntroductionData.json";
 
 const FileItem = ({ name, url }) => {
   const handleDownload = () => {
-    // In a real app, this would trigger a download. 
-    // For now, we'll open the URL which often triggers download for images/zips
     window.open(url, "_blank");
   };
 
@@ -16,7 +13,6 @@ const FileItem = ({ name, url }) => {
   return (
     <div className="file-box">
       <div className="file-left">
-
         {/* Link Icon */}
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
           stroke="#444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -31,7 +27,6 @@ const FileItem = ({ name, url }) => {
       </div>
 
       <div className="file-actions">
-
         {/* Download Icon */}
         <button className="icon-btn" onClick={handleDownload} title="Download">
           <svg width="26" height="26" viewBox="0 0 24 24" fill="none"
@@ -56,21 +51,49 @@ const FileItem = ({ name, url }) => {
   );
 };
 
-const Introduction = () => {
-  const { breadcrumb, title, learningMaterials, codeChallenge, classRecordings } = introductionData;
+const Introduction = ({ sectionData, courseName, moduleName }) => {
+  if (!sectionData) return <div className="p-5">Loading lesson data...</div>;
+
+  // Extract data with fallbacks
+  const {
+    title,
+    sectionName,
+    notes,
+    learningMaterialNotes,
+    learningMaterialFile = [],
+    learningMaterialFiles = [],
+    codeChallengeInstructions,
+    codeChallengeFile = [],
+    codeChallengeFiles = [],
+    videos = [],
+    videoReferences = []
+  } = sectionData;
+
+  const displayTitle = sectionName || title || "Lesson";
+  const displayNotes = learningMaterialNotes || notes || "No description available.";
+  const displayChallenge = codeChallengeInstructions || "No instructions provided.";
+
+  // Handle inconsistent naming (API vs Frontend conventions)
+  const materials = learningMaterialFiles.length > 0 ? learningMaterialFiles : learningMaterialFile;
+  const challengeFiles = codeChallengeFiles.length > 0 ? codeChallengeFiles : codeChallengeFile;
+  const classVideos = videos.length > 0 ? videos : videoReferences;
+
+  const mainVideo = classVideos.length > 0 ? (typeof classVideos[0] === 'string' ? { url: classVideos[0] } : classVideos[0]) : null;
 
   const handlePlayVideo = () => {
-    window.open(classRecordings.video.url, "_blank");
+    if (mainVideo?.url) {
+      window.open(mainVideo.url, "_blank");
+    }
   };
 
   return (
     <div className="intro-container">
 
       <p className="breadcrumb">
-        {breadcrumb.parent} / <strong>{breadcrumb.current}</strong>
+        My Courses / {courseName} / <strong>{moduleName}</strong>
       </p>
 
-      <h1 className="intro-title">{title}</h1>
+      <h1 className="intro-title">{displayTitle}</h1>
 
       {/* ============= LEARNING MATERIALS ============= */}
       <div className="section-card">
@@ -86,17 +109,24 @@ const Introduction = () => {
             </svg>
           </div>
 
-          <h2>{learningMaterials.title}</h2>
+          <h2>Learning Materials</h2>
         </div>
 
         <p className="section-description">
-          {learningMaterials.description}
+          {displayNotes}
         </p>
 
         <div className="file-row">
-          {learningMaterials.files.map((file, index) => (
-            <FileItem key={index} name={file.name} url={file.url} />
-          ))}
+          {materials.length > 0 ? materials.map((file, index) => (
+            // Handle if file is just a string (URL) or object
+            <FileItem
+              key={index}
+              name={typeof file === 'string' ? "Material File" : (file.name || file.fileName || "Material File")}
+              url={typeof file === 'string' ? file : file.url}
+            />
+          )) : (
+            <p className="text-muted small">No files attached.</p>
+          )}
         </div>
       </div>
 
@@ -112,17 +142,23 @@ const Introduction = () => {
             </svg>
           </div>
 
-          <h2>{codeChallenge.title}</h2>
+          <h2>Code Challenge</h2>
         </div>
 
         <p className="section-description">
-          {codeChallenge.description}
+          {displayChallenge}
         </p>
 
         <div className="file-row">
-          {codeChallenge.files.map((file, index) => (
-            <FileItem key={index} name={file.name} url={file.url} />
-          ))}
+          {challengeFiles.length > 0 ? challengeFiles.map((file, index) => (
+            <FileItem
+              key={index}
+              name={typeof file === 'string' ? "Challenge File" : (file.name || file.fileName || "Challenge File")}
+              url={typeof file === 'string' ? file : file.url}
+            />
+          )) : (
+            <p className="text-muted small">No challenge files.</p>
+          )}
         </div>
       </div>
 
@@ -138,37 +174,41 @@ const Introduction = () => {
             </svg>
           </div>
 
-          <h2>{classRecordings.title}</h2>
+          <h2>Class Recordings</h2>
         </div>
 
-        <p className="section-description">
-          <strong>Link:</strong>{" "}
-          <a href={classRecordings.link} className="recording-link" target="_blank" rel="noopener noreferrer">
-            {classRecordings.link}
-          </a>
-        </p>
+        {mainVideo ? (
+          <>
+            <p className="section-description">
+              <strong>Link:</strong>{" "}
+              <a href={mainVideo.url} className="recording-link" target="_blank" rel="noopener noreferrer">
+                {mainVideo.url}
+              </a>
+            </p>
 
-        <div className="video-card">
-          <div className="video-thumbnail-container" onClick={handlePlayVideo} style={{ cursor: 'pointer' }}>
-            <img
-              src={classRecordings.video.thumbnail}
-              className="video-thumbnail"
-              alt="Video Thumbnail"
-            />
-            <div className="play-overlay">▶</div>
-          </div>
+            <div className="video-card">
+              <div className="video-thumbnail-container" onClick={handlePlayVideo} style={{ cursor: 'pointer' }}>
+                {/* Placeholder or real thumbnail logic */}
+                <div style={{ width: '100%', height: '100%', background: '#000', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <span style={{ color: '#fff' }}>Video Preview</span>
+                </div>
+                <div className="play-overlay">▶</div>
+              </div>
 
-          <div className="video-info">
-            <h3 className="video-title">{classRecordings.video.title}</h3>
-            <p className="video-time">{classRecordings.video.duration}</p>
-            <button className="play-button" onClick={handlePlayVideo}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: '6px' }}>
-                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-              </svg>
-              Play
-            </button>
-          </div>
-        </div>
+              <div className="video-info">
+                <h3 className="video-title">Class Recording</h3>
+                <button className="play-button" onClick={handlePlayVideo}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style={{ marginRight: '6px' }}>
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                  </svg>
+                  Play
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          <p className="text-muted p-3">No recordings available for this session.</p>
+        )}
 
       </div>
 

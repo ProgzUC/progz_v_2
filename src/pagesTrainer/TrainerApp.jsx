@@ -77,18 +77,10 @@ function TrainerApp() {
           isCreatingCourse ? (
             <CreateCourse
               onBack={() => setIsCreatingCourse(false)}
-              onSave={(newCourseData) => {
-                const newCourse = {
-                  ...newCourseData,
-                  id: newCourseData.courseId || Date.now(),
-                  title: newCourseData.name, // Map name to title if needed by MyCourses
-                  students: 0,
-                  color: '#4CAF50',
-                  modules: newCourseData.modules || []
-                };
-                console.log('Created:', newCourse);
-                setSelectedBatch(newCourse);
+              onSave={() => {
+                // Success callback from CreateCourse (after API success)
                 setIsCreatingCourse(false);
+                setSelectedBatch(null); // Return to list
               }}
             />
           ) : selectedBatch ? (
@@ -98,10 +90,9 @@ function TrainerApp() {
                 isEditMode={true}
                 onBack={() => setIsEditingCourse(false)}
                 onSave={(updatedData) => {
-                  console.log('Saved:', updatedData);
-                  // Merge existing with updates
-                  setSelectedBatch({ ...selectedBatch, ...updatedData });
+                  // Success callback from EditCourse (after API success)
                   setIsEditingCourse(false);
+                  setSelectedBatch(null); // Return to list to see updates
                 }}
               />
             ) : (

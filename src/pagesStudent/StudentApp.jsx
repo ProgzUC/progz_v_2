@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Hero from "./components/Hero";
 import Courses from "./components/Courses/Courses";
 import CategoryPage from "./components/Category/CategoryPage";
@@ -12,9 +12,22 @@ import Footer from "./components/Footer/Footer";
 import "./StudentGlobal.css";
 
 export default function StudentApp() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Clear authentication data
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('user');
+
+    // Redirect to login page
+    navigate('/');
+  };
+
   return (
     <div className="student-header">
-      <Header />
+      <Header onLogout={handleLogout} />
       <Routes>
         <Route path="/" element={
           <>

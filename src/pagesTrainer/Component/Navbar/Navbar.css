@@ -1,169 +1,281 @@
-.navbar {
-    background-color: var(--bg-dark);
-    color: var(--white);
-    padding: 0.5rem 0;
+/* =========================================
+   TRAINER NAVBAR STYLES (DARK THEME)
+   ========================================= */
+
+/* 1. MAIN NAVBAR WRAPPER */
+.trainer-navbar {
     position: fixed;
     top: 0;
-    width: 100%;
     left: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.trainer-navbar .nav-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 0 2.5rem;
-    position: relative;
     width: 100%;
-    min-height: 3.5rem;
+    height: 70px;
+    background: rgba(17, 17, 17, 0.95);
+    /* Dark background */
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
 }
 
-.nav-links {
-    display: flex;
-    gap: 2.5rem;
-    align-items: center;
+.trainer-navbar.scrolled {
+    height: 60px;
+    background: rgba(10, 10, 10, 0.98);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
-.nav-link {
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: 500;
-    font-size: 0.95rem;
-    padding: 0.5rem 0;
-    border-bottom: 2px solid transparent;
-    transition: var(--transition);
-}
-
-.nav-link:hover {
-    color: var(--white);
-}
-
-.nav-link.active {
-    color: var(--white);
-    border-bottom: 2px solid var(--primary-color);
-}
-
-.logout-container {
-    position: absolute;
-    right: 2.5rem;
+.trainer-nav-container {
+    max-width: 1400px;
+    height: 100%;
+    margin: 0 auto;
+    padding: 0 30px;
     display: flex;
     align-items: center;
-}
-
-.logout-btn {
-    background-color: #000;
-    color: var(--white);
-    padding: 0.5rem 1.25rem;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 0.85rem;
-    transition: var(--transition);
-}
-
-.logout-btn:hover {
-    background-color: #333;
-    transform: translateY(-1px);
-}
-
-/* Toggle hidden on desktop */
-.menu-toggle {
-    display: none;
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-    z-index: 1002;
-}
-
-.hamburger {
-    width: 24px;
-    height: 18px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
     justify-content: space-between;
 }
 
-.hamburger span {
-    display: block;
+/* 2. BRAND LOGO */
+.trainer-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.brand-text {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    /* White text */
+    letter-spacing: -0.5px;
+}
+
+.brand-badge {
+    padding: 2px 8px;
+    background: rgba(0, 135, 90, 0.2);
+    color: #00d68f;
+    /* Brighter green for contrast */
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border-radius: 4px;
+    margin-top: 2px;
+}
+
+/* 3. CENTER NAVIGATION */
+.trainer-nav-menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 1;
+    margin-left: 60px;
+}
+
+.nav-items {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: transparent;
+    border: none;
+    font-size: 15px;
+    font-weight: 500;
+    color: #a0a0a0;
+    /* Muted light text */
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.nav-icon {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+/* Hover State */
+.nav-item:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Active State */
+.nav-item.active {
+    color: #ffffff;
+    background: var(--trainer-primary, #00875a);
+    /* Primary green bg */
+    font-weight: 600;
+}
+
+
+/* 4. ACTIONS (LOGOUT) */
+.nav-actions {
+    display: flex;
+    align-items: center;
+}
+
+.trainer-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.trainer-logout-btn:hover {
+    background: #ffffff;
+    color: #000000;
+    border-color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+/* 5. MOBILE MENU TOGGLE */
+.trainer-menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1002;
+    padding: 0;
+}
+
+.trainer-menu-toggle .bar {
     width: 100%;
     height: 2px;
-    background-color: var(--white);
+    background: #ffffff;
     border-radius: 2px;
-    transition: var(--transition);
+    transition: all 0.3s ease;
 }
 
-/* ANIMATIONS FOR HAMBURGER */
-.hamburger.open span:nth-child(1) {
-    transform: translateY(8px) rotate(45deg);
-}
 
-.hamburger.open span:nth-child(2) {
-    opacity: 0;
-}
+/* =========================================
+   RESPONSIVE (TABLET & MOBILE)
+   ========================================= */
 
-.hamburger.open span:nth-child(3) {
-    transform: translateY(-8px) rotate(-45deg);
-}
-
-/* RESPONSIVE STYLES */
 @media (max-width: 992px) {
-    .nav-links {
-        gap: 1.5rem;
+    .trainer-nav-menu {
+        margin-left: 30px;
+    }
+
+    .nav-item {
+        padding: 8px 12px;
+        font-size: 14px;
     }
 }
 
 @media (max-width: 768px) {
-    .navbar {
-        padding: 0.25rem 0;
+    .trainer-menu-toggle {
+        display: flex;
     }
 
-    .nav-container {
-        padding: 0 1.5rem;
-        min-height: 2.5rem;
-    }
-
-    .menu-toggle {
-        display: block;
-        position: absolute;
-        left: 1.5rem;
-    }
-
-    .nav-links {
+    /* Side Drawer Menu */
+    .trainer-nav-menu {
         position: fixed;
         top: 0;
-        left: 0;
-        width: 100%;
+        right: 0;
+        width: 280px;
         height: 100vh;
-        background-color: var(--bg-dark);
+        background: #1a1a1a;
+        /* Dark drawer */
         flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        padding: 80px 30px 30px;
+        margin: 0;
+        box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+        transform: translateX(100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1001;
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .trainer-nav-menu.active {
+        transform: translateX(0);
+    }
+
+    .nav-items {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+        margin-bottom: auto;
+        /* Push logout to bottom */
+    }
+
+    .nav-item {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 12px 16px;
+        font-size: 16px;
+        color: #cccccc;
+    }
+
+    .nav-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-actions {
+        width: 100%;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 20px;
+    }
+
+    .trainer-logout-btn {
+        width: 100%;
         justify-content: center;
-        align-items: center;
-        gap: 2.5rem;
-        transform: translateY(-100%);
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: rgba(255, 255, 255, 0.1);
+        border: none;
+    }
+
+    /* Toggle Animation */
+    .trainer-menu-toggle.active .bar:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+    }
+
+    .trainer-menu-toggle.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .trainer-menu-toggle.active .bar:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+    }
+
+    /* Mobile Overlay */
+    .trainer-nav-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
         z-index: 1000;
-        padding-top: 2rem;
+        backdrop-filter: blur(4px);
+        animation: fadeIn 0.3s ease;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
     }
 
-    .nav-links.mobile-open {
-        transform: translateY(0);
-    }
-
-    .nav-link {
-        font-size: 1.25rem;
-    }
-
-    .logout-container {
-        display: block;
-        right: 1.5rem;
-    }
-
-    .logout-btn {
-        padding: 0.4rem 1rem;
-        font-size: 0.75rem;
+    to {
+        opacity: 1;
     }
 }

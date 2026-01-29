@@ -74,15 +74,27 @@ export const useTrainerBatchDetails = (batchId) =>
         enabled: !!batchId,
     });
 
+// export const useToggleSectionCompletion = () => {
+//     const queryClient = useQueryClient();
+//     return useMutation({
+//         mutationFn: toggleSectionCompletion,
+//         onSuccess: (data, variables) => {
+//             // Invalidate the batch details to refresh the section progress
+//             if (variables.batchId) {
+//                 queryClient.invalidateQueries(["trainerBatch", variables.batchId]);
+//             }
+//         },
+//     });
+// };
 export const useToggleSectionCompletion = () => {
-    const queryClient = useQueryClient();
-    return useMutation({
-        mutationFn: toggleSectionCompletion,
-        onSuccess: (data, variables) => {
-            // Invalidate the batch details to refresh the section progress
-            if (variables.batchId) {
-                queryClient.invalidateQueries(["trainerBatch", variables.batchId]);
-            }
-        },
-    });
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: toggleSectionCompletion,
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["trainerBatch", variables.batchId],
+      });
+    },
+  });
 };

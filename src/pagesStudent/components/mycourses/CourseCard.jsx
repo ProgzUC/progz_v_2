@@ -33,17 +33,17 @@ function LargeCourseCard({ course }) {
     return (
         <div className="large-card ">
             <ImageWithFallback
-                src={course.courseImage}
+                src={course.thumbnail?.url}
                 alt={course.courseName}
                 className="large-thumb"
                 fallbackText={course.courseName}
             />
 
             <div className="large-content">
-                <span className="large-category">{course.category}</span>
+                <span className="large-category">{course.batchName}</span>
 
                 <h2 className="large-title">{course.courseName}</h2>
-                <p className="large-author">{course.instructor}</p>
+                <p className="large-author">{course.courseId}</p>
 
                 <div className="large-progress-bar">
                     <div
@@ -86,6 +86,7 @@ function CourseTabs({ tabs, activeTab, setActiveTab }) {
               ${isLast ? "tab-last" : ""} 
               ${isActive ? "active" : ""}`}
                         onClick={() => setActiveTab(tabName)}
+                        title={tabName}
                     >
                         {tabName}
                     </div>
@@ -134,13 +135,35 @@ export default function MyCourses() {
     // Fetch details for selected course to get modules/sections
     const { data: courseDetails, isLoading: detailsLoading } = useCourseProgress(selectedCourse?.courseId);
 
+    // Debug logging
+    console.log("Selected Course:", selectedCourse);
+    console.log("Course Details (API):", courseDetails);
+    console.log("Thumbnail URL:", selectedCourse?.thumbnail);
+    console.log("course data", coursesData);
+    console.log("Lesson Progress Array:", courseDetails?.lessonProgress);
+
     // Merge list data with detailed data
-    const displayCourse = selectedCourse ? {
-        ...selectedCourse,
-        modules: courseDetails?.course?.modules || [],
-        enrolledAt: courseDetails?.enrollmentDate || selectedCourse.enrolledAt,
-        lessonProgress: courseDetails?.lessonProgress || []
-    } : null;
+    const displayCourse = selectedCourse ? (() => {
+        // Use modules from API details if available (already enriched with isCompleted)
+        // Otherwise fall back to list data modules
+        const modules = courseDetails?.course?.modules || selectedCourse.modules || [];
+
+        // Debug logging
+        if (courseDetails?.course?.modules) {
+            console.log("Using enriched modules from API with completion data");
+            const firstModule = modules[0];
+            if (firstModule?.sections?.[0]) {
+                console.log("Sample section:", firstModule.sections[0]);
+            }
+        }
+
+        return {
+            ...selectedCourse,
+            modules: modules,
+            enrolledAt: courseDetails?.enrollmentDate || selectedCourse.enrolledAt,
+            lessonProgress: courseDetails?.lessonProgress || []
+        };
+    })() : null;
 
     // Set initial selected course from list
     React.useEffect(() => {
@@ -218,7 +241,7 @@ export default function MyCourses() {
                                             >
                                                 <div className="card-content">
                                                     <ImageWithFallback
-                                                        src={course.courseImage}
+                                                        src={course.thumbnail?.url}
                                                         alt={course.courseName}
                                                         className="course-thumb"
                                                         fallbackText={course.courseName}
@@ -226,11 +249,11 @@ export default function MyCourses() {
 
                                                     <div className="card-details">
                                                         <div className="tag-box">
-                                                            <span className="tag-text">{course.category || "Course"}</span>
+                                                            <span className="tag-text">{course.batchName || "Course"}</span>
                                                         </div>
 
                                                         <h3 className="course-title">{course.courseName}</h3>
-                                                        <p className="author">{course.instructor}</p>
+                                                        <p className="author">{course.courseId}</p>
 
                                                         <div className="progress-bar">
                                                             <div
@@ -274,7 +297,11 @@ export default function MyCourses() {
                             >
                                 <i className="bi bi-arrow-left"></i> Back to Lessons
                             </button>
-                            <Introduction />
+                            <Introduction
+                                sectionData={viewLesson}
+                                courseName={displayCourse.courseName}
+                                moduleName={activeTab}
+                            />
                         </div>
                     ) : (
                         <>
@@ -306,12 +333,18 @@ export default function MyCourses() {
                                         // Use enriched section data if available from details
                                         const sectionTitle = section.sectionName || section.title;
 
-                                        // Logic from details API might differ in property naming
-                                        const isCompleted = section.isCompleted;
+                                        // Simple locking logic: completed sections are unlocked, incomplete sections are locked
+                                        const isCompleted = section.isCompleted === true;
+                                        const isLocked = !isCompleted;
 
-                                        // Sequential locking logic
-                                        const previousSectionCompleted = idx === 0 || allSections[idx - 1]?.isCompleted;
-                                        const isLocked = !isCompleted && !previousSectionCompleted;
+                                        // Debug logging for troubleshooting
+                                        if (idx < 3) { // Log first 3 sections to avoid spam
+                                            console.log(`Section ${idx + 1} (${sectionTitle}):`, {
+                                                isCompleted,
+                                                isLocked,
+                                                rawIsCompleted: section.isCompleted
+                                            });
+                                        }
 
                                         return (
                                             <LessonRow
@@ -319,7 +352,7 @@ export default function MyCourses() {
                                                 number={idx + 1}
                                                 title={sectionTitle}
                                                 isLocked={isLocked}
-                                                onOpen={() => setViewLesson(sectionTitle)}
+                                                onOpen={() => setViewLesson(section)}
                                             />
                                         );
                                     })}

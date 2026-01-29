@@ -12,6 +12,7 @@
 .student-mycourses-page .container {
     width: 100%;
     overflow-x: hidden;
+    margin-top: 4rem;
 }
 
 /* LEFT PANEL */
@@ -95,6 +96,7 @@
     padding-left: 15px;
     justify-content: space-between;
     min-height: 121px;
+    overflow: hidden;
 }
 
 .student-mycourses-page .tag-box {
@@ -257,7 +259,7 @@
 .student-mycourses-page .tabs-container {
     width: 100%;
     max-width: 609px;
-    height: 51px;
+    min-height: 51px;
     display: flex;
     margin-top: 40px;
     background: rgba(0, 0, 0, 0.1);
@@ -278,6 +280,12 @@
     background: transparent;
     transition: all 0.25s ease;
     border-radius: 6px;
+    padding: 8px 12px;
+    white-space: normal;
+    word-wrap: break-word;
+    text-align: center;
+    min-height: 43px;
+    min-width: 0;
 }
 
 .student-mycourses-page .tab:hover {
@@ -384,7 +392,7 @@
         padding-bottom: 40px;
     }
 
-   .student-mycourses-page  .course-card {
+    .student-mycourses-page .course-card {
         max-width: 100%;
     }
 
@@ -507,17 +515,17 @@
         margin-bottom: 15px;
     }
 
-    .student-mycourses-page  .card-details {
+    .student-mycourses-page .card-details {
         padding-left: 0;
         width: 100%;
     }
 
-    .student-mycourses-page  .course-title {
+    .student-mycourses-page .course-title {
         font-size: 16px;
     }
 
-    .student-mycourses-page  .lessons,
-    .student-mycourses-page  .author {
+    .student-mycourses-page .lessons,
+    .student-mycourses-page .author {
         font-size: 11px;
     }
 }
@@ -525,7 +533,7 @@
 /* =========================================================
    LESSON CONTENT VIEW (INTRODUCTION SECTION)
 ========================================================= */
-.student-mycourses-page  .lesson-content-view {
+.student-mycourses-page .lesson-content-view {
     width: 100%;
     animation: fadeIn 0.3s ease-in-out;
 }

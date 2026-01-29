@@ -38,6 +38,7 @@ const MyCourses = ({ onManageCourse, onCreateNew, onBack }) => {
     }
 
     const coursesData = courses || [];
+    
 
     return (
         <div className="my-courses-container trainer-myCourses">
@@ -64,15 +65,13 @@ const MyCourses = ({ onManageCourse, onCreateNew, onBack }) => {
                                 style={{
                                     backgroundImage: course.thumbnail
                                         ? `url(${course.thumbnail.url})`
-                                        : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                        : 'linear-gradient(135deg, #66ea90ff 0%, #4ba268ff 100%)',
                                     backgroundSize: 'cover',
                                     backgroundPosition: 'center',
                                     backgroundRepeat: 'no-repeat'
                                 }}
                             >
-                                <button className="menu-dots">
-                                    <BiDotsHorizontalRounded />
-                                </button>
+                             
                             </div>
                             <div className="card-content">
                                 <h3>{course.courseName}</h3>
@@ -88,7 +87,7 @@ const MyCourses = ({ onManageCourse, onCreateNew, onBack }) => {
                                     className="manage-course-btn"
                                     onClick={() => onManageCourse(course)}
                                 >
-                                    <BiEdit /> Manage Course
+                                    <BiEdit /> View Course
                                 </button>
                             </div>
                         </div>

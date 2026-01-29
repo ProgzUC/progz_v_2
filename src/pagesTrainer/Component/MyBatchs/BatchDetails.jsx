@@ -71,7 +71,7 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
             allSections.push({
                 moduleIndex: modIdx,
                 sectionIndex: secIdx,
-                uniqueId: `${modIdx}-${secIdx}`,
+                uniqueId: `m${modIdx}-s${secIdx}`,
                 title: sec.sectionName || sec.title,
                 moduleTitle: mod.title,
                 completed: progress?.isCompleted || false,
@@ -229,13 +229,14 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
 
                         <div className="section-items-list">
                             {allSections.length > 0 ? (
-                                allSections.map((item, idx) => (
-                                    <div key={idx} className={`section-item ${item.completed ? 'completed' : ''}`}>
+                                allSections.map((item) => (
+                                    <div key={item.uniqueId} className={`section-item ${item.completed ? 'completed' : ''}`}>
                                         <div
                                             className="item-radio"
-                                            onClick={() => {
+                                            onClick={(e) => {
+                                                e.stopPropagation();
                                                 toggleCompletion.mutate({
-                                                    batchId: batch.batchId,
+                                                    batchId,
                                                     moduleIndex: item.moduleIndex,
                                                     sectionIndex: item.sectionIndex
                                                 }, {

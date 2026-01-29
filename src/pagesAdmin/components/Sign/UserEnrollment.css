@@ -202,7 +202,7 @@ textarea.form-control {
 }
 
 /* Form Actions */
-.form-actions {
+user-enrollment-page .form-actions {
   margin-top: -60px;   /* moves even more up */
   display: flex;
   justify-content: flex-end;
@@ -453,7 +453,7 @@ textarea.form-control {
   }
 
   /* ------- BUTTON FIX (Cancel ABOVE Next) ------- */
-  .form-actions {
+  user-enrollment-page .form-actions {
     display: flex;
     flex-direction: row;   /* Horizontal layout */
     justify-content: center;  /* Center buttons */

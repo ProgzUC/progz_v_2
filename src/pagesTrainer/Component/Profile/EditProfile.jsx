@@ -73,25 +73,13 @@ const EditProfile = ({ onCancel, onBack }) => {
                 <div className="profile-card">
                     <div className="profile-sidebar">
                         <div className="avatar-section">
-                            <div className="avatar-wrapper" onClick={handleImageClick} style={{ cursor: 'pointer' }}>
-                                {formData.avatar ? (
-                                    <img src={formData.avatar} alt="Avatar" className="avatar-img" />
-                                ) : (
-                                    <FaUser className="avatar-img" style={{ fontSize: '60px', color: '#ccc' }} />
-                                )}
-                                <div className="edit-avatar-badge">
-                                    <FaCamera size={12} />
+                            <div className="avatar-wrapper">
+                                <div className="avatar-initials">
+                                    {formData.name ? formData.name.charAt(0) : 'T'}
                                 </div>
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    style={{ display: 'none' }}
-                                    accept="image/*"
-                                    onChange={handleFileChange}
-                                />
                             </div>
                             <h2 className="profile-name">{formData.name}</h2>
-                            <span className="profile-role-badge">{formData.role}</span>
+                            <span className="profile-role-badge">{formData.role || 'Trainer'}</span>
                         </div>
                     </div>
 

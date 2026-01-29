@@ -1,213 +1,276 @@
-/* ==========================================================================
-   HEADER WRAPPER
-   ========================================================================== */
-.student-header .header-container {
-  width: 100%;
-  height: 78px;
-  background: #B3B3B3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  z-index: 9999;
-  position: sticky;
+/* =========================================
+   STUDENT NAVBAR STYLES (DARK THEME)
+   ========================================= */
+
+/* 1. MAIN NAVBAR WRAPPER */
+.student-navbar {
+  position: fixed;
   top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background: rgba(17, 17, 17, 0.95);
+  /* Dark background */
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
 }
 
-/* ==========================================================================
-   INNER LAYOUT (Desktop Structure)
-   ========================================================================== */
-.header-inner {
-  width: 100%;
-  max-width: 1440px;
+.student-navbar.scrolled {
+  height: 60px;
+  background: rgba(10, 10, 10, 0.98);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.student-nav-container {
+  max-width: 1400px;
   height: 100%;
+  margin: 0 auto;
+  padding: 0 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 40px;
 }
 
-/* ==========================================================================
-   BRAND SECTION: LOGO
-   ========================================================================== */
-.header-logo {
-  font-size: 28px;
-  font-weight: 800;
-  color: #333;
-  letter-spacing: -1px;
-  text-transform: none;
-  font-family: 'Inter', sans-serif;
-}
-
-.logo-link {
-  text-decoration: none;
-}
-
-
-
-
-
-/* ==========================================================================
-   NAVIGATION GROUP (Links + Logout)
-   ========================================================================== */
-.nav-group {
+/* 2. BRAND LOGO */
+.student-brand {
   display: flex;
   align-items: center;
-  gap: 40px;
-}
-
-/* -------------------- NAV LINKS CONTAINER -------------------- */
-.student-header .nav-links {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-}
-
-/* -------------------- NAV LINKS -------------------- */
-.student-header .nav-links a {
-  position: relative;
-  display: flex;
-  align-items: center;
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
-  text-decoration: none;
+  gap: 8px;
   cursor: pointer;
-  padding: 5px 0;
+  user-select: none;
+  text-decoration: none;
 }
 
-.student-header .nav-links a.active::after {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  left: 0;
-  bottom: 0;
-  background-color: #198754;
-  border-radius: 2px;
+.student-brand .brand-text {
+  font-size: 24px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
 }
 
-.student-header .nav-links a:hover {
-  color: black;
+.student-brand .brand-badge {
+  padding: 2px 8px;
+  background: rgba(0, 135, 90, 0.2);
+  color: #00d68f;
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+  margin-top: 2px;
 }
 
-/* ==========================================================================
-   LOGOUT BUTTON
-   ========================================================================== */
-.logout-btn {
-  height: 40px;
-  padding: 0 24px;
-  border-radius: 20px;
-  background: black;
-  color: white;
+/* 3. CENTER NAVIGATION */
+.student-nav-menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  margin-left: 60px;
+}
+
+.nav-items {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.student-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: transparent;
   border: none;
+  font-size: 15px;
+  font-weight: 500;
+  color: #a0a0a0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.nav-icon {
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+/* Hover State */
+.student-nav-item:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Active State */
+.student-nav-item.active {
+  color: #ffffff;
+  background: var(--student-success, #00875a);
+  font-weight: 600;
+}
+
+
+/* 4. ACTIONS (LOGOUT) */
+.nav-actions {
+  display: flex;
+  align-items: center;
+}
+
+.student-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
   font-size: 14px;
   font-weight: 600;
+  border-radius: 30px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.2s ease;
 }
 
-.logout-btn:hover {
-  background-color: #333;
+.student-logout-btn:hover {
+  background: #ffffff;
+  color: #000000;
+  border-color: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 }
 
-/* ==========================================================================
-   HAMBURGER MENU (Mobile Trigger)
-   ========================================================================== */
-.hamburger {
+/* 5. MOBILE MENU TOGGLE */
+.student-menu-toggle {
   display: none;
-  font-size: 24px;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  background: transparent;
+  border: none;
   cursor: pointer;
-  color: #333;
-  z-index: 10001;
-  transition: transform 0.3s ease;
-  /* Smooth icon animation */
+  z-index: 1002;
+  padding: 0;
 }
 
-.hamburger.active {
-  transform: rotate(90deg);
-  /* Optional icon rotation */
+.student-menu-toggle .bar {
+  width: 100%;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
 }
 
-/* ==========================================================================
-   RESPONSIVE — TABLET (1024px and below)
-   ========================================================================== */
-@media (max-width: 1024px) {
-  .header-container {
-    width: 100%;
-    left: 0;
-    transform: none;
+
+/* =========================================
+   RESPONSIVE (TABLET & MOBILE)
+   ========================================= */
+
+@media (max-width: 992px) {
+  .student-nav-menu {
+    margin-left: 30px;
   }
 
-  .header-inner {
-    padding: 0 20px;
-  }
-
-  .nav-group {
-    gap: 20px;
-  }
-
-  .nav-links {
-    gap: 20px;
+  .student-nav-item {
+    padding: 8px 12px;
+    font-size: 14px;
   }
 }
 
-/* ==========================================================================
-   RESPONSIVE — MOBILE (700px and below)
-   ========================================================================== */
-@media (max-width: 700px) {
-
-  .header-container {
-    height: 78px;
-    padding: 0;
+@media (max-width: 768px) {
+  .student-menu-toggle {
+    display: flex;
   }
 
-  .header-inner {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-  }
-
-  .hamburger {
-    display: block;
-  }
-
-  /* Mobile Slide-in Navigation */
-  .nav-group {
+  /* Side Drawer Menu */
+  .student-nav-menu {
     position: fixed;
-    top: 78px;
-    left: 0;
-    width: 100%;
-    height: calc(100vh - 78px);
-    background-color: #f9f9f9;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    background: #1a1a1a;
     flex-direction: column;
-    align-items: center;
     justify-content: flex-start;
-    padding-top: 40px;
-    gap: 30px;
+    align-items: flex-start;
+    padding: 80px 30px 30px;
+    margin: 0;
+    box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
     transform: translateX(100%);
-    transition: transform 1s ease-in-out;
-    /* Smoother slide animation */
-    z-index: 10000;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1001;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .nav-group.open {
+  .student-nav-menu.active {
     transform: translateX(0);
   }
 
-  .nav-links {
+  .nav-items {
     flex-direction: column;
     width: 100%;
-    gap: 25px;
+    gap: 10px;
+    margin-bottom: auto;
   }
 
-  .nav-links a {
-    font-size: 18px;
+  .student-nav-item {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 12px 16px;
+    font-size: 16px;
+    color: #cccccc;
   }
 
-  .logout-btn {
-    width: 80%;
-    max-width: 300px;
+  .student-nav-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-actions {
+    width: 100%;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 20px;
+  }
+
+  .student-logout-btn {
+    width: 100%;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+  }
+
+  /* Toggle Animation */
+  .student-menu-toggle.active .bar:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+  }
+
+  .student-menu-toggle.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .student-menu-toggle.active .bar:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+  }
+
+  /* Mobile Overlay */
+  .student-nav-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }

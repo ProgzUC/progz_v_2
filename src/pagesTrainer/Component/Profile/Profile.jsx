@@ -37,13 +37,13 @@ const Profile = ({ onEdit, onBack }) => {
                     <div className="profile-sidebar">
                         <div className="avatar-section">
                             <div className="avatar-wrapper">
-
-                                <FaUser className="avatar-img" />
-
-                                {/* <img src={personalDetails.avatar} alt="Avatar" className="avatar-img" /> */}
+                                <div className="avatar-initials">
+                                    {profileData.name ? profileData.name.charAt(0) : 'T'}
+                                </div>
                             </div>
                             <h2 className="profile-name">{profileData.name}</h2>
-                            <span className="profile-role-badge">{profileData.role}</span>
+                            <span className="profile-role-badge">{profileData.role || 'Trainer'}</span>
+
                             <div className="sidebar-info">
                                 <div className="info-item">
                                     <FaEnvelope /> <span>{profileData.email}</span>
@@ -51,9 +51,11 @@ const Profile = ({ onEdit, onBack }) => {
                                 <div className="info-item">
                                     <FaPhone /> <span>{profileData.phone}</span>
                                 </div>
-                                <div className="info-item">
-                                    <FaMapMarkerAlt /> <span></span>
-                                </div>
+                                {profileData.address && (
+                                    <div className="info-item">
+                                        <FaMapMarkerAlt /> <span>{profileData.address}</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

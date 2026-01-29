@@ -1,83 +1,97 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
-import { FiMenu, FiX } from "react-icons/fi";
 import { Link, useLocation } from "react-router-dom";
+import { BiGridAlt, BiBookOpen, BiSearch, BiUserCircle, BiLogOut, BiMenu } from "react-icons/bi";
 
 
 export default function Header({ onLogout }) {
-    const [activeIndex, setActiveIndex] = useState(null);
-    const [menuOpen, setMenuOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
 
     /* ----------------------------- NAVIGATION LINKS ----------------------------- */
     const links = [
-        { name: "Home", href: "/student-dashboard/" },
-        { name: "My Courses", href: "/student-dashboard/my-courses" },
-        { name: "Browse", href: "/student-dashboard/browse" },
-        { name: "Profile", href: "/student-dashboard/profile" },
+        { name: "Home", href: "/student-dashboard/", icon: <BiGridAlt /> },
+        { name: "My Courses", href: "/student-dashboard/my-courses", icon: <BiBookOpen /> },
+        { name: "Browse", href: "/student-dashboard/browse", icon: <BiSearch /> },
+        { name: "Profile", href: "/student-dashboard/profile", icon: <BiUserCircle /> },
     ];
 
-    // Set active link based on current URL
+    // Handle scroll effect
     useEffect(() => {
-        const currentPath = location.pathname;
-        const foundIndex = links.findIndex(link => link.href === currentPath);
-        setActiveIndex(foundIndex !== -1 ? foundIndex : null);
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Close menu when route changes
+    useEffect(() => {
+        setIsMenuOpen(false);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, [location.pathname]);
 
-    /* ----------------------------- MENU TOGGLE HANDLER ----------------------------- */
-    const toggleMenu = () => setMenuOpen(!menuOpen);
-
-    /* ----------------------------- BODY SCROLL HANDLING ----------------------------- */
+    // Body scroll handling
     useEffect(() => {
-        if (menuOpen) document.body.classList.add("no-scroll");
+        if (isMenuOpen) document.body.classList.add("no-scroll");
         else document.body.classList.remove("no-scroll");
-
         return () => document.body.classList.remove("no-scroll");
-    }, [menuOpen]);
+    }, [isMenuOpen]);
 
     return (
-        <header className="header-container">
-            <div className="header-inner">
+        <nav className={`student-navbar ${scrolled ? 'scrolled' : ''}`}>
+            <div className="student-nav-container">
 
-                {/* ----------------------------- BRAND / LOGO SECTION ----------------------------- */}
-                <Link to="/student-dashboard/" className="logo-link">
-                    <div className="header-logo">ProgZ</div>
+                {/* 1. BRAND LOGO */}
+                <Link to="/student-dashboard/" className="student-brand">
+                    <span className="brand-text">ProgZ</span>
+                    <span className="brand-badge">Student</span>
                 </Link>
 
-                {/* ----------------------------- HAMBURGER MENU ICON ----------------------------- */}
-                <div className="hamburger" onClick={toggleMenu}>
-                    {menuOpen ? <FiX /> : <FiMenu />}
-                </div>
+                {/* 2. MOBILE TOGGLE */}
+                <button
+                    className={`student-menu-toggle ${isMenuOpen ? 'active' : ''}`}
+                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    aria-label="Toggle navigation"
+                >
+                    <span className="bar"></span>
+                    <span className="bar"></span>
+                    <span className="bar"></span>
+                </button>
 
-                {/* ----------------------------- NAVIGATION + LOGOUT GROUP ----------------------------- */}
-                <div className={`nav-group ${menuOpen ? "open" : ""}`}>
-
-                    {/* ----------------------------- NAVIGATION LINKS LOOP ----------------------------- */}
-                    <div className="nav-links">
-                        {links.map((item, index) => (
+                {/* 3. NAVIGATION LINKS */}
+                <div className={`student-nav-menu ${isMenuOpen ? 'active' : ''}`}>
+                    <div className="nav-items">
+                        {links.map((link, index) => (
                             <Link
                                 key={index}
-                                to={item.href}
-                                className={activeIndex === index ? "active" : ""}
-                                onClick={() => {
-                                    setMenuOpen(false);
-                                }}
+                                to={link.href}
+                                className={`student-nav-item ${location.pathname === link.href ? 'active' : ''}`}
                             >
-                                {item.name}
+                                <span className="nav-icon">{link.icon}</span>
+                                {link.name}
                             </Link>
                         ))}
                     </div>
 
-                    {/* ----------------------------- LOGOUT BUTTON (DYNAMIC FUNCTION) ----------------------------- */}
-                    <button
-                        className="logout-btn"
-                        onClick={onLogout}  // Calls parent function dynamically
-                    >
-                        Log Out
-                    </button>
+                    {/* 4. LOGOUT BUTTON */}
+                    <div className="nav-actions">
+                        <button className="student-logout-btn" onClick={onLogout}>
+                            <span className="nav-icon"><BiLogOut /></span>
+                            <span>Log Out</span>
+                        </button>
+                    </div>
                 </div>
 
+                {/* Mobile Overlay */}
+                {isMenuOpen && (
+                    <div
+                        className="student-nav-overlay"
+                        onClick={() => setIsMenuOpen(false)}
+                    />
+                )}
             </div>
-        </header>
+        </nav>
     );
 }
