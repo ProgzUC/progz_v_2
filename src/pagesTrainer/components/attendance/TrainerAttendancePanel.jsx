@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./TrainerAttendancePanel.css";
-import { useStartClass, useMarkAttendance, useEndClass } from "../../../hooks/useClassSession";
+import { useStartClass, useMarkAttendance, useEndClass, useClassSessions } from "../../../hooks/useClassSession";
 import Swal from "sweetalert2";
 import Loader from "../../../components/common/Loader/Loader";
 
@@ -11,9 +11,32 @@ export default function TrainerAttendancePanel({ batch }) {
     const [elapsedTime, setElapsedTime] = useState(0);
     const [searchQuery, setSearchQuery] = useState("");
 
+    const batchIdToUse = batch?._id || batch?.batchId;
+
     const startClassMutation = useStartClass();
     const markAttendanceMutation = useMarkAttendance();
     const endClassMutation = useEndClass();
+
+    // Fetch existing sessions to check for active session
+    const { data: sessionsData } = useClassSessions(batchIdToUse);
+
+    // Check for existing active session on mount
+    useEffect(() => {
+        if (sessionsData?.sessions) {
+            const activeSess = sessionsData.sessions.find((s) => !s.endTime);
+            if (activeSess && !activeSession) {
+                setActiveSession(activeSess);
+                setAttendance(
+                    activeSess.attendance.map((a) => ({
+                        studentId: a.student._id,
+                        studentName: a.student.name,
+                        status: a.status,
+                    }))
+                );
+                setNotes(activeSess.notes || "");
+            }
+        }
+    }, [sessionsData]);
 
     // Live timer for active session
     useEffect(() => {
