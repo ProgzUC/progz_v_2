@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./CourseCard.css";
 import Introduction from "../Introduction/Introduction";
 import { useStudentCourses, useCourseProgress } from "../../../hooks/useStudentCourses";
@@ -71,27 +71,119 @@ function LargeCourseCard({ course }) {
    TABS — DYNAMIC BUT SAME DESIGN
 ---------------------------------------------- */
 function CourseTabs({ tabs, activeTab, setActiveTab }) {
-    return (
-        <div className="tabs-container">
-            {tabs.map((tabName, index) => {
-                const isFirst = index === 0;
-                const isLast = index === tabs.length - 1;
-                const isActive = activeTab === tabName;
+    const tabsRef = useRef({});
+    const containerRef = useRef(null);
+    const [showLeftFade, setShowLeftFade] = useState(false);
+    const [showRightFade, setShowRightFade] = useState(false);
 
-                return (
-                    <div
-                        key={tabName}
-                        className={`tab 
-              ${isFirst ? "tab-first" : ""} 
-              ${isLast ? "tab-last" : ""} 
-              ${isActive ? "active" : ""}`}
-                        onClick={() => setActiveTab(tabName)}
-                        title={tabName}
-                    >
-                        {tabName}
-                    </div>
-                );
-            })}
+    // Check visibility of fades
+    const checkScroll = () => {
+        if (containerRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+            setShowLeftFade(scrollLeft > 0);
+            setShowRightFade(scrollWidth > clientWidth && scrollLeft < scrollWidth - clientWidth - 5);
+        }
+    };
+
+    // Navigate Tabs (Next/Prev)
+    const handleTabNav = (direction) => {
+        const currentIndex = tabs.indexOf(activeTab);
+        if (direction === 'left') {
+            const prevIndex = currentIndex - 1;
+            if (prevIndex >= 0) setActiveTab(tabs[prevIndex]);
+        } else {
+            const nextIndex = currentIndex + 1;
+            if (nextIndex < tabs.length) setActiveTab(tabs[nextIndex]);
+        }
+    };
+
+    useEffect(() => {
+        if (tabsRef.current[activeTab]) {
+            tabsRef.current[activeTab].scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
+        }
+    }, [activeTab]);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (container) {
+            container.addEventListener('scroll', checkScroll);
+            checkScroll(); // Check initially
+            window.addEventListener('resize', checkScroll);
+
+            return () => {
+                container.removeEventListener('scroll', checkScroll);
+                window.removeEventListener('resize', checkScroll);
+            };
+        }
+    }, [tabs]);
+
+    const handleKeyDown = (e) => {
+        const currentIndex = tabs.indexOf(activeTab);
+
+        if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            const nextIndex = (currentIndex + 1) % tabs.length;
+            setActiveTab(tabs[nextIndex]);
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+            setActiveTab(tabs[prevIndex]);
+        }
+    };
+
+    return (
+        <div className="tabs-wrapper">
+            {/* Left Fade */}
+            <div
+                className={`tabs-fade-overlay left ${showLeftFade ? 'visible' : ''}`}
+                onClick={() => handleTabNav('left')}
+            >
+                <i className="bi bi-chevron-left fade-arrow"></i>
+            </div>
+            <div
+                className="tabs-container"
+                ref={containerRef}
+                onKeyDown={handleKeyDown}
+                tabIndex={0}
+                role="tablist"
+                aria-label="Course sections"
+            >
+                {tabs.map((tabName, index) => {
+                    const isFirst = index === 0;
+                    const isLast = index === tabs.length - 1;
+                    const isActive = activeTab === tabName;
+
+                    return (
+                        <div
+                            key={tabName}
+                            ref={el => tabsRef.current[tabName] = el}
+                            className={`tab 
+                  ${isFirst ? "tab-first" : ""} 
+                  ${isLast ? "tab-last" : ""} 
+                  ${isActive ? "active" : ""}`}
+                            onClick={() => setActiveTab(tabName)}
+                            title={tabName}
+                            role="tab"
+                            aria-selected={isActive}
+                            tabIndex={isActive ? 0 : -1}
+                        >
+                            {tabName}
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* Right Fade */}
+            <div
+                className={`tabs-fade-overlay right ${showRightFade ? 'visible' : ''}`}
+                onClick={() => handleTabNav('right')}
+            >
+                <i className="bi bi-chevron-right fade-arrow"></i>
+            </div>
         </div>
     );
 }

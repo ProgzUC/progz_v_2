@@ -253,58 +253,187 @@
 }
 
 
-/* ------------------------------------------
-   TABS REDESIGN (Proper design for buttons)
-------------------------------------------- */
 .student-mycourses-page .tabs-container {
     width: 100%;
-    max-width: 609px;
-    min-height: 51px;
+    max-width: 620px;
     display: flex;
+    align-items: stretch;
+    gap: 0;
+    gap: 0;
     margin-top: 40px;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 4px;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    background: #c4c4c4;
+    border-radius: 12px;
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+    min-height: 51px;
+}
+
+.student-mycourses-page .tabs-container::-webkit-scrollbar {
+    display: none;
 }
 
 .student-mycourses-page .tab {
-    flex: 1;
-    font-size: 17px;
+    flex: 1 1 0;
+    min-width: max-content;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
     font-weight: 600;
-    color: #444;
+    line-height: 22px;
+    color: #fff;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
     background: transparent;
-    transition: all 0.25s ease;
-    border-radius: 6px;
-    padding: 8px 12px;
-    white-space: normal;
-    word-wrap: break-word;
+    transition: background 0.3s ease, color 0.3s ease;
+    border-radius: 0;
+    padding: 12px 24px;
+    white-space: nowrap;
     text-align: center;
-    min-height: 43px;
-    min-width: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    height: 51px;
+    scroll-snap-align: start;
+    position: relative;
+}
+
+.student-mycourses-page .tab:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 35px;
+    background: #a5a5a5;
+    border-radius: 27px;
+}
+
+.student-mycourses-page .tab.active:not(:last-child)::after {
+    display: none;
+}
+
+.student-mycourses-page .tab:first-child {
+    border-radius: 12px 0 0 12px;
+}
+
+.student-mycourses-page .tab:last-child {
+    border-radius: 0 12px 12px 0;
+}
+
+.student-mycourses-page .tab:only-child {
+    border-radius: 12px;
 }
 
 .student-mycourses-page .tab:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: #000;
+    background: rgba(0, 0, 0, 0.05);
 }
 
-/* ACTIVE GREEN */
 .student-mycourses-page .tab.active {
     background: #198754;
     color: #fff;
-    box-shadow: 0 4px 6px rgba(25, 135, 84, 0.2);
 }
 
-/* No special rounding needed as we use the container padding and child radius */
-.student-mycourses-page .tab-first,
-.student-mycourses-page .tab-last {
-    border-radius: 6px;
+.student-mycourses-page .tab.active:hover {
+    background: #157347;
 }
+
+.student-mycourses-page .tab-first {
+    border-radius: 12px 0 0 12px;
+    padding-left: 32px;
+}
+
+.student-mycourses-page .tab-last {
+    border-radius: 0 12px 12px 0;
+    padding-right: 32px;
+}
+
+.student-mycourses-page .tabs-container:focus {
+    outline: 2px solid #198754;
+    outline-offset: 2px;
+}
+
+/* Tabs Wrapper */
+.student-mycourses-page .tabs-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    margin-top: 40px;
+    border-radius: 12px;
+    overflow: hidden;
+    /* Ensure overlay respects rounded corners */
+}
+
+/* Override container margin inside wrapper */
+.student-mycourses-page .tabs-wrapper .tabs-container {
+    margin-top: 0;
+    border-radius: 12px;
+    /* Ensure rounded corners */
+}
+
+/* Fade Overlay + Arrow */
+.student-mycourses-page .tabs-fade-overlay {
+    position: absolute;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.student-mycourses-page .tabs-fade-overlay.right {
+    right: 0;
+    justify-content: flex-end;
+    padding-right: 15px;
+    background: transparent;
+    /* No gradient as requested */
+}
+
+.student-mycourses-page .tabs-fade-overlay.left {
+    left: 0;
+    justify-content: flex-start;
+    padding-left: 15px;
+    background: transparent;
+    /* No gradient as requested */
+}
+
+.student-mycourses-page .tabs-fade-overlay:hover .fade-arrow {
+    transform: scale(1.2);
+    /* Color change on hover intentionally removed to keep consistent style */
+}
+
+.student-mycourses-page .tabs-fade-overlay.visible {
+    opacity: 1;
+}
+
+.student-mycourses-page .fade-arrow {
+    font-size: 20px;
+    color: #555;
+    transition: transform 0.2s ease;
+}
+
+@keyframes bounceRight {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(3px);
+    }
+}
+
+
 
 /* Divider */
 .student-mycourses-page .tabs-horizontal-divider {
@@ -390,6 +519,10 @@
         height: auto;
         min-height: auto;
         padding-bottom: 40px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
     }
 
     .student-mycourses-page .course-card {
@@ -448,16 +581,42 @@
         justify-content: center;
     }
 
+    /* Mobile Tabs: One at a time, centered */
     .student-mycourses-page .tabs-container {
-        flex-wrap: wrap;
-        height: auto;
-        padding: 6px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding: 0;
+        scroll-snap-type: x mandatory;
+        /* Snap to tabs */
+        margin-top: 20px;
     }
 
     .student-mycourses-page .tab {
-        flex: 1 1 50%;
-        height: 45px;
-        font-size: 16px;
+        flex: 0 0 100%;
+        /* Full width */
+        width: 100%;
+        min-width: 100%;
+        height: 51px;
+        font-size: 14px;
+        padding: 12px 0;
+        scroll-snap-align: center;
+        /* Center snap */
+        justify-content: center;
+    }
+
+    /* Ensure arrows are visible on mobile and white for contrast on green */
+    .student-mycourses-page .tabs-fade-overlay {
+        display: flex;
+        width: 50px;
+    }
+
+    .student-mycourses-page .fade-arrow {
+        color: #fff;
+    }
+
+    .student-mycourses-page .tabs-wrapper {
+        margin-top: 20px;
     }
 
     .student-mycourses-page .lesson-row {
