@@ -39,8 +39,22 @@ export default function TrainerAttendancePanel({ batch }) {
 
     // Handle start class
     const handleStartClass = async () => {
+        // Validate batch data - API returns batchId, not _id
+        const batchIdToUse = batch?._id || batch?.batchId;
+
+        if (!batch || !batchIdToUse) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Batch information is not available. Please refresh the page.",
+            });
+            console.error("Batch data:", batch);
+            return;
+        }
+
         try {
-            const session = await startClassMutation.mutateAsync(batch._id);
+            console.log("Starting class for batch ID:", batchIdToUse);
+            const session = await startClassMutation.mutateAsync(batchIdToUse);
             setActiveSession(session);
 
             // Initialize attendance state
@@ -60,10 +74,11 @@ export default function TrainerAttendancePanel({ batch }) {
                 showConfirmButton: false,
             });
         } catch (error) {
+            console.error("Start class error:", error);
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: error.response?.data?.message || "Failed to start class",
+                text: error.response?.data?.message || error.message || "Failed to start class",
             });
         }
     };

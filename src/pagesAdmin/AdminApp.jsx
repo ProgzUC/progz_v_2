@@ -19,6 +19,7 @@ import CourseTrainers from "./components/CourseIcon/CourseTrainers.jsx";
 import Batches from "./components/Batches/Batches.jsx";
 import ViewBatch from "./components/Batches/ViewBatch.jsx";
 import RecycleBin from "./components/RecycleBin/RecycleBin.jsx";
+import AttendanceReport from "./components/reports/AttendanceReport.jsx";
 
 // AUTH COMPONENTS
 import SignIn from "./components/Sign/SignIn.jsx";
@@ -74,6 +75,7 @@ export default function AdminApp() {
                   <Route path="batches/:id" element={<ViewBatch />} />
                   <Route path="instructor-preview" element={<InstructorPreview />} />
                   <Route path="recycle-bin" element={<RecycleBin />} />
+                  <Route path="reports/attendance" element={<AttendanceReport />} />
                 </Routes>
               </div>
             </div>

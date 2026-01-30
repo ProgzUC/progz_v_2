@@ -6,6 +6,7 @@ import CategoryPage from "./components/Category/CategoryPage";
 import ProfilePage from "./components/Profile/ProfilePage";
 import Dashboard from "./components/mycourses/CourseCard";
 import Introduction from "./components/Introduction/Introduction";
+import StudentAttendance from "./components/attendance/StudentAttendance";
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
@@ -38,6 +39,7 @@ export default function StudentApp() {
         <Route path="/browse" element={<CategoryPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/my-courses" element={<Dashboard />} />
+        <Route path="/my-attendance" element={<StudentAttendance />} />
       </Routes>
       <Footer />
     </div>

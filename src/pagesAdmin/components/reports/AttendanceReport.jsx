@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import "./AttendanceReport.css";
 import { useBatchAttendanceReport } from "../../../hooks/useClassSession";
+import { useBatches } from "../../../hooks/useBatches";
 import Loader from "../../../components/common/Loader/Loader";
 
-export default function AttendanceReport({ batches }) {
+export default function AttendanceReport() {
     const [selectedBatchId, setSelectedBatchId] = useState("");
 
+    const { data: batchesData, isLoading: batchesLoading } = useBatches();
     const { data, isLoading, isError } = useBatchAttendanceReport(selectedBatchId);
+
+    const batches = batchesData || [];
 
     const handleBatchChange = (e) => {
         setSelectedBatchId(e.target.value);
@@ -27,8 +31,11 @@ export default function AttendanceReport({ batches }) {
                         value={selectedBatchId}
                         onChange={handleBatchChange}
                         className="batch-dropdown"
+                        disabled={batchesLoading}
                     >
-                        <option value="">-- Select a Batch --</option>
+                        <option value="">
+                            {batchesLoading ? "Loading batches..." : "-- Select a Batch --"}
+                        </option>
                         {batches?.map((batch) => (
                             <option key={batch._id} value={batch._id}>
                                 {batch.name}
@@ -162,10 +169,10 @@ export default function AttendanceReport({ batches }) {
                                                     <div className="percentage-cell">
                                                         <div
                                                             className={`percentage-bar ${student.attendancePercentage >= 75
-                                                                    ? "good"
-                                                                    : student.attendancePercentage >= 50
-                                                                        ? "average"
-                                                                        : "poor"
+                                                                ? "good"
+                                                                : student.attendancePercentage >= 50
+                                                                    ? "average"
+                                                                    : "poor"
                                                                 }`}
                                                         >
                                                             <div

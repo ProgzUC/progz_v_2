@@ -49,6 +49,50 @@
     color: #00875a;
 }
 
+/* Batch Tabs */
+.batch-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.batch-tab {
+    background: transparent;
+    border: none;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #6c757d;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 3px solid transparent;
+    transition: all 0.3s ease;
+    margin-bottom: -2px;
+}
+
+.batch-tab:hover {
+    color: #212529;
+}
+
+.batch-tab.active {
+    color: #198754;
+    border-bottom-color: #198754;
+}
+
+.batch-tab i {
+    font-size: 18px;
+}
+
+/* Attendance Tab Content */
+.attendance-tab-content {
+    background: transparent;
+    padding: 0;
+}
+
+
 .stats-row {
     display: flex;
     gap: 1.5rem;
