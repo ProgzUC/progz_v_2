@@ -103,7 +103,9 @@
   position: relative;
   z-index: 5;
   max-width: 700px;
-  padding-left: 64px;
+
+  padding-left: 40px;
+
 }
 
 .student-hero-section .hero-content h1 {
@@ -115,9 +117,11 @@
 
 .hero-sub {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.92);
+  color: #ffffff;
   margin: 0 0 22px;
   max-width: 560px;
+  font-weight: 500;
+  text-shadow: #0f172a 0px 4px 12px;
 }
 
 .hero-buttons {
@@ -217,11 +221,25 @@
 
 /* Mobile View */
 @media (max-width: 768px) {
+
   .hero-container {
-    height: auto;
-    padding: 80px 20px;
+    height: 500px;
+    padding: 100px 20px 60px;
     background-size: cover;
     background-position: right center;
+  }
+  .student-hero-section .hero-content {
+  position: relative;
+  z-index: 5;
+  max-width: 700px;
+  padding: 0 20px;
+
+}
+
+  .student-hero-section .hero-content h1 {
+    font-size: 28px;
+    line-height: 1.2;
+    font-weight: 700;
   }
 
   .hero-content {
@@ -230,22 +248,44 @@
     text-align: left;
   }
 
-  .hero-content h1 {
-    font-size: 28px;
-    line-height: 1.2;
-  }
-
   .hero-sub {
     font-size: 14px;
     max-width: 100%;
   }
 
+  /* ------------------------------ */
+  /* FIX: STACK HERO BUTTONS */
+  /* ------------------------------ */
+
   .hero-buttons {
+    display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     width: 100%;
-    margin-top: 18px;
+    margin-top: 50px;
   }
+
+  /* Disable absolute positioning on mobile */
+  .student-hero-btn {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    width: 100%;
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  .continue-learning-btn{
+    top: 350px !important;
+    left: 80px !important;
+
+  }
+  .browse-all-btn{
+    top: 410px !important;
+    left: 80px !important;
+
+  }
+  
 
   .btn {
     width: 100%;
@@ -253,7 +293,7 @@
     font-size: 16px;
   }
 
-  /* Hide large vectors on mobile – prevents overlap */
+  /* Hide vectors on mobile */
   .vector-1,
   .vector-2,
   .vector-3 {
@@ -314,8 +354,8 @@
   /* Reduced from 223px */
   height: 46px;
   /* Reduced from 51px */
-  left: 60px;
-  top: 450px;
+  left: 40px;
+  top: 440px;
 
   background: #198754;
   box-shadow: 0px 4px 8px rgba(25, 135, 84, 0.3);
@@ -329,9 +369,9 @@
   /* Reduced from 223px */
   height: 46px;
   /* Reduced from 51px */
-  left: 280px;
+  left: 240px;
   /* Adjusted left to maintain ~15px gap (120+200+15) */
-  top: 450px;
+  top: 440px;
 
   background: #FFFFFF;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
