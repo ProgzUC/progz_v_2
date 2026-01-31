@@ -1,4 +1,5 @@
 .batch-details-container {
+    margin-top:4rem;
     padding: 2.5rem 3.5rem;
     background-color: #ebebeb;
     min-height: 100vh;
@@ -205,8 +206,7 @@
 }
 
 .content-grid {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
+  
     gap: 2.5rem;
 }
 

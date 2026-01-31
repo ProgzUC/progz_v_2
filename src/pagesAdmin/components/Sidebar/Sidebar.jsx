@@ -100,7 +100,7 @@ const Sidebar = () => {
           {!collapsed && <span>Courses</span>}
         </NavLink>
 
-        <NavLink
+        {/* <NavLink
           to="/admin/enroll"
           className={({ isActive }) =>
             isActive ? "menu-item active" : "menu-item"
@@ -108,7 +108,7 @@ const Sidebar = () => {
         >
           <i className="bi bi-calendar4"></i>
           {!collapsed && <span>Enroll Student</span>}
-        </NavLink>
+        </NavLink> */}
 
         <NavLink
           to="/admin/instructors"

@@ -218,7 +218,7 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                             <h2 className="section-title">Curriculum</h2>
                             <span className="badge-outline">{modules.length} Modules Total</span>
                         </div>
-                        <div className="module-list">
+                        {/* <div className="module-list">
                             {modules.length > 0 ? (
                                 modules.map((module, idx) => (
                                     <div key={module._id || idx} className="module-item">
@@ -239,7 +239,7 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                             ) : (
                                 <p className="empty-message">No curriculum modules found.</p>
                             )}
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="sections-col">
