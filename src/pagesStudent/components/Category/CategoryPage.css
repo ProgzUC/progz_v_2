@@ -89,22 +89,21 @@
 .student-category-page .course-card {
   background: #9A9A9A;
   border-radius: 20px;
-  padding-bottom: 20px;
+  padding-bottom: 25px;
+  /* Increased for better balance */
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  transition: 0.3s ease;
-
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   display: flex;
   flex-direction: column;
   height: 100%;
-
   position: relative;
-  /* ← ADD THIS */
 }
 
 .student-category-page .course-card:hover {
   background: #BCBCBC;
-  transform: translateY(-5px);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
 }
 
 /* Hover: Make text white */
@@ -119,68 +118,85 @@
 /* IMAGE */
 /* ------------------------------------------------------ */
 
-.course-img {
+.student-category-page .course-img {
   width: 92%;
   height: 200px;
   border-radius: 16px;
   object-fit: cover;
   display: block;
   margin: 16px auto 0 auto;
+  transition: transform 0.4s ease;
+}
+
+.student-category-page .course-card:hover .course-img {
+  transform: scale(1.02);
 }
 
 /* ------------------------------------------------------ */
 /* CONTENT */
 /* ------------------------------------------------------ */
 
-.course-info {
-  width: 92%;
-  margin: 15px auto 0;
+.student-category-page .course-info {
+  width: 90%;
+  margin: 20px auto 0;
   flex-grow: 1;
   text-align: left;
+  display: flex;
+  flex-direction: column;
 }
 
-.course-title {
+.student-category-page .course-title {
   font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 8px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  line-height: 1.2;
 }
 
-.course-desc {
+.student-category-page .course-desc {
   font-size: 14px;
-  line-height: 1.5;
-  height: 90px;
+  line-height: 1.6;
+  height: 95px;
+  /* Slightly adjusted */
   overflow: hidden;
-  margin-bottom: -5px;
-  color: #2e2e2e;
+  margin-bottom: 15px;
+  color: #333;
 }
 
-.course-roles {
-  font-size: 14px;
+.student-category-page .course-roles {
+  font-size: 13.5px;
   color: #222;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.course-salary {
+.student-category-page .course-salary {
   font-size: 14px;
   color: #0d6b29;
-  font-weight: 600;
+  font-weight: 700;
+  margin-top: auto;
+}
+
+.student-category-page .course-card:hover .course-roles {
+  border-top-color: rgba(255, 255, 255, 0.2);
 }
 
 /* ------------------------------------------------------ */
 /* ARROW BUTTON */
 /* ------------------------------------------------------ */
 
-.arrow-btn {
+.student-category-page .arrow-btn {
   position: absolute;
   top: 175px;
-  right: 22px;
-  width: 36px;
-  height: 36px;
+  right: 25px;
+  /* Adjusted position */
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: #0d6b29;
   border: none;
   color: #fff;
-  font-size: 20px;
+  font-size: 22px;
 
   display: flex;
   align-items: center;
@@ -188,7 +204,8 @@
 
   cursor: pointer;
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25);
-  transition: 0.2s ease;
+  transition: all 0.3s ease;
+  z-index: 5;
 }
 
 .student-category-page .course-card:hover .arrow-btn {
