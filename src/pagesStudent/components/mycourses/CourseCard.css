@@ -178,323 +178,324 @@
 /* RIGHT SIDE */
 .student-mycourses-page .right-section {
     padding: 30px;
-    height: calc(100vh - 4rem);
-    overflow-y: auto;
-    scrollbar-width: thin;
-    scrollbar-color: #198754 #f5f5f5;
-}
-
-.student-mycourses-page .right-section::-webkit-scrollbar {
-    width: 6px;
-}
-
-.student-mycourses-page .right-section::-webkit-scrollbar-thumb {
-    background-color: #198754;
-    border-radius: 10px;
-}
-
-.student-mycourses-page .curriculum-container-box {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
 }
 
 /* LARGE CARD */
 .student-mycourses-page .large-card {
     width: 100%;
-    max-width: 100%;
+    max-width: 582px;
     background: #e4e4e4;
     border-radius: 19px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 7px 4px rgba(0, 0, 0, 0.25);
     display: flex;
-    gap: 25px;
-    padding: 25px;
-    transition: transform 0.3s ease;
+    gap: 20px;
+    padding: 20px;
 }
 
 .student-mycourses-page .large-thumb {
     width: 206px;
     height: 130px;
-    border-radius: 12px;
+    border-radius: 10px;
     object-fit: cover;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.student-mycourses-page .large-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    flex: 1;
 }
 
 .student-mycourses-page .large-category {
-    padding: 4px 14px;
-    background: #198754;
-    border-radius: 20px;
-    font-size: 12px;
-    color: #fff;
     width: fit-content;
-    font-weight: 500;
+    padding: 4px 16px;
+    min-height: 23px;
+    background: #198754;
+    border-radius: 28px;
+    font-size: 13px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    white-space: nowrap;
 }
 
 .student-mycourses-page .large-title {
-    font-size: 28px;
-    font-weight: 700;
-    margin: 10px 0 5px 0;
-    color: #1a1a1a;
+    font-size: 26px;
+    font-weight: 600;
+    margin-top: 6px;
 }
 
 .student-mycourses-page .large-author {
-    font-size: 12px;
-    color: #666;
-    margin-bottom: 15px;
+    font-size: 11px;
+    color: #737272;
+    margin-bottom: 8px;
 }
 
+
 .student-mycourses-page .large-progress-bar {
-    width: 100%;
-    max-width: 300px;
-    height: 8px;
-    background: #d0d0d0;
-    border-radius: 10px;
-    overflow: hidden;
+    width: 254px;
+    height: 6px;
+    background: #9a9a9a;
+    border-radius: 23px;
 }
 
 .student-mycourses-page .large-progress-fill {
-    height: 100%;
+    height: 6px;
     background: #198754;
-    border-radius: 10px;
+    border-radius: 23px;
+    transition: width 0.3s ease;
 }
 
 .student-mycourses-page .large-bottom-row {
-    margin-top: 12px;
+    margin-top: 8px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 25px;
 }
 
-.student-mycourses-page .large-percent {
-    font-weight: 700;
-    color: #198754;
+.student-mycourses-page .large-lessons .lesson-icon {
+    margin-right: 6px;
+    margin-left: -10px;
 }
 
-.student-mycourses-page .large-lessons {
-    font-size: 13px;
-    color: #555;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
 
-/* COURSE CURRICULUM ACCORDION */
-.student-mycourses-page .course-curriculum-wrapper {
-    margin-top: 10px;
+.student-mycourses-page .tabs-container {
     width: 100%;
-}
-
-.student-mycourses-page .curriculum-header-row {
+    max-width: 620px;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #e0e0e0;
+    align-items: stretch;
+    gap: 0;
+    gap: 0;
+    margin-top: 40px;
+    background: #c4c4c4;
+    border-radius: 12px;
+    padding: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+    min-height: 51px;
 }
 
-.student-mycourses-page .curriculum-main-title {
-    font-size: 22px;
-    font-weight: 700;
-    color: #333;
-    margin: 0;
+.student-mycourses-page .tabs-container::-webkit-scrollbar {
+    display: none;
 }
 
-.student-mycourses-page .curriculum-stats {
+.student-mycourses-page .tab {
+    flex: 1 1 0;
+    min-width: max-content;
+    font-family: 'Inter', sans-serif;
     font-size: 14px;
-    color: #777;
-    font-weight: 500;
-}
-
-.student-mycourses-page .curriculum-accordion {
+    font-weight: 600;
+    line-height: 22px;
+    color: #fff;
+    cursor: pointer;
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    transition: background 0.3s ease, color 0.3s ease;
+    border-radius: 0;
+    padding: 12px 24px;
+    white-space: nowrap;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    height: 51px;
+    scroll-snap-align: start;
+    position: relative;
 }
 
-.student-mycourses-page .curriculum-item {
-    background: #fff;
-    border: 1px solid #e0e0e0;
+.student-mycourses-page .tab:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 35px;
+    background: #a5a5a5;
+    border-radius: 27px;
+}
+
+.student-mycourses-page .tab.active:not(:last-child)::after {
+    display: none;
+}
+
+.student-mycourses-page .tab:first-child {
+    border-radius: 12px 0 0 12px;
+}
+
+.student-mycourses-page .tab:last-child {
+    border-radius: 0 12px 12px 0;
+}
+
+.student-mycourses-page .tab:only-child {
+    border-radius: 12px;
+}
+
+.student-mycourses-page .tab:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.student-mycourses-page .tab.active {
+    background: #198754;
+    color: #fff;
+}
+
+.student-mycourses-page .tab.active:hover {
+    background: #157347;
+}
+
+.student-mycourses-page .tab-first {
+    border-radius: 12px 0 0 12px;
+    padding-left: 32px;
+}
+
+.student-mycourses-page .tab-last {
+    border-radius: 0 12px 12px 0;
+    padding-right: 32px;
+}
+
+.student-mycourses-page .tabs-container:focus {
+    outline: 2px solid #198754;
+    outline-offset: 2px;
+}
+
+/* Tabs Wrapper */
+.student-mycourses-page .tabs-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 620px;
+    margin-top: 40px;
     border-radius: 12px;
     overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    /* Ensure overlay respects rounded corners */
 }
 
-.student-mycourses-page .curriculum-item.is-open {
-    border-color: #198754;
-    box-shadow: 0 4px 12px rgba(25, 135, 84, 0.1);
+/* Override container margin inside wrapper */
+.student-mycourses-page .tabs-wrapper .tabs-container {
+    margin-top: 0;
+    border-radius: 12px;
+    /* Ensure rounded corners */
 }
 
-.student-mycourses-page .curriculum-module-header {
-    padding: 18px 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    background: #fdfdfd;
-    transition: background 0.2s ease;
-}
-
-.student-mycourses-page .curriculum-module-header:hover {
-    background: #f5f5f5;
-}
-
-.student-mycourses-page .curriculum-item.is-open .curriculum-module-header {
-    background: #f8fffb;
-}
-
-.student-mycourses-page .header-left {
+/* Fade Overlay + Arrow */
+.student-mycourses-page .tabs-fade-overlay {
+    position: absolute;
+    top: 0;
+    width: 60px;
+    height: 100%;
     display: flex;
     align-items: center;
-    gap: 15px;
-}
-
-.student-mycourses-page .chevron-icon {
-    font-size: 16px;
-    color: #777;
-}
-
-.student-mycourses-page .curriculum-item.is-open .chevron-icon {
-    color: #198754;
-}
-
-.student-mycourses-page .module-title {
-    font-size: 17px;
-    font-weight: 600;
-    color: #333;
-}
-
-.student-mycourses-page .module-info {
-    font-size: 13px;
-    color: #888;
-    font-weight: 500;
-}
-
-.student-mycourses-page .curriculum-sections-list {
-    background: #fff;
-    border-top: 1px solid #eee;
-}
-
-.student-mycourses-page .curriculum-section-row {
-    padding: 15px 25px 15px 55px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border-bottom: 1px solid #f9f9f9;
-}
-
-.student-mycourses-page .curriculum-section-row:last-child {
-    border-bottom: none;
-}
-
-.student-mycourses-page .curriculum-section-row:hover {
-    background: #f9f9f9;
-}
-
-.student-mycourses-page .section-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    flex: 1;
-}
-
-.student-mycourses-page .status-icon i {
-    font-size: 18px;
-}
-
-.student-mycourses-page .status-icon .play {
-    color: #198754;
-}
-
-.student-mycourses-page .status-icon .done {
-    color: #198754;
-}
-
-.student-mycourses-page .section-title {
-    font-size: 15px;
-    color: #444;
-    line-height: 1.4;
-}
-
-.student-mycourses-page .section-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
     opacity: 0;
-    transform: translateX(-10px);
-    transition: all 0.3s ease;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+    z-index: 10;
 }
 
-.student-mycourses-page .curriculum-section-row:hover .section-right {
+.student-mycourses-page .tabs-fade-overlay.right {
+    right: 0;
+    justify-content: flex-end;
+    padding-right: 15px;
+    background: transparent;
+    /* No gradient as requested */
+}
+
+.student-mycourses-page .tabs-fade-overlay.left {
+    left: 0;
+    justify-content: flex-start;
+    padding-left: 15px;
+    background: transparent;
+    /* No gradient as requested */
+}
+
+.student-mycourses-page .tabs-fade-overlay:hover .fade-arrow {
+    transform: scale(1.2);
+    /* Color change on hover intentionally removed to keep consistent style */
+}
+
+.student-mycourses-page .tabs-fade-overlay.visible {
     opacity: 1;
-    transform: translateX(0);
 }
 
-.student-mycourses-page .start-text {
-    font-size: 13px;
-    font-weight: 600;
-    color: #198754;
-}
-
-.student-mycourses-page .section-right .arrow {
+.student-mycourses-page .fade-arrow {
     font-size: 20px;
-    color: #198754;
+    color: #555;
+    transition: transform 0.2s ease;
 }
 
-.student-mycourses-page .no-sections,
-.student-mycourses-page .no-modules-placeholder {
-    padding: 40px;
-    text-align: center;
-    color: #999;
+@keyframes bounceRight {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    50% {
+        transform: translateX(3px);
+    }
 }
 
-.student-mycourses-page .no-modules-placeholder i {
-    font-size: 48px;
-    margin-bottom: 15px;
-    display: block;
+
+
+/* Divider */
+.student-mycourses-page .tabs-horizontal-divider {
+    width: 100%;
+    height: 2px;
+    background: #9a9a9a;
+    margin-top: 23px;
 }
 
-.student-mycourses-page .details-loader-box {
-    padding: 100px 0;
-}
-
-/* BACK BUTTON IN LESSON VIEW */
-.student-mycourses-page .btn-back-to-curriculum {
-    background: #1a1a1a;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-weight: 600;
+/* LESSON ROW */
+.student-mycourses-page .lesson-row {
+    width: 100%;
+    max-width: 907px;
+    height: 56px;
+    background: #e4e4e4;
+    border-radius: 41px;
+    box-shadow: 0 0 5.7px 4px rgba(0, 0, 0, 0.25);
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 25px;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 0 20px;
+    margin-top: 40px;
 }
 
-.student-mycourses-page .btn-back-to-curriculum:hover {
+.student-mycourses-page .lesson-number {
+    width: 48px;
+    height: 48px;
     background: #000;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    border-radius: 50%;
+    color: #fff;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* REFINEMENTS FOR LEFT CARDS */
-.student-mycourses-page .selected-card {
-    border: 2px solid #198754;
-    transform: scale(1.02);
+.student-mycourses-page .lesson-title {
+    flex: 1;
+    margin-left: 25px;
+    font-size: 20px;
+    color: #373737;
 }
+
+.student-mycourses-page .lesson-action {
+    width: 120px;
+    display: flex;
+    justify-content: center;
+}
+
+.student-mycourses-page .open-btn {
+    width: 105px;
+    height: 41px;
+    border-radius: 9px;
+    border: none;
+    background: #000;
+    color: #fff;
+    font-size: 15px;
+}
+
+.student-mycourses-page .lock-icon {
+    font-size: 24px;
+}
+
 
 
 /* ============================================
@@ -502,12 +503,9 @@
 ============================================ */
 
 @media (max-width: 992px) {
-    .student-mycourses-page .right-section {
-        height: auto;
-    }
 
-    .student-mycourses-page .col-lg-4,
-    .student-mycourses-page .col-lg-8 {
+    .student-mycourses-page .col-4,
+    .student-mycourses-page .col-8 {
         width: 100% !important;
         max-width: 100%;
     }
@@ -524,17 +522,26 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        text-align: center;
     }
 
-    .student-mycourses-page .col-lg-8.right-section {
+    .student-mycourses-page .course-card {
+        max-width: 100%;
+    }
+
+    .student-mycourses-page .col-8.right-section {
         display: none;
     }
 
-    .mobile-show-details .col-lg-4 {
+    .student-mycourses-page .col-4 {
+        display: block;
+    }
+
+    .mobile-show-details .col-4 {
         display: none;
     }
 
-    .mobile-show-details .col-lg-8.right-section {
+    .mobile-show-details .col-8.right-section {
         display: block;
     }
 
@@ -714,15 +721,5 @@
         align-items: center;
         gap: 8px;
         box-shadow: none !important;
-    }
-}
-
-/* TABLET CENTERING (768px - 1024px) */
-@media (min-width: 768px) and (max-width: 1024px) {
-    .student-mycourses-page .card-container {
-        margin-left: auto !important;
-        margin-right: auto !important;
-        align-items: center;
-        width: 100%;
     }
 }

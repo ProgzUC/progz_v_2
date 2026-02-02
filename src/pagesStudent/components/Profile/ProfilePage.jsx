@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./ProfilePage.css";
 import { useStudentProfile, useUpdateStudentProfile, useChangePassword } from "../../../hooks/useStudentProfile";
 import { useStudentCourses } from "../../../hooks/useStudentCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
-import { uploadToCloudinary } from "../../../utils/cloudinary";
 
 /* ============================
    USER INITIALS AVATAR
 ============================ */
-const UserAvatar = ({ name, image }) => {
+const UserAvatar = ({ name }) => {
     const initials = (name || "User")
         .split(' ')
         .map(word => word[0])
@@ -20,11 +18,7 @@ const UserAvatar = ({ name, image }) => {
 
     return (
         <div className="profile-avatar-wrapper">
-            {image ? (
-                <img src={image} alt={name} className="profile-avatar-img" />
-            ) : (
-                <div className="profile-initials-avatar">{initials}</div>
-            )}
+            <div className="profile-initials-avatar">{initials}</div>
         </div>
     );
 };
@@ -34,28 +28,17 @@ const UserAvatar = ({ name, image }) => {
 ============================ */
 const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
     const [form, setForm] = useState(currentData);
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [previewUrl, setPreviewUrl] = useState(currentData?.profileImage?.url || null);
     const [currentPwdInput, setCurrentPwdInput] = useState("");
     const [newPwdInput, setNewPwdInput] = useState("");
     const [confirmPwdInput, setConfirmPwdInput] = useState("");
     const [error, setError] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
-    const [uploading, setUploading] = useState(false);
 
     const updateProfile = useUpdateStudentProfile();
     const changePassword = useChangePassword();
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
-    };
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setSelectedFile(file);
-            setPreviewUrl(URL.createObjectURL(file));
-        }
     };
 
     const handlePasswordSave = () => {
@@ -88,7 +71,7 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
         });
     };
 
-    const handleSave = async () => {
+    const handleSave = () => {
         setError("");
         setSuccessMsg("");
         if (mode === "password") {
@@ -96,39 +79,18 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
             return;
         }
 
-        setUploading(true);
-        try {
-            let updatedForm = { ...form };
-
-            if (selectedFile) {
-                const uploadRes = await uploadToCloudinary(selectedFile, "profiles");
-                if (uploadRes) {
-                    updatedForm.profileImage = {
-                        url: uploadRes.url,
-                        publicId: uploadRes.publicId
-                    };
-                }
+        updateProfile.mutate(form, {
+            onSuccess: () => {
+                onSave(form);
+                onClose();
+            },
+            onError: (err) => {
+                setError(err?.response?.data?.message || "Failed to update profile.");
             }
-
-            updateProfile.mutate(updatedForm, {
-                onSuccess: () => {
-                    onSave(updatedForm);
-                    onClose();
-                },
-                onError: (err) => {
-                    setError(err?.response?.data?.message || "Failed to update profile.");
-                },
-                onSettled: () => {
-                    setUploading(false);
-                }
-            });
-        } catch (err) {
-            setError(err.message || "Failed to upload image.");
-            setUploading(false);
-        }
+        });
     };
 
-    const saving = updateProfile.isPending || changePassword.isPending || uploading;
+    const saving = updateProfile.isPending || changePassword.isPending;
 
     return (
         <div className="profile-modal-overlay" role="dialog" aria-modal="true">
@@ -136,19 +98,6 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                 <h2>{mode === "password" ? "Change Password" : "Edit Profile"}</h2>
                 {mode !== "password" && (
                     <>
-                        <div className="profile-edit-section">
-                            {previewUrl ? (
-                                <img src={previewUrl} alt="Preview" className="profile-preview-img" />
-                            ) : (
-                                <div className="profile-initials-avatar" style={{ width: '120px', height: '120px', fontSize: '32px' }}>
-                                    {(form.name || "U")[0].toUpperCase()}
-                                </div>
-                            )}
-                            <label className="profile-upload-label">
-                                {selectedFile ? "Change Image" : "Upload Picture"}
-                                <input type="file" accept="image/*" onChange={handleFileChange} />
-                            </label>
-                        </div>
                         <div className="profile-input-row">
                             <label>Phone Number</label>
                             <input type="text" name="phone" value={form.phone || ""} onChange={handleChange} />
@@ -208,7 +157,7 @@ const Info = ({ profile, ongoingCount, completedCount }) => {
     return (
         <div className="profile-sidebar">
             <div className="profile-header-meta">
-                <UserAvatar name={profile.name} image={profile.profileImage?.url} />
+                <UserAvatar name={profile.name} />
             </div>
 
             <div className="profile-details-list">
@@ -275,7 +224,6 @@ const Info = ({ profile, ongoingCount, completedCount }) => {
 ============================ */
 const CourseGrid = ({ courses }) => {
     const [filter, setFilter] = useState("ongoing");
-    const navigate = useNavigate();
 
     const filteredCourses = courses.filter((course) => {
         const progress = course.progressPercentage || 0;
@@ -284,8 +232,7 @@ const CourseGrid = ({ courses }) => {
         return true;
     });
 
-    const handleCertificate = (e) => {
-        e.stopPropagation(); // Prevent navigation when clicking certificate
+    const handleCertificate = () => {
         const pngUrl = "/certificate.png";
         window.open(pngUrl, '_blank');
         const link = document.createElement("a");
@@ -294,13 +241,6 @@ const CourseGrid = ({ courses }) => {
         document.body.appendChild(link);
         link.click();
         link.remove();
-    };
-
-    const handleCourseClick = (course) => {
-        // Navigate to my-courses and pass the courseId to auto-select it
-        navigate("/student-dashboard/my-courses", {
-            state: { selectedCourseId: course.courseId || course.id }
-        });
     };
 
     return (
@@ -323,12 +263,7 @@ const CourseGrid = ({ courses }) => {
                         const isCompleted = progress === 100;
 
                         return (
-                            <div
-                                key={c.courseId || c.id}
-                                className="profile-course-card"
-                                onClick={() => handleCourseClick(c)}
-                                style={{ cursor: 'pointer' }}
-                            >
+                            <div key={c.courseId || c.id} className="profile-course-card">
                                 <div className="profile-course-card-top">
                                     <ImageWithFallback
                                         src={c.courseImage || c.img}

@@ -510,17 +510,15 @@
 /* ============================
    RESPONSIVE
 ============================ */
-@media(max-width: 1024px) {
+@media (max-width: 1024px) {
     .profile-main-layout {
         grid-template-columns: 1fr;
-        padding-left: 8px;
+       padding-left: 8px;
     }
 
     .profile-sidebar {
         align-items: center;
         text-align: center;
-       
-      
     }
 
     .profile-detail-item {
@@ -539,53 +537,4 @@
     .profile-courses-grid {
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     }
-}
-
-
-
-/* TABLET VIEW CENTERING (768px - 1024px) */
-@media (min-width: 768px) and (max-width: 1024px) {
-    .profile-container-outer {
-        margin: 0 auto;
-    }
-
-    /* ============================
-   MOBILE VIEW (max-width: 449px)
-============================ */
-@media (max-width: 449px) {
-
-    .profile-root {
-        padding: 20px 12px;
-    }
-
-    .profile-container-outer {
-        width: 100%;
-        margin: 0; /* mobile stays full-width */
-    }
-
-    .profile-main-layout {
-        padding: 0 10px;
-        gap: 20px;
-    }
-
-    .profile-avatar-wrapper {
-        width: 140px;
-        height: 140px;
-    }
-
-    .profile-banner-gradient {
-        height: 180px;
-    }
-
-    .profile-course-card-top {
-        height: 170px;
-    }
-
-    .profile-courses-grid {
-        grid-template-columns: 1fr; /* single column on mobile */
-        margin-left: 0;
-    }
-
-}
-
 }
