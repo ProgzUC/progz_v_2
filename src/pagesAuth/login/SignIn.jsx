@@ -72,7 +72,7 @@ const SignIn = () => {
     }
   };
 
-  const handleForgotSubmit = (e) => {
+  const handleForgotSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccessMessage("");
@@ -86,15 +86,13 @@ const SignIn = () => {
 
     setLoading(true);
     try {
-      forgotPassword({ email: forgotEmail });
+      const res = await forgotPassword({ email: forgotEmail });
+      setSuccessMessage(res.msg || `Password reset link has been sent to ${forgotEmail}.`);
     } catch (err) {
       setError(err.response?.data?.msg || "Password reset failed");
-    }
-    // Simulate API call
-    setTimeout(() => {
+    } finally {
       setLoading(false);
-      setSuccessMessage(`Password reset Link has been sent to  ${forgotEmail}. You can use the link to reset your password within 15 minutes.`);
-    }, 1500);
+    }
   };
 
 
