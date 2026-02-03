@@ -1,11 +1,12 @@
 /* Main container */
 .intro-container {
-  padding: 10px;
+  padding: 20px;
   background: transparent;
   font-family: Arial, sans-serif;
   max-width: 1200px;
   margin: 0 auto;
   overflow-x: hidden;
+  width: 100%;
 }
 
 .breadcrumb {
@@ -329,4 +330,81 @@
 
 .recording-link:hover {
   text-decoration: underline;
+}
+
+/* Tablet View Fixes */
+@media (min-width: 450px) and (max-width: 1024px) {
+  .intro-container {
+    padding: 20px;
+  }
+
+  .section-card {
+    padding: 25px;
+    margin-bottom: 25px;
+  }
+
+  .file-row {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+  }
+}
+
+/* Mobile View Fixes */
+@media (max-width: 449px) {
+  .intro-container {
+    padding: 15px;
+  }
+
+  .student-introduction-section .intro-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .section-card {
+    padding: 16px;
+    margin-bottom: 15px;
+    border-radius: 14px;
+  }
+
+  .section-header {
+    gap: 12px;
+    margin-bottom: 15px;
+  }
+
+  .section-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .section-header h2 {
+    font-size: 16px;
+  }
+
+  .section-description {
+    font-size: 13px;
+    margin-bottom: 15px;
+  }
+
+  .file-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .file-box {
+    padding: 12px;
+    min-width: 0;
+  }
+
+  .file-name {
+    font-size: 13px;
+  }
+
+  .file-sub {
+    font-size: 10px;
+  }
+
+  .breadcrumb {
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
 }

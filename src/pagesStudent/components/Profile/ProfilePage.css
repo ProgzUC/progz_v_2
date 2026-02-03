@@ -384,15 +384,18 @@
 ============================ */
 .profile-modal-overlay {
     position: fixed;
-    top: 0;
+    top: 70px;
+    /* Start below the header */
     left: 0;
     width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    height: calc(100vh - 70px);
+    background: rgba(0, 0, 0, 0.4);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 5000;
+    z-index: 100;
+    /* Ensure it stays below navbar (1000) but above content */
+    backdrop-filter: blur(2px);
 }
 
 .profile-modal-box {
@@ -400,7 +403,29 @@
     padding: 30px;
     border-radius: 15px;
     width: 90%;
-    max-width: 400px;
+    max-width: 450px;
+    max-height: 90%;
+    /* Relative to the overlay height */
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    margin-bottom: 20px;
+    /* Extra space at bottom */
+}
+
+/* Custom scrollbar for modal */
+.profile-modal-box::-webkit-scrollbar {
+    width: 6px;
+}
+
+.profile-modal-box::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.profile-modal-box::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
 }
 
 .profile-modal-box h2 {
@@ -470,35 +495,7 @@
     font-weight: 500;
 }
 
-.profile-edit-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-}
 
-.profile-preview-img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #008952;
-}
-
-.profile-upload-label {
-    background: #008952;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-.profile-upload-label input {
-    display: none;
-}
 
 .profile-no-courses {
     text-align: center;
@@ -510,31 +507,167 @@
 /* ============================
    RESPONSIVE
 ============================ */
-@media (max-width: 1024px) {
+
+/* Tablet View */
+@media (min-width: 450px) and (max-width: 1024px) {
+    .profile-container-outer {
+        margin: 0 auto !important;
+        padding: 0 20px;
+    }
+
     .profile-main-layout {
         grid-template-columns: 1fr;
-       padding-left: 8px;
+        padding: 0 20px;
+        margin-top: -100px;
+        justify-items: center;
     }
 
     .profile-sidebar {
         align-items: center;
         text-align: center;
+        margin-bottom: 40px;
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .profile-avatar-wrapper {
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .profile-detail-item {
         justify-content: center;
     }
 
-    .profile-summary-item {
+    .profile-action-btns {
+        flex-direction: row;
         justify-content: center;
-        gap: 40px;
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto 25px;
+    }
+
+    .profile-btn-edit,
+    .profile-btn-password {
+        flex: 1;
+    }
+
+    .profile-summary-section {
+        margin-top: 0;
+        width: 100%;
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .profile-summary-item {
+        justify-content: space-between;
+        gap: 20px;
     }
 
     .profile-courses-main {
         padding-top: 20px;
     }
 
-    .profile-courses-grid {
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    .profile-tab-line {
+        margin-bottom: 20px;
     }
+
+    .profile-courses-grid {
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        justify-content: center;
+    }
+
+    .profile-courses-main {
+        padding-top: 20px;
+        width: 100%;
+    }
+}
+
+/* Mobile View */
+@media (max-width: 449px) {
+    .profile-main-layout {
+        grid-template-columns: 1fr;
+        padding: 0 15px;
+        margin-top: -80px;
+        justify-items: center;
+    }
+
+    .profile-sidebar {
+        align-items: center;
+        text-align: center;
+        margin-bottom: 40px;
+        width: 100%;
+        max-width: 140px;
+    }
+
+    .profile-avatar-wrapper {
+        width: 140px;
+        height: 140px;
+    }
+
+    .profile-courses-main {
+        padding-top: 20px;
+        width: 100%;
+    }
+
+    .profile-courses-grid {
+        grid-template-columns: 1fr;
+        justify-content: center;
+        /* Task 7: Center grid */
+    }
+}
+
+/* New Profile Image Styles */
+.profile-image-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-image-edit-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.profile-image-preview-container {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 10px;
+    border: 3px solid #008952;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-image-placeholder {
+    font-size: 40px;
+    color: #008952;
+    font-weight: bold;
+}
+
+.profile-change-photo-btn {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.profile-change-photo-btn:hover {
+    background: #e4e4e4;
 }

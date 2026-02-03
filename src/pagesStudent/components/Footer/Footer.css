@@ -1,7 +1,7 @@
 /* ============================
    MAIN FOOTER WRAPPER
    ============================ */
-.student-footer  {
+.student-footer {
     background-color: #373737;
     color: rgba(255, 255, 255, 0.8);
     padding: 60px 0 20px;
@@ -15,36 +15,38 @@
 /* ============================
    FOOTER CONTENT LAYOUT
    ============================ */
-.student-footer  .footer-content {
+.student-footer .footer-content {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
+    align-items: flex-start;
     padding: 0 20px;
-    gap: 40px;
+    gap: 30px;
 }
 
-.student-footer  .footer-section {
+.student-footer .footer-section {
     flex: 1;
-    min-width: 200px;
+    min-width: 150px;
 }
 
-.student-footer  .brand-section {
-    flex: 1.5;
+.student-footer .brand-section {
+    flex: 1 1 100%;
+    max-width: 300px;
 }
 
 /* ============================
    BRAND LOGO + DESCRIPTION
    ============================ */
-.student-footer  .footer-logo {
+.student-footer .footer-logo {
     font-size: 24px;
     font-weight: 700;
     margin-bottom: 15px;
     color: rgba(255, 255, 255, 0.8);
 }
 
-.student-footer  .footer-description {
+.student-footer .footer-description {
     font-size: 14px;
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.8);
@@ -56,20 +58,19 @@
 /* ============================
    SOCIAL MEDIA ICONS
    ============================ */
-.student-footer  .social-icons {
+.student-footer .social-icons {
     display: flex;
-    justify-content: center;
-    /* Centered as per CSS provided, though structure suggests left alignment usually. Keeping as provided. */
+    justify-content: flex-start;
     gap: 15px;
 }
 
 /* Override center for desktop if needed based on provided css behaving like block */
-.student-footer  .brand-section .social-icons {
+.student-footer .brand-section .social-icons {
     justify-content: flex-start;
 }
 
 
-.student-footer  .social-icon {
+.student-footer .social-icon {
     color: rgba(255, 255, 255, 0.8);
     font-size: 18px;
     text-decoration: none;
@@ -79,12 +80,12 @@
     align-items: center;
 }
 
-.student-footer  .social-icon:hover {
+.student-footer .social-icon:hover {
     color: #fff;
     /* Brighten on hover */
 }
 
-.student-footer  .footer-section h3 {
+.student-footer .footer-section h3 {
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 20px;
@@ -115,44 +116,25 @@
 /* ============================
    LIST STYLING
    ============================ */
-.student-footer  .footer-section ul {
+.student-footer .footer-section ul {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-.student-footer  .footer-section ul li {
+.student-footer .footer-section ul li {
     margin-bottom: 12px;
 }
 
-.student-footer  .footer-section ul li a {
+.student-footer .footer-section ul li a {
     color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     font-size: 14px;
     transition: color 0.3s ease;
 }
 
-.student-footer  .footer-section ul li a:hover {
+.student-footer .footer-section ul li a:hover {
     color: #fff;
-}
-
-/* Align Stay Connected items to the left on desktop */
-.student-footer  .contact-section {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-}
-
-/* Align each line (icon + text) to the left */
-.student-footer  .contact-section ul li {
-    justify-content: flex-start;
-    text-align: left;
-}
-
-/* Prevent icon from sticking to the left */
-.student-footer  .contact-section .icon {
-    margin-top: 2px;
 }
 
 
@@ -160,20 +142,28 @@
 /* ============================
    CONTACT SECTION
    ============================ */
-.student-footer  .contact-section ul li {
+.student-footer .contact-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+}
+
+.student-footer .contact-section ul li {
     display: flex;
     align-items: flex-start;
     gap: 10px;
     color: rgba(255, 255, 255, 0.8);
     font-size: 14px;
+    justify-content: flex-start;
 }
 
-.student-footer  .contact-section .icon {
+.student-footer .contact-section .icon {
     margin-top: 2px;
 }
 
 /* Icon sizing helpers */
-.student-footer  .contact-icon {
+.student-footer .contact-icon {
     font-size: 18px;
     /* Match social icons */
 }
@@ -181,86 +171,98 @@
 /* ============================
    FOOTER BOTTOM
    ============================ */
-.student-footer  .footer-bottom {
+.student-footer .footer-bottom {
     max-width: 1200px;
     margin: 40px auto 0;
-    padding-top: 20px;
+    padding: 20px;
     border-top: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-left: 20px;
-    padding-right: 20px;
     font-size: 13px;
     color: #999999;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
-.student-footer  .legal-links {
+.student-footer .legal-links {
     display: flex;
     gap: 30px;
 }
 
-.student-footer  .legal-links a {
+.student-footer .legal-links a {
     color: #999999;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 /* ============================================================
-   RESPONSIVE — TABLET (max-width: 1024px)
+   RESPONSIVE — TABLET (450px - 1024px)
    ============================================================ */
-@media (max-width: 1024px) {
-
-    /* Put logo section on its own row */
-    .student-footer  .brand-section {
-        flex-basis: 100%;
-        /* full width */
-        text-align: center;
-        align-items: center;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .student-footer  .brand-section .social-icons {
-        justify-content: center;
-        /* Center on tablet/mobile */
-    }
-
-    /* All sections align center but DO NOT stack unnecessarily */
-    .student-footer  .footer-section {
-        text-align: center;
-        align-items: center;
-    }
-
-    /* Keep 3 sections in the row */
-    .student-footer  .links-section,
-    .student-footer  .categories-section,
-    .student-footer  .contact-section {
-        flex-basis: 30%;
-        /* 3 columns */
-    }
-
-    .student-footer  .footer-content {
+@media (min-width: 450px) and (max-width: 1024px) {
+    .student-footer .footer-content {
         justify-content: center;
         gap: 30px;
+        padding: 0 20px;
     }
 
-    .student-footer  .social-icons {
+    /* Brand logo centered */
+    .student-footer .brand-section {
+        flex: 1 1 100%;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        max-width: none;
+    }
+
+    .student-footer .footer-description {
+        margin: 0 auto 20px;
+        max-width: 400px;
+    }
+
+    .student-footer .brand-section .social-icons {
         justify-content: center;
     }
 
-    .student-footer  .contact-section ul li {
+    /* Footer sections balanced */
+    .student-footer .footer-section {
+        flex: 1 1 150px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .student-footer .footer-section h3 {
+        text-align: center;
+    }
+
+    .student-footer .footer-section ul {
+        text-align: center;
+    }
+
+    .student-footer .footer-section ul li {
+        display: flex;
         justify-content: center;
     }
 
-    .student-footer  .footer-bottom {
+    .student-footer .contact-section {
+        align-items: center;
+        text-align: center;
+    }
+
+    .student-footer .footer-bottom {
         flex-direction: column;
         gap: 15px;
         text-align: center;
     }
 
-    .student-footer  .legal-links {
+    .student-footer .legal-links {
         justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
     }
 }
 
@@ -269,36 +271,77 @@
    RESPONSIVE — MOBILE (max-width: 700px)
    ============================================================ */
 @media (max-width: 700px) {
-    .student-footer  .footer-content {
-        gap: 30px;
+    .student-footer {
+        padding: 40px 0 20px;
     }
 
-    .student-footer  .footer-section {
+    .student-footer .footer-content {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+        padding: 0 15px;
+    }
+
+    .student-footer .footer-section {
+        flex: 1 1 100%;
         align-items: center;
         text-align: center;
+        width: 100%;
     }
 
-    .student-footer  .brand-section {
+    .student-footer .brand-section {
         align-items: center;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 0;
     }
 
-    .student-footer  .social-icons {
+    .student-footer .footer-logo {
+        font-size: 22px;
+    }
+
+    .student-footer .footer-description {
+        font-size: 13px;
+        max-width: 100%;
+    }
+
+    .student-footer .social-icons {
         justify-content: center;
     }
 
-    .student-footer  .contact-section ul li {
-        justify-content: center;
+    .student-footer .footer-section h3 {
+        font-size: 15px;
+        margin-bottom: 15px;
     }
 
-    .student-footer  .footer-bottom {
+    .student-footer .footer-section ul li {
+        justify-content: center;
+        font-size: 13px;
+    }
+
+    .student-footer .footer-section ul li a {
+        font-size: 13px;
+    }
+
+    .student-footer .footer-bottom {
         flex-direction: column;
         gap: 12px;
         text-align: center;
+        padding: 20px 15px;
     }
 
-    .student-footer  .legal-links {
+    .student-footer .copyright {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    .student-footer .legal-links {
         flex-wrap: wrap;
-        gap: 15px;
+        gap: 12px;
         justify-content: center;
+    }
+
+    .student-footer .legal-links a {
+        font-size: 12px;
     }
 }

@@ -8,11 +8,13 @@
     height: auto;
 }
 
+.student-mycourses-page,
 .container-fluid,
 .student-mycourses-page .container {
     width: 100%;
-    overflow-x: hidden;
+    overflow-x: hidden !important;
     margin-top: 4rem;
+    box-sizing: border-box;
 }
 
 /* LEFT PANEL */
@@ -178,6 +180,49 @@
 /* RIGHT SIDE */
 .student-mycourses-page .right-section {
     padding: 30px;
+    height: 100vh;
+    overflow-y: auto;
+    position: sticky;
+    top: 0;
+}
+
+.student-mycourses-page .mobile-back-btn,
+.student-mycourses-page .lesson-content-view .btn-dark {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: none !important;
+    border: none !important;
+    font-size: 16px;
+    font-weight: 600;
+    color: #000 !important;
+    margin-bottom: 20px !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    cursor: pointer;
+}
+
+.student-mycourses-page .mobile-back-btn {
+    display: none;
+    /* Hidden by default on desktop */
+}
+
+/* Custom Scrollbar for Right Section */
+.student-mycourses-page .right-section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.student-mycourses-page .right-section::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.student-mycourses-page .right-section::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.student-mycourses-page .right-section::-webkit-scrollbar-thumb:hover {
+    background: #999;
 }
 
 /* LARGE CARD */
@@ -253,248 +298,179 @@
 }
 
 
-.student-mycourses-page .tabs-container {
+/* COURSE CURRICULUM (ACCORDION) */
+.student-mycourses-page .course-curriculum-container {
     width: 100%;
-    max-width: 620px;
-    display: flex;
-    align-items: stretch;
-    gap: 0;
-    gap: 0;
     margin-top: 40px;
-    background: #c4c4c4;
-    border-radius: 12px;
-    padding: 0;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    scroll-snap-type: x mandatory;
-    min-height: 51px;
-}
-
-.student-mycourses-page .tabs-container::-webkit-scrollbar {
-    display: none;
-}
-
-.student-mycourses-page .tab {
-    flex: 1 1 0;
-    min-width: max-content;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 22px;
-    color: #fff;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background: transparent;
-    transition: background 0.3s ease, color 0.3s ease;
-    border-radius: 0;
-    padding: 12px 24px;
-    white-space: nowrap;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    height: 51px;
-    scroll-snap-align: start;
-    position: relative;
 }
 
-.student-mycourses-page .tab:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 2px;
-    height: 35px;
-    background: #a5a5a5;
-    border-radius: 27px;
+.student-mycourses-page .curriculum-main-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
 }
 
-.student-mycourses-page .tab.active:not(:last-child)::after {
-    display: none;
+.student-mycourses-page .curriculum-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.student-mycourses-page .tab:first-child {
-    border-radius: 12px 0 0 12px;
-}
-
-.student-mycourses-page .tab:last-child {
-    border-radius: 0 12px 12px 0;
-}
-
-.student-mycourses-page .tab:only-child {
-    border-radius: 12px;
-}
-
-.student-mycourses-page .tab:hover {
-    background: rgba(0, 0, 0, 0.05);
-}
-
-.student-mycourses-page .tab.active {
-    background: #198754;
-    color: #fff;
-}
-
-.student-mycourses-page .tab.active:hover {
-    background: #157347;
-}
-
-.student-mycourses-page .tab-first {
-    border-radius: 12px 0 0 12px;
-    padding-left: 32px;
-}
-
-.student-mycourses-page .tab-last {
-    border-radius: 0 12px 12px 0;
-    padding-right: 32px;
-}
-
-.student-mycourses-page .tabs-container:focus {
-    outline: 2px solid #198754;
-    outline-offset: 2px;
-}
-
-/* Tabs Wrapper */
-.student-mycourses-page .tabs-wrapper {
-    position: relative;
-    width: 100%;
-    max-width: 620px;
-    margin-top: 40px;
-    border-radius: 12px;
+.student-mycourses-page .module-accordion-item {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
     overflow: hidden;
-    /* Ensure overlay respects rounded corners */
+    transition: all 0.3s ease;
 }
 
-/* Override container margin inside wrapper */
-.student-mycourses-page .tabs-wrapper .tabs-container {
-    margin-top: 0;
-    border-radius: 12px;
-    /* Ensure rounded corners */
+.student-mycourses-page .module-accordion-item.active {
+    border-color: #198754;
+    box-shadow: 0 4px 12px rgba(25, 135, 84, 0.1);
 }
 
-/* Fade Overlay + Arrow */
-.student-mycourses-page .tabs-fade-overlay {
-    position: absolute;
-    top: 0;
-    width: 60px;
-    height: 100%;
+.student-mycourses-page .module-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: #fdfdfd;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s ease;
+}
+
+.student-mycourses-page .module-header:hover {
+    background: #f5f5f5;
+}
+
+.student-mycourses-page .module-header-left {
     display: flex;
     align-items: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    cursor: pointer;
-    z-index: 10;
-}
-
-.student-mycourses-page .tabs-fade-overlay.right {
-    right: 0;
-    justify-content: flex-end;
+    gap: 15px;
+    flex: 1;
+    min-width: 0;
     padding-right: 15px;
-    background: transparent;
-    /* No gradient as requested */
 }
 
-.student-mycourses-page .tabs-fade-overlay.left {
-    left: 0;
-    justify-content: flex-start;
-    padding-left: 15px;
-    background: transparent;
-    /* No gradient as requested */
+.student-mycourses-page .accordion-icon {
+    font-size: 14px;
+    color: #333;
+    transition: transform 0.3s ease;
+    flex-shrink: 0;
 }
 
-.student-mycourses-page .tabs-fade-overlay:hover .fade-arrow {
-    transform: scale(1.2);
-    /* Color change on hover intentionally removed to keep consistent style */
+.student-mycourses-page .accordion-icon.expanded {
+    transform: rotate(180deg);
+    color: #198754;
 }
 
-.student-mycourses-page .tabs-fade-overlay.visible {
-    opacity: 1;
+.student-mycourses-page .module-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.4;
 }
 
-.student-mycourses-page .fade-arrow {
-    font-size: 20px;
-    color: #555;
-    transition: transform 0.2s ease;
+.student-mycourses-page .module-meta {
+    font-size: 13px;
+    color: #777;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
-@keyframes bounceRight {
-
-    0%,
-    100% {
-        transform: translateX(0);
-    }
-
-    50% {
-        transform: translateX(3px);
-    }
+.student-mycourses-page .module-body {
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    background: #ffffff;
 }
 
-
-
-/* Divider */
-.student-mycourses-page .tabs-horizontal-divider {
-    width: 100%;
-    height: 2px;
-    background: #9a9a9a;
-    margin-top: 23px;
+.student-mycourses-page .module-lessons-list {
+    padding: 0 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 15px;
 }
+
 
 /* LESSON ROW */
 .student-mycourses-page .lesson-row {
     width: 100%;
-    max-width: 907px;
-    height: 56px;
-    background: #e4e4e4;
-    border-radius: 41px;
-    box-shadow: 0 0 5.7px 4px rgba(0, 0, 0, 0.25);
+    height: 50px;
+    background: #ffffff;
+    border-radius: 50px;
+    border: 1px solid #eee;
     display: flex;
     align-items: center;
-    padding: 0 20px;
-    margin-top: 40px;
+    padding: 0 15px;
+    margin-top: 0;
+    transition: all 0.2s ease;
+}
+
+.student-mycourses-page .lesson-row:hover {
+    background: #fcfcfc;
+    border-color: #198754;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
 .student-mycourses-page .lesson-number {
-    width: 48px;
-    height: 48px;
-    background: #000;
+    width: 28px;
+    height: 28px;
+    background: #f0f0f0;
     border-radius: 50%;
-    color: #fff;
-    font-size: 20px;
+    color: #333;
+    font-size: 13px;
+    font-weight: 700;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .student-mycourses-page .lesson-title {
     flex: 1;
-    margin-left: 25px;
-    font-size: 20px;
-    color: #373737;
+    margin-left: 15px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #444;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .student-mycourses-page .lesson-action {
-    width: 120px;
+    width: 100px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
 }
 
 .student-mycourses-page .open-btn {
-    width: 105px;
-    height: 41px;
-    border-radius: 9px;
+    padding: 6px 16px;
+    border-radius: 50px;
     border: none;
-    background: #000;
+    background: #333;
     color: #fff;
-    font-size: 15px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.student-mycourses-page .open-btn:hover {
+    background: #000;
 }
 
 .student-mycourses-page .lock-icon {
-    font-size: 24px;
+    font-size: 18px;
+    color: #999;
 }
+
 
 
 
@@ -502,39 +478,22 @@
    RESPONSIVE LAYOUT
 ============================================ */
 
-@media (max-width: 992px) {
+/* Mobile */
+@media (max-width: 449px) {
+    .student-mycourses-page {
+        width: 100%;
+        overflow-x: hidden;
+    }
 
     .student-mycourses-page .col-4,
     .student-mycourses-page .col-8 {
         width: 100% !important;
         max-width: 100%;
-    }
-
-    .student-mycourses-page .left-shadow {
-        max-width: 100%;
-        min-width: 100%;
-    }
-
-    .student-mycourses-page .left-section {
-        height: auto;
-        min-height: auto;
-        padding-bottom: 40px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-
-    .student-mycourses-page .course-card {
-        max-width: 100%;
+        padding: 0 !important;
     }
 
     .student-mycourses-page .col-8.right-section {
         display: none;
-    }
-
-    .student-mycourses-page .col-4 {
-        display: block;
     }
 
     .mobile-show-details .col-4 {
@@ -545,31 +504,229 @@
         display: block;
     }
 
-    .student-mycourses-page .mobile-back-btn {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        background: transparent;
-        border: none;
-        font-size: 16px;
-        font-weight: 600;
-        color: #000;
-        margin-bottom: 20px;
+    .student-mycourses-page .container-fluid {
+        margin-top: 3rem;
         padding: 0;
     }
-}
 
-@media (min-width: 993px) {
-    .student-mycourses-page .mobile-back-btn {
+    .student-mycourses-page .left-shadow {
+        width: 100%;
+        max-width: 100%;
+        min-width: auto;
+    }
+
+    .student-mycourses-page .left-shadow::after {
         display: none;
     }
-}
 
-@media (max-width: 768px) {
+    .student-mycourses-page .left-section {
+        height: auto;
+        min-height: auto;
+        padding: 15px;
+    }
+
+    .student-mycourses-page .card-container {
+        padding: 0 10px;
+        gap: 15px;
+    }
+
+    .student-mycourses-page .course-card {
+        max-width: 100%;
+        min-height: 140px;
+        padding: 12px;
+    }
+
+    .student-mycourses-page .course-thumb {
+        width: 100px;
+        height: 80px;
+    }
+
+    .student-mycourses-page .card-details {
+        padding-left: 12px;
+        min-height: 100px;
+    }
+
+    .student-mycourses-page .curriculum-tab-bar {
+        display: flex;
+        width: 100%;
+        overflow-x: auto;
+        scrollbar-width: none;
+        border-radius: 8px;
+        gap: 8px;
+    }
+
+    .student-mycourses-page .curriculum-tab-bar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .student-mycourses-page .curriculum-tab {
+        padding: 8px 12px;
+        font-size: 11px;
+        flex: 0 0 auto;
+        min-width: 70px;
+        white-space: nowrap;
+    }
+
+    .student-mycourses-page .curriculum-title {
+        font-size: 16px;
+    }
+
+    .student-mycourses-page .lesson-row {
+        height: auto;
+        padding: 10px;
+        gap: 12px;
+    }
+
+    .student-mycourses-page .lesson-number {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .student-mycourses-page .lesson-title {
+        font-size: 12px;
+        margin-left: 8px;
+    }
+
     .student-mycourses-page .large-card {
         flex-direction: column;
         align-items: center;
         text-align: center;
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .student-mycourses-page .large-thumb {
+        width: 100%;
+        height: auto;
+        max-height: 180px;
+    }
+
+    .student-mycourses-page .large-progress-bar {
+        width: 100%;
+    }
+
+    .student-mycourses-page .right-section {
+        padding: 15px;
+        height: auto;
+        overflow-y: visible;
+        position: static;
+        top: auto;
+    }
+
+    .student-mycourses-page .mobile-back-btn {
+        display: flex !important;
+    }
+}
+
+/* Tablet */
+@media (min-width: 450px) and (max-width: 1024px) {
+    .student-mycourses-page {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .student-mycourses-page .container-fluid {
+        margin-top: 2rem;
+        padding: 0 15px;
+        width: 100%;
+    }
+
+    .student-mycourses-page .col-4,
+    .student-mycourses-page .col-8 {
+        width: 100% !important;
+        max-width: 100%;
+        padding: 0 !important;
+    }
+
+    .student-mycourses-page .left-shadow {
+        max-width: 100%;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .student-mycourses-page .left-shadow::after {
+        display: none;
+    }
+
+    .student-mycourses-page .left-section {
+        height: auto;
+        min-height: auto;
+        padding: 20px;
+        background: #fdfdfd;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        margin-bottom: 30px;
+    }
+
+    .student-mycourses-page .courses-heading {
+        text-align: center;
+        margin-left: 0;
+        margin-bottom: 25px;
+        font-size: 22px;
+    }
+
+    .student-mycourses-page .card-container {
+        padding: 0;
+        align-items: center;
+        width: 100%;
+        gap: 20px;
+    }
+
+    .student-mycourses-page .course-card {
+        max-width: 500px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .student-mycourses-page .col-8.right-section {
+        display: none;
+    }
+
+    .mobile-show-details .col-4 {
+        display: none;
+    }
+
+    .mobile-show-details .col-8.right-section {
+        display: block;
+        padding: 0;
+    }
+
+    .student-mycourses-page .right-section {
+        padding: 20px;
+        height: auto;
+        overflow-y: visible;
+        position: static;
+        top: auto;
+    }
+
+    .student-mycourses-page .curriculum-tabs-container {
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .student-mycourses-page .curriculum-tab-bar {
+        justify-content: flex-start;
+        display: flex;
+        overflow-x: auto;
+        gap: 10px;
+    }
+
+    .student-mycourses-page .curriculum-tab {
+        padding: 8px 16px;
+        font-size: 12px;
+        flex: 0 0 auto;
+    }
+
+    .student-mycourses-page .curriculum-lessons-stats {
+        padding: 0 10px;
+    }
+
+    .student-mycourses-page .large-card {
+        max-width: 100%;
+        flex-direction: column;
+        gap: 15px;
     }
 
     .student-mycourses-page .large-thumb {
@@ -577,121 +734,54 @@
         height: auto;
     }
 
-    .student-mycourses-page .large-bottom-row {
-        justify-content: center;
-    }
-
-    /* Mobile Tabs: One at a time, centered */
-    .student-mycourses-page .tabs-container {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding: 0;
-        scroll-snap-type: x mandatory;
-        /* Snap to tabs */
-        margin-top: 20px;
-    }
-
-    .student-mycourses-page .tab {
-        flex: 0 0 100%;
-        /* Full width */
+    .student-mycourses-page .large-progress-bar {
         width: 100%;
-        min-width: 100%;
-        height: 51px;
-        font-size: 14px;
-        padding: 12px 0;
-        scroll-snap-align: center;
-        /* Center snap */
-        justify-content: center;
     }
 
-    /* Ensure arrows are visible on mobile and white for contrast on green */
-    .student-mycourses-page .tabs-fade-overlay {
-        display: flex;
-        width: 50px;
+    .student-mycourses-page .mobile-back-btn {
+        display: flex !important;
     }
+}
 
-    .student-mycourses-page .fade-arrow {
-        color: #fff;
-    }
-
-    .student-mycourses-page .tabs-wrapper {
-        margin-top: 20px;
-    }
-
-    .student-mycourses-page .lesson-row {
-        height: auto;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 15px;
-        gap: 10px;
-    }
-
-    .student-mycourses-page .lesson-number {
-        width: 40px;
-        height: 40px;
-        font-size: 16px;
-    }
-
-    .student-mycourses-page .lesson-title {
-        margin-left: 0;
-    }
-
-    .student-mycourses-page .lesson-action {
+/* Large Screens */
+@media (min-width: 1440px) {
+    .student-mycourses-page {
         width: 100%;
+    }
+
+    .student-mycourses-page .right-section {
+        padding: 40px 60px;
+        height: 100vh;
+        overflow-y: auto;
+        position: sticky;
+        top: 0;
+    }
+
+    .student-mycourses-page .curriculum-tabs-container {
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+    }
+
+    .student-mycourses-page .curriculum-tab-bar {
         justify-content: flex-start;
+        display: flex;
+    }
+
+    .student-mycourses-page .curriculum-lessons-stats {
+        max-width: 1000px;
+        margin: 0 auto 15px;
+    }
+
+    .student-mycourses-page .curriculum-lesson-list {
+        max-width: 1000px;
+        margin: 0 auto;
+        text-align: left;
     }
 }
 
-@media (max-width: 480px) {
-    .student-mycourses-page .large-title {
-        font-size: 20px;
-    }
-
-    .student-mycourses-page .lesson-title {
-        font-size: 16px;
-    }
-
-    .student-mycourses-page .open-btn {
-        width: 100%;
-    }
-}
-
-@media (max-width: 576px) {
-    .student-mycourses-page .course-card {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .student-mycourses-page .card-content {
-        flex-direction: column;
-    }
-
-    .student-mycourses-page .course-thumb {
-        width: 100%;
-        height: auto;
-        max-height: 180px;
-        margin-bottom: 15px;
-    }
-
-    .student-mycourses-page .card-details {
-        padding-left: 0;
-        width: 100%;
-    }
-
-    .student-mycourses-page .course-title {
-        font-size: 16px;
-    }
-
-    .student-mycourses-page .lessons,
-    .student-mycourses-page .author {
-        font-size: 11px;
-    }
-}
-
-/* =========================================================
-   LESSON CONTENT VIEW (INTRODUCTION SECTION)
-========================================================= */
+/* Fixes for lesson content view */
 .student-mycourses-page .lesson-content-view {
     width: 100%;
     animation: fadeIn 0.3s ease-in-out;
@@ -706,20 +796,5 @@
     to {
         opacity: 1;
         transform: translateY(0);
-    }
-}
-
-@media (max-width: 992px) {
-    .student-mycourses-page .lesson-content-view .btn-dark {
-        background: transparent !important;
-        border: none !important;
-        color: #000 !important;
-        padding: 0 !important;
-        font-weight: 600;
-        margin-bottom: 20px !important;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        box-shadow: none !important;
     }
 }

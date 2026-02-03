@@ -59,6 +59,9 @@
     max-width: 1280px;
     margin: 0 auto;
     padding: 0 var(--student-spacing-lg);
+    width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 .student-card {
@@ -210,6 +213,12 @@
     }
 }
 
+@media (max-width: 1024px) {
+    .student-container {
+        padding: 0 var(--student-spacing-md);
+    }
+}
+
 @media (max-width: 768px) {
     .student-container {
         padding: 0 var(--student-spacing-sm);
@@ -226,6 +235,10 @@
     .student-heading-3 {
         font-size: 20px;
     }
+
+    .student-card {
+        padding: var(--student-spacing-md);
+    }
 }
 
 @media (max-width: 480px) {
@@ -239,5 +252,19 @@
 
     .student-heading-2 {
         font-size: 22px;
+    }
+
+    .student-heading-3 {
+        font-size: 18px;
+    }
+
+    .student-card {
+        padding: var(--student-spacing-sm);
+    }
+
+    .student-btn-primary,
+    .student-btn-secondary {
+        padding: 10px 20px;
+        font-size: 14px;
     }
 }

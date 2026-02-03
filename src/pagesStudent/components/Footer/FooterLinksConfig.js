@@ -7,21 +7,21 @@ export const footerSocials = [
 ];
 
 export const quickLinks = [
-    { label: "Home", path: "https://www.urbancode.in/home" },
+    { label: "Home", path: "https://www.urbancode.in/" },
     { label: "About Us", path: "https://www.urbancode.in/about-us" },
-    { label: "Contact Us", path: "https://www.urbancode.in/contacus" },
+    { label: "Contact Us", path: "https://www.urbancode.in/contact-us" },
     { label: "Projects", path: "https://www.urbancode.in/projects" },
     { label: "Blogs", path: "https://www.urbancode.in/blogs" }
 ];
 
 export const trendingCourses = [
-    { label: "MERN Stack", path: "https://www.urbancode.in/courses/web-and-app-development/mern-stack" },
-    { label: "MEAN Stack", path: "https://www.urbancode.in/courses/web-and-app-development/mean-stack" },
+    { label: "MERN Stack", path: "https://www.urbancode.in/training/mern-stack" },
+    { label: "MEAN Stack", path: "https://www.urbancode.in/training/mean-stack" },
     { label: "Python Stack", path: "https://www.urbancode.in/courses/web-and-app-development/python-full-stack" },
     { label: ".Net + Angular Full Stack", path: "https://www.urbancode.in/training/dotnet-angular" },
-    { label: "Data Analytics", path: "https://www.urbancode.in/courses/data-science" },
-    { label: "AWS Cloud Computing", path: "https://www.urbancode.in/courses/cloud-and-devops/aws" },
-    { label: "Software Testing", path: "https://www.urbancode.in/courses/software-testing" }
+    { label: "Data Analytics", path: "https://www.urbancode.in/training/data-analytics" },
+    { label: "AWS Cloud Computing", path: "https://www.urbancode.in/training/aws-devops" },
+    { label: "Software Testing", path: "https://www.urbancode.in/training/automation-testing" }
 ];
 
 export const kidsCourses = [

@@ -1,7 +1,7 @@
 .hero-container {
   position: relative;
   width: 100%;
-  height: 640px;
+  height: 740px;
   /* Increased from 600px to accommodate buttons at top:561px + height:51px */
   /* Increased from 600px to accommodate buttons at top:561px + height:51px */
   /* Background properties moved to ::before for animation */
@@ -118,7 +118,7 @@
 .hero-sub {
   font-size: 16px;
   color: #ffffff;
-  margin: 0 0 22px;
+  margin: 0 0 112px;
   max-width: 560px;
   font-weight: 500;
   text-shadow: #0f172a 0px 4px 12px;

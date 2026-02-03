@@ -1,38 +1,22 @@
 /* Container for the entire banner */
 .banner-container {
-  /* Set the height of the banner */
   height: 670px;
-  /* Adjust this height as needed */
   width: 100%;
-
-  /* Background Image Properties */
   background-image: linear-gradient(
-      /* This linear gradient creates the dark overlay effect */
       to right,
       rgba(0, 0, 0, 0.6) 0%,
-      /* Darker on the left */
       rgba(0, 0, 0, 0.1) 60%,
-      /* Lighter towards the center */
       rgba(0, 0, 0, 0.4) 100%
-      /* Slightly darker on the right */
     ),
-    /* Replace 'path/to/your/image.jpg' with the actual path */
     url('/student/Banner.jpg');
-
-  /* Ensure the image covers the container */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-
-  /* Flexbox for centering content */
   display: flex;
   justify-content: center;
-  /* Center horizontally */
   align-items: center;
-  /* Center vertically */
-
-  /* Add the white fade effect at the bottom */
   position: relative;
+  overflow-x: hidden;
 }
 
 /* Add the subtle white fade at the bottom (optional but present in the original) */
@@ -43,8 +27,6 @@
   left: 0;
   width: 100%;
   height: 250px;
-  /* Height of the fade */
-  /* Gradient from transparent to white */
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #e4e4e4 100%);
 }
 
@@ -52,17 +34,14 @@
 .banner-container .banner-content {
   text-align: center;
   max-width: 600px;
-  /* Limit the width of the text block */
   z-index: 1;
-  /* Ensure text is above the ::after fade */
   padding: 0 20px;
-  /* Add some padding on the sides */
+  width: 100%;
 }
 
 /* Heading style */
 .banner-container .banner-content h1 {
   font-size: 3em;
-  /* Large, prominent heading */
   font-weight: bold;
   margin-bottom: 0.5em;
   line-height: 1.2;
@@ -72,9 +51,7 @@
 /* Paragraph style */
 .banner-container .banner-content p {
   font-size: 1.2em;
-  /* Readable paragraph size */
   opacity: 0.9;
-  /* Slightly less opaque than the heading */
   color: #fff !important;
 }
 
@@ -85,17 +62,17 @@
 /* Tablet View */
 @media (max-width: 1024px) {
   .banner-container {
-    height: 600px;
+    height: 550px;
     background-position: center right;
   }
 
   .banner-content h1 {
-    font-size: 2.4em;
+    font-size: 2.2em;
     color: #fff !important;
   }
 
   .banner-content p {
-    font-size: 1.1em;
+    font-size: 1em;
     color: #fff !important;
   }
 }
@@ -104,42 +81,55 @@
 @media (max-width: 768px) {
   .banner-container {
     height: auto;
-    /* Allow auto height for long text */
-    padding: 120px 20px;
+    min-height: 450px;
+    padding: 100px 20px 60px;
     background-position: center right;
   }
 
   .banner-content {
     text-align: left;
     max-width: 100%;
+    padding: 0;
   }
 
   .banner-content h1 {
     font-size: 1.8em;
     line-height: 1.3;
     color: #fff !important;
+    margin-bottom: 10px;
   }
 
   .banner-content p {
-    font-size: 1em;
-    margin-top: 10px;
+    font-size: 0.95em;
+    margin-top: 8px;
     color: #fff !important;
   }
 
   .banner-container::after {
-    height: 80px;
+    height: 100px;
   }
 }
 
 /* Small Mobile (phones under 480px) */
 @media (max-width: 480px) {
+  .banner-container {
+    min-height: 400px;
+    padding: 80px 15px 50px;
+  }
+
   .banner-content h1 {
-    font-size: 1.6em;
+    font-size: 1.5em;
+    line-height: 1.2;
     color: #fff !important;
+    margin-bottom: 8px;
   }
 
   .banner-content p {
-    font-size: 0.95em;
+    font-size: 0.9em;
     color: #fff !important;
+  }
+
+  .banner-container::after {
+    height: 80px;
   }
 }

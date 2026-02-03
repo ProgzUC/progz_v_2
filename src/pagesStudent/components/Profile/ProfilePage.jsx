@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./ProfilePage.css";
 import { useStudentProfile, useUpdateStudentProfile, useChangePassword } from "../../../hooks/useStudentProfile";
 import { useStudentCourses } from "../../../hooks/useStudentCourses";
@@ -8,7 +9,18 @@ import ImageWithFallback from "../../../components/common/ImageWithFallback/Imag
 /* ============================
    USER INITIALS AVATAR
 ============================ */
-const UserAvatar = ({ name }) => {
+const UserAvatar = ({ name, imageUrl }) => {
+    // Cache bust the image to ensure update is reflected
+    const cacheBustUrl = imageUrl ? `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}t=${new Date().getTime()}` : null;
+
+    if (imageUrl) {
+        return (
+            <div className="profile-avatar-wrapper">
+                <img src={cacheBustUrl} alt={name} className="profile-image-avatar" />
+            </div>
+        );
+    }
+
     const initials = (name || "User")
         .split(' ')
         .map(word => word[0])
@@ -33,12 +45,27 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
     const [confirmPwdInput, setConfirmPwdInput] = useState("");
     const [error, setError] = useState("");
     const [successMsg, setSuccessMsg] = useState("");
+    const [previewImage, setPreviewImage] = useState(currentData.profileImage || null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const fileInputRef = useRef(null);
 
     const updateProfile = useUpdateStudentProfile();
     const changePassword = useChangePassword();
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setSelectedFile(file);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setPreviewImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handlePasswordSave = () => {
@@ -79,13 +106,23 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
             return;
         }
 
-        updateProfile.mutate(form, {
-            onSuccess: () => {
-                onSave(form);
+        const formData = new FormData();
+        formData.append('phone', form.phone || "");
+        formData.append('location', form.location || "");
+        formData.append('education', form.education || "");
+        formData.append('jobTitle', form.jobTitle || "");
+
+        if (selectedFile) {
+            formData.append('profileImage', selectedFile);
+        }
+
+        updateProfile.mutate(formData, {
+            onSuccess: (updatedData) => {
+                if (onSave) onSave(updatedData);
                 onClose();
             },
             onError: (err) => {
-                setError(err?.response?.data?.message || "Failed to update profile.");
+                setError(err?.message || "Failed to update profile.");
             }
         });
     };
@@ -98,6 +135,33 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                 <h2>{mode === "password" ? "Change Password" : "Edit Profile"}</h2>
                 {mode !== "password" && (
                     <>
+                        {/* Profile Picture Section */}
+                        <div className="profile-image-edit-section">
+                            <div className="profile-image-preview-container">
+                                {previewImage ? (
+                                    <img src={previewImage} alt="Preview" className="profile-image-preview" />
+                                ) : (
+                                    <div className="profile-image-placeholder">
+                                        {(form.name || "U")[0].toUpperCase()}
+                                    </div>
+                                )}
+                            </div>
+                            <button
+                                className="profile-change-photo-btn"
+                                onClick={() => fileInputRef.current.click()}
+                                type="button"
+                            >
+                                Change Photo
+                            </button>
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                onChange={handleImageChange}
+                                accept="image/*"
+                                style={{ display: 'none' }}
+                            />
+                        </div>
+
                         <div className="profile-input-row">
                             <label>Phone Number</label>
                             <input type="text" name="phone" value={form.phone || ""} onChange={handleChange} />
@@ -157,7 +221,7 @@ const Info = ({ profile, ongoingCount, completedCount }) => {
     return (
         <div className="profile-sidebar">
             <div className="profile-header-meta">
-                <UserAvatar name={profile.name} />
+                <UserAvatar name={profile.name} imageUrl={profile.profileImage} />
             </div>
 
             <div className="profile-details-list">
@@ -224,6 +288,7 @@ const Info = ({ profile, ongoingCount, completedCount }) => {
 ============================ */
 const CourseGrid = ({ courses }) => {
     const [filter, setFilter] = useState("ongoing");
+    const navigate = useNavigate();
 
     const filteredCourses = courses.filter((course) => {
         const progress = course.progressPercentage || 0;
@@ -232,7 +297,8 @@ const CourseGrid = ({ courses }) => {
         return true;
     });
 
-    const handleCertificate = () => {
+    const handleCertificate = (e) => {
+        e.stopPropagation(); // Avoid navigating when clicking certificate
         const pngUrl = "/certificate.png";
         window.open(pngUrl, '_blank');
         const link = document.createElement("a");
@@ -263,10 +329,15 @@ const CourseGrid = ({ courses }) => {
                         const isCompleted = progress === 100;
 
                         return (
-                            <div key={c.courseId || c.id} className="profile-course-card">
+                            <div
+                                key={c.courseId || c.id}
+                                className="profile-course-card"
+                                onClick={() => navigate('/student-dashboard/my-courses', { state: { courseId: c.courseId || c.id } })}
+                                style={{ cursor: "pointer" }}
+                            >
                                 <div className="profile-course-card-top">
                                     <ImageWithFallback
-                                        src={c.courseImage || c.img}
+                                        src={c.thumbnail?.url || c.courseImage || c.img}
                                         alt={c.courseName || c.title}
                                         className="profile-card-image"
                                         fallbackText={c.courseName || c.title}
@@ -277,7 +348,6 @@ const CourseGrid = ({ courses }) => {
                                 </div>
                                 <div className="profile-course-card-body">
                                     <h3>{c.courseName || c.title}</h3>
-                                    <p className="profile-card-author">{c.instructor || c.author}</p>
 
                                     <div className="profile-card-progress-area">
                                         <div className="profile-card-progress-label">
@@ -346,3 +416,4 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
+

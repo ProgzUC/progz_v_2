@@ -11,8 +11,14 @@ export const useUpdateStudentProfile = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: updateStudentProfile,
-        onSuccess: () => {
-            queryClient.invalidateQueries(["studentProfile"]);
+        onSuccess: (data) => {
+            // Update the cache immediately for instant UI feedback
+            queryClient.setQueryData(["studentProfile"], data);
+
+            // Invalidate to ensure we stay in sync with any background server logic
+            queryClient.invalidateQueries({
+                queryKey: ["studentProfile"]
+            });
         },
     });
 };

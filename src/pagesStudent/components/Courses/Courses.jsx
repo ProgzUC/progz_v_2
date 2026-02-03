@@ -69,7 +69,6 @@ export default function Courses() {
 
             <img src={course.img} alt={course.title} className="jc-course-img" />
 
-            {/* <button className="jc-course-btn">↗</button> */}
 
             <div className="jc-course-content">
               <h2 className="jc-courses-card-title">{course.title}</h2>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLocation } from "react-router-dom";
 import "./CourseCard.css";
 import Introduction from "../Introduction/Introduction";
 import { useStudentCourses, useCourseProgress } from "../../../hooks/useStudentCourses";
@@ -43,7 +44,8 @@ function LargeCourseCard({ course }) {
                 <span className="large-category">{course.batchName}</span>
 
                 <h2 className="large-title">{course.courseName}</h2>
-                <p className="large-author">{course.courseId}</p>
+
+
 
                 <div className="large-progress-bar">
                     <div
@@ -68,131 +70,6 @@ function LargeCourseCard({ course }) {
 }
 
 /* ----------------------------------------------
-   TABS — DYNAMIC BUT SAME DESIGN
----------------------------------------------- */
-function CourseTabs({ tabs, activeTab, setActiveTab }) {
-    const tabsRef = useRef({});
-    const containerRef = useRef(null);
-    const [showLeftFade, setShowLeftFade] = useState(false);
-    const [showRightFade, setShowRightFade] = useState(false);
-
-    // Check visibility of fades
-    const checkScroll = () => {
-        if (containerRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
-            setShowLeftFade(scrollLeft > 0);
-            setShowRightFade(scrollWidth > clientWidth && scrollLeft < scrollWidth - clientWidth - 5);
-        }
-    };
-
-    // Navigate Tabs (Next/Prev)
-    const handleTabNav = (direction) => {
-        const currentIndex = tabs.indexOf(activeTab);
-        if (direction === 'left') {
-            const prevIndex = currentIndex - 1;
-            if (prevIndex >= 0) setActiveTab(tabs[prevIndex]);
-        } else {
-            const nextIndex = currentIndex + 1;
-            if (nextIndex < tabs.length) setActiveTab(tabs[nextIndex]);
-        }
-    };
-
-    useEffect(() => {
-        if (tabsRef.current[activeTab]) {
-            tabsRef.current[activeTab].scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest',
-                inline: 'center'
-            });
-        }
-    }, [activeTab]);
-
-    useEffect(() => {
-        const container = containerRef.current;
-        if (container) {
-            container.addEventListener('scroll', checkScroll);
-            checkScroll(); // Check initially
-            window.addEventListener('resize', checkScroll);
-
-            return () => {
-                container.removeEventListener('scroll', checkScroll);
-                window.removeEventListener('resize', checkScroll);
-            };
-        }
-    }, [tabs]);
-
-    const handleKeyDown = (e) => {
-        const currentIndex = tabs.indexOf(activeTab);
-
-        if (e.key === 'ArrowRight') {
-            e.preventDefault();
-            const nextIndex = (currentIndex + 1) % tabs.length;
-            setActiveTab(tabs[nextIndex]);
-        } else if (e.key === 'ArrowLeft') {
-            e.preventDefault();
-            const prevIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-            setActiveTab(tabs[prevIndex]);
-        }
-    };
-
-    return (
-        <div className="tabs-wrapper">
-            {/* Left Fade */}
-            <div
-                className={`tabs-fade-overlay left ${showLeftFade ? 'visible' : ''}`}
-                onClick={() => handleTabNav('left')}
-            >
-                <i className="bi bi-chevron-left fade-arrow"></i>
-            </div>
-            <div
-                className="tabs-container"
-                ref={containerRef}
-                onKeyDown={handleKeyDown}
-                tabIndex={0}
-                role="tablist"
-                aria-label="Course sections"
-            >
-                {tabs.map((tabName, index) => {
-                    const isFirst = index === 0;
-                    const isLast = index === tabs.length - 1;
-                    const isActive = activeTab === tabName;
-
-                    return (
-                        <div
-                            key={tabName}
-                            ref={el => tabsRef.current[tabName] = el}
-                            className={`tab 
-                  ${isFirst ? "tab-first" : ""} 
-                  ${isLast ? "tab-last" : ""} 
-                  ${isActive ? "active" : ""}`}
-                            onClick={() => setActiveTab(tabName)}
-                            title={tabName}
-                            role="tab"
-                            aria-selected={isActive}
-                            tabIndex={isActive ? 0 : -1}
-                        >
-                            {tabName}
-                        </div>
-                    );
-                })}
-            </div>
-
-            {/* Right Fade */}
-            <div
-                className={`tabs-fade-overlay right ${showRightFade ? 'visible' : ''}`}
-                onClick={() => handleTabNav('right')}
-            >
-                <i className="bi bi-chevron-right fade-arrow"></i>
-            </div>
-        </div>
-    );
-}
-
-function TabsDivider() {
-    return <div className="tabs-horizontal-divider"></div>;
-}
-
-/* ----------------------------------------------
    LESSON ROW
 ---------------------------------------------- */
 function LessonRow({ number, title, isLocked, onOpen }) {
@@ -213,42 +90,108 @@ function LessonRow({ number, title, isLocked, onOpen }) {
 }
 
 /* ----------------------------------------------
-   MAIN MY COURSES PAGE
+   CURRICULUM TABS
 ---------------------------------------------- */
+/* ----------------------------------------------
+   COURSE CURRICULUM (ACCORDION STYLE)
+---------------------------------------------- */
+function CourseCurriculum({ modules, setViewLesson }) {
+    const [expandedModuleIdx, setExpandedModuleIdx] = useState(0);
+
+    const toggleModule = (index) => {
+        setExpandedModuleIdx(prev => prev === index ? -1 : index);
+    };
+
+    if (!modules || modules.length === 0) return null;
+
+    return (
+        <div className="course-curriculum-container">
+            <h3 className="curriculum-main-title">Course Curriculum</h3>
+
+            <div className="curriculum-accordion">
+                {modules.map((module, mIdx) => {
+                    const isExpanded = expandedModuleIdx === mIdx;
+                    const lessonCount = module.sections?.length || 0;
+
+                    return (
+                        <div key={mIdx} className={`module-accordion-item ${isExpanded ? 'active' : ''}`}>
+                            <button
+                                className="module-header"
+                                onClick={() => toggleModule(mIdx)}
+                                aria-expanded={isExpanded}
+                            >
+                                <div className="module-header-left">
+                                    <i className={`bi bi-chevron-down accordion-icon ${isExpanded ? 'expanded' : ''}`}></i>
+                                    <span className="module-title">{module.moduleName || module.title}</span>
+                                </div>
+                                <span className="module-meta">{lessonCount} {lessonCount === 1 ? 'Lesson' : 'Lessons'}</span>
+                            </button>
+
+                            <div
+                                className="module-body"
+                                style={{
+                                    maxHeight: isExpanded ? '2000px' : '0',
+                                    opacity: isExpanded ? 1 : 0
+                                }}
+                            >
+                                <div className="module-lessons-list">
+                                    {module.sections?.map((section, sIdx) => {
+                                        const sectionTitle = section.sectionName || section.title;
+                                        const isCompleted = section.isCompleted === true;
+                                        const isLocked = !isCompleted;
+
+                                        return (
+                                            <LessonRow
+                                                key={sIdx}
+                                                number={sIdx + 1}
+                                                title={sectionTitle}
+                                                isLocked={isLocked}
+                                                onOpen={() => setViewLesson(section)}
+                                            />
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
 export default function MyCourses() {
     const { data: coursesData, isLoading: listLoading, isError } = useStudentCourses();
     const courses = coursesData?.enrolledCourses || [];
 
-    const [selectedCourse, setSelectedCourse] = useState(null);
-    const [activeTab, setActiveTab] = useState("");
+    const [selectedCourseId, setSelectedCourseId] = useState(null);
     const [showMobileDetails, setShowMobileDetails] = useState(false);
     const [viewLesson, setViewLesson] = useState(null);
+
+    // Get selected course from the source of truth
+    const selectedCourse = courses.find(c => c.courseId === selectedCourseId) || courses[0];
 
     // Fetch details for selected course to get modules/sections
     const { data: courseDetails, isLoading: detailsLoading } = useCourseProgress(selectedCourse?.courseId);
 
-    // Debug logging
-    console.log("Selected Course:", selectedCourse);
-    console.log("Course Details (API):", courseDetails);
-    console.log("Thumbnail URL:", selectedCourse?.thumbnail);
-    console.log("course data", coursesData);
-    console.log("Lesson Progress Array:", courseDetails?.lessonProgress);
+    const location = useLocation();
+
+    // Sync selectedCourseId from location state or initial load
+    React.useEffect(() => {
+        if (courses.length > 0) {
+            const stateCourseId = location.state?.courseId;
+            if (stateCourseId && courses.some(c => c.courseId === stateCourseId)) {
+                setSelectedCourseId(stateCourseId);
+                setShowMobileDetails(true);
+            } else if (!selectedCourseId) {
+                setSelectedCourseId(courses[0].courseId);
+            }
+        }
+    }, [courses, selectedCourseId, location.state]);
 
     // Merge list data with detailed data
     const displayCourse = selectedCourse ? (() => {
-        // Use modules from API details if available (already enriched with isCompleted)
-        // Otherwise fall back to list data modules
         const modules = courseDetails?.course?.modules || selectedCourse.modules || [];
-
-        // Debug logging
-        if (courseDetails?.course?.modules) {
-            console.log("Using enriched modules from API with completion data");
-            const firstModule = modules[0];
-            if (firstModule?.sections?.[0]) {
-                console.log("Sample section:", firstModule.sections[0]);
-            }
-        }
-
         return {
             ...selectedCourse,
             modules: modules,
@@ -256,23 +199,6 @@ export default function MyCourses() {
             lessonProgress: courseDetails?.lessonProgress || []
         };
     })() : null;
-
-    // Set initial selected course from list
-    React.useEffect(() => {
-        if (courses.length > 0 && !selectedCourse) {
-            setSelectedCourse(courses[0]);
-        }
-    }, [courses, selectedCourse]);
-
-    // Update active tab when course details load or course changes
-    React.useEffect(() => {
-        if (displayCourse?.modules?.length > 0) {
-            // Only set if not already set or if switching courses
-            if (!activeTab || !displayCourse.modules.find(m => (m.moduleName || m.title) === activeTab)) {
-                setActiveTab(displayCourse.modules[0].moduleName || displayCourse.modules[0].title);
-            }
-        }
-    }, [displayCourse?.courseId, courseDetails, activeTab]);
 
     if (listLoading) {
         return <Loader message="Loading your courses..." />;
@@ -325,7 +251,7 @@ export default function MyCourses() {
                                             <div
                                                 className={`course-card ${isSelected ? 'selected-card' : ''}`}
                                                 onClick={() => {
-                                                    setSelectedCourse(course);
+                                                    setSelectedCourseId(course.courseId);
                                                     setShowMobileDetails(true);
                                                     setViewLesson(null);
                                                 }}
@@ -345,7 +271,7 @@ export default function MyCourses() {
                                                         </div>
 
                                                         <h3 className="course-title">{course.courseName}</h3>
-                                                        <p className="author">{course.courseId}</p>
+
 
                                                         <div className="progress-bar">
                                                             <div
@@ -387,12 +313,12 @@ export default function MyCourses() {
                                 className="btn btn-dark mb-3"
                                 onClick={() => setViewLesson(null)}
                             >
-                                <i className="bi bi-arrow-left"></i> Back to Lessons
+                                <i className="bi bi-arrow-left"></i> Back to Curriculum
                             </button>
                             <Introduction
                                 sectionData={viewLesson}
                                 courseName={displayCourse.courseName}
-                                moduleName={activeTab}
+                                moduleName={displayCourse.modules.find(m => m.sections.some(s => s === viewLesson))?.moduleName || ""}
                             />
                         </div>
                     ) : (
@@ -409,46 +335,10 @@ export default function MyCourses() {
                             {detailsLoading ? (
                                 <Loader message="Loading curriculum..." />
                             ) : displayCourse.modules && displayCourse.modules.length > 0 ? (
-                                <>
-                                    <CourseTabs
-                                        tabs={displayCourse.modules.map(m => m.moduleName || m.title)}
-                                        activeTab={activeTab}
-                                        setActiveTab={(tab) => {
-                                            setActiveTab(tab);
-                                            setViewLesson(null);
-                                        }}
-                                    />
-
-                                    <TabsDivider />
-
-                                    {displayCourse.modules.find(m => (m.moduleName || m.title) === activeTab)?.sections.map((section, idx, allSections) => {
-                                        // Use enriched section data if available from details
-                                        const sectionTitle = section.sectionName || section.title;
-
-                                        // Simple locking logic: completed sections are unlocked, incomplete sections are locked
-                                        const isCompleted = section.isCompleted === true;
-                                        const isLocked = !isCompleted;
-
-                                        // Debug logging for troubleshooting
-                                        if (idx < 3) { // Log first 3 sections to avoid spam
-                                            console.log(`Section ${idx + 1} (${sectionTitle}):`, {
-                                                isCompleted,
-                                                isLocked,
-                                                rawIsCompleted: section.isCompleted
-                                            });
-                                        }
-
-                                        return (
-                                            <LessonRow
-                                                key={idx}
-                                                number={idx + 1}
-                                                title={sectionTitle}
-                                                isLocked={isLocked}
-                                                onOpen={() => setViewLesson(section)}
-                                            />
-                                        );
-                                    })}
-                                </>
+                                <CourseCurriculum
+                                    modules={displayCourse.modules}
+                                    setViewLesson={setViewLesson}
+                                />
                             ) : (
                                 <p style={{ textAlign: 'center', padding: '40px', color: '#999' }}>
                                     No modules available for this course yet.
@@ -461,3 +351,4 @@ export default function MyCourses() {
         </div>
     );
 }
+

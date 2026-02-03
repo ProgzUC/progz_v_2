@@ -67,7 +67,7 @@ function CategoryPage() {
               <p className="course-desc">{course.desc}</p>
 
               <p className="course-roles">
-                <strong>In Demand Roles:</strong> {course.roles}
+                <strong>In Demand Roles:</strong> {course.roles.replace(/^In Demand Roles:\s*/i, '')}
               </p>
 
               <p className="course-salary">
@@ -75,7 +75,6 @@ function CategoryPage() {
               </p>
             </div>
 
-            <div className="arrow-btn">↗</div>
 
           </div>
         ))}
