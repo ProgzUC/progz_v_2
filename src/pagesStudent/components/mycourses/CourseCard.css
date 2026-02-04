@@ -629,7 +629,8 @@
     .student-mycourses-page .container-fluid {
         margin-top: 2rem;
         padding: 0 15px;
-        width: 100%;
+        width: 90%;
+    
     }
 
     .student-mycourses-page .col-4,

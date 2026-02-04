@@ -2,12 +2,10 @@
 .banner-container {
   height: 670px;
   width: 100%;
-  background-image: linear-gradient(
-      to right,
+  background-image: linear-gradient(to right,
       rgba(0, 0, 0, 0.6) 0%,
       rgba(0, 0, 0, 0.1) 60%,
-      rgba(0, 0, 0, 0.4) 100%
-    ),
+      rgba(0, 0, 0, 0.4) 100%),
     url('/student/Banner.jpg');
   background-size: cover;
   background-position: center;
