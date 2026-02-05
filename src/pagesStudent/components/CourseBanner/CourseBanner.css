@@ -38,9 +38,9 @@
 }
 
 /* Heading style */
-.banner-container .banner-content h1 {
+.banner-container .banner-content .banner-title {
   font-size: 3em;
-  font-weight: bold;
+  font-weight: 600;
   margin-bottom: 0.5em;
   line-height: 1.2;
   color: #fff !important;
@@ -64,7 +64,7 @@
     background-position: center right;
   }
 
-  .banner-content h1 {
+  .banner-content .banner-title {
     font-size: 2.2em;
     color: #fff !important;
   }
@@ -90,7 +90,7 @@
     padding: 0;
   }
 
-  .banner-content h1 {
+  .banner-content .banner-title {
     font-size: 1.8em;
     line-height: 1.3;
     color: #fff !important;
@@ -115,7 +115,7 @@
     padding: 80px 15px 50px;
   }
 
-  .banner-content h1 {
+  .banner-content .banner-title {
     font-size: 1.5em;
     line-height: 1.2;
     color: #fff !important;

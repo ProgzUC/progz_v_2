@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./CourseCard.css";
 import Introduction from "../Introduction/Introduction";
 import { useStudentCourses, useCourseProgress } from "../../../hooks/useStudentCourses";
@@ -28,41 +28,50 @@ function getProgress(modules) {
 /* ----------------------------------------------
    LARGE COURSE CARD (RIGHT SIDE)
 ---------------------------------------------- */
+import { BiTimeFive, BiBarChartAlt2, BiBook } from "react-icons/bi";
+
 function LargeCourseCard({ course }) {
     const progress = course.progressPercentage || 0;
 
     return (
-        <div className="large-card ">
-            <ImageWithFallback
-                src={course.thumbnail?.url}
-                alt={course.courseName}
-                className="large-thumb"
-                fallbackText={course.courseName}
-            />
+        <div className="large-card premium-shadow">
+            <div className="large-thumb-container">
+                <ImageWithFallback
+                    src={course.thumbnail?.url}
+                    alt={course.courseName}
+                    className="large-thumb"
+                    fallbackText={course.courseName}
+                />
+                <div className="large-badge">Enrolled</div>
+            </div>
 
             <div className="large-content">
-                <span className="large-category">{course.batchName}</span>
-
-                <h2 className="large-title">{course.courseName}</h2>
-
-
-
-                <div className="large-progress-bar">
-                    <div
-                        className="large-progress-fill"
-                        style={{ width: `${progress}%` }}
-                    />
+                <div className="large-meta-top">
+                    <span className="large-meta-item"><BiBarChartAlt2 /> {course.level || "Intermediate"}</span>
+                    <span className="large-meta-item"><BiTimeFive /> {course.duration || "Self-paced"}</span>
                 </div>
 
-                <div className="large-bottom-row">
-                    <span className="large-percent">{progress}%</span>
+                <p className="large-title">{course.courseName}</p>
+                <p className="large-batch-info">{course.batchName}</p>
 
-                    <div className="large-lessons">
-                        <i className="bi bi-book lesson-icon"></i>
-                        <span>
-                            {course.completedLessons || 0} of {course.totalLessons || 0} Lessons
-                        </span>
+                <div className="large-progress-section">
+                    <div className="progress-info-row">
+                        <span className="progress-label">Course Progress</span>
+                        <span className="progress-value">{progress}%</span>
                     </div>
+                    <div className="large-progress-bar">
+                        <div
+                            className="large-progress-fill"
+                            style={{ width: `${progress}%` }}
+                        />
+                    </div>
+                </div>
+
+                <div className="large-lessons-summary">
+                    <BiBook className="lesson-icon" />
+                    <span>
+                        <strong>{course.completedLessons || 0}</strong> of {course.totalLessons || 0} Lessons Completed
+                    </span>
                 </div>
             </div>
         </div>
@@ -96,7 +105,7 @@ function LessonRow({ number, title, isLocked, onOpen }) {
    COURSE CURRICULUM (ACCORDION STYLE)
 ---------------------------------------------- */
 function CourseCurriculum({ modules, setViewLesson }) {
-    const [expandedModuleIdx, setExpandedModuleIdx] = useState(0);
+    const [expandedModuleIdx, setExpandedModuleIdx] = useState(-1);
 
     const toggleModule = (index) => {
         setExpandedModuleIdx(prev => prev === index ? -1 : index);
@@ -106,7 +115,7 @@ function CourseCurriculum({ modules, setViewLesson }) {
 
     return (
         <div className="course-curriculum-container">
-            <h3 className="curriculum-main-title">Course Curriculum</h3>
+            <p className="curriculum-main-title">Course Curriculum</p>
 
             <div className="curriculum-accordion">
                 {modules.map((module, mIdx) => {
@@ -164,6 +173,7 @@ export default function MyCourses() {
     const { data: coursesData, isLoading: listLoading, isError } = useStudentCourses();
     const courses = coursesData?.enrolledCourses || [];
 
+    const navigate = useNavigate();
     const [selectedCourseId, setSelectedCourseId] = useState(null);
     const [showMobileDetails, setShowMobileDetails] = useState(false);
     const [viewLesson, setViewLesson] = useState(null);
@@ -179,12 +189,21 @@ export default function MyCourses() {
     // Sync selectedCourseId from location state or initial load
     React.useEffect(() => {
         if (courses.length > 0) {
-            const stateCourseId = location.state?.courseId;
-            if (stateCourseId && courses.some(c => c.courseId === stateCourseId)) {
+            const state = location.state;
+            const stateCourseId = state?.courseId;
+            const isReset = state?.reset;
+
+            if (isReset) {
+                // If clicked from Nav, show the list (reset details)
+                setShowMobileDetails(false);
+            } else if (stateCourseId && courses.some(c => c.courseId === stateCourseId)) {
+                // If clicked from Profile card or specific link
                 setSelectedCourseId(stateCourseId);
                 setShowMobileDetails(true);
             } else if (!selectedCourseId) {
+                // Default initial load
                 setSelectedCourseId(courses[0].courseId);
+                setShowMobileDetails(false);
             }
         }
     }, [courses, selectedCourseId, location.state]);
@@ -218,7 +237,7 @@ export default function MyCourses() {
         return (
             <div className="container-fluid student-mycourses-page">
                 <div className="empty-message" style={{ textAlign: 'center', padding: '40px' }}>
-                    <h3>No courses enrolled yet</h3>
+                    <p className="h3-style">No courses enrolled yet</p>
                     <p>Browse available courses and enroll to get started!</p>
                 </div>
             </div>
@@ -237,7 +256,7 @@ export default function MyCourses() {
                 <div className="col-4 p-0">
                     <div className="left-shadow">
                         <div className="left-section">
-                            <h2 className="courses-heading ms-5 mt-2">My Courses</h2>
+                            <p className="courses-heading ms-5 mt-2">My Courses</p>
 
                             <div className="card-container ms-auto mt-4 ">
                                 {courses.map((course, index) => {
@@ -254,6 +273,10 @@ export default function MyCourses() {
                                                     setSelectedCourseId(course.courseId);
                                                     setShowMobileDetails(true);
                                                     setViewLesson(null);
+                                                    // Scroll to top when selecting on mobile
+                                                    if (window.innerWidth <= 1024) {
+                                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                    }
                                                 }}
                                                 style={{ cursor: "pointer" }}
                                             >
@@ -270,7 +293,7 @@ export default function MyCourses() {
                                                             <span className="tag-text">{course.batchName || "Course"}</span>
                                                         </div>
 
-                                                        <h3 className="course-title">{course.courseName}</h3>
+                                                        <p className="course-title">{course.courseName}</p>
 
 
                                                         <div className="progress-bar">
@@ -294,9 +317,6 @@ export default function MyCourses() {
                                                 </div>
                                             </div>
 
-                                            {index !== courses.length - 1 && (
-                                                <div className="divider"></div>
-                                            )}
                                         </React.Fragment>
                                     );
                                 })}
@@ -310,10 +330,16 @@ export default function MyCourses() {
                     {viewLesson ? (
                         <div className="lesson-content-view">
                             <button
-                                className="btn btn-dark mb-3"
-                                onClick={() => setViewLesson(null)}
+                                className="jc-back-btn mb-4"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setViewLesson(null);
+                                }}
                             >
-                                <i className="bi bi-arrow-left"></i> Back to Curriculum
+                                <div className="back-icon-circle">
+                                    <i className="bi bi-arrow-left"></i>
+                                </div>
+                                <span>Back to Course</span>
                             </button>
                             <Introduction
                                 sectionData={viewLesson}
@@ -323,12 +349,32 @@ export default function MyCourses() {
                         </div>
                     ) : (
                         <>
-                            <button
-                                className="mobile-back-btn"
-                                onClick={() => setShowMobileDetails(false)}
-                            >
-                                <i className="bi bi-arrow-left"></i> Back to Courses
-                            </button>
+                            {/* Hide back button on desktop/tablet unless from Profile */}
+                            {(location.state?.fromProfile || window.innerWidth <= 768) && (
+                                <button
+                                    className="jc-back-btn mb-4"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        // 1. If we explicitly came from the Profile page, go back there
+                                        if (location.state?.fromProfile) {
+                                            navigate('/student-dashboard/profile');
+                                        }
+                                        // 2. If we are on mobile and viewing a course, go back to the list
+                                        else if (showMobileDetails && window.innerWidth <= 768) {
+                                            setShowMobileDetails(false);
+                                        }
+                                        // 3. Absolute fallback: standard history back
+                                        else {
+                                            navigate(-1);
+                                        }
+                                    }}
+                                >
+                                    <div className="back-icon-circle">
+                                        <i className="bi bi-arrow-left"></i>
+                                    </div>
+                                    <span>Back to Courses</span>
+                                </button>
+                            )}
 
                             <LargeCourseCard course={displayCourse} />
 

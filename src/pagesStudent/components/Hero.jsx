@@ -34,39 +34,42 @@ export default function Hero() {
       />
 
       <div className="hero-content">
-        <h1>
+        <p className="hero-title">
           Unlock Your Potential
           <br />
           with Expert-Led Online
           <br />
           Courses
-        </h1>
+        </p>
 
         <p className="hero-sub">
           Continue your learning journey and master new skills with our expert-led courses.
         </p>
 
         <div className="hero-buttons">
-          {/* Replaced by absolute positioned buttons below */}
+          {/* Button 1: Continue Learning */}
+          <Link to="/student-dashboard/my-courses" className="student-hero-btn continue-learning-btn">
+            <div className="btn-icon">
+              <FaPlay className="icon-svg" />
+            </div>
+            <span className="btn-text">Continue Learning</span>
+          </Link>
+
+          {/* Button 2: Browse All Courses */}
+          <Link to="/student-dashboard/browse" className="student-hero-btn browse-all-btn">
+            <div className="btn-icon">
+              <TbBook className="icon-svg" />
+            </div>
+            <span className="btn-text">Browse All Courses</span>
+          </Link>
         </div>
       </div>
 
-      {/* Button 1: Continue Learning */}
-      <Link to="/student-dashboard/my-courses" className="student-hero-btn continue-learning-btn">
-        <div className="btn-icon">
-          <FaPlay className="icon-svg" />
-        </div>
-        <span className="btn-text">Continue Learning</span>
-      </Link>
 
-      {/* Button 2: Browse All Courses */}
-      <Link to="/student-dashboard/browse" className="student-hero-btn browse-all-btn">
-        <div className="btn-icon">
-          <TbBook className="icon-svg" />
-        </div>
-        <span className="btn-text">Browse All Courses</span>
-      </Link>
-
+      <div className="scroll-indicator">
+        <span className="scroll-text">Scroll Down</span>
+        <div className="mouse-wheel"></div>
+      </div>
 
       <div className="hero-bottom-fade" />
     </section >

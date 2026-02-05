@@ -6,21 +6,12 @@ import { useStudentCourses } from "../../../hooks/useStudentCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
 
+import { BiPhone, BiMapPin, BiBook, BiBriefcase, BiCheckShield, BiTimeFive, BiTrophy, BiShieldQuarter } from "react-icons/bi";
+
 /* ============================
    USER INITIALS AVATAR
-============================ */
+   ============================ */
 const UserAvatar = ({ name, imageUrl }) => {
-    // Cache bust the image to ensure update is reflected
-    const cacheBustUrl = imageUrl ? `${imageUrl}${imageUrl.includes('?') ? '&' : '?'}t=${new Date().getTime()}` : null;
-
-    if (imageUrl) {
-        return (
-            <div className="profile-avatar-wrapper">
-                <img src={cacheBustUrl} alt={name} className="profile-image-avatar" />
-            </div>
-        );
-    }
-
     const initials = (name || "User")
         .split(' ')
         .map(word => word[0])
@@ -29,8 +20,21 @@ const UserAvatar = ({ name, imageUrl }) => {
         .slice(0, 2);
 
     return (
-        <div className="profile-avatar-wrapper">
-            <div className="profile-initials-avatar">{initials}</div>
+        <div className="profile-avatar-container">
+            <div className="profile-avatar-wrapper">
+                {imageUrl ? (
+                    <img src={imageUrl} alt={name} className="profile-image-avatar" />
+                ) : (
+                    <div className="profile-initials-avatar">{initials}</div>
+                )}
+                <div className="verify-badge" title="Verified Student">
+                    <BiCheckShield />
+                </div>
+            </div>
+            <div className="profile-user-info">
+                <p className="profile-user-name">{name}</p>
+                <span className="profile-user-status">Active Student</span>
+            </div>
         </div>
     );
 };
@@ -130,9 +134,9 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
     const saving = updateProfile.isPending || changePassword.isPending;
 
     return (
-        <div className="profile-modal-overlay" role="dialog" aria-modal="true">
-            <div className="profile-modal-box">
-                <h2>{mode === "password" ? "Change Password" : "Edit Profile"}</h2>
+        <div className="profile-modal-overlay" role="dialog" aria-modal="true" onClick={(e) => e.target.classList.contains('profile-modal-overlay') && onClose()}>
+            <div className="profile-modal-box profile-modal-animate">
+                <p className="profile-modal-title">{mode === "password" ? "Change Password" : "Edit Profile"}</p>
                 {mode !== "password" && (
                     <>
                         {/* Profile Picture Section */}
@@ -212,73 +216,69 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
 /* ============================
    INFO COMPONENT
 ============================ */
-const Info = ({ profile, ongoingCount, completedCount }) => {
-    const [isModelOpen, setIsModelOpen] = useState(false);
-    const [modalMode, setModalMode] = useState("edit");
-
+const Info = ({ profile, ongoingCount, completedCount, openEdit, openPassword }) => {
     if (!profile) return null;
 
     return (
         <div className="profile-sidebar">
-            <div className="profile-header-meta">
-                <UserAvatar name={profile.name} imageUrl={profile.profileImage} />
-            </div>
+            <UserAvatar name={profile.name} imageUrl={profile.profileImage} />
 
-            <div className="profile-details-list">
+            <div className="profile-details-card">
                 <div className="profile-detail-item">
-                    <img src="/student/phoneicon.png" className="profile-detail-icon" alt="phone" />
-                    <span className="profile-detail-text">{profile.phone || "Not provided"}</span>
+                    <div className="detail-icon"><BiPhone /></div>
+                    <div className="detail-info">
+                        <label>Phone</label>
+                        <span>{profile.phone || "Not provided"}</span>
+                    </div>
                 </div>
                 <div className="profile-detail-item">
-                    <img src="/student/location.png" className="profile-detail-icon" alt="location" />
-                    <span className="profile-detail-text">{profile.location || "Not provided"}</span>
+                    <div className="detail-icon"><BiMapPin /></div>
+                    <div className="detail-info">
+                        <label>Location</label>
+                        <span>{profile.location || "Not provided"}</span>
+                    </div>
                 </div>
                 <div className="profile-detail-item">
-                    <img src="/student/degree.png" className="profile-detail-icon" alt="degree" />
-                    <span className="profile-detail-text">{profile.education || "Not provided"}</span>
+                    <div className="detail-icon"><BiBook /></div>
+                    <div className="detail-info">
+                        <label>Education</label>
+                        <span>{profile.education || "Not provided"}</span>
+                    </div>
                 </div>
                 <div className="profile-detail-item">
-                    <img src="/student/job.png" className="profile-detail-icon" alt="job" />
-                    <span className="profile-detail-text">{profile.jobTitle || "Not provided"}</span>
+                    <div className="detail-icon"><BiBriefcase /></div>
+                    <div className="detail-info">
+                        <label>Job Title</label>
+                        <span>{profile.jobTitle || "Not provided"}</span>
+                    </div>
                 </div>
             </div>
 
             <div className="profile-action-btns">
-                <button className="profile-btn-edit" onClick={() => { setModalMode("edit"); setIsModelOpen(true); }}>
+                <button className="profile-btn-edit active-btn" onClick={openEdit}>
                     Edit Profile
                 </button>
-                <button className="profile-btn-password" onClick={() => { setModalMode("password"); setIsModelOpen(true); }}>
-                    Change Password
+                <button className="profile-btn-password outline-btn" onClick={openPassword}>
+                    Security Settings
                 </button>
             </div>
 
-            <hr className="profile-sidebar-divider" />
-
-            <div className="profile-summary-section">
-                <div className="profile-summary-item">
-                    <div className="profile-summary-left">
-                        <img src="/student/time.png" className="profile-summary-icon" alt="ongoing" />
-                        <span>Ongoing Courses</span>
+            <div className="profile-stats-grid">
+                <div className="stat-card ongoing">
+                    <div className="stat-icon"><BiTimeFive /></div>
+                    <div className="stat-data">
+                        <span className="count">{ongoingCount}</span>
+                        <span className="label">Ongoing</span>
                     </div>
-                    <span className="profile-summary-count">{ongoingCount.toString().padStart(2, '0')}</span>
                 </div>
-                <div className="profile-summary-item">
-                    <div className="profile-summary-left">
-                        <img src="/student/completed.png" className="profile-summary-icon" alt="completed" />
-                        <span>Completed Courses</span>
+                <div className="stat-card completed">
+                    <div className="stat-icon"><BiTrophy /></div>
+                    <div className="stat-data">
+                        <span className="count">{completedCount}</span>
+                        <span className="label">Completed</span>
                     </div>
-                    <span className="profile-summary-count">{completedCount.toString().padStart(2, '0')}</span>
                 </div>
             </div>
-
-            {isModelOpen && (
-                <EditProfileModel
-                    currentData={profile}
-                    mode={modalMode}
-                    onClose={() => setIsModelOpen(false)}
-                    onSave={() => { }}
-                />
-            )}
         </div>
     );
 };
@@ -332,7 +332,7 @@ const CourseGrid = ({ courses }) => {
                             <div
                                 key={c.courseId || c.id}
                                 className="profile-course-card"
-                                onClick={() => navigate('/student-dashboard/my-courses', { state: { courseId: c.courseId || c.id } })}
+                                onClick={() => navigate('/student-dashboard/my-courses', { state: { courseId: c.courseId || c.id, fromProfile: true } })}
                                 style={{ cursor: "pointer" }}
                             >
                                 <div className="profile-course-card-top">
@@ -347,7 +347,7 @@ const CourseGrid = ({ courses }) => {
                                     </div>
                                 </div>
                                 <div className="profile-course-card-body">
-                                    <h3>{c.courseName || c.title}</h3>
+                                    <p className="profile-course-title">{c.courseName || c.title}</p>
 
                                     <div className="profile-card-progress-area">
                                         <div className="profile-card-progress-label">
@@ -385,8 +385,11 @@ const CourseGrid = ({ courses }) => {
    MAIN PROFILE PAGE
 ============================ */
 const ProfilePage = () => {
-    const { data: profile, isLoading: profileLoading } = useStudentProfile();
+    const { data: profile, isLoading: profileLoading, refetch: refetchProfile } = useStudentProfile();
     const { data: coursesData, isLoading: coursesLoading } = useStudentCourses();
+
+    const [isModelOpen, setIsModelOpen] = useState(false);
+    const [modalMode, setModalMode] = useState("edit");
 
     if (profileLoading || coursesLoading) {
         return <Loader message="Loading profile..." />;
@@ -406,11 +409,22 @@ const ProfilePage = () => {
                             profile={profile}
                             ongoingCount={ongoingCount}
                             completedCount={completedCount}
+                            openEdit={() => { setModalMode("edit"); setIsModelOpen(true); }}
+                            openPassword={() => { setModalMode("password"); setIsModelOpen(true); }}
                         />
                         <CourseGrid courses={courses} />
                     </div>
                 </div>
             </div>
+
+            {isModelOpen && (
+                <EditProfileModel
+                    currentData={profile}
+                    mode={modalMode}
+                    onClose={() => setIsModelOpen(false)}
+                    onSave={refetchProfile}
+                />
+            )}
         </div>
     );
 };

@@ -1,6 +1,6 @@
 /* Main container */
 .intro-container {
-  padding: 20px;
+  padding: 5px 20px 20px 20px;
   background: transparent;
   font-family: Arial, sans-serif;
   max-width: 1200px;
@@ -12,12 +12,12 @@
 .breadcrumb {
   font-size: 14px;
   color: #555;
-  margin-bottom: 15px;
+  margin-bottom: 8px;
 }
 
 .student-introduction-section .intro-title {
   font-size: 24px;
-  font-weight: bold;
+  font-weight: 600;
   margin-bottom: 25px;
 }
 
@@ -90,7 +90,7 @@
 .section-header h2 {
   margin: 0;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 @media (min-width: 768px) {
@@ -169,7 +169,7 @@
 
 .file-name {
   font-size: 14px;
-  font-weight: bold;
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -313,7 +313,7 @@
   display: flex;
   align-items: center;
   width: fit-content;
-  font-weight: 600;
+  font-weight: 500;
   transition: background 0.2s, transform 0.1s;
 }
 

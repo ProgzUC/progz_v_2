@@ -67,6 +67,7 @@ export default function Header({ onLogout }) {
                             <Link
                                 key={index}
                                 to={link.href}
+                                state={link.name === "My Courses" ? { reset: true } : {}}
                                 className={`student-nav-item ${location.pathname === link.href ? 'active' : ''}`}
                             >
                                 <span className="nav-icon">{link.icon}</span>

@@ -8,8 +8,24 @@
     font-family: 'Inter', sans-serif;
     width: 100%;
     position: relative;
-    /* margin-top: auto; Removed auto to avoid pushing up if content is short, usually handled by layout */
     margin-bottom: 0;
+
+    /* Reveal Transition Logic */
+    transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.footer-hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(30px);
+    pointer-events: none;
+}
+
+.footer-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
 /* ============================
@@ -85,7 +101,7 @@
     /* Brighten on hover */
 }
 
-.student-footer .footer-section h3 {
+.student-footer .footer-section .footer-heading {
     font-size: 16px;
     font-weight: 600;
     margin-bottom: 20px;
@@ -305,6 +321,7 @@
         max-width: 100%;
     }
 
+    .student-footer .brand-section .social-icons,
     .student-footer .social-icons {
         justify-content: center;
     }
