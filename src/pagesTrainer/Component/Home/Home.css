@@ -6,7 +6,7 @@
     background-position: center;
     display: flex;
     align-items: center;
-    padding: 4rem 0;
+    padding: 5rem 0;
     overflow: hidden;
 }
 
@@ -90,7 +90,7 @@
     gap: 0.8rem;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease;
-    
+
 }
 
 .trainer-home .btn-secondary:hover {

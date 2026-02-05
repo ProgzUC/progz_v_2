@@ -22,7 +22,8 @@
     align-items: center;
     text-align: center;
     background: linear-gradient(180deg, #b8e2d4 0%, var(--bg-grey) 100%);
-    padding: 0 2rem;
+    padding: 80px 2rem 2rem 2rem;
+    /* Added top padding for navbar */
 }
 
 .my-batchs-title {
@@ -71,8 +72,9 @@
 
 @media (max-width: 820px) {
     .my-batchs-hero {
-        height: 280px;
-        padding: 0 1.5rem;
+        height: auto;
+        min-height: 280px;
+        padding: 80px 1.5rem 2rem 1.5rem;
     }
 
     .my-batchs-title {
@@ -86,7 +88,8 @@
 
 @media (max-width: 480px) {
     .my-batchs-hero {
-        height: 240px;
+        height: auto;
+        min-height: 240px;
     }
 
     .my-batchs-title {

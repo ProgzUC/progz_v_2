@@ -46,7 +46,8 @@
 
 @media (max-width: 768px) {
   .trainer-app .main-content {
-    margin-top: 3rem;
+    margin-top: 0; /* Reset margin, handle via padding or per-page */
+    padding-bottom: 60px; /* Space for bottom nav if any or just breathing room */
   }
 }
 @media (max-width: 1024px) {
