@@ -4,6 +4,8 @@
   background: white;
   min-height: 100vh;
   padding-bottom: 40px;
+  padding-top: 80px;
+  /* Clear fixed navbar */
 }
 
 /* Header Section */

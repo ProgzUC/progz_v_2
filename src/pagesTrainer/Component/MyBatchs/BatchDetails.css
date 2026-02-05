@@ -1,10 +1,15 @@
 .batch-details-container {
-    margin-top:4rem;
-    padding: 2.5rem 3.5rem;
+    padding-top: 100px;
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
+    padding-bottom: 2.5rem;
     background-color: #ebebeb;
     min-height: 100vh;
     font-family: 'Inter', sans-serif;
     color: #1a1a1a;
+    width: 100%;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 .details-header {
@@ -14,7 +19,7 @@
     margin-bottom: 2.5rem;
 }
 
-.trainer-batch-details-page .back-btn {
+.back-btn {
     background: none;
     border: none;
     color: #555;
@@ -24,9 +29,11 @@
     justify-content: center;
     padding: 0.5rem;
     transition: transform 0.2s;
+    font-size: 1.5rem;
+    /* Ensure icon is visible size */
 }
 
-.trainer-batch-details-page .back-btn:hover {
+.back-btn:hover {
     transform: translateX(-3px);
     color: #000;
 }
@@ -56,6 +63,11 @@
     gap: 8px;
     margin-bottom: 2rem;
     border-bottom: 2px solid #e9ecef;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 5px;
+    /* Space for scrollbar if any */
 }
 
 .batch-tab {
@@ -206,7 +218,7 @@
 }
 
 .content-grid {
-  
+
     gap: 2.5rem;
 }
 
@@ -400,18 +412,36 @@
 
 @media (max-width: 768px) {
     .batch-details-container {
-        padding: 1.5rem;
+        padding-top: 90px;
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+
+    /* Compress tabs on mobile */
+    .batch-tab {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .batch-tabs {
+        justify-content: space-between;
+        /* distribute space */
     }
 
     .details-header {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        /* Keep header items in row if possible, or wrap */
+        flex-wrap: wrap;
+        align-items: center;
         gap: 1rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
     }
 
     .header-title {
         font-size: 1.5rem;
+        word-break: break-word;
+        /* Prevent long title overflow */
     }
 
     .stats-row {
@@ -421,20 +451,48 @@
 
     .stat-card {
         padding: 1rem;
+        width: 100%;
+        /* Ensure full width */
+        margin: 0;
+        box-sizing: border-box;
     }
 
     .students-section {
         padding: 1rem;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .sections-card {
         padding: 1.5rem;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    /* Ensure table scrolls */
+    .table-container {
+        width: 100%;
+        overflow-x: auto;
+        display: block;
     }
 }
 
 @media (max-width: 480px) {
     .batch-details-container {
-        padding: 1rem;
+        padding-top: 85px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .batch-tab {
+        padding: 6px 8px;
+        /* Even smaller on very small screens */
+        font-size: 12px;
+        gap: 4px;
+    }
+
+    .batch-tab i {
+        font-size: 14px;
     }
 
     .section-title {

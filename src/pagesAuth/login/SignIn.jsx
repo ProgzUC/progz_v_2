@@ -66,7 +66,7 @@ const SignIn = () => {
       else setError("Invalid role");
 
     } catch (err) {
-      setError(err.response?.data?.msg || "Login failed");
+      setError(err.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -89,7 +89,7 @@ const SignIn = () => {
       const res = await forgotPassword({ email: forgotEmail });
       setSuccessMessage(res.msg || `Password reset link has been sent to ${forgotEmail}.`);
     } catch (err) {
-      setError(err.response?.data?.msg || "Password reset failed");
+      setError(err.message || "Password reset failed");
     } finally {
       setLoading(false);
     }

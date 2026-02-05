@@ -27,7 +27,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // normalize error message
     const message =
-      error.response?.data?.message || error.response?.statusText || error.message;
+      error.response?.data?.message || error.response?.data?.msg || error.response?.statusText || error.message;
     return Promise.reject(new Error(message));
   }
 );

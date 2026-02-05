@@ -69,7 +69,7 @@ const ResetPassword = () => {
             const res = await resetPassword({ password: resetData.newPassword }, token);
             setSuccessMessage(res.msg || "Password reset successfully! You can now login.");
         } catch (err) {
-            setError(err.response?.data?.msg || "Failed to reset password");
+            setError(err.message || "Failed to reset password");
         } finally {
             setLoading(false);
         }

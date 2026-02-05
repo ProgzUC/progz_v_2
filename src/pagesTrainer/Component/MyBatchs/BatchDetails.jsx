@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { FaArrowLeft } from 'react-icons/fa';
 import './BatchDetails.css';
 import { useTrainerBatchDetails, useToggleSectionCompletion } from '../../../hooks/useBatches';
 import Loader from '../../../components/common/Loader/Loader';
@@ -99,10 +100,7 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
         <div className="batch-details-container">
             <header className="details-header">
                 <button className="back-btn" onClick={onBack}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="19" y1="12" x2="5" y2="12"></line>
-                        <polyline points="12 19 5 12 12 5"></polyline>
-                    </svg>
+                    <FaArrowLeft />
                 </button>
                 <h1 className="header-title">{batch.batchName || batch.title}</h1>
                 <span className={`status-badge ${batch.status?.toLowerCase() || 'active'}`}>{batch.status || 'Active'}</span>
