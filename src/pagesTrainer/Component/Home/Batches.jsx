@@ -1,7 +1,7 @@
 import React from 'react';
 import './Batches.css';
 
-const Active = ({ data }) => {
+const Active = ({ data, onViewBatch }) => {
     const batches = data.activeBatches;
     // const batches = [
     //     {
@@ -73,9 +73,12 @@ const Active = ({ data }) => {
                     <div className="batches-batch-grid">
                         {batches.map(batch => (
                             <div key={batch.batchId} className="batches-batch-card">
-                                <span className={`batches-batch-tag `}>{batch.courseName}</span>
+                                <span className="batches-batch-tag">{batch.courseName}</span>
                                 <h3 className="batches-batch-title">{batch.batchName}</h3>
-
+                                <div className="batches-batch-info-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                                    <span>{batch.studentsCount} Students</span>
+                                </div>
                                 <div className="batches-progress-container">
                                     <div className="batches-progress-label">
                                         <span>Avg. Completion</span>
@@ -85,17 +88,16 @@ const Active = ({ data }) => {
                                         <div className="batches-progress-fill" style={{ width: `${batch.completionPercentage}%` }}></div>
                                     </div>
                                 </div>
-                                <h6 >{formatClassTiming(batch.timing || batch.classTiming)}</h6>
-                                <div className="batches-batch-info">
-                                    <div className="batches-batch-info-item">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                                        {batch.studentsCount} Students
-                                    </div>
-                                    <button className="batches-arrow-btn">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                                <div className="batches-arrow-wrap">
+                                    <button
+                                        type="button"
+                                        className="batches-arrow-btn"
+                                        aria-label={`View ${batch.batchName}`}
+                                        onClick={() => onViewBatch?.(batch)}
+                                    >
+                                        -&gt;
                                     </button>
                                 </div>
-
                             </div>
                         ))}
                     </div>
@@ -103,16 +105,13 @@ const Active = ({ data }) => {
                         <div className="batches-sidebar-card">
                             <h3 className="batches-sidebar-title">Upcoming Classes</h3>
                             {upcomingClasses.map(cls => (
-                                <div key={cls.batchId} className={`batches-class-card ${cls.nextClassAt ? 'live' : 'upcoming'}`}>
+                                <div key={cls.batchId} className={`batches-class-card ${cls.isLive ? 'live' : 'upcoming'}`}>
                                     <div className="batches-class-header">
-                                        <span className={`batches-status-tag ${cls.nextClassAt ? 'live' : 'upcoming'}`}>
-                                            <span className="batches-dot" style={{
-                                                width: '6px', height: '6px', borderRadius: '50%',
-                                                background: cls.isLive ? '#00875a' : '#888', marginRight: '2px'
-                                            }}></span> {istDateTime(cls.nextClassAt)}
+                                        <span className={`batches-status-tag ${cls.isLive ? 'live' : 'upcoming'}`}>
+                                            {cls.isLive && <span className="batches-dot" aria-hidden></span>}
+                                            {cls.isLive ? 'Live Now' : 'Upcoming'}
                                         </span>
                                         <span className="batches-student-count">
-                                            {/* Users Icon */}
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
                                             {cls.studentsCount}
                                         </span>
@@ -120,11 +119,10 @@ const Active = ({ data }) => {
                                     <h4 className="batches-class-title">{cls.batchName}</h4>
                                     <div className="batches-class-footer">
                                         <div className="batches-class-time">
-                                            {/* Clock Icon */}
                                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
                                             {formatClassTiming(cls.timing || cls.classTiming)}
                                         </div>
-                                        <button className={`batches-join-btn ${cls.isLive ? 'active' : 'disabled'}`}>
+                                        <button type="button" className={`batches-join-btn ${cls.isLive ? 'active' : 'disabled'}`} disabled={!cls.isLive}>
                                             Join Now
                                         </button>
                                     </div>

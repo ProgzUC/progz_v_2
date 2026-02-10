@@ -345,6 +345,7 @@ textarea {
     padding: 1.5rem;
     border-radius: 0;
     box-shadow: none;
+    margin-top: 50px;
   }
 
   .page-header h2 {

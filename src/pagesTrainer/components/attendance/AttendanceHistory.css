@@ -1,6 +1,6 @@
 /* Container */
 .attendance-history-container {
-    padding: 30px;
+    padding: var(--trainer-spacing-lg) 0;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -10,23 +10,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: var(--trainer-spacing-lg);
     flex-wrap: wrap;
     gap: 20px;
 }
 
 .history-header h2 {
     font-size: 28px;
-    font-weight: 700;
-    color: #212529;
+    font-weight: 600;
+    color: var(--trainer-text);
     margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.history-header h2 i {
-    color: #198754;
 }
 
 /* Date Filters */
@@ -38,158 +31,134 @@
 
 .date-filters input[type="date"] {
     padding: 10px 16px;
-    border: 2px solid #dee2e6;
-    border-radius: 8px;
+    border: 1px solid var(--trainer-border);
+    border-radius: var(--trainer-radius-md);
     font-size: 14px;
-    transition: border-color 0.3s ease;
+    background: white;
+    color: var(--trainer-text);
+    transition: var(--trainer-transition);
 }
 
 .date-filters input[type="date"]:focus {
-    border-color: #198754;
+    border-color: var(--trainer-primary);
+    box-shadow: 0 0 0 3px var(--trainer-primary-light);
     outline: none;
 }
 
 .clear-filters-btn {
-    background: #dc3545;
-    color: #fff;
+    background: var(--trainer-divider);
+    color: var(--trainer-text-muted);
     border: none;
     padding: 10px 16px;
-    border-radius: 8px;
+    border-radius: var(--trainer-radius-md);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: background 0.3s ease;
+    transition: var(--trainer-transition);
 }
 
 .clear-filters-btn:hover {
-    background: #c82333;
+    background: var(--trainer-border);
+    color: var(--trainer-text);
 }
 
 /* Empty State */
 .empty-state {
     text-align: center;
     padding: 80px 20px;
-    color: #6c757d;
+    color: var(--trainer-text-muted);
 }
 
 .empty-state i {
-    font-size: 80px;
-    margin-bottom: 20px;
-    opacity: 0.3;
-}
-
-.empty-state h3 {
-    font-size: 24px;
-    margin: 0 0 8px 0;
-    color: #495057;
-}
-
-.empty-state p {
-    font-size: 16px;
-    margin: 0;
-}
-
-/* Error State */
-.error-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: #dc3545;
-}
-
-.error-state i {
     font-size: 60px;
     margin-bottom: 16px;
-}
-
-.error-state p {
-    font-size: 18px;
-    margin: 0;
+    opacity: 0.3;
 }
 
 /* Sessions List */
 .sessions-list {
     display: grid;
-    gap: 20px;
+    gap: var(--trainer-spacing-md);
 }
 
 /* Session Card */
 .session-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    background: var(--trainer-card-bg);
+    border-radius: var(--trainer-radius-lg);
+    border: 1px solid var(--trainer-border);
+    box-shadow: var(--trainer-shadow-sm);
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: var(--trainer-transition);
 }
 
 .session-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    box-shadow: var(--trainer-shadow-md);
 }
 
 .session-card.active {
-    border: 2px solid #198754;
+    border-color: var(--trainer-primary);
 }
 
 /* Session Card Header */
 .session-card-header {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    padding: 20px 24px;
+    background: var(--trainer-page-bg);
+    padding: 16px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid var(--trainer-divider);
 }
 
 .session-card.active .session-card-header {
-    background: linear-gradient(135deg, #d1f2eb 0%, #b8e6d5 100%);
+    background: var(--trainer-primary-light);
 }
 
 .session-date-info h3 {
-    font-size: 18px;
-    font-weight: 700;
-    color: #212529;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--trainer-text);
     margin: 0 0 4px 0;
 }
 
 .session-date-info p {
-    font-size: 14px;
-    color: #6c757d;
-    margin: 0;
+    font-size: 12px;
+    color: var(--trainer-text-muted);
 }
 
 /* Status Badges */
 .status-badge {
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 13px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 12px;
     font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .active-badge {
-    background: #198754;
-    color: #fff;
+    background: var(--trainer-primary);
+    color: white;
 }
 
 .completed-badge {
-    background: #6c757d;
-    color: #fff;
+    background: var(--trainer-divider);
+    color: var(--trainer-text-muted);
 }
 
 /* Session Card Body */
 .session-card-body {
-    padding: 24px;
+    padding: var(--trainer-spacing-lg);
 }
 
 .session-info-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
-    margin-bottom: 20px;
+    margin-bottom: var(--trainer-spacing-lg);
 }
 
 .info-item {
@@ -197,12 +166,11 @@
     align-items: center;
     gap: 8px;
     font-size: 14px;
-    color: #495057;
+    color: var(--trainer-text-muted);
 }
 
 .info-item i {
-    font-size: 18px;
-    color: #198754;
+    color: var(--trainer-primary);
 }
 
 /* Attendance Stats */
@@ -210,34 +178,30 @@
     display: flex;
     gap: 20px;
     padding: 16px;
-    background: #f8f9fa;
-    border-radius: 8px;
+    background: var(--trainer-page-bg);
+    border-radius: var(--trainer-radius-md);
     margin-bottom: 16px;
-    flex-wrap: wrap;
 }
 
 .stat-item {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
 .stat-item.present {
-    color: #198754;
+    color: var(--trainer-primary);
 }
 
 .stat-item.late {
-    color: #ffc107;
+    color: #f59e0b;
 }
 
 .stat-item.absent {
-    color: #dc3545;
-}
-
-.stat-item i {
-    font-size: 18px;
+    color: var(--trainer-error);
 }
 
 /* Session Notes */
@@ -245,38 +209,27 @@
     display: flex;
     gap: 12px;
     padding: 16px;
-    background: #fff3cd;
-    border-left: 4px solid #ffc107;
-    border-radius: 8px;
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: var(--trainer-radius-md);
 }
 
 .session-notes i {
-    font-size: 20px;
-    color: #856404;
+    color: #b45309;
     flex-shrink: 0;
-    margin-top: 2px;
 }
 
 .session-notes p {
-    font-size: 14px;
-    color: #856404;
-    margin: 0;
+    font-size: 13px;
+    color: #451a03;
     line-height: 1.6;
 }
 
-/* Responsive Design */
+/* RESPONSIVE */
 @media (max-width: 768px) {
-    .attendance-history-container {
-        padding: 20px 15px;
-    }
-
     .history-header {
         flex-direction: column;
         align-items: flex-start;
-    }
-
-    .history-header h2 {
-        font-size: 24px;
     }
 
     .date-filters {
@@ -289,12 +242,6 @@
         width: 100%;
     }
 
-    .session-card-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-    }
-
     .session-info-row {
         grid-template-columns: 1fr;
     }
@@ -302,27 +249,5 @@
     .attendance-stats {
         flex-direction: column;
         gap: 12px;
-    }
-}
-
-@media (max-width: 480px) {
-    .history-header h2 {
-        font-size: 20px;
-    }
-
-    .session-card-header {
-        padding: 16px;
-    }
-
-    .session-card-body {
-        padding: 16px;
-    }
-
-    .empty-state i {
-        font-size: 60px;
-    }
-
-    .empty-state h3 {
-        font-size: 20px;
     }
 }

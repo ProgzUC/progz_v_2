@@ -1,23 +1,45 @@
 .footer {
-    background-color: var(--bg-dark);
-    color: var(--white);
-    padding: 1.5rem 0;
-    margin-top: auto;
-    text-align: center;
+  background-color: #2d2d2d;
+  color: #ffffff;
+  padding: 1rem 0;
+  margin-top: auto;
+  text-align: center;
+  width: 100%;
 }
 
-.trainer-footer .footer-container {
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
+.footer-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.footer-container p {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 0.875rem 0;
+  }
+
+  .footer-container {
+    padding: 0 1rem;
+  }
+
+  .footer-container p {
+    font-size: 0.85rem;
+  }
 }
 
 @media (max-width: 480px) {
-    .footer {
-        padding: 1rem 0;
-    }
+  .footer {
+    padding: 0.75rem 0;
+  }
 
-    .footer-container p {
-        font-size: 0.8rem;
-    }
+  .footer-container p {
+    font-size: 0.8rem;
+  }
 }

@@ -1,20 +1,8 @@
-:root {
-  --primary-color: #00875a;
-  --bg-dark: #303030;
-  --bg-light: #e4e4e4;
-  --text-primary: #1a1a1a;
-  --text-secondary: #666;
-  --white: #ffffff;
-  --border-radius-lg: 20px;
-  --border-radius-md: 12px;
-  --border-radius-sm: 8px;
-  --transition: all 0.3s ease;
-}
-
 .trainer-app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: var(--trainer-page-bg);
 }
 
 .trainer-app button {
@@ -24,9 +12,11 @@
 }
 
 .trainer-app .container {
-  max-width: 1440px;
- 
-  padding: 0 4rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 var(--trainer-spacing-lg);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Hide Scrollbar */
@@ -34,36 +24,38 @@
   display: none;
 }
 
-
 .trainer-app main {
   flex: 1;
 }
 
 .trainer-app .main-content {
-  
   width: 100%;
 }
 
-@media (max-width: 768px) {
-  .trainer-app .main-content {
-    margin-top: 0; /* Reset margin, handle via padding or per-page */
-    padding-bottom: 60px; /* Space for bottom nav if any or just breathing room */
+@media (max-width: 1200px) {
+  .trainer-app .container {
+    padding: 0 var(--trainer-spacing-md);
   }
 }
+
 @media (max-width: 1024px) {
   .trainer-app .container {
-    padding: 0 2rem;
+    padding: 0 var(--trainer-spacing-md);
   }
 }
 
 @media (max-width: 768px) {
   .trainer-app .container {
-    padding: 0 1.5rem;
+    padding: 0 var(--trainer-spacing-sm);
+  }
+
+  .trainer-app .main-content {
+    padding-bottom: 20px;
   }
 }
 
 @media (max-width: 480px) {
   .trainer-app .container {
-    padding: 0 1rem;
+    padding: 0 var(--trainer-spacing-xs);
   }
 }

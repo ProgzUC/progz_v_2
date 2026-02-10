@@ -37,6 +37,11 @@ function TrainerApp() {
     setSelectedBatch(batch);
   };
 
+  const handleViewBatchFromHome = (batch) => {
+    setSelectedBatch(batch);
+    setActiveTab('batches');
+  };
+
   const handleBackToList = () => {
     setSelectedBatch(null);
     setIsEditingCourse(false);
@@ -58,10 +63,16 @@ function TrainerApp() {
       <main className="main-content">
         {activeTab === 'home' && (
           <>
-            <Home trainer={data.trainer}
+            <Home
+              trainer={data.trainer}
               stats={data.stats}
+              onNavigateToCreateCourse={() => {
+                setActiveTab('courses');
+                setIsCreatingCourse(true);
+              }}
+              onNavigateToMyCourses={() => setActiveTab('courses')}
             />
-            <Active data={data} />
+            <Active data={data} onViewBatch={handleViewBatchFromHome} />
           </>
         )}
         {activeTab === 'batches' && (
@@ -106,7 +117,6 @@ function TrainerApp() {
             <MyCourses
               onManageCourse={(course) => setSelectedBatch(course)}
               onCreateNew={() => setIsCreatingCourse(true)}
-              onBack={() => setActiveTab('home')}
             />
           )
         )}
@@ -125,7 +135,6 @@ function TrainerApp() {
             <Profile
               profileData={profileData}
               onEdit={() => setIsEditingProfile(true)}
-              onBack={() => setActiveTab('home')}
             />
           )
         )}

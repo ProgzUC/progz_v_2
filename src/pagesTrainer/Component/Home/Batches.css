@@ -1,220 +1,271 @@
+.trainer-home-batches {
+    padding: var(--trainer-spacing-xl) 0;
+    margin-top: 0;
+    animation: trainerSectionFade 0.6s ease-out;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.trainer-home-batches .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--trainer-spacing-lg);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Clear gap below hero so "Scroll for more" isn't on top of this section */
+@media (max-width: 768px) {
+    .trainer-home-batches {
+        padding-top: 32px;
+    }
+}
+
+@keyframes trainerSectionFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .trainer-home-batches .batches-section-title {
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: var(--trainer-spacing-lg);
     text-align: center;
+    color: var(--trainer-text);
 }
 
 /* MAIN LAYOUT */
 .trainer-home-batches .batches-dashboard-layout {
     display: flex;
-    gap: 30px;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 2rem 60px 2rem;
+    gap: var(--trainer-spacing-lg);
     align-items: flex-start;
 }
 
 /* LEFT SIDE - GRID */
 .trainer-home-batches .batches-batch-grid {
     flex: 1;
-    /* Takes available space */
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    /* 2 columns as shown */
-    gap: 30px;
+    gap: var(--trainer-spacing-lg);
 }
 
 /* COURSE CARD */
 .trainer-home-batches .batches-batch-card {
-    background: #fff;
-    border-radius: 24px;
-    /* More rounded */
-    padding: 2rem;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+    background: var(--trainer-card-bg);
+    border-radius: var(--trainer-radius-lg);
+    padding: var(--trainer-spacing-lg);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: 1px solid var(--trainer-border);
+    animation: trainerBatchCardEntrance 0.5s ease-out forwards;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+.trainer-home-batches .batches-batch-card:nth-child(1) { animation-delay: 0.05s; }
+.trainer-home-batches .batches-batch-card:nth-child(2) { animation-delay: 0.1s; }
+.trainer-home-batches .batches-batch-card:nth-child(3) { animation-delay: 0.15s; }
+.trainer-home-batches .batches-batch-card:nth-child(4) { animation-delay: 0.2s; }
+
+@keyframes trainerBatchCardEntrance {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.trainer-home-batches .batches-batch-card:hover {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+    transform: translateY(-6px);
+    border-color: rgba(25, 135, 84, 0.2);
 }
 
 .trainer-home-batches .batches-batch-tag {
     display: inline-block;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 13px;
+    width: fit-content;
+    max-width: 100%;
+    align-self: flex-start;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 11px;
     font-weight: 600;
-    margin-bottom: 1rem;
-     background: #e6f4ef;
-    color: #00875a;
+    margin-bottom: 10px;
+    background: var(--trainer-primary-light);
+    color: var(--trainer-primary);
+    letter-spacing: 0.02em;
 }
 
 .trainer-home-batches .batches-batch-title {
-    font-size: 1.5rem;
-    font-weight: 500;
-    margin-bottom: 0.8rem;
-    color: #111;
-}
-
-.trainer-home-batches .batches-batch-info {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 var(--trainer-spacing-sm) 0;
+    color: #1a1a1a;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
 }
 
 .trainer-home-batches .batches-batch-info-item {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--trainer-text-muted);
+    margin-bottom: var(--trainer-spacing-sm);
+}
+
+.trainer-home-batches .batches-arrow-wrap {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: var(--trainer-spacing-sm);
 }
 
 /* Progress Bar */
 .trainer-home-batches .batches-progress-container {
-    margin-bottom: 2rem;
-    margin-top: 2rem;
+    margin: var(--trainer-spacing-md) 0;
 }
 
 .trainer-home-batches .batches-progress-label {
     display: flex;
     justify-content: space-between;
-    font-size: 0.85rem;
+    font-size: 13px;
     margin-bottom: 8px;
-    color: #888;
+    color: var(--trainer-text-muted);
+    font-weight: 500;
 }
 
 .trainer-home-batches .batches-progress-bar {
     height: 8px;
-    background: #F3F4F6;
+    background: var(--trainer-divider);
     border-radius: 999px;
     overflow: hidden;
 }
 
 .trainer-home-batches .batches-progress-fill {
     height: 100%;
-    background: #00875a;
+    background: var(--trainer-primary);
     border-radius: 999px;
-}
-
-/* Footer Avatar & Button */
-.trainer-home-batches .batches-batch-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.trainer-home-batches .batches-student-avatars {
-    display: flex;
-}
-
-.trainer-home-batches .batches-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #f3f3f3;
-    border: 2px solid #fff;
-    margin-left: -10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 600;
-    color: #555;
-}
-
-.trainer-home-batches .batches-avatar:first-child {
-    margin-left: 0;
+    transition: width 0.3s ease;
 }
 
 .trainer-home-batches .batches-arrow-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: #e6f4ef;
-    color: #00875a;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.2s;
+    background: none;
+    border: none;
+    color: var(--trainer-primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+    transition: var(--trainer-transition);
 }
 
 .trainer-home-batches .batches-arrow-btn:hover {
-    background: #00875a;
-    color: #fff;
+    color: var(--trainer-primary-hover);
+    transform: translateX(2px);
 }
-
 
 /* RIGHT SIDEBAR */
 .trainer-home-batches .batches-sidebar {
     width: 360px;
     flex-shrink: 0;
+    position: sticky;
+    top: 20px;
 }
 
 .trainer-home-batches .batches-sidebar-card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 1.5rem;
-    /* No shadow in screenshot, or very subtle */
+    background: var(--trainer-card-bg);
+    border-radius: var(--trainer-radius-lg);
+    padding: var(--trainer-spacing-lg);
+    box-shadow: var(--trainer-shadow-md);
+    border: 1px solid var(--trainer-border);
 }
 
 .trainer-home-batches .batches-sidebar-title {
-    font-size: 1.2rem;
-    font-weight: 800;
-    margin-bottom: 1.5rem;
-    color: #111;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: var(--trainer-spacing-lg);
+    color: var(--trainer-text);
+    text-align: left;
 }
 
 /* Sidebar Item */
 .trainer-home-batches .batches-class-card {
-    margin-bottom: 1.5rem;
-    padding: 1.25rem;
-    border-radius: 16px;
-    background: #fff;
-    /* Default */
+    margin-bottom: var(--trainer-spacing-md);
+    padding: var(--trainer-spacing-md);
+    border-radius: var(--trainer-radius-md);
+    background: var(--trainer-card-bg);
+    border: 1px solid var(--trainer-border);
+    transition: var(--trainer-transition);
 }
 
 .trainer-home-batches .batches-class-card.live {
-    background: #e6f4ef;
-    /* Light Green Bg for Live */
-}
-
-/* Upcoming items look transparent/white in screenshot? Or just simplified. 
-   Screenshot shows 'Upcoming' items just cleanly listed. Let's make them white with light border or plain. */
-.trainer-home-batches .batches-class-card:not(.live) {
-    background: #fff;
+    border-color: rgba(25, 135, 84, 0.25);
 }
 
 .trainer-home-batches .batches-class-header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .trainer-home-batches .batches-status-tag {
-    font-size: 12px;
-    font-weight: 700;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .trainer-home-batches .batches-status-tag.live {
-    color: #00875a;
+    color: var(--trainer-primary);
+}
+
+.trainer-home-batches .batches-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--trainer-primary);
+    flex-shrink: 0;
 }
 
 .trainer-home-batches .batches-status-tag.upcoming {
-    color: #888;
+    background: var(--trainer-primary-light);
+    color: var(--trainer-primary);
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .trainer-home-batches .batches-student-count {
-    font-size: 13px;
-    color: #555;
+    font-size: 12px;
+    color: var(--trainer-text-muted);
     display: flex;
     align-items: center;
     gap: 4px;
+    font-weight: 500;
 }
 
 .trainer-home-batches .batches-class-title {
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 700;
     margin-bottom: 12px;
-    color: #111;
+    color: #1a1a1a;
+    line-height: 1.35;
 }
 
 .trainer-home-batches .batches-class-footer {
@@ -225,7 +276,7 @@
 
 .trainer-home-batches .batches-class-time {
     font-size: 12px;
-    color: #666;
+    color: var(--trainer-text-muted);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -233,101 +284,117 @@
 
 .trainer-home-batches .batches-join-btn {
     padding: 8px 16px;
-    border-radius: 6px;
+    border-radius: var(--trainer-radius-sm);
     font-size: 12px;
     font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--trainer-transition);
 }
 
 .trainer-home-batches .batches-join-btn.active {
-    background: #00875a;
-    color: #fff;
+    background: var(--trainer-primary);
+    color: white;
+}
+
+.trainer-home-batches .batches-join-btn.active:hover {
+    background: var(--trainer-primary-hover);
+    transform: translateY(-1px);
 }
 
 .trainer-home-batches .batches-join-btn.disabled {
-    background: #E5E7EB;
-    color: #6B7280;
+    background: var(--trainer-divider);
+    color: var(--trainer-text-light);
+    cursor: not-allowed;
 }
 
+/* RESPONSIVENESS */
+
 @media (max-width: 1200px) {
-    .batches-active-section {
-        padding: 3rem 1.5rem;
-    }
-
-    .batches-dashboard-layout {
+    .trainer-home-batches .batches-dashboard-layout {
         flex-direction: column;
-        align-items: center;
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 0 1.5rem;
+        align-items: stretch;
     }
 
-    .batches-batch-grid {
+    .trainer-home-batches .batches-sidebar {
         width: 100%;
-    }
-
-    .batches-sidebar {
-        width: 100%;
-        margin-top: 3rem;
+        position: static;
     }
 }
 
 @media (max-width: 768px) {
-    .batches-active-section {
-        padding: 2rem 0;
+    .trainer-home-batches .container {
+        padding: 0 var(--trainer-spacing-md);
     }
 
-    .batches-dashboard-layout {
-        padding: 0 0.5rem 60px 0.5rem;
-    }
-
-    .batches-section-title {
-        font-size: 1.8rem;
-        margin-bottom: 2rem;
-        padding: 0 1.5rem;
-        text-align: center;
-    }
-
-    .batches-batch-grid {
+    .trainer-home-batches .batches-batch-grid {
         grid-template-columns: 1fr;
-        padding: 0 0.5rem;
-        gap: 20px;
+        gap: var(--trainer-spacing-md);
     }
 
-    .batches-batch-card {
-        padding: 1.5rem;
+    .trainer-home-batches .batches-section-title {
+        font-size: 24px;
     }
 
-    .batches-batch-title {
-        font-size: 1.2rem;
+    .trainer-home-batches .batches-batch-card {
+        padding: var(--trainer-spacing-md);
     }
 
-    .batches-sidebar {
-        padding: 0 1.5rem;
+    .trainer-home-batches .batches-batch-title {
+        font-size: 20px;
+        font-weight: 700;
     }
 
-    .batches-sidebar-card {
-        padding: 1.25rem;
+    .trainer-home-batches .batches-sidebar-card {
+        padding: var(--trainer-spacing-md);
     }
 
-    .batches-sidebar-title {
-        font-size: 1.1rem;
+    .trainer-home-batches .batches-class-title {
+        font-size: 16px;
+        font-weight: 700;
     }
 }
 
 @media (max-width: 480px) {
-    .batches-batch-info {
-        flex-direction: column;
-        gap: 10px;
-        
+    .trainer-home-batches .container {
+        padding: 0 var(--trainer-spacing-sm);
     }
 
-    .batches-class-footer {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
+    .trainer-home-batches .batches-section-title {
+        font-size: 20px;
+        margin-bottom: var(--trainer-spacing-md);
     }
 
-    .batches-join-btn {
+    .trainer-home-batches .batches-batch-card {
+        padding: var(--trainer-spacing-sm);
+    }
+
+    .trainer-home-batches .batches-batch-title {
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .trainer-home-batches .batches-batch-info-item {
+        font-size: 13px;
+    }
+
+    .trainer-home-batches .batches-arrow-btn {
+        font-size: 1.1rem;
+    }
+
+    .trainer-home-batches .batches-class-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .trainer-home-batches .batches-join-btn {
         width: 100%;
+        text-align: center;
+        padding: 10px 16px;
+    }
+
+    .trainer-home-batches .batches-class-card {
+        padding: var(--trainer-spacing-sm);
     }
 }

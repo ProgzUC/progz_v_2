@@ -1,90 +1,117 @@
-:root {
-  --green: #00875a;
-  --green-hover: #006b47;
-  --page-bg: #efefef;
-  --text: #111;
-  --muted: #555;
-}
-
-/* PAGE BG */
-body {
-  margin: 0;
-  background: var(--page-bg);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-}
-
-/* OUTER WRAPPER (left aligned like your screenshot) */
 .trainer-active-batches-page {
-  padding: 0;
-  /* Remove extra padding as parent has container padding */
+  padding: var(--trainer-spacing-xl) 0;
 }
 
-/* SECTION TITLES (LEFT, NOT CENTER) */
 .trainer-active-batches-page .batches-title {
-  margin: 0 0 28px 0;
+  margin: 0 0 var(--trainer-spacing-lg) 0;
   font-size: 28px;
-  font-weight: 800;
-  color: var(--text);
+  font-weight: 600;
+  color: var(--trainer-text);
 }
 
 .trainer-active-batches-page .batches-title--spaced {
-  margin-top: 70px;
+  margin-top: var(--trainer-spacing-xl);
 }
 
-/* GRID (left aligned) */
 .trainer-active-batches-page .batches-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 34px;
-  justify-content: start;
-  align-items: start;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--trainer-spacing-lg);
 }
 
-/* CARD — EXACT FIGMA */
+.trainer-active-batches-page .batches-empty-state {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--trainer-spacing-xl) var(--trainer-spacing-lg);
+  background: linear-gradient(135deg, rgba(25, 135, 84, 0.06) 0%, rgba(25, 135, 84, 0.02) 100%);
+  border: 1px dashed rgba(25, 135, 84, 0.25);
+  border-radius: var(--trainer-radius-lg);
+  min-height: 200px;
+}
+
+.trainer-active-batches-page .batches-empty-state-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--trainer-primary-light);
+  color: var(--trainer-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--trainer-spacing-md);
+}
+
+.trainer-active-batches-page .batches-empty-state-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--trainer-text);
+  margin: 0 0 8px 0;
+}
+
+.trainer-active-batches-page .batches-empty-state-text {
+  font-size: 14px;
+  color: var(--trainer-text-muted);
+  margin: 0;
+  max-width: 320px;
+  line-height: 1.5;
+}
+
 .trainer-active-batches-page .batch-card {
-  width: 100%;
-  max-width: 400px;
-  height: 264px;
-  border-radius: 16px;
-  background: #fff;
-  padding: 18px;
-  box-sizing: border-box;
+  background: var(--trainer-card-bg);
+  border-radius: var(--trainer-radius-lg);
+  padding: var(--trainer-spacing-lg);
   position: relative;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.10);
+  box-shadow: var(--trainer-shadow-md);
+  border: 1px solid var(--trainer-border);
+  transition: var(--trainer-transition);
+  display: flex;
+  flex-direction: column;
+  min-height: 280px;
 }
 
-/* TOP ROW */
+.trainer-active-batches-page .batch-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--trainer-shadow-lg);
+}
+
 .trainer-active-batches-page .batch-card__top {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: var(--trainer-spacing-md);
 }
 
 .trainer-active-batches-page .batch-card__batch {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  color: var(--green);
+  color: var(--trainer-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* STATUS PILL */
 .trainer-active-batches-page .batch-card__status {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
+  gap: 6px;
+  padding: 6px 14px;
   border-radius: 999px;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
+  text-transform: uppercase;
 }
 
 .trainer-active-batches-page .batch-card__status.active {
-  background: #e6f4ef;
-  color: var(--green);
+  background: var(--trainer-primary-light);
+  color: var(--trainer-primary);
 }
 
 .trainer-active-batches-page .batch-card__status.completed {
-  background: #ffe6e6;
-  color: #ff4d4d;
+  background: #fee2e2;
+  color: var(--trainer-error);
 }
 
 .trainer-active-batches-page .batch-card__dot {
@@ -94,21 +121,18 @@ body {
   background: currentColor;
 }
 
-/* TITLE */
 .trainer-active-batches-page .batch-card__title {
-  margin: 16px 0 14px 0;
+  margin-bottom: var(--trainer-spacing-md);
   font-size: 18px;
-  font-weight: 800;
-  color: var(--text);
-  line-height: 1.2;
+  font-weight: 600;
+  color: var(--trainer-text);
+  line-height: 1.4;
 }
 
-/* DETAILS */
 .trainer-active-batches-page .batch-card__details {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 4px;
+  gap: 12px;
 }
 
 .trainer-active-batches-page .batch-card__row {
@@ -116,25 +140,21 @@ body {
   align-items: center;
   gap: 10px;
   font-size: 14px;
-  color: var(--muted);
+  color: var(--trainer-text-muted);
   font-weight: 500;
 }
 
 .trainer-active-batches-page .batch-card__icon {
-  width: 18px;
+  width: 20px;
   display: inline-flex;
   justify-content: center;
-  color: var(--green);
-  /* Make icons green */
-  font-size: 18px;
+  color: var(--trainer-primary);
+  font-size: 16px;
 }
 
-/* ACTIONS pinned bottom */
 .trainer-active-batches-page .batch-card__actions {
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: 16px;
+  margin-top: auto;
+  padding-top: var(--trainer-spacing-lg);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -145,71 +165,66 @@ body {
   background: none;
   padding: 0;
   cursor: pointer;
-  color: var(--green);
+  color: var(--trainer-primary);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
   text-decoration: underline;
-  /* Add underline for visibility */
   text-underline-offset: 4px;
+  transition: var(--trainer-transition);
+}
+
+.trainer-active-batches-page .batch-card__link:hover {
+  color: var(--trainer-primary-hover);
 }
 
 .trainer-active-batches-page .batch-card__btn {
   border: none;
   cursor: pointer;
-  background: var(--green);
+  background: var(--trainer-primary);
   color: #fff;
   font-weight: 700;
-  font-size: 13px;
-  padding: 8px 18px;
-  border-radius: 999px;
+  font-size: 12px;
+  padding: 8px 20px;
+  border-radius: var(--trainer-radius-sm);
+  transition: var(--trainer-transition);
 }
 
 .trainer-active-batches-page .batch-card__btn:hover {
-  background: var(--green-hover);
-}
-
-.trainer-active-batches-page .batch-card__arrow {
-  margin-left: 6px;
+  background: var(--trainer-primary-hover);
+  transform: translateY(-1px);
 }
 
 /* RESPONSIVE */
-@media (max-width: 900px) {
-  .batches-page {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+@media (max-width: 1024px) {
+  .trainer-active-batches-page .batches-grid {
+    gap: var(--trainer-spacing-md);
   }
+}
 
-  .batches-grid {
-    gap: 20px;
-  }
-
-  .batch-card {
-    max-width: 100%;
-    height: auto;
-    min-height: 264px;
-  }
-
-  .batches-title {
+@media (max-width: 768px) {
+  .trainer-active-batches-page .batches-title {
     font-size: 24px;
-    margin-bottom: 20px;
+    text-align: center;
   }
 
-  .batches-title--spaced {
-    margin-top: 40px;
+  .trainer-active-batches-page .batches-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .trainer-active-batches-page .batch-card {
+    min-height: auto;
   }
 }
 
 @media (max-width: 480px) {
-  .batch-card__actions {
-    position: relative;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin-top: 20px;
-    gap: 10px;
+  .trainer-active-batches-page .batch-card__actions {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
   }
 
-  .batch-card {
-    padding: 1.2rem;
+  .trainer-active-batches-page .batch-card__btn {
+    width: 100%;
+    text-align: center;
   }
 }

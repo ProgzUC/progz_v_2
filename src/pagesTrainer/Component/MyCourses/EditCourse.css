@@ -4,7 +4,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -12,29 +13,31 @@
 }
 
 .edit-course-container {
-    background: white;
+    background: var(--trainer-card-bg);
     width: 90%;
     max-width: 600px;
-    border-radius: 12px;
-    padding: 24px;
+    border-radius: var(--trainer-radius-lg);
+    padding: var(--trainer-spacing-lg);
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--trainer-shadow-lg);
+    border: 1px solid var(--trainer-border);
 }
 
 .edit-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 15px;
+    margin-bottom: var(--trainer-spacing-lg);
+    border-bottom: 1px solid var(--trainer-divider);
+    padding-bottom: var(--trainer-spacing-sm);
 }
 
 .edit-header h2 {
     margin: 0;
-    font-size: 1.5rem;
-    color: #333;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--trainer-text);
 }
 
 .close-btn {
@@ -42,78 +45,103 @@
     border: none;
     font-size: 24px;
     cursor: pointer;
-    color: #666;
+    color: var(--trainer-text-muted);
+    transition: var(--trainer-transition);
+}
+
+.close-btn:hover {
+    color: var(--trainer-text);
+    transform: rotate(90deg);
 }
 
 .trainer-edit-course-page .form-group {
-    margin-bottom: 20px;
+    margin-bottom: var(--trainer-spacing-md);
 }
 
 .trainer-edit-course-page .form-group label {
     display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #444;
+    margin-bottom: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--trainer-text);
 }
 
 .trainer-edit-course-page .form-group input,
 .trainer-edit-course-page .form-group textarea {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    padding: 12px 16px;
+    border: 1px solid var(--trainer-border);
+    border-radius: var(--trainer-radius-md);
+    background: white;
     font-size: 14px;
+    color: var(--trainer-text);
+    outline: none;
+    transition: var(--trainer-transition);
+}
+
+.trainer-edit-course-page .form-group input:focus,
+.trainer-edit-course-page .form-group textarea:focus {
+    border-color: var(--trainer-primary);
+    box-shadow: 0 0 0 3px var(--trainer-primary-light);
 }
 
 .trainer-edit-course-page .form-group textarea {
-    min-height: 100px;
+    min-height: 120px;
     resize: vertical;
 }
 
 .placeholder-module-msg {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 6px;
-    color: #666;
+    background: var(--trainer-page-bg);
+    padding: 16px;
+    border-radius: var(--trainer-radius-md);
+    color: var(--trainer-text-muted);
     text-align: center;
-    font-style: italic;
-    margin-bottom: 20px;
+    font-size: 14px;
+    margin-bottom: var(--trainer-spacing-lg);
+    border: 1px dashed var(--trainer-border);
 }
 
 .edit-footer {
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
-}
-
-.cancel-btn,
-.trainer-edit-course-page .save-btn {
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s;
+    gap: var(--trainer-spacing-md);
+    padding-top: var(--trainer-spacing-md);
+    border-top: 1px solid var(--trainer-divider);
 }
 
 .cancel-btn {
-    background: #f1f2f6;
-    color: #666;
+    padding: 10px 24px;
+    border-radius: var(--trainer-radius-md);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    background: white !important;
+    border: 1px solid var(--trainer-border) !important;
+    color: var(--trainer-text-muted) !important;
+    transition: var(--trainer-transition);
 }
 
 .cancel-btn:hover {
-    background: #e1e2e6;
+    background: var(--trainer-page-bg) !important;
 }
 
 .trainer-edit-course-page .save-btn {
-    background: #2a7d38;
-    color: white;
+    padding: 10px 32px;
+    border-radius: var(--trainer-radius-md);
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    background: var(--trainer-primary) !important;
+    color: white !important;
+    border: none !important;
+    transition: var(--trainer-transition);
+    box-shadow: var(--trainer-shadow-sm);
 }
 
 .trainer-edit-course-page .save-btn:hover {
-    background: #15613b;
+    background: var(--trainer-primary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: var(--trainer-shadow-md);
 }
 
 @media (max-width: 600px) {
@@ -127,12 +155,11 @@
 
     .edit-footer {
         flex-direction: column;
-        gap: 10px;
     }
 
     .cancel-btn,
-    .save-btn {
+    .trainer-edit-course-page .save-btn {
         width: 100%;
-        padding: 12px;
+        justify-content: center;
     }
 }

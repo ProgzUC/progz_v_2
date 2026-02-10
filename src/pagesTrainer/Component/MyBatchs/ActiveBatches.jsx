@@ -120,9 +120,22 @@ const ActiveBatches = ({ onViewDetails = () => { } }) => {
       <h2 className="batches-title batches-title--spaced">Completed Batches</h2>
 
       <div className="batches-grid">
-        {completedBatches.map((b, idx) => (
-          <BatchCard key={b._id || b.id || idx} batch={b} />
-        ))}
+        {completedBatches.length > 0 ? (
+          completedBatches.map((b, idx) => (
+            <BatchCard key={b._id || b.id || idx} batch={b} />
+          ))
+        ) : (
+          <div className="batches-empty-state" aria-live="polite">
+            <div className="batches-empty-state-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <h3 className="batches-empty-state-title">No completed batches yet</h3>
+            <p className="batches-empty-state-text">When you finish running a batch, it will appear here.</p>
+          </div>
+        )}
       </div>
     </section>
   );

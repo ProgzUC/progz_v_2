@@ -48,7 +48,7 @@
     --student-radius-xl: 24px;
 
     /* transitions */
-    --student-transition: 0.2s ease;
+    --student-transition: 0.25s ease-in-out;
 }
 
 /* Global Background for Student Module */
@@ -78,12 +78,12 @@ body,
     border-radius: var(--student-radius-lg);
     padding: var(--student-spacing-lg);
     box-shadow: var(--student-shadow-md);
-    transition: var(--student-transition);
+    transition: transform var(--student-transition), box-shadow var(--student-transition);
 }
 
 .student-card:hover {
     box-shadow: var(--student-shadow-lg);
-    transform: translateY(-2px);
+    transform: translateY(-3px) scale(1.02);
 }
 
 .student-btn-primary {
@@ -94,13 +94,13 @@ body,
     border-radius: var(--student-radius-md);
     font-weight: 500;
     cursor: pointer;
-    transition: var(--student-transition);
+    transition: transform var(--student-transition), box-shadow var(--student-transition), background-color var(--student-transition);
 }
 
 .student-btn-primary:hover {
     background: var(--student-primary-hover);
-    transform: translateY(-1px);
-    box-shadow: var(--student-shadow-md);
+    transform: translateY(-2px);
+    box-shadow: var(--student-shadow-md), 0 0 20px rgba(59, 130, 246, 0.25);
 }
 
 .student-btn-secondary {
@@ -111,11 +111,12 @@ body,
     border-radius: var(--student-radius-md);
     font-weight: 500;
     cursor: pointer;
-    transition: var(--student-transition);
+    transition: transform var(--student-transition), background-color var(--student-transition), border-color var(--student-transition);
 }
 
 .student-btn-secondary:hover {
     background: var(--student-primary-light);
+    transform: translateY(-1px);
 }
 
 /* ================================
@@ -209,7 +210,43 @@ body,
     height: 100%;
     background: var(--student-primary);
     border-radius: 999px;
-    transition: width 0.3s ease;
+    transition: width 0.4s ease-in-out;
+}
+
+/* ================================
+   VISUAL POLISH (motion, glow, focus)
+   ================================ */
+
+@keyframes studentFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.student-container {
+    animation: studentFadeIn 0.4s ease-out;
+}
+
+.student-header .student-container {
+    animation: studentFadeIn 0.4s ease-out;
+}
+
+.student-header main,
+.student-header > div {
+    animation: studentFadeIn 0.35s ease-out;
+}
+
+.student-header input:focus,
+.student-header textarea:focus,
+.student-header select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+    transition: box-shadow 0.2s ease-in-out;
 }
 
 /* ================================

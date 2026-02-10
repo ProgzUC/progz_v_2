@@ -1,22 +1,21 @@
 import React from 'react';
 import './MyCourses.css';
 import { BsBook, BsPeople } from 'react-icons/bs';
-import { FaArrowLeft } from 'react-icons/fa';
-import { BiPlus, BiEdit, BiDotsHorizontalRounded } from 'react-icons/bi';
+import { BiPlus, BiEdit } from 'react-icons/bi';
 import { useTrainerCourses } from '../../../hooks/useTrainerCourses';
 import Loader from '../../../components/common/Loader/Loader';
 
-const MyCourses = ({ onManageCourse, onCreateNew, onBack }) => {
+const MyCourses = ({ onManageCourse, onCreateNew }) => {
     const { data: courses, isLoading, isError } = useTrainerCourses();
 
     if (isLoading) {
         return (
             <div className="my-courses-container trainer-myCourses">
                 <div className="header-section">
-                    <div className="back-title">
-                        <button className="back-btn" onClick={onBack}><FaArrowLeft /></button>
-                        <h1>My Courses</h1>
-                    </div>
+                    <h1 className="my-courses-page-title">My Courses</h1>
+                    <button className="create-batch-btn" onClick={onCreateNew}>
+                        <BiPlus /> Create New Course
+                    </button>
                 </div>
                 <Loader message="Loading courses..." />
             </div>
@@ -27,10 +26,10 @@ const MyCourses = ({ onManageCourse, onCreateNew, onBack }) => {
         return (
             <div className="my-courses-container trainer-myCourses">
                 <div className="header-section">
-                    <div className="back-title">
-                        <button className="back-btn" onClick={onBack}><FaArrowLeft /></button>
-                        <h1>My Courses</h1>
-                    </div>
+                    <h1 className="my-courses-page-title">My Courses</h1>
+                    <button className="create-batch-btn" onClick={onCreateNew}>
+                        <BiPlus /> Create New Course
+                    </button>
                 </div>
                 <p style={{ textAlign: 'center', padding: '40px', color: '#e74c3c' }}>Error loading courses. Please try again.</p>
             </div>
@@ -38,17 +37,14 @@ const MyCourses = ({ onManageCourse, onCreateNew, onBack }) => {
     }
 
     const coursesData = courses || [];
-    
+
 
     return (
         <div className="my-courses-container trainer-myCourses">
             <div className="header-section">
-                <div className="back-title">
-                    <button className="back-btn" onClick={onBack}><FaArrowLeft /></button>
-                    <h1>My Courses</h1>
-                </div>
+                <h1 className="my-courses-page-title">My Courses</h1>
                 <button className="create-batch-btn" onClick={onCreateNew}>
-                    <BiPlus /> Create New Batch
+                    <BiPlus /> Create New Course
                 </button>
             </div>
 
@@ -71,7 +67,7 @@ const MyCourses = ({ onManageCourse, onCreateNew, onBack }) => {
                                     backgroundRepeat: 'no-repeat'
                                 }}
                             >
-                             
+
                             </div>
                             <div className="card-content">
                                 <h3>{course.courseName}</h3>

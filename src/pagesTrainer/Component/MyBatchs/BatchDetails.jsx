@@ -13,35 +13,46 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
     // Different endpoints return different field names: _id, id, or batchId
     const batchId = initialBatch?._id || initialBatch?.id || initialBatch?.batchId;
     const { data: batchDetails, isLoading, isError, error } = useTrainerBatchDetails(batchId);
-    const toggleCompletion = useToggleSectionCompletion();
+    const { mutate: toggleSection, isPending: isToggling, variables: togglingVariables } = useToggleSectionCompletion();
 
-    // Debug: Show what we're working with
     if (!batchId) {
         return (
-            <div className="error-message">
-                <p>No batch ID found.</p>
-                <p>Received batch object: {JSON.stringify(initialBatch)}</p>
+            <div className="batch-details-container">
+                <div className="error-message">
+                    <p>No batch ID found.</p>
+                    <p>Received batch object: {JSON.stringify(initialBatch)}</p>
+                </div>
             </div>
         );
     }
 
-    if (isLoading) return <Loader message="Loading batch details..." />;
+    if (isLoading) {
+        return (
+            <div className="batch-details-container">
+                <Loader message="Loading batch details..." />
+            </div>
+        );
+    }
 
     if (isError) {
         return (
-            <div className="error-message">
-                <p>Error loading batch details.</p>
-                <p>Batch ID: {batchId}</p>
-                <p>Error: {error?.message || 'Unknown error'}</p>
+            <div className="batch-details-container">
+                <div className="error-message">
+                    <p>Error loading batch details.</p>
+                    <p>Batch ID: {batchId}</p>
+                    <p>Error: {error?.message || 'Unknown error'}</p>
+                </div>
             </div>
         );
     }
 
     if (!batchDetails) {
         return (
-            <div className="error-message">
-                <p>Batch not found.</p>
-                <p>Batch ID: {batchId}</p>
+            <div className="batch-details-container">
+                <div className="error-message">
+                    <p>Batch not found.</p>
+                    <p>Batch ID: {batchId}</p>
+                </div>
             </div>
         );
     }
@@ -99,11 +110,14 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
     return (
         <div className="batch-details-container">
             <header className="details-header">
-                <button className="back-btn" onClick={onBack}>
-                    <FaArrowLeft />
+                <button type="button" className="trainer-back-btn" onClick={onBack}>
+                    <span className="trainer-back-btn-circle"><FaArrowLeft /></span>
+                    <span className="trainer-back-btn-label">Back to Batches</span>
                 </button>
-                <h1 className="header-title">{batch.batchName || batch.title}</h1>
-                <span className={`status-badge ${batch.status?.toLowerCase() || 'active'}`}>{batch.status || 'Active'}</span>
+                <div className="details-header-row">
+                    <h1 className="header-title">{batch.batchName || batch.title}</h1>
+                    <span className={`status-badge ${batch.status?.toLowerCase() || 'active'}`}>{batch.status || 'Active'}</span>
+                </div>
             </header>
 
             {/* Tab Navigation */}
@@ -210,34 +224,12 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
             )}
 
             {activeTab === 'sections' && (
-                <div className="content-grid">
+                <div className="sections-tab-layout">
                     <div className="curriculum-col">
                         <div className="column-header">
                             <h2 className="section-title">Curriculum</h2>
                             <span className="badge-outline">{modules.length} Modules Total</span>
                         </div>
-                        {/* <div className="module-list">
-                            {modules.length > 0 ? (
-                                modules.map((module, idx) => (
-                                    <div key={module._id || idx} className="module-item">
-                                        <div className="module-main">
-                                            <div className="module-icon">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-                                            </div>
-                                            <div className="module-info">
-                                                <h3 className="module-title">{module.title || module.moduleName}</h3>
-                                                <p className="module-subtitle">{module.description || `${module.sections?.length || 0} Sections`}</p>
-                                            </div>
-                                            <div className="module-arrow">
-                                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="empty-message">No curriculum modules found.</p>
-                            )}
-                        </div> */}
                     </div>
 
                     <div className="sections-col">
@@ -260,13 +252,16 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
 
                             <div className="section-items-list">
                                 {allSections.length > 0 ? (
-                                    allSections.map((item) => (
-                                        <div key={item.uniqueId} className={`section-item ${item.completed ? 'completed' : ''}`}>
+                                    allSections.map((item) => {
+                                        const isThisSectionToggling = isToggling && togglingVariables?.moduleIndex === item.moduleIndex && togglingVariables?.sectionIndex === item.sectionIndex;
+                                        return (
+                                        <div key={item.uniqueId} className={`section-item ${item.completed ? 'completed' : ''} ${isThisSectionToggling ? 'section-item-toggling' : ''}`}>
                                             <div
                                                 className="item-radio"
                                                 onClick={(e) => {
+                                                    if (isThisSectionToggling) return;
                                                     e.stopPropagation();
-                                                    toggleCompletion.mutate({
+                                                    toggleSection({
                                                         batchId,
                                                         moduleIndex: item.moduleIndex,
                                                         sectionIndex: item.sectionIndex
@@ -276,9 +271,11 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                                                         }
                                                     });
                                                 }}
-                                                style={{ cursor: 'pointer' }}
+                                                style={{ cursor: isThisSectionToggling ? 'wait' : 'pointer' }}
                                             >
-                                                {item.completed ? (
+                                                {isThisSectionToggling ? (
+                                                    <div className="item-radio-loader" aria-hidden="true"></div>
+                                                ) : item.completed ? (
                                                     <div className="radio-check active">
                                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                                     </div>
@@ -296,7 +293,8 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                                                 )}
                                             </div>
                                         </div>
-                                    ))
+                                        );
+                                    })
                                 ) : (
                                     <p className="empty-message">No sections found in your assigned modules.</p>
                                 )}

@@ -89,7 +89,7 @@
   color: #a0a0a0;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out;
   text-decoration: none;
 }
 
@@ -131,7 +131,7 @@
   font-weight: 600;
   border-radius: 30px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out, transform 0.25s ease-in-out;
 }
 
 .student-logout-btn:hover {

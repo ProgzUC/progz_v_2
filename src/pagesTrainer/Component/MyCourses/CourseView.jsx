@@ -6,8 +6,6 @@ import { useCourse } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
 
 const CourseView = ({ courseData, onBack, onEdit }) => {
-  // Use courseData._id or courseData.courseId to fetch full details
-  // Admin uses _id usually, let's try _id first then courseId
   const courseId = courseData?._id || courseData?.courseId;
   const { data: fullCourse, isLoading, isError, error } = useCourse(courseId);
 
@@ -31,7 +29,7 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
 
   const toggleSection = (idx) => {
     setExpandedSection(expandedSection === idx ? null : idx);
-  }
+  };
 
   // Calculate stats
   const lessonsCount = course.modules?.reduce((acc, mod) => acc + (mod.sections?.length || 0), 0) || 0;
@@ -77,7 +75,118 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
           {course.courseDescription || "No description available."}
         </div>
 
-        {/* COLUMNS */}
+        {/* MOBILE: Accordion - sections open below the module list */}
+        <div className="cv-mobile-accordion">
+          <div className="cv-column-header">
+            <span>Module</span>
+          </div>
+          {course.modules?.map((mod, index) => (
+            <div key={`mobile-${index}`} className="cv-mobile-module-block">
+              <div
+                className={`cv-list-item ${selectedModule === index ? 'active' : ''}`}
+                onClick={() => handleModuleClick(index)}
+              >
+                <span>{mod.title}</span>
+                {selectedModule === index ? (
+                  <BiChevronUp className="cv-list-icon" />
+                ) : (
+                  <BiChevronDown className="cv-list-icon" />
+                )}
+              </div>
+              {selectedModule === index && (
+                <div className="cv-mobile-sections-inner">
+                  <div className="cv-column-header cv-mobile-sections-header">
+                    <span>Sections</span>
+                  </div>
+                  {mod.sections && mod.sections.length > 0 ? (
+                    <div className="cv-list">
+                      {mod.sections.map((sec, idx) => (
+                        <div key={idx} className="cv-section-wrapper">
+                          <div
+                            className={`cv-list-item ${expandedSection === idx ? 'active' : ''}`}
+                            onClick={() => toggleSection(idx)}
+                          >
+                            <span>{sec.sectionName}</span>
+                            {expandedSection === idx ? (
+                              <BiChevronUp className="cv-list-icon" />
+                            ) : (
+                              <BiChevronDown className="cv-list-icon" />
+                            )}
+                          </div>
+                          {expandedSection === idx && (
+                            <div className="cv-section-details">
+                              {sec.learningMaterialNotes && (
+                                <div className="cv-detail-block">
+                                  <h4>Notes:</h4>
+                                  <p>{sec.learningMaterialNotes}</p>
+                                </div>
+                              )}
+                              {sec.learningMaterialFile && sec.learningMaterialFile.length > 0 && (
+                                <div className="cv-detail-block">
+                                  <h4>Materials:</h4>
+                                  <ul className="cv-file-list">
+                                    {sec.learningMaterialFile.map((file, i) => (
+                                      <li key={i}>
+                                        <a href={file.url} target="_blank" rel="noopener noreferrer">
+                                          <i className="bi bi-file-earmark-text"></i> {file.originalName || "Download File"}
+                                        </a>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+                              {sec.videoReferences && sec.videoReferences.length > 0 && (
+                                <div className="cv-detail-block">
+                                  <h4>Videos:</h4>
+                                  <ul className="cv-video-list">
+                                    {sec.videoReferences.map((vid, i) => (
+                                      <li key={i}>
+                                        <a href={vid} target="_blank" rel="noopener noreferrer">
+                                          <i className="bi bi-play-circle"></i> {vid}
+                                        </a>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+                              )}
+                              {(sec.codeChallengeInstructions || (sec.codeChallengeFile && sec.codeChallengeFile.length > 0)) && (
+                                <div className="cv-detail-block challenge-block">
+                                  <h4>Code Challenge:</h4>
+                                  {sec.codeChallengeInstructions && <p>{sec.codeChallengeInstructions}</p>}
+                                  {sec.codeChallengeFile && sec.codeChallengeFile.length > 0 && (
+                                    <ul className="cv-file-list">
+                                      {sec.codeChallengeFile.map((file, i) => (
+                                        <li key={i}>
+                                          <a href={file.url} target="_blank" rel="noopener noreferrer">
+                                            <i className="bi bi-code-square"></i> {file.originalName || "Challenge File"}
+                                          </a>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+                              )}
+                              {!sec.learningMaterialNotes && (!sec.learningMaterialFile || sec.learningMaterialFile.length === 0) && (!sec.videoReferences || sec.videoReferences.length === 0) && !sec.codeChallengeInstructions && (!sec.codeChallengeFile || sec.codeChallengeFile.length === 0) && (
+                                <div className="cv-detail-empty">No content in this section.</div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="cv-empty-state">No sections in this module</div>
+                  )}
+                </div>
+              )}
+            </div>
+          ))}
+          {(!course.modules || course.modules.length === 0) && (
+            <div className="cv-empty-state">No modules found</div>
+          )}
+        </div>
+
+        {/* DESKTOP: Two columns */}
         <div className="cv-columns-grid">
 
           {/* MODULES COLUMN */}
@@ -216,7 +325,12 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
 
         {/* FOOTER ACTION */}
         <div className="cv-footer">
-          <button className="cv-back-btn" onClick={onBack}>Back</button>
+          <button type="button" className="trainer-back-btn" onClick={onBack}>
+            <span className="trainer-back-btn-circle">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            </span>
+            <span className="trainer-back-btn-label">Back to Courses</span>
+          </button>
         </div>
 
       </div>
