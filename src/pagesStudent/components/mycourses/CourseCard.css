@@ -613,9 +613,30 @@
 
 /* Mobile */
 @media (max-width: 768px) {
+
+    .student-mycourses-page .card-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .student-mycourses-page .large-content{
+        width:100%;
+    }
+    .student-mycourses-page .course-thumb {
+        width: 100%;
+        max-width: 300px;
+        height: auto;
+        margin-bottom: 15px;
+    }
+    .student-mycourses-page .card-details {
+        width: 100%;
+    }
     .student-mycourses-page {
         margin-top: 80px;
         /* Optimized for mobile */
+    }
+    .student-mycourses-page .course-title{
+        text-align: left;
     }
 
     /* Hide list only when viewing details */

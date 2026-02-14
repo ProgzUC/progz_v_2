@@ -46,10 +46,10 @@ function LargeCourseCard({ course }) {
             </div>
 
             <div className="large-content">
-                <div className="large-meta-top">
+                {/* <div className="large-meta-top">
                     <span className="large-meta-item"><BiBarChartAlt2 /> {course.level || "Intermediate"}</span>
                     <span className="large-meta-item"><BiTimeFive /> {course.duration || "Self-paced"}</span>
-                </div>
+                </div> */}
 
                 <p className="large-title">{course.courseName}</p>
                 <p className="large-batch-info">{course.batchName}</p>
@@ -258,7 +258,7 @@ export default function MyCourses() {
                         <div className="left-section">
                             <p className="courses-heading ms-5 mt-2">My Courses</p>
 
-                            <div className="card-container ms-auto mt-4 ">
+                            <div className="card-container ms-auto mt-4 mb-4">
                                 {courses.map((course, index) => {
                                     const progress = course.progressPercentage || 0;
                                     const completedLessons = course.completedLessons || 0;
@@ -397,4 +397,6 @@ export default function MyCourses() {
         </div>
     );
 }
+
+
 

@@ -66,7 +66,18 @@ const UserDetailView = () => {
       <div className="ud-row">
         <div className="ud-field full">
           <label>Address</label>
-          <p>{user.address}</p>
+          <p>{user.address || "N/A"}</p>
+        </div>
+      </div>
+
+      <div className="ud-row">
+        <div className="ud-field">
+          <label>Gender</label>
+          <p>{user.gender || "N/A"}</p>
+        </div>
+        <div className="ud-field">
+          <label>Source</label>
+          <p>{user.source || "N/A"}</p>
         </div>
       </div>
 
@@ -86,31 +97,52 @@ const UserDetailView = () => {
       <div className="ud-row">
         <div className="ud-field">
           <label>Education</label>
-          <p>{user.education}</p>
+          <p>{user.education || user.qualification || "N/A"}</p>
         </div>
 
         <div className="ud-field">
           <label>University/School</label>
-          <p>{user.university}</p>
+          <p>{user.university || "N/A"}</p>
         </div>
       </div>
 
       <div className="ud-row">
         <div className="ud-field">
           <label>Profession</label>
-          <p>{user.profession}</p>
+          <p>{user.profession || "N/A"}</p>
         </div>
 
         <div className="ud-field">
           <label>Experience</label>
-          <p>{user.experience}</p>
+          <p>{user.experience || "N/A"}</p>
         </div>
       </div>
 
       <div className="ud-row">
         <div className="ud-field full">
           <label>Employment Status</label>
-          <p>{user.employmentStatus}</p>
+          <p>{user.employmentStatus || "N/A"}</p>
+        </div>
+      </div>
+
+      <div className="ud-row">
+        <div className="ud-field full">
+          <label>Skills</label>
+          <p>{user.skills || "N/A"}</p>
+        </div>
+      </div>
+
+      {/* ---------- ZEN COURSE ---------- */}
+      <h3 className="ud-section-title">Zen Course Details</h3>
+      <div className="ud-row">
+        <div className="ud-field">
+          <label>Zen Course Name</label>
+          <p>{user.zenCourseName || "N/A"}</p>
+        </div>
+
+        <div className="ud-field">
+          <label>Zen Course Type</label>
+          <p>{user.zenCourseType || "N/A"}</p>
         </div>
       </div>
 

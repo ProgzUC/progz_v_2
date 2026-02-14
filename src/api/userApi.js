@@ -30,3 +30,6 @@ export const restoreBinItem = (id) =>
 
 export const permanentlyDeleteBinItem = (id) =>
     axiosInstance.delete(`/bin/${id}`).then((res) => res.data);
+
+export const updateUser = (id, data) =>
+    axiosInstance.put(`/users/${id}`, data).then((res) => res.data);

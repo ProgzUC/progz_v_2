@@ -429,7 +429,7 @@
   }
 
   .cv-body-content {
-    padding: 0 12px;
+    padding: 0!important ;
   }
 
   .cv-description-box {

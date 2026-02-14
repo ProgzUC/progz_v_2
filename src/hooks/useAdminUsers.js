@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchPendingUsers, fetchAllUsers, approveUser, rejectUser, deleteUser } from "../api/userApi";
+import { fetchPendingUsers, fetchAllUsers, approveUser, rejectUser, deleteUser, updateUser } from "../api/userApi";
 
 export const usePendingUsers = () =>
     useQuery({
@@ -34,12 +34,13 @@ export const useRejectUser = () => {
     });
 };
 
-export const useDeleteUser = () => {
+export const useUpdateUser = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: deleteUser,
-        onSuccess: () => {
+        mutationFn: ({ id, data }) => updateUser(id, data),
+        onSuccess: (data) => {
             queryClient.invalidateQueries(["allUsers"]);
+            queryClient.invalidateQueries(["user", data.user.id]);
         },
     });
 };

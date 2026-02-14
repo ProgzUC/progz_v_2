@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Instructors.css";
 import Loader from "../../../components/common/Loader/Loader";
-import { useAllUsers, useDeleteUser } from "../../../hooks/useAdminUsers";
+import { useAllUsers} from "../../../hooks/useAdminUsers";
 import { FaTrash, FaEdit, FaEye } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +29,7 @@ const Instructors = () => {
     currentPage * itemsPerPage
   );
 
-  const { mutate: deleteUser } = useDeleteUser();
+  
 
   const handleDelete = (user) => {
     Swal.fire({
@@ -98,7 +98,7 @@ const Instructors = () => {
                 <td>{item.phone}</td>
 
                 <td>
-                  {(item.qualification || "Not specified").split("\n").map((line, idx) => (
+                  {(item.education || item.qualification || "Not specified").split("\n").map((line, idx) => (
                     <div key={idx}>{line}</div>
                   ))}
                 </td>
