@@ -1,21 +1,42 @@
+
 {
-  "short_name": "Progz",
-  "name": "Progz - Your Learning Companion",
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "progz",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "progz",
+  "start_url": "/",
+  "theme_color": "#8be986",
   "icons": [
     {
-      "src": "/admin/logo.png",
+      "src": "https://progz-v-2.vercel.app/admin/logo.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "isSquare": false,
+      "isPng": true,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 0,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": false
     },
     {
-      "src": "/admin/logo.png",
+      "src": "https://progz-v-2.vercel.app/admin/logo.png",
       "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any maskable"
+      "isSquare": false,
+      "isPng": true,
+      "isWebp": false,
+      "isJpg": false,
+      "width": 0,
+      "is512x512": false,
+      "is256x256": false,
+      "is192x192": false
     }
   ],
-  "start_url": "/",
-  "background_color": "#ffffff",
-  "display": "standalone",
-  "theme_color": "#000000"
+  "description": "Progz - Your learning companion",
+  "categories": [
+    "education"
+  ]
 }
