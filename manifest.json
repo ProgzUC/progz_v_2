@@ -16,13 +16,13 @@
   ],
   "icons": [
     {
-      "src": "https://progz-v-2.vercel.app/admin/logo.png",
+      "src": "https://progz-v-2.vercel.app/uclogo192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://progz-v-2.vercel.app/admin/logo.png",
+      "src": "https://progz-v-2.vercel.app/uclogo512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -30,8 +30,8 @@
   ],
   "screenshots": [
     {
-      "src": "https://progz-v-2.vercel.app/admin/logo.png",
-      "sizes": "1080x1920",
+      "src": "https://progz-v-2.vercel.app/screenshot.png",
+      "sizes": "2760x1480",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Homescreen of Progz"
