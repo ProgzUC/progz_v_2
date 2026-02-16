@@ -9,6 +9,7 @@ import { Navigate } from "react-router-dom"
 import TrainerApp from "./pagesTrainer/TrainerApp"
 import StudentApp from "./pagesStudent/StudentApp"
 import AdminApp from "./pagesAdmin/AdminApp"
+import PrivacyPolicy from "./pagesAuth/Privacy"
 
 
 const getAuthData = () => {
@@ -44,6 +45,8 @@ const App = () => {
           <Route path="/" element={<SignIn />} />
           <Route path="/signup" element={<StudentSignup />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           {/* End of Login Routes */}
 
           {/* Protected Routes */}
