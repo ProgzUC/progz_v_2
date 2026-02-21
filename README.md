@@ -18,3 +18,4 @@ trial
 trial2
 trial12345
 assests
+offline.html
