@@ -9,7 +9,7 @@ import Introduction from "./components/Introduction/Introduction";
 import StudentAttendance from "./components/attendance/StudentAttendance";
 
 import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
+import Footer from "../pagesTrainer/Component/Navbar/Footer"
 import "./StudentGlobal.css";
 
 export default function StudentApp() {
