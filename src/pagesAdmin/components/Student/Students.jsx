@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Students.css";
 import Loader from "../../../components/common/Loader/Loader";
-import { useAllUsers} from "../../../hooks/useAdminUsers";
+import { useAllUsers } from "../../../hooks/useAdminUsers";
 import { FaTrash, FaEdit, FaEye } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -30,7 +30,7 @@ const Students = () => {
     currentPage * itemsPerPage
   );
 
- 
+
 
   const handleDelete = (user) => {
     Swal.fire({
@@ -83,72 +83,83 @@ const Students = () => {
       <div className="students-card">
         <h3 className="title">Students</h3>
 
-        <table className="students-table">
-          <thead>
-            <tr>
-              <th>Student</th>
-              <th>E-mail</th>
-              <th>Mobile No</th>
-              <th>Qualification</th>
-              <th style={{ width: "120px" }}>Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {paginatedData.map((s, index) => (
-              <tr key={index}>
-                <td>
-                  {s.name}
-                  <div className="student-id">ID: {s.id}</div>
-                </td>
-
-                <td>{s.email}</td>
-                <td>{s.phone}</td>
-
-                <td>
-                  {(s.education || s.qualification || "Not specified").split("\n").map((line, i) => (
-                    <div key={i}>{line}</div>
-                  ))}
-                </td>
-
-                <td className="actions">
-                  <FaTrash className="icon delete" onClick={() => handleDelete(s)} />
-                  <FaEdit
-                    className="icon edit"
-                    onClick={() => navigate("/admin/student-preview", { state: { student: s, initialEditMode: true } })}
-                  />
-                  <FaEye
-                    className="icon view"
-                    onClick={() => navigate("/admin/student-preview", { state: { student: s, initialEditMode: false } })}
-                  />
-                </td>
+        <div style={{ overflowX: "auto" }}>
+          <table className="students-table">
+            <colgroup>
+              <col style={{ width: "60px" }} />
+              <col style={{ width: "200px" }} />
+              <col style={{ width: "200px" }} />
+              <col style={{ width: "130px" }} />
+              <col style={{ width: "160px" }} />
+              <col style={{ width: "120px" }} />
+            </colgroup>
+            <thead>
+              <tr>
+                <th className="s-no">S.No</th>
+                <th>Student</th>
+                <th>E-mail</th>
+                <th>Mobile No</th>
+                <th>Qualification</th>
+                <th style={{ width: "120px" }}>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {paginatedData.map((s, index) => (
+                <tr key={index}>
+                  <td className="s-no">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                  <td>
+                    {s.name}
+                    <div className="student-id">ID: {s.id}</div>
+                  </td>
+
+                  <td>{s.email}</td>
+                  <td>{s.phone}</td>
+
+                  <td>
+                    {(s.education || s.qualification || "Not specified").split("\n").map((line, i) => (
+                      <div key={i}>{line}</div>
+                    ))}
+                  </td>
+
+                  <td className="actions">
+                    <FaTrash className="icon delete" onClick={() => handleDelete(s)} />
+                    <FaEdit
+                      className="icon edit"
+                      onClick={() => navigate("/admin/student-preview", { state: { student: s, initialEditMode: true } })}
+                    />
+                    <FaEye
+                      className="icon view"
+                      onClick={() => navigate("/admin/student-preview", { state: { student: s, initialEditMode: false } })}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination */}
+        <div className="pagination">
+          <button className="page-arrow" onClick={() => changePage(currentPage - 1)}>&lt;</button>
+
+          {[...Array(totalPages)].map((_, i) => (
+            <button
+              key={i}
+              className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
+              onClick={() => changePage(i + 1)}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+          <button className="page-arrow" onClick={() => changePage(currentPage + 1)}>&gt;</button>
+        </div>
+
       </div>
-
-      {/* Pagination */}
-      <div className="pagination">
-        <button className="page-arrow" onClick={() => changePage(currentPage - 1)}>&lt;</button>
-
-        {[...Array(totalPages)].map((_, i) => (
-          <button
-            key={i}
-            className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
-            onClick={() => changePage(i + 1)}
-          >
-            {i + 1}
-          </button>
-        ))}
-
-        <button className="page-arrow" onClick={() => changePage(currentPage + 1)}>&gt;</button>
-      </div>
-
-
-
     </div>
   );
 };
 
 export default Students;
+

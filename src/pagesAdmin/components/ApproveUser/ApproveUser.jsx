@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { usePendingUsers, useApproveUser, useRejectUser } from "../../../hooks/useAdminUsers";
 import Loader from "../../../components/common/Loader/Loader";
@@ -10,10 +11,17 @@ const ApproveUser = () => {
 
   const { data: pendingUsers = [], isLoading, isError, error } = usePendingUsers();
   const [activeTab, setActiveTab] = useState("student");
+  const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
-  const filteredUsers = pendingUsers.filter(user => user.role?.toLowerCase() === activeTab);
+  const filteredUsers = pendingUsers.filter(user => {
+    const matchesTab = user.role?.toLowerCase() === activeTab;
+    const matchesSearch = (user.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.source || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (user.zenCourseName || "").toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesTab && matchesSearch;
+  });
 
   const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
   const paginatedData = filteredUsers.slice(
@@ -71,7 +79,22 @@ const ApproveUser = () => {
 
   return (
     <div className="admin-approve-user-page">
-      <h1 className="page-title">Approve Users</h1>
+      <div className="approve-user-header-main">
+        <h1 className="page-title">Approve Users</h1>
+        <div className="search-bar-container">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            className="search-input"
+            placeholder={`Search ${activeTab}s...`}
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+          />
+        </div>
+      </div>
 
       <div className="pending-registrations-card">
         <h2 className="card-header">Pending Registrations</h2>
@@ -79,13 +102,19 @@ const ApproveUser = () => {
           <div className="tab-container">
             <button
               className={`tab-btn ${activeTab === "student" ? "active" : ""}`}
-              onClick={() => setActiveTab("student")}
+              onClick={() => {
+                setActiveTab("student");
+                setCurrentPage(1);
+              }}
             >
               Students
             </button>
             <button
               className={`tab-btn ${activeTab === "trainer" ? "active" : ""}`}
-              onClick={() => setActiveTab("trainer")}
+              onClick={() => {
+                setActiveTab("trainer");
+                setCurrentPage(1);
+              }}
             >
               Trainers
             </button>
@@ -95,6 +124,7 @@ const ApproveUser = () => {
             <table className="user-table">
               <thead>
                 <tr>
+                  <th className="s-no">S.No</th>
                   <th>Name</th>
                   <th>Source</th>
                   {activeTab === "student" && <th>Zen Course</th>}
@@ -105,11 +135,12 @@ const ApproveUser = () => {
               <tbody>
                 {paginatedData.length === 0 ? (
                   <tr>
-                    <td colSpan={activeTab === "student" ? "5" : "4"} style={{ textAlign: "center" }}>No pending {activeTab}s found</td>
+                    <td colSpan={activeTab === "student" ? "6" : "5"} style={{ textAlign: "center" }}>No pending {activeTab}s found</td>
                   </tr>
                 ) : (
-                  paginatedData.map((user) => (
+                  paginatedData.map((user, index) => (
                     <tr key={user._id || user.id}>
+                      <td className="s-no">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                       <td className="user-name">{user.name}</td>
                       <td>{user.source || "-"}</td>
                       {activeTab === "student" && <td>{user.zenCourseName || "-"}</td>}

@@ -30,7 +30,7 @@ const EditCourse = ({ courseData, onCancel, onSave }) => {
             <div className="edit-course-container">
                 <div className="edit-header">
                     <h2>Edit Course</h2>
-                    <button className="close-btn" onClick={onCancel}><BiX /></button>
+                    <BiX className="close-icon" onClick={onCancel} />
                 </div>
 
                 <div className="edit-body">

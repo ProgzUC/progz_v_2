@@ -102,9 +102,37 @@
   color: #666;
 }
 
-.admin-students-page .students-table tbody td:first-child {
-  color: #999;
-  font-weight: 400;
+.admin-students-page .students-table th.s-no,
+.admin-students-page .students-table td.s-no {
+  width: 60px;
+  min-width: 60px;
+  max-width: 60px;
+  text-align: center !important;
+  color: #bbb !important;
+  font-weight: 500;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Prevent column squashing */
+.admin-students-page .students-table td:nth-child(2) {
+  min-width: 160px;
+}
+
+.admin-students-page .students-table td:nth-child(3) {
+  min-width: 180px;
+}
+
+.admin-students-page .students-table td:nth-child(4) {
+  min-width: 110px;
+}
+
+.admin-students-page .students-table td:nth-child(5) {
+  min-width: 120px;
+}
+
+.admin-students-page .students-table td:nth-child(6) {
+  min-width: 120px;
 }
 
 /* Student ID Small Text */

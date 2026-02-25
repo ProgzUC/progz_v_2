@@ -23,16 +23,30 @@
 }
 
 /* Close button */
-.close-btn {
+.manage-card .close-btn {
   position: absolute;
-  top: -3px;
-  right: 16px;
-  background: none;
-  border: none;
-  font-size: 32px;
+  top: 10px;
+  right: 15px;
+  width: auto;
+  height: auto;
+  background: none !important;
+  border: none !important;
+  font-size: 30px;
   cursor: pointer;
   color: #008F4C;
-  text-align: right;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+  z-index: 10;
+  transition: opacity 0.2s;
+}
+
+.manage-card .close-btn:hover {
+  opacity: 0.7;
+}
+
+.manage-card .close-btn:active {
+  transform: translateY(0) !important;
 }
 
 /* Headings */

@@ -40,11 +40,14 @@
     gap: 8px;
     box-shadow: 0 4px 14px rgba(25, 135, 84, 0.25);
     transition: all 0.3s ease;
+    margin-top: -25px;
+    /* Moved up more from -10px */
+    /* Moves it up slightly */
 }
 
 .create-batch-btn:hover {
     background-color: var(--trainer-primary-hover);
-    transform: translateY(-2px);
+    transform: translateY(-4px) scale(1.02);
     box-shadow: 0 8px 24px rgba(25, 135, 84, 0.35);
 }
 
@@ -75,18 +78,36 @@
     opacity: 0;
 }
 
-.trainer-myCourses .course-card:nth-child(1) { animation-delay: 0.05s; }
-.trainer-myCourses .course-card:nth-child(2) { animation-delay: 0.1s; }
-.trainer-myCourses .course-card:nth-child(3) { animation-delay: 0.15s; }
-.trainer-myCourses .course-card:nth-child(4) { animation-delay: 0.2s; }
-.trainer-myCourses .course-card:nth-child(5) { animation-delay: 0.25s; }
-.trainer-myCourses .course-card:nth-child(6) { animation-delay: 0.3s; }
+.trainer-myCourses .course-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.trainer-myCourses .course-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.trainer-myCourses .course-card:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.trainer-myCourses .course-card:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.trainer-myCourses .course-card:nth-child(5) {
+    animation-delay: 0.25s;
+}
+
+.trainer-myCourses .course-card:nth-child(6) {
+    animation-delay: 0.3s;
+}
 
 @keyframes trainerCardEntrance {
     from {
         opacity: 0;
         transform: translateY(24px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);

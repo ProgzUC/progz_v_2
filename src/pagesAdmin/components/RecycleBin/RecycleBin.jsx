@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FaSearch } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { fetchBinItems, restoreBinItem, permanentlyDeleteBinItem } from "../../../api/userApi";
 import Loader from "../../../components/common/Loader/Loader";
@@ -7,6 +8,7 @@ import "./RecycleBin.css";
 const RecycleBin = () => {
     const [binItems, setBinItems] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
     const [error, setError] = useState(null);
 
     useEffect(() => {
@@ -87,7 +89,19 @@ const RecycleBin = () => {
 
     return (
         <div className="admin-recycle-bin-page">
-            <h2 className="page-title">Recycle Bin</h2>
+            <div className="recycle-bin-header-main">
+                <h2 className="page-title">Recycle Bin</h2>
+                <div className="search-bar-container">
+                    <FaSearch className="search-icon" />
+                    <input
+                        type="text"
+                        className="search-input"
+                        placeholder="Search by name..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+            </div>
 
             <div className="recycle-bin-card">
                 <div className="card-header">Deleted Items</div>
@@ -96,6 +110,7 @@ const RecycleBin = () => {
                     <table className="bin-table">
                         <thead>
                             <tr>
+                                <th className="s-no">S.No</th>
                                 <th>Type</th>
                                 <th>Name</th>
                                 <th>Deleted Date</th>
@@ -103,52 +118,57 @@ const RecycleBin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {binItems.length === 0 ? (
+                            {binItems
+                                .filter(item => (item.itemRefName || item.data?.name || "").toLowerCase().includes(searchTerm.toLowerCase()))
+                                .length === 0 ? (
                                 <tr>
-                                    <td colSpan="4">
+                                    <td colSpan="5">
                                         <div className="empty-state">
                                             <i className="bi bi-trash"></i>
-                                            <p>Recycle Bin is empty</p>
+                                            <p>{searchTerm ? "No matching items found" : "Recycle Bin is empty"}</p>
                                         </div>
                                     </td>
                                 </tr>
                             ) : (
-                                binItems.map((item) => (
-                                    <tr key={item._id || item.id}>
-                                        <td>
-                                            <span className={`item-type ${item.itemType?.toLowerCase()}`}>
-                                                {item.itemType || "Unknown"}
-                                            </span>
-                                        </td>
-                                        <td className="item-name">{item.itemRefName || item.data?.name || "N/A"}</td>
-                                        <td className="deleted-date">
-                                            {item.createdAt
-                                                ? new Date(item.createdAt).toLocaleDateString("en-US", {
-                                                    year: 'numeric',
-                                                    month: 'short',
-                                                    day: 'numeric'
-                                                })
-                                                : "-"
-                                            }
-                                        </td>
-                                        <td className="action-icons">
-                                            <button
-                                                className="icon-btn restore-btn"
-                                                title="Restore"
-                                                onClick={() => handleRestore(item._id || item.id)}
-                                            >
-                                                <i className="bi bi-arrow-counterclockwise"></i>
-                                            </button>
-                                            <button
-                                                className="icon-btn delete-btn"
-                                                title="Delete Forever"
-                                                onClick={() => handleDeleteForever(item._id || item.id)}
-                                            >
-                                                <i className="bi bi-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))
+                                binItems
+                                    .filter(item => (item.itemRefName || item.data?.name || "").toLowerCase().includes(searchTerm.toLowerCase()))
+                                    .map((item, index) => (
+                                        <tr key={item._id || item.id}>
+                                            <td className="s-no">{index + 1}</td>
+                                            <td>
+                                                <span className={`item-type ${item.itemType?.toLowerCase()}`}>
+                                                    {item.itemType || "Unknown"}
+                                                </span>
+                                            </td>
+                                            <td className="item-name">{item.itemRefName || item.data?.name || "N/A"}</td>
+                                            <td className="deleted-date">
+                                                {item.createdAt
+                                                    ? new Date(item.createdAt).toLocaleDateString("en-US", {
+                                                        year: 'numeric',
+                                                        month: 'short',
+                                                        day: 'numeric'
+                                                    })
+                                                    : "-"
+                                                }
+                                            </td>
+                                            <td className="action-icons">
+                                                <button
+                                                    className="icon-btn restore-btn"
+                                                    title="Restore"
+                                                    onClick={() => handleRestore(item._id || item.id)}
+                                                >
+                                                    <i className="bi bi-arrow-counterclockwise"></i>
+                                                </button>
+                                                <button
+                                                    className="icon-btn delete-btn"
+                                                    title="Delete Forever"
+                                                    onClick={() => handleDeleteForever(item._id || item.id)}
+                                                >
+                                                    <i className="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))
                             )}
                         </tbody>
                     </table>

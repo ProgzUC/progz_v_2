@@ -5,11 +5,37 @@
     font-family: 'Poppins', sans-serif;
 }
 
+.admin-batches-page .batches-header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
 .admin-batches-page .batches-header-main h1 {
     font-size: 28px;
     color: #666;
     font-weight: 600;
-    margin-bottom: 20px;
+    margin-bottom: 0;
+}
+
+.create-batch-btn {
+    width: 180px !important;
+    justify-content: center !important;
+    padding: 10px 0 !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    transition: all 0.2s ease;
+    border-radius: 10px !important;
+    position: relative;
+    top: 25px;
+    /* Moves it down more to align better with filter box below */
+}
+
+.create-batch-btn:hover {
+    background: #0d8a4a !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 163, 88, 0.2);
 }
 
 .admin-batches-page .batches-stats-row {
@@ -42,8 +68,49 @@
     font-weight: 700;
 }
 
-.admin-batches-page .filter-controls {
+.admin-batches-page .filter-controls-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
     margin-left: auto;
+}
+
+.admin-batches-page .search-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    width: 300px;
+    transition: all 0.2s;
+}
+
+.admin-batches-page .search-bar-container:focus-within {
+    border: 2px solid #00a35a !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.admin-batches-page .search-input,
+.admin-batches-page .search-input:focus,
+.admin-batches-page .search-input:active {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+
+.admin-batches-page .search-input {
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 14px;
+    color: #374151;
+}
+
+.admin-batches-page .filter-controls {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -54,9 +121,9 @@
     transition: all 0.2s;
 }
 
-.admin-batches-page .filter-controls:hover {
-    border-color: #e5e7eb;
-    box-shadow: none;
+.admin-batches-page .filter-controls:hover,
+.admin-batches-page .filter-controls:focus-within {
+    border-color: #00a35a;
 }
 
 .admin-batches-page .filter-icon {
@@ -125,6 +192,16 @@
     border-bottom: 1px solid #f9f9f9;
     color: #666;
     font-size: 14px;
+}
+
+.admin-batches-page .batches-table th.s-no,
+.admin-batches-page .batches-table td.s-no {
+    width: 60px;
+    text-align: center !important;
+    color: #bbb !important;
+    font-weight: 500;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 .admin-batches-page .batch-name-cell {

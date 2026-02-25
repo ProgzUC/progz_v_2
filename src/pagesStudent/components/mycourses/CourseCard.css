@@ -33,10 +33,32 @@
 
 .student-mycourses-page .left-section {
     background: #E4E4E4;
-    min-height: 100vh;
+    height: calc(100vh - 85px);
+    /* Offset for app header */
     padding-top: 20px;
-    position: relative;
-    height: 862px;
+    position: sticky;
+    top: 85px;
+    /* Sync with app header height */
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Custom Scrollbar for Left Section */
+.student-mycourses-page .left-section::-webkit-scrollbar {
+    width: 6px;
+}
+
+.student-mycourses-page .left-section::-webkit-scrollbar-track {
+    background: #e4e4e4;
+}
+
+.student-mycourses-page .left-section::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.student-mycourses-page .left-section::-webkit-scrollbar-thumb:hover {
+    background: #999;
 }
 
 .student-mycourses-page .left-shadow::after {
@@ -63,7 +85,8 @@
     display: flex;
     flex-direction: column;
     gap: 30px;
-    padding: 0 30px;
+    padding: 0 30px 60px;
+    /* Added bottom padding for perfect alignment */
 }
 
 .student-mycourses-page .course-card {
@@ -232,17 +255,17 @@
 }
 
 .student-mycourses-page .jc-back-btn:hover .back-icon-circle {
-    background: #198754;
+    background: #f0f0f0;
+    /* Keep circle grey */
     transform: translateX(-4px);
 }
 
-.student-mycourses-page .jc-back-btn:hover .back-icon-circle i,
-.student-mycourses-page .jc-back-btn:hover span {
-    color: #198754;
+.student-mycourses-page .jc-back-btn:hover .back-icon-circle i {
+    color: #146c43;
 }
 
 .student-mycourses-page .jc-back-btn:hover span {
-    color: #198754;
+    color: #146c43;
 }
 
 /* Back Button Visibility */
@@ -619,23 +642,28 @@
         align-items: center;
         text-align: center;
     }
-    .student-mycourses-page .large-content{
-        width:100%;
+
+    .student-mycourses-page .large-content {
+        width: 100%;
     }
+
     .student-mycourses-page .course-thumb {
         width: 100%;
         max-width: 300px;
         height: auto;
         margin-bottom: 15px;
     }
+
     .student-mycourses-page .card-details {
         width: 100%;
     }
+
     .student-mycourses-page {
         margin-top: 80px;
         /* Optimized for mobile */
     }
-    .student-mycourses-page .course-title{
+
+    .student-mycourses-page .course-title {
         text-align: left;
     }
 

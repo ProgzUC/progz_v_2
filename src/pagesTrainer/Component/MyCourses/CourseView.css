@@ -222,7 +222,7 @@
   min-width: 0;
 }
 
-.cv-list-item > span:first-child {
+.cv-list-item>span:first-child {
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -291,6 +291,7 @@
 }
 
 @media (max-width: 768px) {
+
   .course-view-page,
   .trainer-course-view-page {
     padding: calc(70px + var(--trainer-spacing-sm)) 0 var(--trainer-spacing-lg);
@@ -380,7 +381,7 @@
     padding: 14px 16px;
   }
 
-  .cv-list-item > span:first-child {
+  .cv-list-item>span:first-child {
     white-space: normal;
     word-break: break-word;
   }
@@ -400,6 +401,7 @@
 }
 
 @media (max-width: 480px) {
+
   .course-view-page,
   .trainer-course-view-page {
     padding: calc(70px + 12px) 12px var(--trainer-spacing-md);
@@ -429,7 +431,7 @@
   }
 
   .cv-body-content {
-    padding: 0!important ;
+    padding: 0 !important;
   }
 
   .cv-description-box {

@@ -100,11 +100,17 @@
   padding: 20px 10px;
   font-size: 14px;
   color: #666;
+  vertical-align: middle;
 }
 
-.admin-instructors-page .inst-table tbody td:first-child {
-  color: #999;
-  font-weight: 400;
+.admin-instructors-page .inst-table th.s-no,
+.admin-instructors-page .inst-table td.s-no {
+  width: 70px;
+  text-align: center !important;
+  color: #bbb !important;
+  font-weight: 500;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }
 
 .admin-instructors-page .actions {

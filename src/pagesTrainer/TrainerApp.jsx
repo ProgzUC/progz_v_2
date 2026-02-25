@@ -135,6 +135,7 @@ function TrainerApp() {
             <Profile
               profileData={profileData}
               onEdit={() => setIsEditingProfile(true)}
+              onBack={() => setActiveTab('home')}
             />
           )
         )}

@@ -80,7 +80,7 @@ const ViewBatch = () => {
         <div className="view-batch-page">
             {/* Header */}
             <div className="view-batch-header">
-                <button className="back-btn" onClick={() => navigate('/batches')}>
+                <button className="back-btn" onClick={() => navigate('/admin/batches')}>
                     <FaArrowLeft /> Back to Batches
                 </button>
                 <div className="header-title">

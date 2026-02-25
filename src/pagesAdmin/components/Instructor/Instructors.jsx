@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Instructors.css";
 import Loader from "../../../components/common/Loader/Loader";
-import { useAllUsers} from "../../../hooks/useAdminUsers";
+import { useAllUsers } from "../../../hooks/useAdminUsers";
 import { FaTrash, FaEdit, FaEye } from "react-icons/fa";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -29,7 +29,7 @@ const Instructors = () => {
     currentPage * itemsPerPage
   );
 
-  
+
 
   const handleDelete = (user) => {
     Swal.fire({
@@ -82,6 +82,7 @@ const Instructors = () => {
         <table className="inst-table">
           <thead>
             <tr>
+              <th className="s-no">S.No</th>
               <th>Instructor</th>
               <th>E-mail</th>
               <th>Mobile No</th>
@@ -93,6 +94,7 @@ const Instructors = () => {
           <tbody>
             {paginatedData.map((item, index) => (
               <tr key={index}>
+                <td className="s-no">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                 <td>{item.name}</td>
                 <td>{item.email}</td>
                 <td>{item.phone}</td>

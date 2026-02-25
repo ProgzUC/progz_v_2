@@ -7,6 +7,8 @@ import Loader from "../../../components/common/Loader/Loader";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
 
 import { BiPhone, BiMapPin, BiBook, BiBriefcase, BiCheckShield, BiTimeFive, BiTrophy, BiShieldQuarter } from "react-icons/bi";
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+
 
 /* ============================
    USER INITIALS AVATAR
@@ -51,6 +53,9 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
     const [successMsg, setSuccessMsg] = useState("");
     const [previewImage, setPreviewImage] = useState(currentData.profileImage || null);
     const [selectedFile, setSelectedFile] = useState(null);
+    const [showCurrentPwd, setShowCurrentPwd] = useState(false);
+    const [showNewPwd, setShowNewPwd] = useState(false);
+    const [showConfirmPwd, setShowConfirmPwd] = useState(false);
     const fileInputRef = useRef(null);
 
     const updateProfile = useUpdateStudentProfile();
@@ -139,33 +144,6 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                 <p className="profile-modal-title">{mode === "password" ? "Change Password" : "Edit Profile"}</p>
                 {mode !== "password" && (
                     <>
-                        {/* Profile Picture Section */}
-                        <div className="profile-image-edit-section">
-                            <div className="profile-image-preview-container">
-                                {previewImage ? (
-                                    <img src={previewImage} alt="Preview" className="profile-image-preview" />
-                                ) : (
-                                    <div className="profile-image-placeholder">
-                                        {(form.name || "U")[0].toUpperCase()}
-                                    </div>
-                                )}
-                            </div>
-                            <button
-                                className="profile-change-photo-btn"
-                                onClick={() => fileInputRef.current.click()}
-                                type="button"
-                            >
-                                Change Photo
-                            </button>
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                onChange={handleImageChange}
-                                accept="image/*"
-                                style={{ display: 'none' }}
-                            />
-                        </div>
-
                         <div className="profile-input-row">
                             <label>Phone Number</label>
                             <input type="text" name="phone" value={form.phone || ""} onChange={handleChange} />
@@ -188,15 +166,57 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                     <>
                         <div className="profile-input-row">
                             <label>Current Password</label>
-                            <input type="password" value={currentPwdInput} onChange={(e) => setCurrentPwdInput(e.target.value)} placeholder="Current password" />
+                            <div className="password-input-wrapper">
+                                <input
+                                    type={showCurrentPwd ? "text" : "password"}
+                                    value={currentPwdInput}
+                                    onChange={(e) => setCurrentPwdInput(e.target.value)}
+                                    placeholder="Current password"
+                                />
+                                <button
+                                    type="button"
+                                    className="password-toggle-btn"
+                                    onClick={() => setShowCurrentPwd(!showCurrentPwd)}
+                                >
+                                    {showCurrentPwd ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                                </button>
+                            </div>
                         </div>
                         <div className="profile-input-row">
                             <label>New Password</label>
-                            <input type="password" value={newPwdInput} onChange={(e) => setNewPwdInput(e.target.value)} placeholder="New password" />
+                            <div className="password-input-wrapper">
+                                <input
+                                    type={showNewPwd ? "text" : "password"}
+                                    value={newPwdInput}
+                                    onChange={(e) => setNewPwdInput(e.target.value)}
+                                    placeholder="New password"
+                                />
+                                <button
+                                    type="button"
+                                    className="password-toggle-btn"
+                                    onClick={() => setShowNewPwd(!showNewPwd)}
+                                >
+                                    {showNewPwd ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                                </button>
+                            </div>
                         </div>
                         <div className="profile-input-row">
                             <label>Re-enter Password</label>
-                            <input type="password" value={confirmPwdInput} onChange={(e) => setConfirmPwdInput(e.target.value)} placeholder="Confirm new password" />
+                            <div className="password-input-wrapper">
+                                <input
+                                    type={showConfirmPwd ? "text" : "password"}
+                                    value={confirmPwdInput}
+                                    onChange={(e) => setConfirmPwdInput(e.target.value)}
+                                    placeholder="Confirm new password"
+                                />
+                                <button
+                                    type="button"
+                                    className="password-toggle-btn"
+                                    onClick={() => setShowConfirmPwd(!showConfirmPwd)}
+                                >
+                                    {showConfirmPwd ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
+                                </button>
+                            </div>
                         </div>
                     </>
                 )}
@@ -286,7 +306,7 @@ const Info = ({ profile, ongoingCount, completedCount, openEdit, openPassword })
 /* ============================
    COURSE GRID COMPONENT
 ============================ */
-const CourseGrid = ({ courses }) => {
+const CourseGrid = ({ courses, profileName }) => {
     const [filter, setFilter] = useState("ongoing");
     const navigate = useNavigate();
 
@@ -297,16 +317,15 @@ const CourseGrid = ({ courses }) => {
         return true;
     });
 
-    const handleCertificate = (e) => {
-        e.stopPropagation(); // Avoid navigating when clicking certificate
-        const pngUrl = "/certificate.png";
-        window.open(pngUrl, '_blank');
-        const link = document.createElement("a");
-        link.href = pngUrl;
-        link.download = "certificate.png";
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
+    const handleCertificate = (e, course) => {
+        e.stopPropagation();
+        const certData = {
+            studentName: profileName,
+            courseName: course.courseName || course.title,
+            completionDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+            startDate: "January 2024" // Derive if available
+        };
+        navigate("/student-dashboard/certificate", { state: { certData } });
     };
 
     return (
@@ -365,7 +384,7 @@ const CourseGrid = ({ courses }) => {
                                             <span>{c.completedLessons || 0} of {c.totalLessons || 0} Lessons</span>
                                         </div>
                                         {isCompleted && (
-                                            <button className="profile-view-cert" onClick={handleCertificate}>
+                                            <button className="profile-view-cert" onClick={(e) => handleCertificate(e, c)}>
                                                 🎉 View Certificate
                                             </button>
                                         )}
@@ -412,7 +431,7 @@ const ProfilePage = () => {
                             openEdit={() => { setModalMode("edit"); setIsModelOpen(true); }}
                             openPassword={() => { setModalMode("password"); setIsModelOpen(true); }}
                         />
-                        <CourseGrid courses={courses} />
+                        <CourseGrid courses={courses} profileName={profile?.name} />
                     </div>
                 </div>
             </div>
@@ -430,4 +449,3 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
-

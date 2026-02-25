@@ -11,23 +11,29 @@
 }
 
 .view-batch-page .back-btn {
-    background: #f3f4f6;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #374151;
-    margin-bottom: 16px;
-    transition: background 0.2s;
+    background: #10a358 !important;
+    border: none !important;
+    padding: 10px 24px !important;
+    border-radius: 10px !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: white !important;
+    margin-bottom: 30px !important;
+    transition: all 0.2s ease !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+    min-width: 140px !important;
 }
 
 .view-batch-page .back-btn:hover {
-    background: #e5e7eb;
+    background: #0d8a4a !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 12px rgba(16, 163, 88, 0.2) !important;
 }
 
 .view-batch-page .header-title {

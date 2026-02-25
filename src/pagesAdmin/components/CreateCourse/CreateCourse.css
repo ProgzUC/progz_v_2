@@ -31,14 +31,14 @@
 }
 
 .admin-create-course-page .close-icon {
-  font-size: 20px;
+  font-size: 26px;
   cursor: pointer;
   color: #555;
   transition: 0.2s;
 }
 
 .admin-create-course-page .close-icon:hover {
-  color: #222;
+  color: #1a6b28;
 }
 
 .admin-create-course-page .subtitle {
@@ -146,8 +146,8 @@
 input:focus,
 .admin-create-course-page textarea:focus,
 .admin-create-course-page select:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  border-color: #2a7d38;
+  box-shadow: 0 0 0 3px rgba(42, 125, 56, 0.2);
 }
 
 .admin-create-course-page textarea {
@@ -410,26 +410,38 @@ input:focus,
 }
 
 .admin-create-course-page .cancel-btn,
-.admin-create-course-page .submit-btn {
+.admin-create-course-page .submit-btn,
+.create-course-page .cancel-btn,
+.create-course-page .submit-btn {
   padding: 12px 20px;
   border-radius: 8px;
-  border: none;
+  border: 2px solid transparent;
   font-size: 15px;
   cursor: pointer;
   font-weight: 600;
+  transition: 0.2s;
 }
 
-.admin-create-course-page .cancel-btn {
+.admin-create-course-page .cancel-btn:hover,
+.create-course-page .cancel-btn:hover {
+  border-color: #00a86b;
+}
+
+.admin-create-course-page .cancel-btn,
+.create-course-page .cancel-btn {
   background: #e5e7eb;
 }
 
-.admin-create-course-page .submit-btn {
+.admin-create-course-page .submit-btn,
+.create-course-page .submit-btn {
   background: #2a7d38;
   color: white;
 }
 
-.admin-create-course-page .submit-btn:hover {
+.admin-create-course-page .submit-btn:hover,
+.create-course-page .submit-btn:hover {
   background: #15613b;
+  border-color: #00a86b;
 }
 
 /* -----------------------------
@@ -708,5 +720,5 @@ input:focus,
 }
 
 .admin-create-course-page .lightbox-close:hover {
-  color: #ff4d4f;
+  color: #1a6b28;
 }

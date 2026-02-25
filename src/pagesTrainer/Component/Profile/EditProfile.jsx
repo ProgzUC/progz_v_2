@@ -4,7 +4,8 @@ import {
     FaCamera,
     FaSave,
     FaTimes,
-    FaUser
+    FaUser,
+    FaMapMarkerAlt
 } from 'react-icons/fa';
 import './Profile.css';
 import { useTrainerProfile, useUpdateTrainerProfile } from '../../../hooks/useTrainerProfile';
@@ -66,7 +67,6 @@ const EditProfile = ({ onCancel, onBack }) => {
         <div className="profile-wrapper">
             <div className="profile-container">
                 <div className="profile-header">
-                    <button className="back-btn" onClick={onBack}><FaArrowLeft /></button>
                     <h1>Profile</h1>
                 </div>
 
@@ -162,13 +162,16 @@ const EditProfile = ({ onCancel, onBack }) => {
                                     </div>
                                     <div className="form-group">
                                         <label>Address</label>
-                                        <input
-                                            type="text"
-                                            name="address"
-                                            value={formData.address || ''}
-                                            onChange={handleChange}
-                                            placeholder="Enter your address"
-                                        />
+                                        <div className="input-with-icon">
+                                            <FaMapMarkerAlt />
+                                            <input
+                                                type="text"
+                                                name="address"
+                                                value={formData.address || ''}
+                                                onChange={handleChange}
+                                                placeholder="Enter your address"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </section>

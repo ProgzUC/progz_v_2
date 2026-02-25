@@ -50,25 +50,30 @@
 }
 
 .back-btn {
-    background: white;
-    border: 1px solid var(--border-color)!important;
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+    background: transparent !important;
+    border: none !important;
+    width: auto;
+    height: auto;
+    padding: 0;
+    margin-right: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text-secondary)!important;
-    font-size: 1rem;
+    color: var(--text-secondary) !important;
+    font-size: 1.5rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: var(--shadow-sm)!important;
+    box-shadow: none !important;
 }
 
 .back-btn:hover {
-    color: var(--primary-green);
-    border-color: var(--primary-green);
+    color: var(--trainer-primary, #00875a) !important;
     transform: translateX(-3px);
+    background-color: transparent !important;
+}
+
+.back-btn:hover svg {
+    color: var(--trainer-primary, #00875a) !important;
 }
 
 /* MAIN CARD LAYOUT */
@@ -201,7 +206,8 @@
 
 .info-item {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    /* Better for multi-line address */
     gap: 1rem;
     font-size: 0.9rem;
     color: var(--text-secondary);
@@ -218,6 +224,21 @@
 .info-item svg {
     color: var(--primary-green);
     font-size: 1.1rem;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-item span {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    flex: 1;
+    line-height: 1.5;
+    padding-top: 2px;
+    text-align: left !important;
 }
 
 /* MAIN CONTENT AREA */
@@ -263,7 +284,7 @@
 }
 
 .edit-profile-btn {
-    background-color: var(--text-primary)!important;
+    background-color: var(--text-primary) !important;
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -279,7 +300,7 @@
 }
 
 .edit-profile-btn:hover {
-    background-color: var(--primary-green)!important;
+    background-color: var(--primary-green) !important;
     transform: translateY(-2px);
     box-shadow: 0 6px 12px rgba(0, 135, 90, 0.2);
 }
@@ -318,6 +339,7 @@
     color: var(--primary-green);
     font-size: 1.1rem;
     box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
 }
 
 .detail-content {
@@ -338,6 +360,8 @@
     font-size: 1rem;
     font-weight: 600;
     color: var(--text-primary);
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 .address-box {
@@ -396,6 +420,25 @@
     color: #64748b;
 }
 
+/* INPUT WITH ICON */
+.input-with-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-with-icon svg {
+    position: absolute;
+    left: 12px;
+    color: var(--primary-green);
+    font-size: 1rem;
+    pointer-events: none;
+}
+
+.input-with-icon input {
+    padding-left: 2.5rem !important;
+}
+
 .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -405,9 +448,9 @@
 }
 
 .cancel-btn {
-    background-color: white!important;
-    color: var(--text-secondary)!important;
-    border: 1px solid var(--border-color)!important;
+    background-color: white !important;
+    color: var(--text-secondary) !important;
+    border: 1px solid var(--border-color) !important;
     padding: 0.75rem 1.5rem;
     border-radius: 0.75rem;
     font-weight: 600;

@@ -32,6 +32,13 @@
     margin-bottom: 12px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.modal-box input:focus {
+    border-color: #2a7d38;
+    box-shadow: 0 0 0 3px rgba(42, 125, 56, 0.2);
 }
 
 .modal-actions {

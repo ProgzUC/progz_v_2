@@ -43,14 +43,16 @@
 .close-btn {
     background: none;
     border: none;
-    font-size: 24px;
+    font-size: 32px;
+    /* Increased from 28px */
     cursor: pointer;
     color: var(--trainer-text-muted);
     transition: var(--trainer-transition);
 }
 
 .close-btn:hover {
-    color: var(--trainer-text);
+    color: #2a7d38;
+    /* Matches CreateCourse.css */
     transform: rotate(90deg);
 }
 
@@ -81,8 +83,9 @@
 
 .trainer-edit-course-page .form-group input:focus,
 .trainer-edit-course-page .form-group textarea:focus {
-    border-color: var(--trainer-primary);
-    box-shadow: 0 0 0 3px var(--trainer-primary-light);
+    border-color: #2a7d38;
+    /* Changed from var(--trainer-primary) to green */
+    box-shadow: 0 0 0 3px rgba(42, 125, 56, 0.2);
 }
 
 .trainer-edit-course-page .form-group textarea {

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Batches.css";
 import "../Modal.css";
-import { FaTrash, FaEye, FaEdit, FaUserPlus, FaPlus } from "react-icons/fa";
+import { FaTrash, FaEye, FaEdit, FaUserPlus, FaPlus, FaSearch } from "react-icons/fa";
 import { MdFilterList } from "react-icons/md";
 import Swal from "sweetalert2";
 import { useBatches, useDeleteBatch } from "../../../hooks/useBatches";
@@ -34,12 +34,15 @@ const Batches = () => {
     const [showEditModal, setShowEditModal] = useState(false); // Edit Modal
 
     const [filterStatus, setFilterStatus] = useState("All");
+    const [searchTerm, setSearchTerm] = useState("");
     const itemsPerPage = 10;
 
     // Filter Logic 
     const filteredBatches = batches.filter(batch => {
-        if (filterStatus === "All") return true;
-        return (batch.status || "").toLowerCase() === filterStatus.toLowerCase();
+        const matchesStatus = filterStatus === "All" || (batch.status || "").toLowerCase() === filterStatus.toLowerCase();
+        const matchesSearch = (batch.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (batch.course?.courseName || "").toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesStatus && matchesSearch;
     });
 
     const totalPages = Math.ceil(filteredBatches.length / itemsPerPage);
@@ -156,21 +159,37 @@ const Batches = () => {
                     <span className="stat-value">{batches.filter(b => (b.status || "").toLowerCase() === "active").length}</span>
                 </div>
 
-                <div className="filter-controls">
-                    <MdFilterList className="filter-icon" />
-                    <select
-                        className="filter-select"
-                        value={filterStatus}
-                        onChange={(e) => {
-                            setFilterStatus(e.target.value);
-                            setCurrentPage(1);
-                        }}
-                    >
-                        <option value="All">All</option>
-                        <option value="active">Active</option>
-                        <option value="completed">Completed</option>
-                        <option value="upcoming">Upcoming</option>
-                    </select>
+                <div className="filter-controls-container">
+                    <div className="search-bar-container">
+                        <FaSearch className="search-icon" />
+                        <input
+                            type="text"
+                            className="search-input"
+                            placeholder="Search by batch or course..."
+                            value={searchTerm}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                        />
+                    </div>
+
+                    <div className="filter-controls">
+                        <MdFilterList className="filter-icon" />
+                        <select
+                            className="filter-select"
+                            value={filterStatus}
+                            onChange={(e) => {
+                                setFilterStatus(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                        >
+                            <option value="All">All Status</option>
+                            <option value="active">Active</option>
+                            <option value="completed">Completed</option>
+                            <option value="upcoming">Upcoming</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
@@ -180,6 +199,7 @@ const Batches = () => {
                     <table className="batches-table">
                         <thead>
                             <tr>
+                                <th className="s-no">S.No</th>
                                 <th>Batch Name</th>
                                 <th>Course</th>
                                 <th>Instructors</th>
@@ -191,8 +211,9 @@ const Batches = () => {
                         </thead>
                         <tbody>
                             {paginatedBatches.length > 0 ? (
-                                paginatedBatches.map((batch) => (
+                                paginatedBatches.map((batch, index) => (
                                     <tr key={batch._id || batch.id}>
+                                        <td className="s-no">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                                         <td>
                                             <div className="batch-name-cell">
                                                 <strong>{batch.name}</strong>
@@ -264,7 +285,7 @@ const Batches = () => {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="7" style={{ textAlign: "center", padding: "20px" }}>No batches found</td>
+                                    <td colSpan="8" style={{ textAlign: "center", padding: "20px" }}>No batches found</td>
                                 </tr>
                             )}
                         </tbody>

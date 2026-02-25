@@ -1,36 +1,29 @@
-/* Main Page Layout */
 .user-enrollment-page {
   display: flex;
   flex-direction: row;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: calc(100vh - 40px);
   background-color: #ffffff;
-  font-family: 'Poppins', sans-serif; /* Changed font */
+  font-family: 'Poppins', sans-serif;
   padding: 20px;
-  /* Padding around the whole layout to create the 'floating' look */
   box-sizing: border-box;
-  overflow: hidden;
-  /* No scroll on desktop */
+  overflow-y: auto;
 }
 
 /* Sidebar Styles - Floating Card Look */
 .sidebar {
   position: relative;
-  width: 30%;
-  /* Fixed width percentage */
-  min-width: 300px;
-  max-width: 380px;
+  width: 25%;
+  min-width: 250px;
+  max-width: 320px;
   background: #B8E0D2;
-  padding: 40px 30px;
-  /* Reduced padding to fit content */
+  padding: 30px 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  min-height: 100%;
   border-radius: 30px;
-  /* Rounded corners as per image */
-  margin-right: 40px;
-  /* Spacing between sidebar and form */
+  margin-right: 30px;
 }
 
 
@@ -57,7 +50,7 @@
   flex-direction: column;
   gap: 0;
   margin-top: 0;
- 
+
 }
 
 /* MUCH larger spacing between steps */
@@ -66,7 +59,7 @@
   align-items: center;
   gap: 20px;
   position: relative;
-  padding-bottom: 55px;   /* increased from 60 → 90 */
+  padding-bottom: 35px;
 }
 
 .step-item:last-child {
@@ -78,8 +71,10 @@
   content: '';
   position: absolute;
   left: 15px;
-  top: 45px;          /* aligns the line perfectly */
-  height: 70px;          /* increased from 60 → 90 */
+  top: 45px;
+  /* aligns the line perfectly */
+  height: 70px;
+  /* increased from 60 → 90 */
   width: 4px;
   background-color: #9CA3AF;
   z-index: 0;
@@ -118,22 +113,18 @@
 .content-area {
   flex: 1;
   padding: 20px 0;
-  /* Vertical padding reduced */
   display: flex;
   flex-direction: column;
-  overflow-y: hidden;
-  /* No internal scroll on desktop if possible */
-  height: 100%;
+  min-height: 100%;
   box-sizing: border-box;
-  justify-content: center;
-  /* Center content vertically */
+  justify-content: flex-start;
 }
 
 .section-title {
   font-size: 22px;
   font-weight: 700;
   margin-bottom: 20px;
- 
+
   /* Reduced margin */
   color: #000;
 }
@@ -144,8 +135,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* Distribute space */
-  height: 100%;
 }
 
 .form-grid {
@@ -153,7 +142,7 @@
   grid-template-columns: 1fr 1fr;
   column-gap: 40px;
   row-gap: 16px;
-  
+
   /* Compact row gap */
 }
 
@@ -201,43 +190,83 @@ textarea.form-control {
   resize: none;
 }
 
+/* DOB Alignment Fix - Refined targeting for internal text */
+.personal-details-container .input-wrapper {
+  width: 100% !important;
+  display: flex !important;
+  position: relative;
+  justify-content: flex-start !important;
+}
+
+.personal-details-container .input-wrapper input[type="date"] {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 100% !important;
+  background: #EFEFEF !important;
+  display: block !important;
+  text-align: left !important;
+  padding-left: 14px !important;
+  /* Ensure consistency with padding */
+}
+
+/* Targeting internal browser alignment for date inputs */
+.personal-details-container .input-wrapper input[type="date"]::-webkit-datetime-edit {
+  display: flex !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  width: 100% !important;
+}
+
+.personal-details-container .input-wrapper input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+  display: flex !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+}
+
+
 /* Form Actions */
-user-enrollment-page .form-actions {
-  margin-top: -60px;   /* moves even more up */
+.user-enrollment-page .form-actions {
+  margin-top: 10px;
   display: flex;
   justify-content: flex-end;
   gap: 20px;
-  padding-top: 0px;
+  padding: 10px 0 20px 0;
   border-top: 1px solid #eee;
 }
+
 .btn-cancel,
 .btn-next,
 .btn-submit {
   padding: 8px 30px;
-  /* Compact buttons */
   border-radius: 20px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 15px;
-  margin-bottom: 50px;
-
+  transition: 0.2s;
+  border: 1.5px solid transparent;
 }
 
 .btn-cancel {
-  border: 1px solid #ccc;
+  border: 1.5px solid #ccc;
   background: white;
   color: #333;
-   
+}
+
+.btn-cancel:hover {
+  border-color: #00a86b;
+  color: #00a86b;
 }
 
 .btn-next,
 .btn-submit {
-  border: none;
   background: #198754;
   color: white;
-  
-    
+}
+
+.btn-next:hover,
+.btn-submit:hover {
+  background: #146c43;
+  border-color: #00a86b;
 }
 
 /* Validation Styles */
@@ -374,63 +403,64 @@ user-enrollment-page .form-actions {
   }
 
   .btn-cancel,
-.btn-next,
-.btn-submit{
-  margin-top: 100px;
-}
+  .btn-next,
+  .btn-submit {
+    margin-top: 100px;
+  }
 
- .steps-container {
-        display: flex;
-        flex-direction: row !important;
-        justify-content: space-between;
-        align-items: flex-start;
-        width: 100%;
-        padding: 10px 0;
-        gap: 0;
-    }
+  .steps-container {
+    display: flex;
+    flex-direction: row !important;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    padding: 10px 0;
+    gap: 0;
+  }
 
-    /* Step item becomes column */
-    .step-item {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        width: 33% !important;
-        position: relative;
-    }
+  /* Step item becomes column */
+  .step-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 33% !important;
+    position: relative;
+  }
 
-    /* Circle on top (OK) */
-    .step-indicator {
-        margin-bottom: 10px !important;
-        width: 45px !important;
-        height: 45px !important;
-        z-index: 2;
-    }
+  /* Circle on top (OK) */
+  .step-indicator {
+    margin-bottom: 10px !important;
+    width: 45px !important;
+    height: 45px !important;
+    z-index: 2;
+  }
 
-    /* Convert vertical line → horizontal connector between circles */
-    .step-line {
-        width: 70% !important;
-        height: 4px !important;
-        background: #9CA3AF !important;
-        left: 120px !important;
-        position: relative;
-        top: -40px !important;   /* moves line between circles */
-        z-index: 1;
-       
-    }
+  /* Convert vertical line → horizontal connector between circles */
+  .step-line {
+    width: 70% !important;
+    height: 4px !important;
+    background: #9CA3AF !important;
+    left: 120px !important;
+    position: relative;
+    top: -40px !important;
+    /* moves line between circles */
+    z-index: 1;
 
-    /* Last item should not show connector */
-    .step-item:last-child .step-line {
-        display: none !important;
-    }
+  }
 
-    /* Labels under the circles */
-    .step-label {
-        margin-top: 10px !important;
-        text-align: center !important;
-        font-weight: 600;
-        font-size: 14px !important;
-        max-width: 120px;
-    }
+  /* Last item should not show connector */
+  .step-item:last-child .step-line {
+    display: none !important;
+  }
+
+  /* Labels under the circles */
+  .step-label {
+    margin-top: 10px !important;
+    text-align: center !important;
+    font-weight: 600;
+    font-size: 14px !important;
+    max-width: 120px;
+  }
 }
 
 /* Mobile (max-width: 700px) */
@@ -445,7 +475,8 @@ user-enrollment-page .form-actions {
   }
 
   .form-grid {
-    grid-template-columns: 1fr; /* Stack fields */
+    grid-template-columns: 1fr;
+    /* Stack fields */
   }
 
   .form-group.full-width {
@@ -453,36 +484,44 @@ user-enrollment-page .form-actions {
   }
 
   /* ------- BUTTON FIX (Cancel ABOVE Next) ------- */
-  user-enrollment-page .form-actions {
+  .user-enrollment-page .form-actions {
     display: flex;
-    flex-direction: row;   /* Horizontal layout */
-    justify-content: center;  /* Center buttons */
-    gap: 12px;                 /* Space between buttons */
+    flex-direction: row;
+    /* Horizontal layout */
+    justify-content: center;
+    /* Center buttons */
+    gap: 12px;
+    /* Space between buttons */
     width: 100%;
     align-items: center;
   }
 
   .btn-cancel {
     order: 1;
-   
-    position: relative !important;  /* reset any previous positioning */
-}
+
+    position: relative !important;
+    /* reset any previous positioning */
+  }
 
 
   .btn-next,
   .btn-submit {
-    order: 2;                    /* comes second */
+    order: 2;
+    /* comes second */
     position: relative;
-   
-    
+
+
   }
-  
+
   .btn-cancel,
   .btn-next,
   .btn-submit {
-    width: 70%;        /* Each button takes roughly half width */
-    margin-top: 90px;     /* Remove vertical margin */
-    position: relative !important; /* Reset previous positioning */
+    width: 70%;
+    /* Each button takes roughly half width */
+    margin-top: 90px;
+    /* Remove vertical margin */
+    position: relative !important;
+    /* Reset previous positioning */
   }
 
   /* ------- STEPS HORIZONTAL IN MOBILE ------- */
@@ -519,7 +558,8 @@ user-enrollment-page .form-actions {
     height: 4px !important;
     background: #9CA3AF !important;
     position: absolute !important;
-    top: 22px !important;           /* aligns between circles */
+    top: 22px !important;
+    /* aligns between circles */
     left: 105px !important;
     transform: translateX(-50%);
     z-index: 1;

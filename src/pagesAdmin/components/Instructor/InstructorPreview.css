@@ -131,6 +131,12 @@
     border: 1px solid #ddd;
 }
 
+.ip-input:focus {
+    border-color: #006834 !important;
+    /* Darker green */
+    box-shadow: 0 0 0 2px rgba(0, 104, 52, 0.1);
+}
+
 .ip-input.as-textarea {
     height: 100px;
     resize: none;
@@ -167,14 +173,14 @@
 }
 
 .ip-role-option.active .ip-radio-custom {
-    border-color: #009b4d;
+    border-color: #006834;
 }
 
 .ip-role-option.active .ip-radio-custom::after {
     content: '';
     width: 8px;
     height: 8px;
-    background: #009b4d;
+    background: #006834;
     border-radius: 50%;
 }
 
@@ -189,14 +195,23 @@
 }
 
 .ip-cancel-btn {
-    background: white;
-    border: 1px solid #ccc;
-    color: #333;
+    background: #006834;
+    /* Solid darker green */
+    border: 1px solid #006834;
+    color: white;
+    /* White text for better contrast */
     font-weight: 600;
     padding: 8px 24px;
     border-radius: 4px;
     font-size: 12px;
     cursor: pointer;
+    transition: background 0.2s;
+}
+
+.ip-cancel-btn:hover {
+    background: #005229;
+    /* Even darker on hover */
+    border-color: #00a86b;
 }
 
 .ip-save-btn {
@@ -208,6 +223,12 @@
     border-radius: 4px;
     font-size: 12px;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.ip-save-btn:hover {
+    border-color: #00a86b;
+    color: #00a86b;
 }
 
 /* Responsive */

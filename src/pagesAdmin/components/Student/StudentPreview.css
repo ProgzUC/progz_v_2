@@ -202,6 +202,7 @@
     border-radius: 4px;
     font-size: 12px;
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .ep-save-btn {
@@ -213,6 +214,13 @@
     border-radius: 4px;
     font-size: 12px;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.ep-cancel-btn:hover,
+.ep-save-btn:hover {
+    border-color: #00a86b !important;
+    color: #00a86b !important;
 }
 
 /* Responsive */
