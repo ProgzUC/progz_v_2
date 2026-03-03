@@ -196,15 +196,14 @@ const Overview = () => {
                 <th>Instructor</th>
                 <th>Date</th>
                 <th>Students</th>
-                <th></th>
               </tr>
             </thead>
             <tbody>
               {paginatedData.map((c) => (
                 <tr key={c.id}>
-                  <td>{c.course}</td>
+                  <td className="course-name">{c.course}</td>
                   <td>{c.instructor}</td>
-                  <td>{c.date}</td>
+                  <td className="td-date">{c.date}</td>
 
                   <td>
                     <div className="student-avatars" onClick={() => c.studentsList?.length > 0 && setStudentPopup(c.studentsList)}>
@@ -213,15 +212,10 @@ const Overview = () => {
                           <img key={idx} src={img || avatar} className="avatar" />
                         ))
                       ) : (
-                        <span style={{ fontSize: '12px', color: '#999' }}>No students</span>
+                        <span style={{ fontSize: '12px', color: '#666666' }}>No students</span>
                       )}
                       {c.more > 0 && <span className="more-count">+{c.more}</span>}
                     </div>
-                  </td>
-
-                  <td className="actions">
-                    <i className="bi bi-pencil-square edit-btn" onClick={() => setEditItem(c)}></i>
-                    <i className="bi bi-trash delete-btn" onClick={() => setDeleteItem(c)}></i>
                   </td>
                 </tr>
               ))}
@@ -248,9 +242,9 @@ const Overview = () => {
               {recentStudents && recentStudents.length > 0 ? (
                 recentStudents.map((s, i) => (
                   <tr key={i}>
-                    <td>{s.name}</td>
+                    <td className="student-name">{s.name}</td>
                     <td>{s.email}</td>
-                    <td>{s.date}</td>
+                    <td className="td-date">{s.date}</td>
                   </tr>
                 ))
               ) : (

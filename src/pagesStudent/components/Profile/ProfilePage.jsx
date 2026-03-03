@@ -6,7 +6,7 @@ import { useStudentCourses } from "../../../hooks/useStudentCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
 
-import { BiPhone, BiMapPin, BiBook, BiBriefcase, BiCheckShield, BiTimeFive, BiTrophy, BiShieldQuarter } from "react-icons/bi";
+import { BiPhone, BiMapPin, BiBook, BiBriefcase, BiCheckShield, BiTimeFive, BiTrophy, BiShieldQuarter, BiCalendar } from "react-icons/bi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 
 
@@ -57,12 +57,74 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
     const [showNewPwd, setShowNewPwd] = useState(false);
     const [showConfirmPwd, setShowConfirmPwd] = useState(false);
     const fileInputRef = useRef(null);
+    const dateInputRef = useRef(null);
 
     const updateProfile = useUpdateStudentProfile();
     const changePassword = useChangePassword();
 
+    const [showOtherGender, setShowOtherGender] = useState(
+        currentData.gender && !["male", "female"].includes(currentData.gender.toLowerCase())
+    );
+
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        if (name === "dob") {
+            const prevState = form.dob || "";
+            let digits = value.replace(/\D/g, "");
+
+            // If user is deleting, handle placeholders/slashes properly
+            if (value.length < prevState.length) {
+                const prevDigits = prevState.replace(/\D/g, "");
+                // If digits didn't decrease but length did, user deleted a slash/placeholder
+                if (digits.length === prevDigits.length && digits.length > 0) {
+                    digits = digits.slice(0, -1);
+                }
+            }
+
+            digits = digits.slice(0, 8);
+
+            if (digits.length === 0) {
+                setForm({ ...form, [name]: "" });
+                return;
+            }
+
+            const template = "dd/mm/yyyy";
+            let formatted = "";
+            let dIdx = 0;
+            for (let i = 0; i < template.length; i++) {
+                if (template[i] === "/") {
+                    formatted += "/";
+                } else {
+                    if (dIdx < digits.length) {
+                        formatted += digits[dIdx++];
+                    } else {
+                        formatted += template[i];
+                    }
+                }
+            }
+            setForm({ ...form, [name]: formatted });
+        } else {
+            setForm({ ...form, [name]: value });
+        }
+    };
+
+    const handleDatePick = (e) => {
+        const dateVal = e.target.value; // YYYY-MM-DD
+        if (dateVal) {
+            const [y, m, d] = dateVal.split("-");
+            setForm({ ...form, dob: `${d}/${m}/${y}` });
+        }
+    };
+
+    const handleGenderSelect = (e) => {
+        const val = e.target.value;
+        if (val === "other") {
+            setShowOtherGender(true);
+            setForm({ ...form, gender: "" });
+        } else {
+            setShowOtherGender(false);
+            setForm({ ...form, gender: val });
+        }
     };
 
     const handleImageChange = (e) => {
@@ -82,12 +144,17 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
         setSuccessMsg("");
 
         if (!currentPwdInput || !newPwdInput || !confirmPwdInput) {
-            setError("All password fields are required.");
+            setError("Please fill in all password fields.");
+            return;
+        }
+
+        if (newPwdInput.length < 6) {
+            setError("New password must be at least 6 characters long.");
             return;
         }
 
         if (newPwdInput !== confirmPwdInput) {
-            setError("New passwords do not match.");
+            setError("The new passwords do not match.");
             return;
         }
 
@@ -115,11 +182,34 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
             return;
         }
 
+        // Validate Profile Fields
+        if (!form.dob || !form.gender || !form.location || !form.education) {
+            setError("Please fill in all required fields (DOB, Gender, Address, Education).");
+            return;
+        }
+
+        // DOB Format Validation
+        const dobRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+        if (!dobRegex.test(form.dob)) {
+            setError("Date of Birth must be in DD/MM/YYYY format.");
+            return;
+        }
+
         const formData = new FormData();
-        formData.append('phone', form.phone || "");
         formData.append('location', form.location || "");
         formData.append('education', form.education || "");
         formData.append('jobTitle', form.jobTitle || "");
+
+        // Extra Fields
+        formData.append('dob', form.dob || "");
+        formData.append('gender', form.gender || "");
+        formData.append('university', form.university || "");
+        formData.append('experience', form.experience || "");
+        formData.append('employmentStatus', form.employmentStatus || "");
+        formData.append('skills', form.skills || "");
+        formData.append('zenCourseName', form.zenCourseName || "");
+        formData.append('zenCourseType', form.zenCourseType || "");
+        formData.append('source', form.source || "");
 
         if (selectedFile) {
             formData.append('profileImage', selectedFile);
@@ -144,21 +234,97 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                 <p className="profile-modal-title">{mode === "password" ? "Change Password" : "Edit Profile"}</p>
                 {mode !== "password" && (
                     <>
+                        <p className="profile-modal-section-title">Personal Details</p>
                         <div className="profile-input-row">
-                            <label>Phone Number</label>
-                            <input type="text" name="phone" value={form.phone || ""} onChange={handleChange} />
+                            <label>Date of Birth</label>
+                            <div className="dob-input-container">
+                                <input
+                                    type="text"
+                                    name="dob"
+                                    value={form.dob || ""}
+                                    onChange={handleChange}
+                                    placeholder="DD/MM/YYYY"
+                                    maxLength="15"
+                                />
+                                <BiCalendar
+                                    className="dob-calendar-icon"
+                                    onClick={() => dateInputRef.current && dateInputRef.current.showPicker()}
+                                />
+                                <input
+                                    type="date"
+                                    ref={dateInputRef}
+                                    onChange={handleDatePick}
+                                    style={{ position: 'absolute', opacity: 0, width: 0, height: 0, padding: 0, border: 'none' }}
+                                />
+                            </div>
                         </div>
                         <div className="profile-input-row">
-                            <label>Location</label>
-                            <input type="text" name="location" value={form.location || ""} onChange={handleChange} />
+                            <label>Gender</label>
+                            <select
+                                value={showOtherGender ? "other" : (form.gender || "").toLowerCase()}
+                                onChange={handleGenderSelect}
+                                className="profile-select-input"
+                            >
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                            {showOtherGender && (
+                                <input
+                                    type="text"
+                                    name="gender"
+                                    value={form.gender || ""}
+                                    onChange={handleChange}
+                                    placeholder="Please specify"
+                                    style={{ marginTop: '10px' }}
+                                    autoFocus
+                                />
+                            )}
                         </div>
+                        <div className="profile-input-row">
+                            <label>Address</label>
+                            <textarea name="location" value={form.location || ""} onChange={handleChange} rows="3"></textarea>
+                        </div>
+
+                        <p className="profile-modal-section-title" style={{ marginTop: '25px' }}>Education & Employment</p>
                         <div className="profile-input-row">
                             <label>Education</label>
                             <input type="text" name="education" value={form.education || ""} onChange={handleChange} />
                         </div>
                         <div className="profile-input-row">
-                            <label>Job Title</label>
+                            <label>University/School</label>
+                            <input type="text" name="university" value={form.university || ""} onChange={handleChange} />
+                        </div>
+                        <div className="profile-input-row">
+                            <label>Profession</label>
                             <input type="text" name="jobTitle" value={form.jobTitle || ""} onChange={handleChange} />
+                        </div>
+                        <div className="profile-input-row">
+                            <label>Experience</label>
+                            <input type="text" name="experience" value={form.experience || ""} onChange={handleChange} />
+                        </div>
+                        <div className="profile-input-row">
+                            <label>Employment Status</label>
+                            <input type="text" name="employmentStatus" value={form.employmentStatus || ""} onChange={handleChange} />
+                        </div>
+                        <div className="profile-input-row">
+                            <label>Skills</label>
+                            <textarea name="skills" value={form.skills || ""} onChange={handleChange} rows="3"></textarea>
+                        </div>
+
+                        <p className="profile-modal-section-title" style={{ marginTop: '25px' }}>Additional Info</p>
+                        <div className="profile-input-row">
+                            <label>Zen Course Name</label>
+                            <input type="text" name="zenCourseName" value={form.zenCourseName || ""} onChange={handleChange} />
+                        </div>
+                        <div className="profile-input-row">
+                            <label>Zen Course Type</label>
+                            <input type="text" name="zenCourseType" value={form.zenCourseType || ""} onChange={handleChange} />
+                        </div>
+                        <div className="profile-input-row">
+                            <label>Source</label>
+                            <input type="text" name="source" value={form.source || ""} onChange={handleChange} />
                         </div>
                     </>
                 )}
@@ -254,7 +420,7 @@ const Info = ({ profile, ongoingCount, completedCount, openEdit, openPassword })
                 <div className="profile-detail-item">
                     <div className="detail-icon"><BiMapPin /></div>
                     <div className="detail-info">
-                        <label>Location</label>
+                        <label>Address</label>
                         <span>{profile.location || "Not provided"}</span>
                     </div>
                 </div>
@@ -268,7 +434,7 @@ const Info = ({ profile, ongoingCount, completedCount, openEdit, openPassword })
                 <div className="profile-detail-item">
                     <div className="detail-icon"><BiBriefcase /></div>
                     <div className="detail-info">
-                        <label>Job Title</label>
+                        <label>Profession</label>
                         <span>{profile.jobTitle || "Not provided"}</span>
                     </div>
                 </div>

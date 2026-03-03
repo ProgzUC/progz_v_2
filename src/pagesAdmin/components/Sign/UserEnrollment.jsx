@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
 import Sidebar from './Sidebar';
 import PersonalDetails from './PersonalDetails';
 import Role from './Role';
@@ -6,7 +9,8 @@ import EducationDetails from './EducationDetails';
 import './UserEnrollment.css';
 
 
-const UserEnrollment = () => {
+const UserEnrollment = ({ subtitle }) => {
+    const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(1);
 
     const handleNext = () => {
@@ -18,13 +22,28 @@ const UserEnrollment = () => {
     };
 
     const handleSubmit = () => {
-        alert('Registration Created Successfully!');
+        Swal.fire({
+            title: 'Success!',
+            text: 'Registration Created Successfully!',
+            icon: 'success',
+            confirmButtonColor: '#198754',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed || result.isDismissed) {
+                // Determine redirect path based on subtitle
+                if (subtitle === "Add Student") {
+                    navigate('/admin/students');
+                } else {
+                    navigate('/admin/instructors');
+                }
+            }
+        });
         // Here you would typically send data to backend
     };
 
     return (
         <div className="user-enrollment-page">
-            <Sidebar currentStep={currentStep} />
+            <Sidebar currentStep={currentStep} subtitle={subtitle} />
             <div className="content-area">
                 {currentStep === 1 && <PersonalDetails onNext={handleNext} />}
                 {currentStep === 2 && <Role onNext={handleNext} onBack={handleBack} />}

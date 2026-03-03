@@ -503,6 +503,80 @@
   min-width: 0;
 }
 
+.cv-file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  background: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--trainer-divider);
+  transition: var(--trainer-transition);
+}
+
+.cv-file-item:hover {
+  border-color: var(--trainer-primary);
+  background: white;
+}
+
+.cv-file-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--trainer-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cv-file-name i {
+  color: var(--trainer-primary);
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.cv-file-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.cv-action-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  font-size: 18px;
+  text-decoration: none !important;
+  transition: all 0.2s ease;
+}
+
+.cv-action-icon.view {
+  color: #1a1a1a;
+  background: #eee;
+}
+
+.cv-action-icon.view:hover {
+  background: #ddd;
+  transform: scale(1.1);
+}
+
+.cv-action-icon.download {
+  color: #198754;
+  background: #e8f5e9;
+}
+
+.cv-action-icon.download:hover {
+  background: #c8e6c9;
+  transform: scale(1.1);
+}
+
 .cv-file-list li a,
 .cv-video-list li a {
   display: flex;

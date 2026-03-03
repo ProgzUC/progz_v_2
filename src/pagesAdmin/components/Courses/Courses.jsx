@@ -120,6 +120,7 @@ const Courses = () => {
               <table className="course-table">
                 <thead>
                   <tr>
+                    <th>S.No</th>
                     <th>Courses</th>
                     <th>Instructors</th>
                     <th>Enrolled</th>
@@ -129,8 +130,9 @@ const Courses = () => {
 
                 <tbody>
                   {paginated.length > 0 ? (
-                    paginated.map((course) => (
+                    paginated.map((course, index) => (
                       <tr key={course._id}>
+                        <td>{(page - 1) * rowsPerPage + index + 1}</td>
                         <td>{course.courseName}</td>
                         <td>
                           <div className="avatar-group">
@@ -168,7 +170,7 @@ const Courses = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="4" style={{ textAlign: "center", padding: "30px" }}>
+                      <td colSpan="5" style={{ textAlign: "center", padding: "30px" }}>
                         No courses found.
                       </td>
                     </tr>

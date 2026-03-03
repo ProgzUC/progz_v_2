@@ -2,12 +2,54 @@ import React from "react";
 import "./introduction.css";
 
 const FileItem = ({ name, url }) => {
-  const handleDownload = () => {
-    window.open(url, "_blank");
+  const handleDownload = async () => {
+    if (!url) return;
+
+    // For Cloudinary URLs, use the fl_attachment flag to force the browser to download the file
+    if (url.includes("res.cloudinary.com") && url.includes("/upload/")) {
+      const downloadUrl = url.replace("/upload/", "/upload/fl_attachment/");
+      // Using an anchor with download attribute as a secondary trigger
+      const link = document.createElement("a");
+      link.href = downloadUrl;
+      link.setAttribute("download", name || "file");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      return;
+    }
+
+    // Generic fetch-based download for other sources
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = name || "Material-File";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (e) {
+      // Fallback if fetch is blocked by CORS
+      window.open(url, "_blank");
+    }
   };
 
   const handleExternalLink = () => {
-    window.open(url, "_blank");
+    if (!url) return;
+
+    const lowerUrl = url.toLowerCase();
+    const officeExtensions = [".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx"];
+    const isOfficeFile = officeExtensions.some(ext => lowerUrl.endsWith(ext) || lowerUrl.includes(ext + "?"));
+
+    if (isOfficeFile) {
+      // Use Microsoft Office Online Viewer to preview office documents without downloading
+      window.open(`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}`, "_blank");
+    } else {
+      // Open in a new tab directly for images, PDFs, etc.
+      window.open(url, "_blank");
+    }
   };
 
   return (

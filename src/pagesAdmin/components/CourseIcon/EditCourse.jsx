@@ -345,8 +345,6 @@ const EditCourse = () => {
 
         <p className="subtitle">Update your modules and sections</p>
 
-        <p className="subtitle">Update your modules and sections</p>
-
         {loading && (
           <div className="loading-overlay">
             <Loader />
@@ -381,6 +379,50 @@ const EditCourse = () => {
             value={course.courseDescription}
             onChange={(e) => updateField("courseDescription", e.target.value)}
           />
+        </div>
+
+        {/* THUMBNAIL UPLOAD (Simple Version as per Image 2) */}
+        <div className="input-full">
+          <label>Thumbnail Image</label>
+          <div className="image-2-style-upload">
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => {
+                if (e.target.files && e.target.files[0]) {
+                  updateField("thumbnail", e.target.files[0]);
+                }
+              }}
+            />
+            {course.thumbnail && (
+              <div className="file-preview-list" style={{ marginTop: "10px" }}>
+                <div className="file-preview-media">
+                  <span
+                    className="remove-file-btn"
+                    title="Remove Thumbnail"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      updateField("thumbnail", null);
+                    }}
+                  >×</span>
+                  <div className="image-preview-wrapper">
+                    <img
+                      src={
+                        course.thumbnail instanceof File
+                          ? URL.createObjectURL(course.thumbnail)
+                          : course.thumbnail?.url || course.thumbnail
+                      }
+                      className="preview-image-consistent"
+                      alt="Preview"
+                    />
+                  </div>
+                  <p className="file-name-media" title={course.thumbnail instanceof File ? course.thumbnail.name : "Current Thumbnail"}>
+                    {course.thumbnail instanceof File ? course.thumbnail.name : "Current Thumbnail"}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="input-grid">

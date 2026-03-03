@@ -68,6 +68,43 @@ const StudentPreview = ({ student, onCancel }) => {
         );
     };
 
+    const handleDOBChange = (e) => {
+        const { value } = e.target;
+        const prevState = formData.dob || "";
+        let digits = value.replace(/\D/g, "");
+
+        // Detect deletion
+        if (value.length < prevState.length) {
+            const prevDigits = prevState.replace(/\D/g, "");
+            if (digits.length === prevDigits.length && digits.length > 0) {
+                digits = digits.slice(0, -1);
+            }
+        }
+
+        digits = digits.slice(0, 8);
+
+        if (digits.length === 0) {
+            setFormData({ ...formData, dob: "" });
+            return;
+        }
+
+        const template = "dd/mm/yyyy";
+        let formatted = "";
+        let dIdx = 0;
+        for (let i = 0; i < template.length; i++) {
+            if (template[i] === "/") {
+                formatted += "/";
+            } else {
+                if (dIdx < digits.length) {
+                    formatted += digits[dIdx++];
+                } else {
+                    formatted += template[i];
+                }
+            }
+        }
+        setFormData({ ...formData, dob: formatted });
+    };
+
     return (
         <div className="ep-container">
             {/* Top Green Gradient Bar */}
@@ -156,8 +193,9 @@ const StudentPreview = ({ student, onCancel }) => {
                             value={formData.dob || ''}
                             readOnly={!isEditing}
                             className={`ep-input ${isEditing ? 'editable' : ''}`}
-                            onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                            onChange={handleDOBChange}
                             placeholder="DD/MM/YYYY"
+                            maxLength="15"
                         />
                     </div>
                     <div className="ep-form-group">

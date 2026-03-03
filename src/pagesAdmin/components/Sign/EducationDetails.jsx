@@ -4,42 +4,49 @@ import './UserEnrollment.css';
 
 
 const educationConfig = [
-  {
-    id: 'education',
-    label: 'Education',
-    type: 'text',
-    placeholder: '',
-    width: 'half'
-  },
-  {
-    id: 'university',
-    label: 'University/School',
-    type: 'text',
-    placeholder: '',
-    width: 'half'
-  },
-  {
-    id: 'profession',
-    label: 'Profession',
-    type: 'text',
-    placeholder: '',
-    width: 'half'
-  },
-  {
-    id: 'experience',
-    label: 'Experience',
-    type: 'select',
-    placeholder: '',
-    width: 'half',
-    options: ['0-1 years', '1-3 years', '3-5 years', '5+ years']
-  },
-  {
-    id: 'employmentStatus',
-    label: 'Employment Status',
-    type: 'text',
-    placeholder: '',
-    width: 'half'
-  }
+    {
+        id: 'education',
+        label: 'Education',
+        type: 'text',
+        placeholder: '',
+        width: 'half'
+    },
+    {
+        id: 'university',
+        label: 'University/School',
+        type: 'text',
+        placeholder: '',
+        width: 'half'
+    },
+    {
+        id: 'profession',
+        label: 'Profession',
+        type: 'text',
+        placeholder: '',
+        width: 'half'
+    },
+    {
+        id: 'experience',
+        label: 'Experience',
+        type: 'select',
+        placeholder: '',
+        width: 'half',
+        options: ['0-1 years', '1-3 years', '3-5 years', '5+ years']
+    },
+    {
+        id: 'employmentStatus',
+        label: 'Employment Status',
+        type: 'text',
+        placeholder: '',
+        width: 'half'
+    },
+    {
+        id: 'skills',
+        label: 'Skills',
+        type: 'text',
+        placeholder: '',
+        width: 'half'
+    }
 ];
 
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import './UserEnrollment.css';
 
-const Sidebar = ({ currentStep }) => {
+const Sidebar = ({ currentStep, subtitle }) => {
     const steps = [
         { id: 1, label: 'Personal Details' },
         { id: 2, label: 'Role' },
@@ -12,7 +12,7 @@ const Sidebar = ({ currentStep }) => {
         <div className="sidebar">
             <div className="sidebar-header">
                 <h1>User Enrollment</h1>
-                <h2></h2>
+                <h2>{subtitle}</h2>
             </div>
 
             <div className="steps-container">

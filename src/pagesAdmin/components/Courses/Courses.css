@@ -49,14 +49,15 @@
   width: 260px;
   font-size: 14px;
   outline: none;
-  color: #666;
-  background: white;
-  transition: border-color 0.2s;
+  color: #333;
+  background: white !important;
+  transition: all 0.2s;
 }
 
 .admin-courses-page .search-box input:focus {
-  border-color: #0FA958;
+  border-color: #0FA958 !important;
   box-shadow: 0 0 0 3px rgba(15, 169, 88, 0.1);
+  outline: none;
 }
 
 .admin-courses-page .search-box i {

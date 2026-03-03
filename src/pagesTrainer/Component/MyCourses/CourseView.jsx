@@ -38,6 +38,18 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
   const displayId = course.courseId ||
     (course._id ? `CRS-${(course.courseName || "GEN").substr(0, 3).toUpperCase().replace(/\s/g, '')}-001` : "N/A");
 
+  const getViewUrl = (url, fileName) => {
+    if (!url) return "#";
+    const lowerUrl = url.toLowerCase();
+    const officeExtensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
+    const isOfficeFile = officeExtensions.some(ext => lowerUrl.endsWith(ext) || lowerUrl.includes(`.${ext}?`));
+
+    if (isOfficeFile) {
+      return `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}`;
+    }
+    return url;
+  };
+
   return (
     <div className="course-view-page">
 
@@ -126,10 +138,18 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                                   <h4>Materials:</h4>
                                   <ul className="cv-file-list">
                                     {sec.learningMaterialFile.map((file, i) => (
-                                      <li key={i}>
-                                        <a href={file.url} target="_blank" rel="noopener noreferrer">
-                                          <i className="bi bi-file-earmark-text"></i> {file.originalName || "Download File"}
-                                        </a>
+                                      <li key={i} className="cv-file-item">
+                                        <span className="cv-file-name">
+                                          <i className="bi bi-file-earmark-text"></i> {file.originalName || "Material"}
+                                        </span>
+                                        <div className="cv-file-actions">
+                                          <a href={getViewUrl(file.url, file.originalName)} target="_blank" rel="noopener noreferrer" className="cv-action-icon view" title="View">
+                                            <i className="bi bi-box-arrow-up-right"></i>
+                                          </a>
+                                          <a href={file.url} download={file.originalName} className="cv-action-icon download" title="Download">
+                                            <i className="bi bi-download"></i>
+                                          </a>
+                                        </div>
                                       </li>
                                     ))}
                                   </ul>
@@ -156,10 +176,18 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                                   {sec.codeChallengeFile && sec.codeChallengeFile.length > 0 && (
                                     <ul className="cv-file-list">
                                       {sec.codeChallengeFile.map((file, i) => (
-                                        <li key={i}>
-                                          <a href={file.url} target="_blank" rel="noopener noreferrer">
-                                            <i className="bi bi-code-square"></i> {file.originalName || "Challenge File"}
-                                          </a>
+                                        <li key={i} className="cv-file-item">
+                                          <span className="cv-file-name">
+                                            <i className="bi bi-code-square"></i> {file.originalName || "Challenge"}
+                                          </span>
+                                          <div className="cv-file-actions">
+                                            <a href={getViewUrl(file.url, file.originalName)} target="_blank" rel="noopener noreferrer" className="cv-action-icon view" title="View">
+                                              <i className="bi bi-box-arrow-up-right"></i>
+                                            </a>
+                                            <a href={file.url} download={file.originalName} className="cv-action-icon download" title="Download">
+                                              <i className="bi bi-download"></i>
+                                            </a>
+                                          </div>
                                         </li>
                                       ))}
                                     </ul>
@@ -256,10 +284,18 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                               <h4>Materials:</h4>
                               <ul className="cv-file-list">
                                 {sec.learningMaterialFile.map((file, i) => (
-                                  <li key={i}>
-                                    <a href={file.url} target="_blank" rel="noopener noreferrer">
-                                      <i className="bi bi-file-earmark-text"></i> {file.originalName || "Download File"}
-                                    </a>
+                                  <li key={i} className="cv-file-item">
+                                    <span className="cv-file-name">
+                                      <i className="bi bi-file-earmark-text"></i> {file.originalName || "Material"}
+                                    </span>
+                                    <div className="cv-file-actions">
+                                      <a href={getViewUrl(file.url, file.originalName)} target="_blank" rel="noopener noreferrer" className="cv-action-icon view" title="View">
+                                        <i className="bi bi-box-arrow-up-right"></i>
+                                      </a>
+                                      <a href={file.url} download={file.originalName} className="cv-action-icon download" title="Download">
+                                        <i className="bi bi-download"></i>
+                                      </a>
+                                    </div>
                                   </li>
                                 ))}
                               </ul>
@@ -291,10 +327,18 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                               {sec.codeChallengeFile && sec.codeChallengeFile.length > 0 && (
                                 <ul className="cv-file-list">
                                   {sec.codeChallengeFile.map((file, i) => (
-                                    <li key={i}>
-                                      <a href={file.url} target="_blank" rel="noopener noreferrer">
-                                        <i className="bi bi-code-square"></i> {file.originalName || "Challenge File"}
-                                      </a>
+                                    <li key={i} className="cv-file-item">
+                                      <span className="cv-file-name">
+                                        <i className="bi bi-code-square"></i> {file.originalName || "Challenge"}
+                                      </span>
+                                      <div className="cv-file-actions">
+                                        <a href={getViewUrl(file.url, file.originalName)} target="_blank" rel="noopener noreferrer" className="cv-action-icon view" title="View">
+                                          <i className="bi bi-box-arrow-up-right"></i>
+                                        </a>
+                                        <a href={file.url} download={file.originalName} className="cv-action-icon download" title="Download">
+                                          <i className="bi bi-download"></i>
+                                        </a>
+                                      </div>
                                     </li>
                                   ))}
                                 </ul>
@@ -327,7 +371,7 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
         <div className="cv-footer">
           <button type="button" className="trainer-back-btn" onClick={onBack}>
             <span className="trainer-back-btn-circle">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" /></svg>
             </span>
             <span className="trainer-back-btn-label">Back to Courses</span>
           </button>

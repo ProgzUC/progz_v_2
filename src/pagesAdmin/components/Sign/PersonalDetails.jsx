@@ -1,72 +1,76 @@
 import React, { useState } from 'react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 import './UserEnrollment.css';
 
 
 const personalDetailsConfig = [
-  {
-    id: 'name',
-    label: 'Name',
-    type: 'text',
-    placeholder: '',
-    width: 'half'
-  },
-  {
-    id: 'email',
-    label: 'Email',
-    type: 'email',
-    placeholder: '',
-    width: 'half'
-  },
-  {
-    id: 'password',
-    label: 'Password',
-    type: 'password',
-    placeholder: '',
-    width: 'half'
-  },
-  {
-    id: 'confirmPassword',
-    label: 'Confirm Password',
-    type: 'password',
-    placeholder: '',
-    width: 'half'
-  },
-  {
-    id: 'phone',
-    label: 'Phone',
-    type: 'tel',
-    placeholder: '',
-    width: 'half'
-  },
-  {
-    id: 'alternatePhone',
-    label: 'Alternate Phone No',
-    type: 'tel',
-    placeholder: '',
-    width: 'half' // The image shows it taking half width but on a new line effectively if the previous row is full? Actually looks like it's just the next item.
-  },
-  {
-    id: 'dob',
-    label: 'Date of Birth',
-    type: 'date',
-    placeholder: '',
-    width: 'half'
-  },
-  
-  {
-    id: 'address',
-    label: 'Address',
-    type: 'textarea',
-    placeholder: '',
-    width: 'full'
-  }
+    {
+        id: 'name',
+        label: 'Name',
+        type: 'text',
+        placeholder: '',
+        width: 'half'
+    },
+    {
+        id: 'email',
+        label: 'Email',
+        type: 'email',
+        placeholder: '',
+        width: 'half'
+    },
+    {
+        id: 'password',
+        label: 'Password',
+        type: 'password',
+        placeholder: '',
+        width: 'half'
+    },
+    {
+        id: 'confirmPassword',
+        label: 'Confirm Password',
+        type: 'password',
+        placeholder: '',
+        width: 'half'
+    },
+    {
+        id: 'phone',
+        label: 'Phone',
+        type: 'tel',
+        placeholder: '',
+        width: 'half'
+    },
+    {
+        id: 'alternatePhone',
+        label: 'Alternate Phone No',
+        type: 'tel',
+        placeholder: '',
+        width: 'half',
+        isOptional: true
+    },
+    {
+        id: 'dob',
+        label: 'Date of Birth',
+        type: 'date',
+        placeholder: '',
+        width: 'half'
+    },
+
+    {
+        id: 'address',
+        label: 'Address',
+        type: 'textarea',
+        placeholder: '',
+        width: 'full'
+    }
 ];
 
 
 const PersonalDetails = ({ onNext }) => {
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -82,7 +86,7 @@ const PersonalDetails = ({ onNext }) => {
         let isValid = true;
 
         personalDetailsConfig.forEach(field => {
-            if (!formData[field.id] || formData[field.id].trim() === '') {
+            if (!field.isOptional && (!formData[field.id] || formData[field.id].trim() === '')) {
                 newErrors[field.id] = `${field.label} is required`;
                 isValid = false;
             }
@@ -124,13 +128,30 @@ const PersonalDetails = ({ onNext }) => {
                             ) : (
                                 <div className="input-wrapper">
                                     <input
-                                        type={field.type}
+                                        type={
+                                            field.type === 'password'
+                                                ? (field.id === 'password' ? (showPassword ? 'text' : 'password') : (showConfirmPassword ? 'text' : 'password'))
+                                                : field.type
+                                        }
                                         id={field.id}
                                         placeholder={field.placeholder}
                                         className={`form-control ${errors[field.id] ? 'is-invalid' : ''}`}
                                         onChange={handleChange}
                                         value={formData[field.id] || ''}
                                     />
+                                    {field.type === 'password' && (
+                                        <button
+                                            type="button"
+                                            className="password-toggle"
+                                            onClick={() => field.id === 'password' ? setShowPassword(!showPassword) : setShowConfirmPassword(!showConfirmPassword)}
+                                        >
+                                            {field.id === 'password' ? (
+                                                showPassword ? <FaEyeSlash /> : <FaEye />
+                                            ) : (
+                                                showConfirmPassword ? <FaEyeSlash /> : <FaEye />
+                                            )}
+                                        </button>
+                                    )}
                                     {field.icon === 'calendar' && (
                                         <span className="icon-calendar">📅</span>
                                     )}

@@ -182,8 +182,8 @@
 .detail-info label {
     font-size: 12px;
     text-transform: uppercase;
-    color: #888;
-    font-weight: 400;
+    color: #1a1a1a;
+    font-weight: 500;
     letter-spacing: 0.5px;
 }
 
@@ -478,7 +478,17 @@
     z-index: 2001;
 }
 
+.profile-modal-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #198754;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #f0fdf4;
+}
+
 .profile-modal-title {
+
     font-size: 20px;
     font-weight: 500;
     margin-bottom: 25px;
@@ -488,10 +498,10 @@
 .profile-input-row label {
     display: block;
     font-size: 0.9rem;
-    font-weight: 400;
-    color: #444;
+    font-weight: 500;
+    color: #000;
     margin-bottom: 8px;
-    margin-left: 4px;
+    margin-left: 0;
 }
 
 .profile-cancel-btn {
@@ -510,20 +520,43 @@
     color: #198754;
 }
 
-.profile-input-row input {
+.profile-input-row input,
+.profile-input-row textarea,
+.profile-input-row select {
     border-radius: 12px !important;
     padding: 12px !important;
     border: 1px solid #eee !important;
-    background: #fbfbfb;
+    background: #fff !important;
+    /* Changed from #fbfbfb to ensure no blue-ish tint */
     outline: none !important;
     transition: all 0.3s ease;
     width: 100%;
+    font-family: inherit;
+    resize: vertical;
 }
 
-.profile-input-row input:focus {
+.profile-input-row input:focus,
+.profile-input-row textarea:focus,
+.profile-input-row select:focus {
     border-color: #198754 !important;
     box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.1) !important;
-    background: #fff;
+    background: #fff !important;
+    outline: none !important;
+}
+
+/* Remove Autofill Blue Background */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+    -webkit-text-fill-color: #333 !important;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 .profile-save-btn {
@@ -541,6 +574,26 @@
     justify-content: flex-end;
     gap: 15px;
     margin-top: 30px;
+}
+
+/* DOB Calendar Support */
+.dob-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dob-calendar-icon {
+    position: absolute;
+    right: 12px;
+    font-size: 20px;
+    color: #198754;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.dob-calendar-icon:hover {
+    transform: scale(1.1);
 }
 
 /* Password Visibility Toggle Support */

@@ -32,9 +32,17 @@
   padding: 11px 20px;
   border-radius: 8px;
   border: 1px solid #d0d0d0;
-  background: white;
+  background: white !important;
   font-size: 14px;
-  color: #999;
+  color: #333;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.admin-instructors-page .inst-search:focus {
+  border-color: #0FA958 !important;
+  box-shadow: 0 0 0 3px rgba(15, 169, 88, 0.1);
+  outline: none;
 }
 
 .admin-instructors-page .inst-search::placeholder {

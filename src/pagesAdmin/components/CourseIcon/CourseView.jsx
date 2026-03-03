@@ -36,6 +36,18 @@ const CourseView = () => {
   const lessonsCount = course.modules?.reduce((acc, mod) => acc + (mod.sections?.length || 0), 0) || 0;
   const progress = 0; // Backend doesn't seem to provide progress yet for admin view, defaulting to 0 or remove.
 
+  const getViewUrl = (url, fileName) => {
+    if (!url) return "#";
+    const lowerUrl = url.toLowerCase();
+    const officeExtensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
+    const isOfficeFile = officeExtensions.some(ext => lowerUrl.endsWith(ext) || lowerUrl.includes(`.${ext}?`));
+
+    if (isOfficeFile) {
+      return `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}`;
+    }
+    return url;
+  };
+
   return (
     <div className="course-view-page">
 
@@ -140,10 +152,18 @@ const CourseView = () => {
                             <h4>Materials:</h4>
                             <ul className="cv-file-list">
                               {sec.learningMaterialFile.map((file, i) => (
-                                <li key={i}>
-                                  <a href={file.url} target="_blank" rel="noopener noreferrer">
-                                    <i className="bi bi-file-earmark-text"></i> {file.originalName || "Download File"}
-                                  </a>
+                                <li key={i} className="cv-file-item">
+                                  <span className="cv-file-name">
+                                    <i className="bi bi-file-earmark-text"></i> {file.originalName || "Material"}
+                                  </span>
+                                  <div className="cv-file-actions">
+                                    <a href={getViewUrl(file.url, file.originalName)} target="_blank" rel="noopener noreferrer" className="cv-action-icon view" title="View">
+                                      <i className="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                    <a href={file.url} download={file.originalName} className="cv-action-icon download" title="Download">
+                                      <i className="bi bi-download"></i>
+                                    </a>
+                                  </div>
                                 </li>
                               ))}
                             </ul>
@@ -175,10 +195,18 @@ const CourseView = () => {
                             {sec.codeChallengeFile && sec.codeChallengeFile.length > 0 && (
                               <ul className="cv-file-list">
                                 {sec.codeChallengeFile.map((file, i) => (
-                                  <li key={i}>
-                                    <a href={file.url} target="_blank" rel="noopener noreferrer">
-                                      <i className="bi bi-code-square"></i> {file.originalName || "Challenge File"}
-                                    </a>
+                                  <li key={i} className="cv-file-item">
+                                    <span className="cv-file-name">
+                                      <i className="bi bi-code-square"></i> {file.originalName || "Challenge"}
+                                    </span>
+                                    <div className="cv-file-actions">
+                                      <a href={getViewUrl(file.url, file.originalName)} target="_blank" rel="noopener noreferrer" className="cv-action-icon view" title="View">
+                                        <i className="bi bi-box-arrow-up-right"></i>
+                                      </a>
+                                      <a href={file.url} download={file.originalName} className="cv-action-icon download" title="Download">
+                                        <i className="bi bi-download"></i>
+                                      </a>
+                                    </div>
                                   </li>
                                 ))}
                               </ul>

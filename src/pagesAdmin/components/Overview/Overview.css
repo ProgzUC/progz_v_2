@@ -186,6 +186,13 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
+.admin-overview-page .table-card h5 {
+  color: #555555;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-left: 0;
+}
+
 .admin-overview-page .table-card table {
   width: 100%;
   border-collapse: collapse;
@@ -193,13 +200,17 @@
 
 .admin-overview-page .table-card th {
   text-align: left;
-  padding-bottom: 10px;
-  color: #6b7280;
+  padding-bottom: 12px;
+  color: #555555;
+  font-weight: 600;
 }
 
 .admin-overview-page .table-card td {
-  padding: 10px 0;
+  padding: 12px 0;
   border-bottom: 1px solid #f1f1f1;
+  color: #666666;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .admin-overview-page .table-card tr:last-child td {
@@ -227,25 +238,18 @@
   font-weight: 600;
 }
 
-.admin-overview-page .actions {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
+.admin-overview-page .course-name,
+.admin-overview-page .student-name {
+  color: #666666 !important;
+  font-weight: 600;
 }
 
-.admin-overview-page .edit-btn,
-.admin-overview-page .delete-btn {
-  font-size: 18px;
-  cursor: pointer;
+.admin-overview-page .td-date {
+  white-space: nowrap;
+  min-width: 100px;
 }
 
-.admin-overview-page .edit-btn:hover {
-  color: #22c55e;
-}
-
-.admin-overview-page .delete-btn:hover {
-  color: #ef4444;
-}
+/* Actions column removed from JSX */
 
 /* ---------------- RESPONSIVE ---------------- */
 @media (max-width: 900px) {

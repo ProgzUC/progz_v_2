@@ -86,4 +86,33 @@ option {
   color: #111;
 }
 
+/* Prevent footer, headers, and sidebars from appearing when a loader is active */
+body:has(.loader-container) .footer,
+body:has(.loader-container) .student-footer,
+body:has(.loader-container) footer,
+body:has(.loader-container) .student-navbar,
+body:has(.loader-container) .trainer-navbar,
+body:has(.loader-container) .admin-sidebar {
+  display: none !important;
+}
+
+/* Ensure loader takes full screen when components are hidden */
+body:has(.loader-container) {
+  overflow: hidden;
+}
+
+body:has(.loader-container) .loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #E4E4E4;
+  /* Matching the app background */
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /* Removed forced option styles to allow browser defaults for better visibility */
