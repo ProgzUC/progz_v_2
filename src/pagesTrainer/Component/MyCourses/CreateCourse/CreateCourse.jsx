@@ -7,9 +7,57 @@ import {
 import "./CreateCourse.css";
 import { BiX, BiTrash, BiChevronDown, BiGridVertical } from "react-icons/bi";
 import { uploadToCloudinary } from "../../../../utils/cloudinary";
-import { useCreateCourse, useUpdateCourse } from "../../../../hooks/useCourses";
+import { useCreateCourse, useUpdateCourse, useCourse } from "../../../../hooks/useCourses";
 import Swal from "sweetalert2";
 import Loader from "../../../../components/common/Loader/Loader";
+
+const buildCourseState = (data) => ({
+  courseName: data.courseName || data.title || "",
+  courseId: data.courseId || data.id || "",
+  courseDescription: data.courseDescription || data.description || "",
+  courseDuration: data.courseDuration || data.duration || "",
+  instructor: data.instructor || "",
+  thumbnail: data.thumbnail || null,
+  modules: (data.modules || []).map(mod => ({
+    title: mod.title,
+    sections: (mod.sections || []).map(sec => ({
+      title: sec.sectionName || sec.title,
+      expanded: false,
+      savedMaterialFiles: sec.learningMaterialFile || [],
+      savedChallengeFiles: sec.codeChallengeFile || [],
+      materialFiles: [],
+      challengeFiles: [],
+      notes: sec.learningMaterialNotes || sec.notes || "",
+      challengeInstructions: sec.codeChallengeInstructions || "",
+      videos: sec.videoReferences || sec.videos || []
+    }))
+  }))
+});
+
+const emptyState = {
+  courseName: "",
+  courseId: "",
+  courseDescription: "",
+  courseDuration: "",
+  instructor: "",
+  thumbnail: null,
+  modules: [
+    {
+      title: "",
+      sections: [
+        {
+          title: "",
+          expanded: false,
+          materialFiles: [],
+          notes: "",
+          challengeFiles: [],
+          challengeInstructions: "",
+          videos: [],
+        },
+      ],
+    },
+  ],
+};
 
 const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const [loading, setLoading] = useState(false);
@@ -20,6 +68,11 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const { mutate: createCourseMutation } = useCreateCourse();
   const { mutate: updateCourseMutation } = useUpdateCourse();
 
+  // Fetch full course detail when editing
+  // Note: trainer courses list returns { courseId: c._id, ... } so we check both
+  const editCourseId = isEditMode ? (initialData?._id || initialData?.courseId) : null;
+  const { data: fullCourse, isLoading: isFetchingCourse } = useCourse(editCourseId);
+
   // Helper to extract YouTube ID
   const getYouTubeId = (url) => {
     if (!url) return null;
@@ -28,61 +81,14 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
-  const [course, setCourse] = useState(() => {
-    // If Editing, populate from initialData
-    if (isEditMode && initialData) {
-      return {
-        courseName: initialData.courseName || initialData.title || "",
-        courseId: initialData.courseId || initialData.id || "",
-        courseDescription: initialData.courseDescription || initialData.description || "",
-        courseDuration: initialData.courseDuration || initialData.duration || "",
-        instructor: initialData.instructor || "",
-        thumbnail: initialData.thumbnail || null,
-        modules: (initialData.modules || []).map(mod => ({
-          title: mod.title,
-          sections: (mod.sections || []).map(sec => ({
-            title: sec.sectionName || sec.title,
-            expanded: false,
-            // Persist existing files
-            savedMaterialFiles: sec.learningMaterialFile || [],
-            savedChallengeFiles: sec.codeChallengeFile || [],
+  const [course, setCourse] = useState(emptyState);
 
-            // New uploads
-            materialFiles: [],
-            challengeFiles: [],
-            notes: sec.learningMaterialNotes || sec.notes || "",
-            challengeInstructions: sec.codeChallengeInstructions || "",
-            videos: sec.videoReferences || sec.videos || []
-          }))
-        }))
-      };
+  // When the full course data is fetched from the API, populate the form
+  useEffect(() => {
+    if (isEditMode && fullCourse) {
+      setCourse(buildCourseState(fullCourse));
     }
-    // Default Empty State
-    return {
-      courseName: "",
-      courseId: "",
-      courseDescription: "",
-      courseDuration: "",
-      instructor: "",
-      thumbnail: null,
-      modules: [
-        {
-          title: "",
-          sections: [
-            {
-              title: "",
-              expanded: false,
-              materialFiles: [],
-              notes: "",
-              challengeFiles: [],
-              challengeInstructions: "",
-              videos: [],
-            },
-          ],
-        },
-      ],
-    };
-  });
+  }, [fullCourse, isEditMode]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -319,11 +325,9 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
       };
 
       if (isEditMode) {
-        // For Update, we need the DB ID (_id). Ensure initialData had it.
-        // If initialData comes from Mongoose, it has _id.
-        const idToUpdate = initialData._id;
-        if (!idToUpdate) throw new Error("Missing Course ID for update");
-        updateCourseMutation({ id: idToUpdate, data: payload }, mutationOptions);
+        // Use editCourseId which correctly resolves _id or courseId from list data
+        if (!editCourseId) throw new Error("Missing Course ID for update");
+        updateCourseMutation({ id: editCourseId, data: payload }, mutationOptions);
       } else {
         createCourseMutation(payload, mutationOptions);
       }
@@ -346,7 +350,9 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
 
         <p className="subtitle">Build your modules and sections</p>
 
-        {loading && <Loader message={isEditMode ? "Updating Course..." : "Creating Course..."} />}
+        {(loading || (isEditMode && isFetchingCourse)) && (
+          <Loader message={isFetchingCourse ? "Loading course data..." : isEditMode ? "Updating Course..." : "Creating Course..."} />
+        )}
 
         {/* BASIC FIELDS */}
         <div className="input-grid">
