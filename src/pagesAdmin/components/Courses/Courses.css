@@ -156,10 +156,20 @@
   font-weight: 400;
 }
 
+/* TABLE COLUMNS ALIGNMENT */
+.admin-courses-page .course-table th:nth-child(4),
+.admin-courses-page .course-table td:nth-child(4) {
+  text-align: center;
+}
+
+.admin-courses-page .course-table td:nth-child(4) .avatar-group {
+  justify-content: center;
+}
+
 .admin-courses-page .course-table th:last-child,
 .admin-courses-page .course-table td:last-child {
-  text-align: right;
-  padding-right: 20px;
+  text-align: center !important;
+  padding-right: 10px;
 }
 
 /* AVATARS */
@@ -202,7 +212,7 @@
 /* ACTION ICONS */
 .admin-courses-page .actions-row {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   gap: 18px;
 }

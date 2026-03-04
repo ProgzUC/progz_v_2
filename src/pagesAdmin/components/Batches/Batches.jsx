@@ -205,8 +205,8 @@ const Batches = () => {
                                 <th>Instructors</th>
                                 <th>Start Date</th>
                                 <th style={{ textAlign: "center" }}>Students</th>
-                                <th>Status</th>
-                                <th style={{ textAlign: "right", paddingRight: "20px" }}>Actions</th>
+                                <th style={{ textAlign: "center" }}>Status</th>
+                                <th style={{ textAlign: "center" }}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -239,18 +239,18 @@ const Batches = () => {
                                             {batch.startDate ? new Date(batch.startDate).toLocaleDateString() : "—"}
                                         </td>
                                         <td style={{ textAlign: "center" }}>
-                                            <span style={{ background: '#f0fdf4', color: '#166534', padding: '4px 8px', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold' }}>
+                                            <span style={{ background: '#f0fdf4', color: '#166534', padding: '4px 16px', borderRadius: '12px', fontSize: '12px', fontWeight: 'bold' }}>
                                                 {batch.students?.length || 0}
                                             </span>
                                         </td>
-                                        <td>
+                                        <td style={{ textAlign: "center" }}>
                                             <span className={`status-badge ${getStatusClass(batch.status)}`}>
                                                 <span className="dot"></span>
                                                 {batch.status || "Unknown"}
                                             </span>
                                         </td>
-                                        <td style={{ textAlign: "right", paddingRight: "20px" }}>
-                                            <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                                        <td style={{ textAlign: "center" }}>
+                                            <div style={{ display: 'flex', gap: '2px', justifyContent: 'center' }}>
                                                 <button
                                                     onClick={() => handleAddStudent(batch)}
                                                     title="Add Student"

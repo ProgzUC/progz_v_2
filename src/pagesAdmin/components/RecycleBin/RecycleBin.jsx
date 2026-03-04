@@ -114,7 +114,7 @@ const RecycleBin = () => {
                                 <th>Type</th>
                                 <th>Name</th>
                                 <th>Deleted Date</th>
-                                <th style={{ textAlign: "right" }}>Actions</th>
+                                <th style={{ textAlign: "center" }}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
