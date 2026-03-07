@@ -24,7 +24,7 @@
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
+   
 }
 
 .trainer-home .hero-overlay {
@@ -115,9 +115,10 @@
     backdrop-filter: blur(12px);
     padding: var(--trainer-spacing-md) var(--trainer-spacing-lg);
     border-radius: var(--trainer-radius-lg);
-    width: fit-content;
+    /* width: fit-content; */
     border: 1px solid rgba(255, 255, 255, 0.5);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    z-index: 10;
 }
 
 .trainer-home .stat-item {

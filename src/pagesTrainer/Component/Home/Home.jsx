@@ -20,7 +20,12 @@ const Home = ({ trainer, stats, onNavigateToCreateCourse, onNavigateToMyCourses 
                         </button>
                     </div>
 
-                    <div className="hero-stats">
+                    
+                </div>
+                
+            </div>
+            
+            <div className="hero-stats">
                         <div className="stat-item">
                             <span className="stat-label">Total Students</span>
                             <span className="stat-value">{stats?.totalStudents}</span>
@@ -36,8 +41,7 @@ const Home = ({ trainer, stats, onNavigateToCreateCourse, onNavigateToMyCourses 
                             <span className="stat-value">{stats?.completedBatches}</span>
                         </div>
                     </div>
-                </div>
-            </div>
+                   
             <div className="hero-scroll-hint" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
                 <span>Scroll for more</span>

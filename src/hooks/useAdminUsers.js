@@ -34,6 +34,15 @@ export const useRejectUser = () => {
     });
 };
 
+export const useDeleteUser = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: deleteUser,
+        onSuccess: () => {
+            queryClient.invalidateQueries(["allUsers"]);
+        },
+    });
+};
 export const useUpdateUser = () => {
     const queryClient = useQueryClient();
     return useMutation({
