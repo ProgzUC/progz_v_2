@@ -3,16 +3,16 @@ import React, { useState } from 'react';
 import './UserEnrollment.css';
 
 const roleConfig = [
-  {
-    id: 'instructor',
-    label: 'Instructor',
-    value: 'instructor'
-  },
-  {
-    id: 'student',
-    label: 'Student',
-    value: 'student'
-  }
+    {
+        id: 'instructor',
+        label: 'Instructor',
+        value: 'instructor'
+    },
+    {
+        id: 'student',
+        label: 'Student',
+        value: 'student'
+    }
 ];
 
 

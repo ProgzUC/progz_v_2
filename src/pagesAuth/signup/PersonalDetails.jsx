@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './PersonalDetails.css';
 
-const PersonalDetails = ({ onNext, onCancel}) => {
+const PersonalDetails = ({ onNext, onCancel }) => {
 
     const [formData, setFormData] = useState({
         name: '',
@@ -16,6 +17,8 @@ const PersonalDetails = ({ onNext, onCancel}) => {
     });
 
     const [errors, setErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const formFields = [
         { id: 'name', label: 'Name', type: 'text', placeholder: 'Enter your name' },
@@ -25,7 +28,7 @@ const PersonalDetails = ({ onNext, onCancel}) => {
         { id: 'phone', label: 'Phone', type: 'tel', placeholder: 'Enter phone number' },
 
         /* ✅ Moved BEFORE Date of Birth */
-        { id: 'altPhone', label: 'Alternate Phone No', type: 'tel', placeholder: 'Enter alternate phone number' },
+        { id: 'altPhone', label: 'Alternate Phone No (Optional)', type: 'tel', placeholder: 'Enter alternate phone number' },
 
         { id: 'dob', label: 'Date of Birth', type: 'date', placeholder: '' },
 
@@ -55,8 +58,11 @@ const PersonalDetails = ({ onNext, onCancel}) => {
         formFields.forEach(field => {
             const value = formData[field.id]?.trim();
             if (!value) {
-                newErrors[field.id] = `${field.label} is required`;
-                isValid = false;
+                // altPhone is NOT mandatory
+                if (field.id !== 'altPhone') {
+                    newErrors[field.id] = `${field.label} is required`;
+                    isValid = false;
+                }
             } else {
                 if (field.id === 'email' && !emailRegex.test(value)) {
                     newErrors[field.id] = "Invalid email format (needs @ and domain)";
@@ -113,6 +119,27 @@ const PersonalDetails = ({ onNext, onCancel}) => {
                                 value={formData[field.id]}
                                 onChange={handleChange}
                             />
+                        ) : field.id === 'password' || field.id === 'confirmPassword' ? (
+                            <div className="password-wrapper">
+                                <input
+                                    type={field.id === 'password' ? (showPassword ? 'text' : 'password') : (showConfirmPassword ? 'text' : 'password')}
+                                    name={field.id}
+                                    placeholder={field.placeholder}
+                                    className={`form-input ${errors[field.id] ? 'error' : ''}`}
+                                    value={formData[field.id]}
+                                    onChange={handleChange}
+                                />
+                                <span
+                                    className="eye-icon"
+                                    onClick={() => field.id === 'password' ? setShowPassword(!showPassword) : setShowConfirmPassword(!showConfirmPassword)}
+                                >
+                                    {field.id === 'password' ? (
+                                        showPassword ? <FaEyeSlash /> : <FaEye />
+                                    ) : (
+                                        showConfirmPassword ? <FaEyeSlash /> : <FaEye />
+                                    )}
+                                </span>
+                            </div>
                         ) : (
                             <input
                                 type={field.type}

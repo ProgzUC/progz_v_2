@@ -107,7 +107,7 @@ body:has(.loader-container) .loader-container {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #E4E4E4;
+  background-color: #F8F9FA;
   /* Matching the app background */
   z-index: 9999;
   display: flex;

@@ -1,12 +1,13 @@
 .signup-container {
     min-height: 100vh;
     position: relative;
+    background-color: #F8F9FA;
 }
 
 .signup-container .main-content {
     margin-left: 400px;
     /* Sidebar width (280) + Left (20) + Gap (20) */
-    padding:0  20px;
+    padding: 0 20px;
     min-height: 100vh;
     position: relative;
 }

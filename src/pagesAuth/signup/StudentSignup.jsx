@@ -38,6 +38,8 @@ const StudentSignup = () => {
         if (activeStep > 1) {
             setActiveStep(activeStep - 1);
             setCompletedSteps(completedSteps.filter(step => step !== activeStep - 1));
+        } else {
+            navigate('/login');
         }
     };
 

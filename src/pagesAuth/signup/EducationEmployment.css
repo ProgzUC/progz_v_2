@@ -16,7 +16,9 @@
 }
 
 .form-select:focus {
-    border-color: #198754;
+    border-color: #198754 !important;
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 /* Reusing button-group from PersonalDetails? 
