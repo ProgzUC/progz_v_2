@@ -134,9 +134,53 @@ const EditBatchModal = ({ isOpen, onClose, batch, coursesList, weekDays }) => {
     };
 
     const handleSubmit = () => {
-        if (!batchData.name || !batchData.courseId) {
-            Swal.fire("Error", "Batch Name and Course are required", "error");
+        // 1. Basic Required Fields
+        if (!batchData.name.trim()) {
+            Swal.fire("Error", "Batch Name is required", "error");
             return;
+        }
+        if (!batchData.courseId) {
+            Swal.fire("Error", "Please select a course", "error");
+            return;
+        }
+        if (!batchData.startDate || !batchData.endDate) {
+            Swal.fire("Error", "Start and End dates are required", "error");
+            return;
+        }
+
+        // 2. Date Integrity
+        if (new Date(batchData.endDate) < new Date(batchData.startDate)) {
+            Swal.fire("Error", "End date cannot be before start date", "error");
+            return;
+        }
+
+        // 3. Class Timing
+        if (!batchData.classTiming.startTime || !batchData.classTiming.endTime) {
+            Swal.fire("Error", "Class start and end times are required", "error");
+            return;
+        }
+        if (batchData.classTiming.endTime <= batchData.classTiming.startTime) {
+            Swal.fire("Error", "Class end time must be after start time", "error");
+            return;
+        }
+
+        // 4. Days of Week
+        if (batchData.daysOfWeek.length === 0) {
+            Swal.fire("Error", "Please select at least one day for the batch", "error");
+            return;
+        }
+
+        // 5. Trainer Validation
+        for (let i = 0; i < batchData.trainers.length; i++) {
+            const t = batchData.trainers[i];
+            if (!t.trainer) {
+                Swal.fire("Error", `Please select a trainer for row ${i + 1}`, "error");
+                return;
+            }
+            if (t.fromDate && t.toDate && new Date(t.toDate) < new Date(t.fromDate)) {
+                Swal.fire("Error", `Trainer ${i + 1}: End date cannot be before start date`, "error");
+                return;
+            }
         }
 
         const payload = {

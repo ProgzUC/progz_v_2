@@ -217,13 +217,13 @@ const Batches = () => {
                                         <td>
                                             <div className="batch-name-cell">
                                                 <strong>{batch.name}</strong>
-                                                <span
+                                                {/* <span
                                                     className="view-more"
                                                     onClick={() => handleViewMore(batch)}
                                                     style={{ fontSize: '11px', color: '#888' }}
                                                 >
                                                     {batch._id}
-                                                </span>
+                                                </span> */}
                                             </div>
                                         </td>
                                         <td>{getCourseName(batch)}</td>

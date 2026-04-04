@@ -138,6 +138,11 @@
     /* Blueish for courses */
 }
 
+.admin-recycle-bin-page .item-type.batch {
+    color: #f59e0b;
+    /* Amber/Orange for batches */
+}
+
 .admin-recycle-bin-page .deleted-date {
     color: #bbb;
     font-size: 13px;
