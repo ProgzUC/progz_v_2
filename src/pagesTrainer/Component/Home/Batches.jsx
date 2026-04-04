@@ -2,45 +2,7 @@ import React from 'react';
 import './Batches.css';
 
 const Active = ({ data, onViewBatch }) => {
-    const batches = data.activeBatches;
-    // const batches = [
-    //     {
-    //         id: 1,
-    //         tag: "Frontend",
-    //         title: "Introduction to React",
-    //         students: 342,
-    //         engaged: 92,
-    //         completion: 78,
-    //         tagType: "frontend"
-    //     },
-    //     {
-    //         id: 2,
-    //         tag: "Advanced",
-    //         title: "Advanced JavaScript Patterns",
-    //         students: 128,
-    //         engaged: 88,
-    //         completion: 45,
-    //         tagType: "advanced"
-    //     },
-    //     {
-    //         id: 3,
-    //         tag: "Design",
-    //         title: "UI Design Fundamentals",
-    //         students: 560,
-    //         engaged: 95,
-    //         completion: 92,
-    //         tagType: "design"
-    //     },
-    //     {
-    //         id: 4,
-    //         tag: "Backend",
-    //         title: "Node.js & Express",
-    //         students: 215,
-    //         engaged: 81,
-    //         completion: 64,
-    //         tagType: "backend"
-    //     }
-    // ];
+    const batches = data.activeBatches || [];
 
     const upcomingClasses = data.upcomingClasses;
 

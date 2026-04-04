@@ -16,10 +16,6 @@ const ActiveBatches = ({ onViewDetails = () => { } }) => {
 
   const formatClassTiming = (timing) => {
     if (!timing) return "Not Scheduled";
-    if (typeof timing === 'object') {
-      const { startTime, endTime, timezone } = timing;
-      return `${startTime} - ${endTime}`;
-    }
     return timing;
   };
 
@@ -43,8 +39,8 @@ const ActiveBatches = ({ onViewDetails = () => { } }) => {
     const isActive = batch.status === "active";
 
     // Map API fields - backend now returns batchName, courseName, timing directly
-    const batchNumber = batch.batchName || batch.name || "Batch";
-    const title = batch.courseName || "Course Title";
+    const batchNumber = batch.batchName;
+    const title = batch.courseName;
     const date = formatDate(batch.startDate);
     const duration = batch.duration || calculateDuration(batch.startDate, batch.endDate);
     const timing = formatClassTiming(batch.timing);
