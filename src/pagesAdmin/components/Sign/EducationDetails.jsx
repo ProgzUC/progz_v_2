@@ -50,8 +50,7 @@ const educationConfig = [
 ];
 
 
-const EducationDetails = ({ onBack, onSubmit }) => {
-    const [formData, setFormData] = useState({});
+const EducationDetails = ({ formData, setFormData, onBack, onSubmit }) => {
     const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {

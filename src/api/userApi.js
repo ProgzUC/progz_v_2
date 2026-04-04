@@ -21,6 +21,9 @@ export const triggerManualSync = () =>
 export const registerUser = (payload) =>
     axiosInstance.post("/users/register", payload).then((res) => res.data);
 
+export const adminCreateUser = (payload) =>
+    axiosInstance.post("/users/admin-create", payload).then((res) => res.data);
+
 /* Recycle Bin APIs */
 export const fetchBinItems = () =>
     axiosInstance.get("/bin").then((res) => res.data);

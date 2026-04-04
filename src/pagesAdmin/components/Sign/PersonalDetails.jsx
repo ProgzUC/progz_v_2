@@ -66,8 +66,7 @@ const personalDetailsConfig = [
 ];
 
 
-const PersonalDetails = ({ onNext, onCancel }) => {
-    const [formData, setFormData] = useState({});
+const PersonalDetails = ({ formData, setFormData, onNext, onCancel }) => {
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -92,11 +91,35 @@ const PersonalDetails = ({ onNext, onCancel }) => {
             }
         });
 
-        if (formData.password && formData.confirmPassword) {
+        // Email structure validation
+        if (formData.email && formData.email.trim() !== '') {
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+                newErrors.email = "Invalid email format";
+                isValid = false;
+            }
+        }
+
+        // Phone structure validation
+        if (formData.phone && formData.phone.trim() !== '') {
+            if (!/^\+?\d{10,15}$/.test(formData.phone.replace(/[\s-]/g, ''))) {
+                newErrors.phone = "Invalid phone number";
+                isValid = false;
+            }
+        }
+
+        // Password depth and match enforcement
+        if (formData.password) {
+            if (formData.password.length < 6) {
+                newErrors.password = "Password must be at least 6 characters";
+                isValid = false;
+            }
             if (formData.password !== formData.confirmPassword) {
                 newErrors.confirmPassword = "Passwords do not match";
                 isValid = false;
             }
+        } else if (!newErrors.password) {
+             // In registration, password is often required, but it's covered by the above loop
+             // making sure it's not strictly null.
         }
 
         setErrors(newErrors);

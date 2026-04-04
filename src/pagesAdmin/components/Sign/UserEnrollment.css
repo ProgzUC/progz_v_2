@@ -321,7 +321,12 @@ textarea.form-control {
 }
 
 .form-control.is-invalid {
-  border-color: #dc3545;
+  border-color: #dc3545 !important;
+  background-color: #fff8f8 !important;
+}
+
+.form-control.is-invalid:focus {
+  box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2) !important;
 }
 
 /* Role Selection Styles */

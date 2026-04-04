@@ -18,9 +18,7 @@ const roleConfig = [
 
 
 
-const Role = ({ onNext, onBack }) => {
-    const [selectedRole, setSelectedRole] = useState('instructor'); // Default to instructor as per image? Or none? Image shows Instructor selected.
-
+const Role = ({ formData, setFormData, onNext, onBack }) => {
     return (
         <div className="role-container">
             <h2 className="section-title">Role</h2>
@@ -31,8 +29,8 @@ const Role = ({ onNext, onBack }) => {
                             type="radio"
                             name="role"
                             value={role.value}
-                            checked={selectedRole === role.value}
-                            onChange={() => setSelectedRole(role.value)}
+                            checked={formData.role === role.value}
+                            onChange={() => setFormData(prev => ({ ...prev, role: role.value }))}
                             className="role-radio"
                         />
                         <span className="role-custom-radio"></span>
