@@ -30,6 +30,7 @@ const StudentPreview = ({ student, onCancel }) => {
     const initialEditMode = location.state?.initialEditMode || false;
     const [isEditing, setIsEditing] = useState(initialEditMode);
     const [formData, setFormData] = useState(initialData);
+    const [errors, setErrors] = useState({});
 
     const { mutate: updateUser } = useUpdateUser();
 
@@ -37,6 +38,7 @@ const StudentPreview = ({ student, onCancel }) => {
         if (isEditing) {
             setIsEditing(false);
             setFormData(initialData); // Reset changes
+            setErrors({});
         } else {
             if (onCancel) {
                 onCancel();
@@ -46,7 +48,36 @@ const StudentPreview = ({ student, onCancel }) => {
         }
     };
 
+    const validate = () => {
+        const newErrors = {};
+        if (!formData.name?.trim()) newErrors.name = "Full Name is required";
+        
+        if (!formData.email?.trim()) {
+            newErrors.email = "Email is required";
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+            newErrors.email = "Invalid email format";
+        }
+
+        if (formData.password) {
+            if (formData.password.length < 6) {
+                newErrors.password = "Password must be at least 6 characters";
+            }
+            if (formData.password !== formData.confirmPassword) {
+                newErrors.confirmPassword = "Passwords do not match";
+            }
+        }
+
+        if (formData.phone?.trim() && !/^\+?\d{10,15}$/.test(formData.phone.replace(/[\s-]/g, ''))) {
+            newErrors.phone = "Invalid phone number";
+        }
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSave = () => {
+        if (!validate()) return;
+
         const payload = {
             ...formData,
             education: formData.qualification, // Map back to backend field
@@ -132,47 +163,64 @@ const StudentPreview = ({ student, onCancel }) => {
                 <h3 className="ep-section-title">Personal Details</h3>
                 <div className="ep-grid">
                     <div className="ep-form-group">
-                        <label>Full Name</label>
+                        <label>Full Name {isEditing && <span style={{color: 'red'}}>*</span>}</label>
                         <input
                             type="text"
                             value={formData.name || ''}
                             readOnly={!isEditing}
-                            className={`ep-input ${isEditing ? 'editable' : ''}`}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                            className={`ep-input ${isEditing ? 'editable' : ''} ${errors.name ? 'input-error' : ''}`}
+                            onChange={(e) => {
+                                setFormData({ ...formData, name: e.target.value });
+                                if (errors.name) setErrors({ ...errors, name: null });
+                            }}
                         />
+                        {errors.name && <span className="ep-error-text" style={{color: 'red', fontSize: '12px'}}>{errors.name}</span>}
                     </div>
                     <div className="ep-form-group">
-                        <label>Email</label>
+                        <label>Email {isEditing && <span style={{color: 'red'}}>*</span>}</label>
                         <input
                             type="email"
                             value={formData.email || ''}
                             readOnly={!isEditing}
-                            className={`ep-input ${isEditing ? 'editable' : ''}`}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            className={`ep-input ${isEditing ? 'editable' : ''} ${errors.email ? 'input-error' : ''}`}
+                            onChange={(e) => {
+                                setFormData({ ...formData, email: e.target.value });
+                                if (errors.email) setErrors({ ...errors, email: null });
+                            }}
                         />
+                        {errors.email && <span className="ep-error-text" style={{color: 'red', fontSize: '12px'}}>{errors.email}</span>}
                     </div>
                     {isEditing && (
                         <>
                             <div className="ep-form-group">
-                                <label>Password</label>
+                                <label>New Password</label>
                                 <input
                                     type="password"
                                     value={formData.password || ''}
-                                    placeholder="Enter new password"
+                                    placeholder="Leave blank to keep current"
                                     readOnly={!isEditing}
-                                    className={`ep-input ${isEditing ? 'editable' : ''}`}
-                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                    className={`ep-input ${isEditing ? 'editable' : ''} ${errors.password ? 'input-error' : ''}`}
+                                    onChange={(e) => {
+                                        setFormData({ ...formData, password: e.target.value });
+                                        if (errors.password) setErrors({ ...errors, password: null });
+                                    }}
                                 />
+                                {errors.password && <span className="ep-error-text" style={{color: 'red', fontSize: '12px'}}>{errors.password}</span>}
                             </div>
                             <div className="ep-form-group">
                                 <label>Confirm Password</label>
                                 <input
                                     type="password"
                                     value={formData.confirmPassword || ''}
-                                    onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                                    placeholder="Confirm new password"
+                                    onChange={(e) => {
+                                        setFormData({ ...formData, confirmPassword: e.target.value });
+                                        if (errors.confirmPassword) setErrors({ ...errors, confirmPassword: null });
+                                    }}
                                     readOnly={!isEditing}
-                                    className={`ep-input ${isEditing ? 'editable' : ''}`}
+                                    className={`ep-input ${isEditing ? 'editable' : ''} ${errors.confirmPassword ? 'input-error' : ''}`}
                                 />
+                                {errors.confirmPassword && <span className="ep-error-text" style={{color: 'red', fontSize: '12px'}}>{errors.confirmPassword}</span>}
                             </div>
                         </>
                     )}
@@ -182,9 +230,13 @@ const StudentPreview = ({ student, onCancel }) => {
                             type="text"
                             value={formData.phone || ''}
                             readOnly={!isEditing}
-                            className={`ep-input ${isEditing ? 'editable' : ''}`}
-                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                            className={`ep-input ${isEditing ? 'editable' : ''} ${errors.phone ? 'input-error' : ''}`}
+                            onChange={(e) => {
+                                setFormData({ ...formData, phone: e.target.value });
+                                if (errors.phone) setErrors({ ...errors, phone: null });
+                            }}
                         />
+                        {errors.phone && <span className="ep-error-text" style={{color: 'red', fontSize: '12px'}}>{errors.phone}</span>}
                     </div>
                     <div className="ep-form-group">
                         <label>Date of Birth</label>
