@@ -115,8 +115,23 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                     <span className="trainer-back-btn-label">Back to Batches</span>
                 </button>
                 <div className="details-header-row">
-                    <h1 className="header-title">{batch.batchName || batch.title}</h1>
-                    <span className={`status-badge ${batch.status?.toLowerCase() || 'active'}`}>{batch.status || 'Active'}</span>
+                    <h1 className="header-title">{batch.batchName}</h1>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                        {batch.meetLink && (
+                            <a 
+                                href={batch.meetLink} 
+                                target="_blank" 
+                                rel="noopener noreferrer" 
+                                className="join-class-btn"
+                            >
+                                <span className="btn-icon-wrapper">
+                                    <i className="bi bi-camera-video-fill"></i>
+                                </span>
+                                Join Class
+                            </a>
+                        )}
+                        <span className={`status-badge ${batch.status?.toLowerCase() || 'active'}`}>{batch.status || 'Active'}</span>
+                    </div>
                 </div>
             </header>
 
@@ -162,7 +177,9 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                     <div className="stat-info">
                         <span className="stat-label">Schedule</span>
                         <div className="stat-value">
-                            {batch.days ? batch.days.join(', ') : 'Mon, Wed, Fri'}
+                            {batch.daysOfWeek && batch.daysOfWeek.length > 0 
+                                ? batch.daysOfWeek.map(d => d.substring(0, 3)).join(', ') 
+                                : 'No schedule set'}
                         </div>
                     </div>
                 </div>
@@ -205,7 +222,7 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                                             <td>{student.phone || student.mobile || 'N/A'}</td>
                                             <td>
                                                 <div className="qualification-col">
-                                                    <span>{student.qualification || 'Not specified'}</span>
+                                                    <span>{student.education || 'Not specified'}</span>
                                                 </div>
                                             </td>
                                         </tr>
