@@ -12,12 +12,37 @@ const Courses = () => {
 
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedInstructor, setSelectedInstructor] = useState("");
 
   const courses = coursesList || [];
 
-  // Filter courses based on search term
+  // Derive unique sorted instructor list for the dropdown
+  const instructorOptions = React.useMemo(() => {
+    const map = new Map();
+    courses.forEach((course) => {
+      (course.instructor || []).forEach((inst) => {
+        const id = inst._id || inst.name || `${inst.firstName} ${inst.lastName}`;
+        const label = inst.name || `${inst.firstName || ""} ${inst.lastName || ""}`.trim();
+        if (id && label) map.set(id, label);
+      });
+    });
+    return Array.from(map.entries())
+      .map(([id, label]) => ({ id, label }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [courses]);
+
+  // Filter courses based on search term AND selected instructor
   const filteredCourses = courses.filter((course) => {
-    return course.courseName?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = course.courseName?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesInstructor =
+      !selectedInstructor ||
+      (course.instructor || []).some(
+        (inst) =>
+          inst._id === selectedInstructor ||
+          inst.name === selectedInstructor ||
+          `${inst.firstName || ""} ${inst.lastName || ""}`.trim() === selectedInstructor
+      );
+    return matchesSearch && matchesInstructor;
   });
 
   const rowsPerPage = 7;
@@ -25,10 +50,10 @@ const Courses = () => {
   const paginated = filteredCourses.slice(start, start + rowsPerPage);
   const totalPages = Math.ceil(filteredCourses.length / rowsPerPage);
 
-  // Reset to page 1 when search changes
+  // Reset to page 1 when search or instructor filter changes
   React.useEffect(() => {
     setPage(1);
-  }, [searchTerm]);
+  }, [searchTerm, selectedInstructor]);
 
   // ----------------------------- ACTION HANDLERS -----------------------------
   const viewHandler = (course) => {
@@ -86,7 +111,7 @@ const Courses = () => {
       <h1 className="course-title">Course Management</h1>
 
       <div className="top-row">
-        {/* SEARCH & CREATE BUTTON */}
+        {/* SEARCH, INSTRUCTOR FILTER & CREATE BUTTON */}
         <div className="search-actions">
           <div className="search-box">
             <i className="bi bi-search"></i>
@@ -97,6 +122,32 @@ const Courses = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
+
+          {/* INSTRUCTOR FILTER */}
+          <div className="instructor-filter">
+            <i className="bi bi-person-fill filter-icon"></i>
+            <select
+              value={selectedInstructor}
+              onChange={(e) => setSelectedInstructor(e.target.value)}
+            >
+              <option value="">All Instructors</option>
+              {instructorOptions.map(({ id, label }) => (
+                <option key={id} value={id}>
+                  {label}
+                </option>
+              ))}
+            </select>
+            {selectedInstructor && (
+              <button
+                className="clear-filter-btn"
+                onClick={() => setSelectedInstructor("")}
+                title="Clear filter"
+              >
+                <i className="bi bi-x"></i>
+              </button>
+            )}
+          </div>
+
           <button className="create-btn" onClick={() => navigate("/admin/create-course")}>
             + Create New Course
           </button>
