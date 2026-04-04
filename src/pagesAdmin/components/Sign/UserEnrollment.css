@@ -10,103 +10,122 @@
   overflow-y: auto;
 }
 
-/* Sidebar Styles - Floating Card Look */
+/* Sidebar Styles - Balanced Signup Design */
 .sidebar {
   position: relative;
   width: 25%;
   min-width: 250px;
-  max-width: 320px;
-  background: #B8E0D2;
+  max-width: 330px;
+  background-color: #1987544D;
   padding: 30px 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  border-radius: 30px;
+  border-radius: 20px;
   margin-right: 30px;
 }
 
 
 .sidebar-header h1 {
-  font-size: 40px;
-  /* Slightly smaller to save space */
-  font-weight: 600;
-  font-style: semibold;
-  color: #545454;
-  margin: 0 0 8px 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 50px 0;
+  font-family: sans-serif;
 }
 
 .sidebar-header h2 {
-  font-size: 32px;
-  font-weight: 600;
-  color: #3B3B3B;
-  margin: 40px 0 40px 0;
+  display: none;
 }
 
-/* Steps Container */
 /* Steps Container */
 .steps-container {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 185px !important;
   margin-top: 0;
-
 }
 
-/* MUCH larger spacing between steps */
+/* Step item */
 .step-item {
   display: flex;
-  align-items: center;
-  gap: 20px;
+  align-items: flex-start;
+  gap: 15px;
   position: relative;
-  padding-bottom: 35px;
+  padding-bottom: 0;
 }
 
 .step-item:last-child {
   padding-bottom: 0;
 }
 
-/* Taller vertical line */
+/* Connector Line - Gray base line */
+.step-item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: 50px !important;
+  left: 25px !important;
+  transform: translateX(-50%) !important;
+  width: 4px !important;
+  height: 188px !important;
+  /* Perfectly bridges the gap */
+  background-color: #94A3B8 !important;
+  z-index: 0;
+}
+
+/* Connector Line - Green flowing progress line */
 .step-item:not(:last-child)::after {
   content: '';
   position: absolute;
-  left: 15px;
-  top: 45px;
-  /* aligns the line perfectly */
-  height: 70px;
-  /* increased from 60 → 90 */
-  width: 4px;
-  background-color: #9CA3AF;
-  z-index: 0;
+  top: 50px !important;
+  left: 25px !important;
+  transform: translateX(-50%) !important;
+  width: 4px !important;
+  height: 0 !important;
+  /* Starts at top with 0 height */
+  background-color: #198754 !important;
+  z-index: 1;
+  transition: height 0.6s ease-in-out;
+  /* Flows from top to bottom */
+}
+
+.step-item.completed:not(:last-child)::after {
+  height: 188px !important;
+  /* Grows to bridge the gap completely */
 }
 
 
 .step-indicator {
-  width: 38px;
-  height: 38px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  background-color: #9CA3AF;
+  background-color: #e0e0e0;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 600;
-  font-size: 16px;
-  color: white;
+  font-size: 18px;
+  color: #555;
+  border: 1px solid #ccc;
   z-index: 1;
   flex-shrink: 0;
-  margin-bottom: 30px;
+  margin-bottom: 0;
 }
 
 .step-item.active .step-indicator,
 .step-item.completed .step-indicator {
   background-color: #198754;
+  color: white;
+  border: none;
 }
 
 .step-label {
+  font-family: sans-serif;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   color: #333;
-  margin-bottom: 35px;
+  margin-top: 12px;
 }
 
 /* Content Area Styles */
@@ -172,7 +191,7 @@
   /* Compact padding */
   font-size: 14px;
   color: #333;
-  outline: none;
+  outline: none !important;
   width: 100%;
   box-sizing: border-box;
   transition: all 0.2s;
@@ -180,8 +199,9 @@
 
 .form-control:focus {
   background: #FFFFFF;
-  border-color: #198754;
-  box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.1);
+  border-color: #198754 !important;
+  box-shadow: none !important;
+  outline: none !important;
 }
 
 textarea.form-control {

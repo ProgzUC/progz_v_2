@@ -84,12 +84,16 @@
     font-size: 16px;
     color: #333;
     font-weight: 500;
+    margin-top: 12px !important;
+    /* Moved headings further down to align with circle center more naturally */
+    line-height: 1.5;
 }
 
 .step-item.active .step-text {
     font-weight: 700;
     color: #000;
 }
+
 
 /* ========== DESKTOP CONNECTOR LINES WITH SMOOTH FILL ========== */
 @media (min-width: 701px) {
@@ -105,22 +109,27 @@
     }
 
     /* Base grey line */
-    .step-item:not(:last-child)::after {
+    /* Anchored to indicator for perfect circle-to-circle connection */
+    .step-item:not(:last-child) .step-indicator {
+        position: relative;
+    }
+
+    .step-item:not(:last-child) .step-indicator::after {
         content: '';
         position: absolute;
-        top: 50px;
-        left: 25px;
-        transform: translateX(-50%);
-        width: 4px;
-        height: 80px;
-        /* Increased from 60px to match larger gap */
-        background-color: #ccc;
-        z-index: -1;
-        overflow: hidden;
+        top: 50px !important;
+        /* Perfectly anchored to bottom of indicator */
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        width: 4px !important;
+        height: 155px !important;
+        /* Bridges the 150px gap + 5px overlap */
+        background-color: #94A3B8 !important;
+        z-index: -1 !important;
     }
 
     /* Green animated fill */
-    .step-item.completed:not(:last-child)::after {
+    .step-item.completed:not(:last-child) .step-indicator::after {
         background-color: #ccc;
         background-image: linear-gradient(#198754, #198754);
         background-repeat: no-repeat;
@@ -141,8 +150,8 @@
     }
 
     .steps-list {
-        gap: 80px;
-        /* Increased from 60px to match larger spacing */
+        gap: 150px !important;
+        /* Increased spacing to move items down and create gaps */
     }
 }
 

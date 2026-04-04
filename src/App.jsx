@@ -43,6 +43,7 @@ const App = () => {
 
           {/* Login Routes */}
           <Route path="/" element={<SignIn />} />
+          <Route path="/login" element={<SignIn />} />
           <Route path="/signup" element={<StudentSignup />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
 
@@ -59,7 +60,7 @@ const App = () => {
             }
           />
 
-          
+
 
           <Route
             path="/trainer-dashboard"

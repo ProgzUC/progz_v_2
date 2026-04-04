@@ -19,7 +19,7 @@ const Sidebar = ({ currentStep, subtitle }) => {
                 {steps.map((step, index) => (
                     <div key={step.id} className={`step-item ${currentStep === step.id ? 'active' : ''} ${currentStep > step.id ? 'completed' : ''}`}>
                         <div className="step-indicator">
-                            {currentStep === step.id ? (
+                            {currentStep > step.id ? (
                                 <span className="check-icon">✓</span>
                             ) : (
                                 <span className="step-number">{step.id}</span>

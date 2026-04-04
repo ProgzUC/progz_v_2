@@ -66,7 +66,7 @@ const personalDetailsConfig = [
 ];
 
 
-const PersonalDetails = ({ onNext }) => {
+const PersonalDetails = ({ onNext, onCancel }) => {
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
@@ -162,7 +162,7 @@ const PersonalDetails = ({ onNext }) => {
                     ))}
                 </div>
                 <div className="form-actions">
-                    <button type="button" className="btn-cancel">Cancel</button>
+                    <button type="button" className="btn-cancel" onClick={onCancel}>Cancel</button>
                     <button type="button" className="btn-next" onClick={handleNextClick}>Next</button>
                 </div>
             </form>

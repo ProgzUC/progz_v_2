@@ -41,11 +41,19 @@ const UserEnrollment = ({ subtitle }) => {
         // Here you would typically send data to backend
     };
 
+    const handleCancel = () => {
+        if (subtitle === "Add Student") {
+            navigate('/admin/students');
+        } else {
+            navigate('/admin/instructors');
+        }
+    };
+
     return (
         <div className="user-enrollment-page">
             <Sidebar currentStep={currentStep} subtitle={subtitle} />
             <div className="content-area">
-                {currentStep === 1 && <PersonalDetails onNext={handleNext} />}
+                {currentStep === 1 && <PersonalDetails onNext={handleNext} onCancel={handleCancel} />}
                 {currentStep === 2 && <Role onNext={handleNext} onBack={handleBack} />}
                 {currentStep === 3 && <EducationDetails onBack={handleBack} onSubmit={handleSubmit} />}
             </div>
