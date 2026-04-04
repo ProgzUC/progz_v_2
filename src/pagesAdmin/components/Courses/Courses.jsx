@@ -208,9 +208,16 @@ const Courses = () => {
                         </td>
 
                         <td>
-                          <div className="avatar-group">
-                            <span className="more-tag">{course.enrolledStudents?.length || 0}</span>
-                          </div>
+                          {(() => {
+                            const count = course.enrolledCount ?? course.enrolledStudents?.length ?? 0;
+                            return count > 0 ? (
+                              <span className="enrolled-badge">
+                                <i className="bi bi-people-fill"></i> {count}
+                              </span>
+                            ) : (
+                              <span className="enrolled-zero">0</span>
+                            );
+                          })()}
                         </td>
 
                         <td className="actions-cell">
