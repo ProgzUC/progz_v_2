@@ -16,6 +16,8 @@ const CourseTrainers = () => {
   const { mutate: updateCourseMutation } = useUpdateCourse();
 
   const [selectedInstructorId, setSelectedInstructorId] = useState("");
+  const [instructorSearchTerm, setInstructorSearchTerm] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
   const isLoading = isCourseLoading || isUsersLoading;
@@ -31,7 +33,15 @@ const CourseTrainers = () => {
   const availableCandidates = (allUsers || []).filter(user => {
     const isAlreadyAssigned = currentInstructors.some(inst => inst._id === user._id);
     const isInstructor = user.role === "trainer"; // Filter by role
-    return !isAlreadyAssigned && isInstructor;
+    
+    // Filter by search term
+    const searchLower = instructorSearchTerm.toLowerCase();
+    const matchesSearch = 
+        !instructorSearchTerm || 
+        user.name?.toLowerCase().includes(searchLower) || 
+        user.email?.toLowerCase().includes(searchLower);
+
+    return !isAlreadyAssigned && isInstructor && matchesSearch;
   });
 
   const handleUpdateInstructors = (newInstructorList) => {
@@ -75,11 +85,18 @@ const CourseTrainers = () => {
   };
 
   const handleAddInstructor = () => {
-    if (!selectedInstructorId) return;
+    if (!selectedInstructorId) {
+      Swal.fire("Attention", "Please select an instructor from the dropdown list first.", "warning");
+      return;
+    }
     const user = allUsers.find(u => u._id === selectedInstructorId);
     if (!user) return;
 
     const newList = [...currentInstructors, user];
+    
+    // Clear the input and specific selection after adding to prevent stale state
+    setInstructorSearchTerm("");
+    
     handleUpdateInstructors(newList);
   };
 
@@ -111,22 +128,46 @@ const CourseTrainers = () => {
           <label className="section-label">Add New Instructor</label>
 
           <div className="select-row">
-            <div className="custom-select-wrapper">
-              <select
-                className={`custom-select ${!selectedInstructorId ? "placeholder" : ""}`}
-                value={selectedInstructorId}
-                onChange={(e) => setSelectedInstructorId(e.target.value)}
-              >
-                <option value="" disabled>
-                  Select an instructor
-                </option>
-                {availableCandidates.map((inst) => (
-                  <option key={inst._id} value={inst._id}>
-                    {inst.name} ({inst.email})
-                  </option>
-                ))}
-              </select>
-              <i className="arrow-down"></i>
+            <div className="searchable-select-container">
+              <i className="bi bi-search search-icon-input"></i>
+              <input
+                type="text"
+                className="searchable-select-input"
+                placeholder="Type to search instructor..."
+                value={instructorSearchTerm}
+                onChange={(e) => {
+                  setInstructorSearchTerm(e.target.value);
+                  setSelectedInstructorId("");
+                  setIsDropdownOpen(true);
+                }}
+                onFocus={() => setIsDropdownOpen(true)}
+                onBlur={() => setTimeout(() => setIsDropdownOpen(false), 200)} // Delay for click
+              />
+              <i className={`bi bi-chevron-down dropdown-icon ${isDropdownOpen ? 'open' : ''}`}></i>
+
+              {isDropdownOpen && (
+                <ul className="searchable-select-dropdown">
+                  {availableCandidates.length > 0 ? (
+                    availableCandidates.map((inst) => (
+                      <li
+                        key={inst._id}
+                        className={`dropdown-item ${selectedInstructorId === inst._id ? "selected" : ""}`}
+                        onMouseDown={() => {
+                          // use onMouseDown instead of onClick so it fires before onBlur takes away the dropdown
+                          setSelectedInstructorId(inst._id);
+                          setInstructorSearchTerm(`${inst.name} (${inst.email})`);
+                          setIsDropdownOpen(false);
+                        }}
+                      >
+                        <div className="dropdown-name">{inst.name}</div>
+                        <div className="dropdown-email">{inst.email}</div>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="dropdown-item empty">No matching instructors found</li>
+                  )}
+                </ul>
+              )}
             </div>
 
             <button className="add-btn" onClick={handleAddInstructor}>
