@@ -138,13 +138,17 @@ const Courses = () => {
                           <div className="avatar-group">
                             {course.instructor && course.instructor.length > 0 ? (
                               course.instructor.map((inst, i) => (
-                                <img
-                                  key={inst._id || i}
-                                  src={inst.profilePicture?.url || "https://ui-avatars.com/api/?name=" + (inst.firstName || inst.name || "T") + "&background=random"}
-                                  className="avatar"
-                                  title={inst.name || `${inst.firstName || ""} ${inst.lastName || ""}`}
-                                  alt="instructor"
-                                />
+                                 <span>
+                                {/* // <img
+                                //   key={inst._id || i}
+                                //   src={inst.profilePicture?.url || "https://ui-avatars.com/api/?name=" + (inst.firstName || inst.name || "T") + "&background=random"}
+                                //   className="avatar"
+                                //   title={inst.name || `${inst.firstName || ""} ${inst.lastName || ""}`}
+                                //   alt="instructor"
+                                // /> */}
+                                {inst.name || `${inst.firstName || ""} ${inst.lastName || ""}`}
+                                &nbsp;
+                                </span>
                               ))
                             ) : (
                               <span style={{ fontSize: "12px", color: "#999" }}>No Instructors</span>

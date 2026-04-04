@@ -101,7 +101,7 @@ const Active = ({ data, onViewBatch }) => {
                             </div>
                         ))}
                     </div>
-                    <aside className="batches-sidebar">
+                    {/* <aside className="batches-sidebar">
                         <div className="batches-sidebar-card">
                             <h3 className="batches-sidebar-title">Upcoming Classes</h3>
                             {upcomingClasses.map(cls => (
@@ -129,7 +129,7 @@ const Active = ({ data, onViewBatch }) => {
                                 </div>
                             ))}
                         </div>
-                    </aside>
+                    </aside> */}
                 </div>
             </div>
         </section >
