@@ -1,7 +1,7 @@
 /* Container */
 .attendance-history-container {
     padding: var(--trainer-spacing-lg) 0;
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .history-header h2 {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 600;
     color: var(--trainer-text);
     margin: 0;
@@ -30,10 +30,10 @@
 }
 
 .date-filters input[type="date"] {
-    padding: 10px 16px;
+    padding: 8px 14px;
     border: 1px solid var(--trainer-border);
     border-radius: var(--trainer-radius-md);
-    font-size: 14px;
+    font-size: 13px;
     background: white;
     color: var(--trainer-text);
     transition: var(--trainer-transition);
@@ -49,9 +49,9 @@
     background: var(--trainer-divider);
     color: var(--trainer-text-muted);
     border: none;
-    padding: 10px 16px;
+    padding: 8px 14px;
     border-radius: var(--trainer-radius-md);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     display: flex;
@@ -68,164 +68,182 @@
 /* Empty State */
 .empty-state {
     text-align: center;
-    padding: 80px 20px;
+    padding: 60px 20px;
     color: var(--trainer-text-muted);
+    background: var(--trainer-card-bg);
+    border-radius: var(--trainer-radius-lg);
+    border: 1px dashed var(--trainer-border);
 }
 
 .empty-state i {
-    font-size: 60px;
-    margin-bottom: 16px;
+    font-size: 48px;
+    margin-bottom: 12px;
     opacity: 0.3;
 }
 
-/* Sessions List */
-.sessions-list {
-    display: grid;
-    gap: var(--trainer-spacing-md);
-}
-
-/* Session Card */
-.session-card {
+/* Table Responsive Container */
+.history-table-container {
     background: var(--trainer-card-bg);
     border-radius: var(--trainer-radius-lg);
     border: 1px solid var(--trainer-border);
     box-shadow: var(--trainer-shadow-sm);
     overflow: hidden;
-    transition: var(--trainer-transition);
+    margin-top: var(--trainer-spacing-md);
 }
 
-.session-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--trainer-shadow-md);
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
-.session-card.active {
-    border-color: var(--trainer-primary);
+/* Table Styles */
+.attendance-history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    text-align: left;
 }
 
-/* Session Card Header */
-.session-card-header {
-    background: var(--trainer-page-bg);
-    padding: 16px 24px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--trainer-divider);
-}
-
-.session-card.active .session-card-header {
-    background: var(--trainer-primary-light);
-}
-
-.session-date-info h3 {
-    font-size: 16px;
+.attendance-history-table th {
+    background-color: var(--trainer-page-bg);
+    padding: 14px 20px;
     font-weight: 600;
-    color: var(--trainer-text);
-    margin: 0 0 4px 0;
+    color: var(--trainer-text-muted);
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--trainer-border);
+    white-space: nowrap;
 }
 
-.session-date-info p {
+.attendance-history-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--trainer-divider);
+    color: var(--trainer-text);
+    vertical-align: middle;
+}
+
+.attendance-history-table tr:last-child td {
+    border-bottom: none;
+}
+
+.attendance-history-table tr:hover td {
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+/* Column Specific Styles */
+.date-col {
+    font-weight: 600;
+}
+
+.date-sub {
+    display: block;
     font-size: 12px;
+    font-weight: normal;
     color: var(--trainer-text-muted);
+    margin-top: 2px;
+}
+
+.timing-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--trainer-text);
+    font-weight: 500;
+}
+
+.trainer-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.trainer-avatar {
+    width: 28px;
+    height: 28px;
+    background: var(--trainer-primary-light);
+    color: var(--trainer-primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
 }
 
 /* Status Badges */
 .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 4px 12px;
     border-radius: 999px;
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
-.active-badge {
-    background: var(--trainer-primary);
-    color: white;
+.status-badge.live {
+    background-color: #fef2f2;
+    color: #ef4444;
 }
 
-.completed-badge {
-    background: var(--trainer-divider);
-    color: var(--trainer-text-muted);
+.status-badge.completed {
+    background-color: #f0fdf4;
+    color: #198754;
 }
 
-/* Session Card Body */
-.session-card-body {
-    padding: var(--trainer-spacing-lg);
+.status-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: currentColor;
 }
 
-.session-info-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: var(--trainer-spacing-lg);
+.status-badge.live .status-indicator {
+    animation: livePulse 1.5s infinite;
 }
 
-.info-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    color: var(--trainer-text-muted);
+@keyframes livePulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.5); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-.info-item i {
-    color: var(--trainer-primary);
-}
-
-/* Attendance Stats */
-.attendance-stats {
-    display: flex;
-    gap: 20px;
-    padding: 16px;
-    background: var(--trainer-page-bg);
-    border-radius: var(--trainer-radius-md);
-    margin-bottom: 16px;
-}
-
-.stat-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.stat-item.present {
-    color: var(--trainer-primary);
-}
-
-.stat-item.late {
-    color: #f59e0b;
-}
-
-.stat-item.absent {
-    color: var(--trainer-error);
-}
-
-/* Session Notes */
-.session-notes {
+/* Attendance Summary Styles */
+.attendance-summary-cell {
     display: flex;
     gap: 12px;
-    padding: 16px;
-    background: #fffbeb;
-    border: 1px solid #fde68a;
-    border-radius: var(--trainer-radius-md);
 }
 
-.session-notes i {
-    color: #b45309;
-    flex-shrink: 0;
+.summary-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
 }
 
-.session-notes p {
-    font-size: 13px;
-    color: #451a03;
-    line-height: 1.6;
+.summary-pill.p { color: var(--trainer-primary); }
+.summary-pill.l { color: #f59e0b; }
+.summary-pill.a { color: #ef4444; }
+
+.summary-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background-color: currentColor;
 }
 
 /* RESPONSIVE */
+@media (max-width: 1024px) {
+    .attendance-history-table th, 
+    .attendance-history-table td {
+        padding: 12px 15px;
+    }
+}
+
 @media (max-width: 768px) {
     .history-header {
         flex-direction: column;
@@ -234,20 +252,14 @@
 
     .date-filters {
         width: 100%;
-        flex-direction: column;
+        gap: 8px;
     }
 
-    .date-filters input[type="date"],
-    .clear-filters-btn {
-        width: 100%;
+    .date-filters input[type="date"] {
+        flex: 1;
     }
 
-    .session-info-row {
-        grid-template-columns: 1fr;
-    }
-
-    .attendance-stats {
-        flex-direction: column;
-        gap: 12px;
+    .history-header h2 {
+        font-size: 20px;
     }
 }
