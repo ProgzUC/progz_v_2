@@ -5,6 +5,7 @@ import { useStudentProfile, useUpdateStudentProfile, useChangePassword } from ".
 import { useStudentCourses } from "../../../hooks/useStudentCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
+import { uploadToCloudinary } from "../../../utils/cloudinary";
 
 import { BiPhone, BiMapPin, BiBook, BiBriefcase, BiCheckShield, BiTimeFive, BiTrophy, BiShieldQuarter, BiCalendar } from "react-icons/bi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -169,12 +170,12 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                 }, 900);
             },
             onError: (err) => {
-                setError(err?.response?.data?.message || "Failed to update password. Try again.");
+                setError(err?.message || "Failed to update password. Try again.");
             }
         });
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
         setError("");
         setSuccessMsg("");
         if (mode === "password") {
@@ -195,35 +196,43 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('location', form.location || "");
-        formData.append('education', form.education || "");
-        formData.append('jobTitle', form.jobTitle || "");
+        // Build JSON payload. Upload image to Cloudinary first if present.
+        const payload = {
+            location: form.location || "",
+            education: form.education || "",
+            jobTitle: form.jobTitle || "",
 
-        // Extra Fields
-        formData.append('dob', form.dob || "");
-        formData.append('gender', form.gender || "");
-        formData.append('university', form.university || "");
-        formData.append('experience', form.experience || "");
-        formData.append('employmentStatus', form.employmentStatus || "");
-        formData.append('skills', form.skills || "");
-        formData.append('zenCourseName', form.zenCourseName || "");
-        formData.append('zenCourseType', form.zenCourseType || "");
-        formData.append('source', form.source || "");
+            dob: form.dob || "",
+            gender: form.gender || "",
+            university: form.university || "",
+            experience: form.experience || "",
+            employmentStatus: form.employmentStatus || "",
+            skills: form.skills || "",
+            zenCourseName: form.zenCourseName || "",
+            zenCourseType: form.zenCourseType || "",
+            source: form.source || "",
+        };
 
-        if (selectedFile) {
-            formData.append('profileImage', selectedFile);
-        }
-
-        updateProfile.mutate(formData, {
-            onSuccess: (updatedData) => {
-                if (onSave) onSave(updatedData);
-                onClose();
-            },
-            onError: (err) => {
-                setError(err?.message || "Failed to update profile.");
+        try {
+            if (selectedFile) {
+                const uploaded = await uploadToCloudinary(selectedFile, "profiles");
+                if (uploaded && uploaded.url) payload.profileImage = uploaded.url;
+            } else if (form.profileImage) {
+                payload.profileImage = form.profileImage;
             }
-        });
+
+            updateProfile.mutate(payload, {
+                onSuccess: (updatedData) => {
+                    if (onSave) onSave(updatedData);
+                    onClose();
+                },
+                onError: (err) => {
+                    setError(err?.message || "Failed to update profile.");
+                }
+            });
+        } catch (uploadErr) {
+            setError(uploadErr?.message || "Image upload failed. Try again.");
+        }
     };
 
     const saving = updateProfile.isPending || changePassword.isPending;
