@@ -25,10 +25,11 @@ axiosInstance.interceptors.request.use((config) => {
 axiosInstance.interceptors.response.use(
   (res) => res,
   (error) => {
-    // normalize error message
-    const message =
-      error.response?.data?.message || error.response?.data?.msg || error.response?.statusText || error.message;
-    return Promise.reject(new Error(message));
+    // normalize error message, keeping any extra server-side detail
+    const data = error.response?.data;
+    const base = data?.message || data?.msg || error.response?.statusText || error.message;
+    const detail = data?.error && data.error !== base ? ` (${data.error})` : "";
+    return Promise.reject(new Error(base + detail));
   }
 );
 
