@@ -2,11 +2,16 @@ import axios from 'axios';
 
 // /Users/savitha/progz_v_2/src/api/axiosInstance.js
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5002/api";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (import.meta.env.DEV
+    ? "http://localhost:5002/api"
+    : "https://progz-backend.onrender.com/api");
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
+  timeout: 60000,
 });
 
 // Attach access token from localStorage to each request if present
