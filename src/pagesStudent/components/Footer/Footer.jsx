@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Footer.css";
 import { footerSocials, quickLinks, trendingCourses, kidsCourses, careerLinks } from "./FooterLinksConfig";
@@ -20,30 +20,6 @@ const socialIcons = {
 
 const Footer = () => {
     const navigate = useNavigate();
-    const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollY = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-
-            // Show footer if:
-            // 1. Scrolled more than 50px OR
-            // 2. Reached the bottom of the page (for short pages)
-            if (scrollY > 50 || (windowHeight + scrollY >= documentHeight - 10)) {
-                setIsVisible(true);
-            } else {
-                setIsVisible(false);
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-        // Initial check in case the page is already scrolled or very short
-        handleScroll();
-
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
 
     const handleNavigation = (path, e) => {
         if (path.startsWith("http") || path === "#") return;
@@ -52,7 +28,7 @@ const Footer = () => {
     };
 
     return (
-        <footer className={`student-footer ${isVisible ? "footer-visible" : "footer-hidden"}`}>
+        <footer className="student-footer">
             {/* ------------ MAIN FOOTER CONTENT -------------- */}
             <div className="footer-content">
 

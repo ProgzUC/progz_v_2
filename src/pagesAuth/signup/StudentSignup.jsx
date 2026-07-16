@@ -44,11 +44,12 @@ const StudentSignup = () => {
     };
 
     const handleFinalSubmit = async (educationData) => {
-        // Collect all data
+        const { confirmPassword, ...personal } = formData.personalDetails || {};
+
         const completeData = {
-            ...formData.personalDetails,
+            ...personal,
             role: formData.role,
-            ...educationData
+            ...educationData,
         };
 
         try {
@@ -79,13 +80,40 @@ const StudentSignup = () => {
     const renderCurrentStep = () => {
         switch (activeStep) {
             case 1:
-                return <PersonalDetails onNext={handleNextStep} onCancel={handlePreviousStep} />;
+                return (
+                    <PersonalDetails
+                        initialValues={formData.personalDetails}
+                        onNext={handleNextStep}
+                        onCancel={handlePreviousStep}
+                    />
+                );
             case 2:
-                return <Role onNext={handleNextStep} onCancel={handlePreviousStep} />;
+                return (
+                    <Role
+                        initialRole={formData.role}
+                        onNext={handleNextStep}
+                        onCancel={handlePreviousStep}
+                    />
+                );
             case 3:
-                return <EducationEmployment onCancel={handlePreviousStep} onSubmit={handleFinalSubmit} />;
+                return (
+                    <EducationEmployment
+                        initialValues={formData.educationEmployment}
+                        onCancel={handlePreviousStep}
+                        onSubmit={(data) => {
+                            setFormData((prev) => ({ ...prev, educationEmployment: data }));
+                            handleFinalSubmit(data);
+                        }}
+                    />
+                );
             default:
-                return <PersonalDetails onNext={handleNextStep} onCancel={handlePreviousStep} />;
+                return (
+                    <PersonalDetails
+                        initialValues={formData.personalDetails}
+                        onNext={handleNextStep}
+                        onCancel={handlePreviousStep}
+                    />
+                );
         }
     };
 

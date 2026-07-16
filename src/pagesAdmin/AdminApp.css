@@ -72,6 +72,7 @@ button:focus-visible {
 .layout {
   display: flex;
   width: 100%;
+  min-height: 100vh;
 }
 
 .content {
@@ -80,6 +81,9 @@ button:focus-visible {
   /* Width of the sidebar */
   transition: margin-left 0.3s ease;
   width: calc(100% - 280px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
 }
 
 /* When sidebar is collapsed */

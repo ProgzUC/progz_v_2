@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Students.css";
 import Loader from "../../../components/common/Loader/Loader";
 import { useAllUsers, useDeleteUser } from "../../../hooks/useAdminUsers";
@@ -19,11 +19,24 @@ const Students = () => {
   const itemsPerPage = 6;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filtered = students.filter((s) =>
-    s.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = students.filter((s) => {
+    const term = search.toLowerCase();
+    return (
+      (s.name || "").toLowerCase().includes(term) ||
+      (s.email || "").toLowerCase().includes(term) ||
+      (s.phone || "").includes(search)
+    );
+  });
 
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [currentPage, totalPages]);
 
   const paginatedData = filtered.slice(
     (currentPage - 1) * itemsPerPage,
@@ -141,7 +154,7 @@ const Students = () => {
 
         {/* Pagination */}
         <div className="pagination">
-          <button className="page-arrow" onClick={() => changePage(currentPage - 1)}>&lt;</button>
+          <button className="page-arrow" disabled={currentPage === 1} onClick={() => changePage(currentPage - 1)}>&lt;</button>
 
           {[...Array(totalPages)].map((_, i) => (
             <button
@@ -153,7 +166,7 @@ const Students = () => {
             </button>
           ))}
 
-          <button className="page-arrow" onClick={() => changePage(currentPage + 1)}>&gt;</button>
+          <button className="page-arrow" disabled={currentPage === totalPages} onClick={() => changePage(currentPage + 1)}>&gt;</button>
         </div>
 
       </div>

@@ -6,9 +6,9 @@
     padding: var(--student-spacing-xl) 0;
     background: #E4E4E4;
     /* Match Hero bottom fade */
-    min-height: 100vh;
+    min-height: auto;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .jc-header-content {
@@ -113,6 +113,10 @@
 
 .jc-courses-card:nth-child(6) {
     animation-delay: 0.6s;
+}
+
+.jc-courses-card--clickable {
+    cursor: pointer;
 }
 
 .jc-courses-card:hover {

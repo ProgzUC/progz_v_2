@@ -41,7 +41,7 @@ const personalDetailsConfig = [
         width: 'half'
     },
     {
-        id: 'alternatePhone',
+        id: 'altPhone',
         label: 'Alternate Phone No',
         type: 'tel',
         placeholder: '',

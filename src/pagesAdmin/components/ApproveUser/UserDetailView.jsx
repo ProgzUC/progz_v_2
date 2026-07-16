@@ -11,6 +11,7 @@ const UserDetailView = () => {
     email: "ram@gmail.com",
     phone: "8220807628",
     alternatePhone: "8220807628",
+    altPhone: "8220807628",
     dob: "26/11/2026",
     address: "456 Elm Street, Suite 3 Los Angeles, CA 90001, USA",
     role: "Student",
@@ -52,7 +53,7 @@ const UserDetailView = () => {
 
         <div className="ud-field">
           <label>Alternative Number</label>
-          <p>{user.alternatePhone}</p>
+          <p>{user.altPhone || user.alternatePhone || "N/A"}</p>
         </div>
       </div>
 

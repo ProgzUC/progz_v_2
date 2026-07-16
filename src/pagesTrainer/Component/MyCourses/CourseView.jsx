@@ -38,6 +38,8 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
   const displayId = course.courseId ||
     (course._id ? `CRS-${(course.courseName || "GEN").substr(0, 3).toUpperCase().replace(/\s/g, '')}-001` : "N/A");
 
+  const thumbnailUrl = course.thumbnail?.url || null;
+
   const getViewUrl = (url, fileName) => {
     if (!url) return "#";
     const lowerUrl = url.toLowerCase();
@@ -55,17 +57,30 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
 
       {/* HEADER SECTION */}
       <div className="cv-header-container">
-        <div className="cv-header-bg">
+        <div
+          className={`cv-header-bg${thumbnailUrl ? " has-thumbnail" : ""}`}
+          style={
+            thumbnailUrl
+              ? {
+                  backgroundImage: `linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 50%, rgba(25,135,84,0.55) 100%), url(${thumbnailUrl})`,
+                }
+              : undefined
+          }
+        >
           <span className="cv-header-id">Course ID: {displayId}</span>
         </div>
 
         <div className="cv-header-content">
           <div className="cv-icon-circle">
-            <FaBook className="cv-book-icon" />
+            {thumbnailUrl ? (
+              <img src={thumbnailUrl} alt="" className="cv-icon-thumb" />
+            ) : (
+              <FaBook className="cv-book-icon" />
+            )}
           </div>
 
           <div className="cv-title-block">
-            <h1>{course.courseName}</h1>
+            <h1>{course.courseName || course.title || "Untitled Course"}</h1>
             <div className="cv-meta-row">
               <span className="cv-lessons">{lessonsCount} lessons</span>
               <span className="cv-lessons">{course.modules?.length || 0} Modules</span>

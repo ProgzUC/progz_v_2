@@ -1,6 +1,6 @@
 
 import { useNavigate } from "react-router-dom";
-import { act, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import { FaFacebook, FaApple } from "react-icons/fa";
@@ -58,7 +58,7 @@ const SignIn = () => {
 
     try {
       const data = await login({ email, password }, rememberMe);
-      const role = data.role;
+      const role = data.role ?? data.user?.role;
 
       if (role === "admin") navigate("/admin");
       else if (role === "trainer") navigate("/trainer-dashboard");

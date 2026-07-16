@@ -21,7 +21,9 @@ export const useCreateBatch = () => {
     return useMutation({
         mutationFn: createBatch,
         onSuccess: () => {
-            queryClient.invalidateQueries(["batches"]);
+            queryClient.invalidateQueries({ queryKey: ["batches"] });
+            queryClient.invalidateQueries({ queryKey: ["courses"] });
+            queryClient.invalidateQueries({ queryKey: ["allUsers"] });
         },
     });
 };
@@ -31,8 +33,9 @@ export const useEnrollStudent = () => {
     return useMutation({
         mutationFn: enrollStudent,
         onSuccess: () => {
-            // Invalidate relevant queries (e.g., users, batches, courses)
-            queryClient.invalidateQueries(["allUsers"]);
+            queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+            queryClient.invalidateQueries({ queryKey: ["batches"] });
+            queryClient.invalidateQueries({ queryKey: ["courses"] });
         },
     });
 };
@@ -42,7 +45,8 @@ export const useDeleteBatch = () => {
     return useMutation({
         mutationFn: (batchId) => deleteBatch(batchId), // Import this!
         onSuccess: () => {
-            queryClient.invalidateQueries(["batches"]);
+            queryClient.invalidateQueries({ queryKey: ["batches"] });
+            queryClient.invalidateQueries({ queryKey: ["courses"] });
             Swal.fire("Deleted!", "Batch has been deleted.", "success");
         },
         onError: (err) => {
@@ -56,7 +60,7 @@ export const useUpdateBatch = () => {
     return useMutation({
         mutationFn: ({ batchId, batchData }) => updateBatch(batchId, batchData),
         onSuccess: () => {
-            queryClient.invalidateQueries(["batches"]);
+            queryClient.invalidateQueries({ queryKey: ["batches"] });
         },
     });
 };

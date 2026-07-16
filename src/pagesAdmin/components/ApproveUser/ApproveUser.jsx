@@ -16,7 +16,11 @@ const ApproveUser = () => {
   const itemsPerPage = 6;
 
   const filteredUsers = pendingUsers.filter(user => {
-    const matchesTab = user.role?.toLowerCase() === activeTab;
+    const role = (user.role || "").toLowerCase();
+    const matchesTab =
+      activeTab === "student"
+        ? role === "student"
+        : role === "trainer" || role === "instructor";
     const matchesSearch = (user.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
       (user.source || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
       (user.zenCourseName || "").toLowerCase().includes(searchTerm.toLowerCase());

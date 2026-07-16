@@ -48,18 +48,33 @@ const CourseView = () => {
     return url;
   };
 
+  const thumbnailUrl = course.thumbnail?.url || null;
+
   return (
     <div className="course-view-page">
 
       {/* HEADER SECTION */}
       <div className="cv-header-container">
-        <div className="cv-header-bg">
+        <div
+          className={`cv-header-bg${thumbnailUrl ? " has-thumbnail" : ""}`}
+          style={
+            thumbnailUrl
+              ? {
+                  backgroundImage: `linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 50%, rgba(16,185,129,0.55) 100%), url(${thumbnailUrl})`,
+                }
+              : undefined
+          }
+        >
           <span className="cv-header-id">Course ID: {course.courseId}</span>
         </div>
 
         <div className="cv-header-content">
           <div className="cv-icon-circle">
-            <FaBook className="cv-book-icon" />
+            {thumbnailUrl ? (
+              <img src={thumbnailUrl} alt="" className="cv-icon-thumb" />
+            ) : (
+              <FaBook className="cv-book-icon" />
+            )}
           </div>
 
           <div className="cv-title-block">

@@ -8,8 +8,11 @@ import {
 import "../CreateCourse/CreateCourse.css"; // Reuse styling
 import { uploadToCloudinary } from "../../../utils/cloudinary";
 import { useCourse, useUpdateCourse, useRollbackCourse } from "../../../hooks/useCourses";
-import Swal from "sweetalert2";
+import { confirmDelete } from "../../../utils/confirmDelete";
+import { showSuccess, showError } from "../../../utils/toast";
 import Loader from "../../../components/common/Loader/Loader";
+import FileDropZone from "../../../components/common/FileDropZone/FileDropZone";
+import { COURSE_FILE_ACCEPT } from "../../../utils/fileDrop";
 import VersionHistory from "./VersionHistory";
 
 const EditCourse = () => {
@@ -42,7 +45,7 @@ const EditCourse = () => {
         courseDuration: fetchedCourse.courseDuration || "",
         instructor: fetchedCourse.instructor?.[0]?.firstName || "", // Simple display for now
         thumbnail: fetchedCourse.thumbnail || null,
-        modules: fetchedCourse.modules.map(mod => ({
+        modules: (fetchedCourse.modules || []).map(mod => ({
           title: mod.title,
           sections: mod.sections.map(sec => ({
             title: sec.sectionName,
@@ -114,11 +117,19 @@ const EditCourse = () => {
     }));
   };
 
-  const removeModule = (index) => {
+  const removeModule = async (index) => {
+    const moduleName = course.modules[index]?.title?.trim() || `Module ${index + 1}`;
+    const confirmed = await confirmDelete(
+      "Delete Module?",
+      `Are you sure you want to delete "${moduleName}"? This cannot be undone.`
+    );
+    if (!confirmed) return;
+
     setCourse((prev) => ({
       ...prev,
       modules: prev.modules.filter((_, i) => i !== index),
     }));
+    showSuccess("Module deleted");
   };
 
   const updateModuleTitle = (index, value) => {
@@ -145,10 +156,19 @@ const EditCourse = () => {
     setCourse({ ...course, modules: updated });
   };
 
-  const removeSection = (mIndex, sIndex) => {
+  const removeSection = async (mIndex, sIndex) => {
+    const sectionName =
+      course.modules[mIndex]?.sections[sIndex]?.title?.trim() || `Section ${sIndex + 1}`;
+    const confirmed = await confirmDelete(
+      "Delete Section?",
+      `Are you sure you want to delete "${sectionName}"? This cannot be undone.`
+    );
+    if (!confirmed) return;
+
     const updated = [...course.modules];
     updated[mIndex].sections.splice(sIndex, 1);
     setCourse({ ...course, modules: updated });
+    showSuccess("Section deleted");
   };
 
   const toggleSection = (mIndex, sIndex) => {
@@ -193,18 +213,12 @@ const EditCourse = () => {
     setLoading(true);
     rollbackCourseMutation({ courseId: id, versionId }, {
       onSuccess: () => {
-        Swal.fire({
-          title: "Reverted!",
-          text: "Course has been reverted to the selected version.",
-          icon: "success",
-          timer: 1500,
-          showConfirmButton: false
-        });
+        showSuccess("Course has been reverted to the selected version.");
         setLoading(false);
         setShowHistory(false);
       },
       onError: (err) => {
-        Swal.fire("Error", err.message || "Rollback failed", "error");
+        showError(err.message || "Rollback failed");
         setLoading(false);
       }
     });
@@ -239,8 +253,8 @@ const EditCourse = () => {
               const formattedNewMaterials = newMaterialUploads.map(f => ({
                 url: f.url,
                 publicId: f.publicId,
-                fileType: f.format,
-                originalName: f.original_filename
+                fileType: f.fileType,
+                originalName: f.originalName
               }));
 
               // Combine SAVED + NEW
@@ -255,8 +269,8 @@ const EditCourse = () => {
               const formattedNewChallenges = newChallengeUploads.map(f => ({
                 url: f.url,
                 publicId: f.publicId,
-                fileType: f.format,
-                originalName: f.original_filename
+                fileType: f.fileType,
+                originalName: f.originalName
               }));
 
               const finalChallenges = [...(sec.savedChallengeFiles || []), ...formattedNewChallenges];
@@ -294,31 +308,17 @@ const EditCourse = () => {
 
       updateCourseMutation({ id, data: payload }, {
         onSuccess: () => {
-          Swal.fire({
-            title: "Updated!",
-            text: "Course updated successfully!",
-            icon: "success",
-            timer: 1500,
-            showConfirmButton: false
-          });
+          showSuccess("Course updated successfully!");
           navigate("/admin/courses");
         },
         onError: (err) => {
-          Swal.fire({
-            title: "Error!",
-            text: err.message || "Update failed",
-            icon: "error",
-          });
+          showError(err.message || "Update failed");
         }
       });
 
     } catch (err) {
       console.error(err);
-      Swal.fire({
-        title: "Error!",
-        text: err.message || "Upload failed",
-        icon: "error",
-      });
+      showError(err.message || "Upload failed");
     } finally {
       setLoading(false);
     }
@@ -384,16 +384,11 @@ const EditCourse = () => {
         {/* THUMBNAIL UPLOAD (Simple Version as per Image 2) */}
         <div className="input-full">
           <label>Thumbnail Image</label>
-          <div className="image-2-style-upload">
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  updateField("thumbnail", e.target.files[0]);
-                }
-              }}
-            />
+          <FileDropZone
+            accept="image/*"
+            hint="Drag image from Google or your computer"
+            onFiles={(file) => updateField("thumbnail", file)}
+          >
             {course.thumbnail && (
               <div className="file-preview-list" style={{ marginTop: "10px" }}>
                 <div className="file-preview-media">
@@ -422,7 +417,7 @@ const EditCourse = () => {
                 </div>
               </div>
             )}
-          </div>
+          </FileDropZone>
         </div>
 
         <div className="input-grid">
@@ -527,14 +522,26 @@ const EditCourse = () => {
                                         {...provided.draggableProps}
                                       >
                                         <div className="section-header-wrapper">
-                                          <div
-                                            className="drag-handle-sec"
-                                            {...provided.dragHandleProps}
-                                          >
-                                            <i className="bi bi-grip-vertical"></i>
+                                          <div className="drag-expand-btn drag-expand-btn--sec">
+                                            <div
+                                              className="drag-expand-grip"
+                                              {...provided.dragHandleProps}
+                                              title="Drag to reorder section"
+                                            >
+                                              <i className="bi bi-grip-vertical"></i>
+                                            </div>
+                                            <button
+                                              type="button"
+                                              className={`drag-expand-chevron ${section.expanded ? "rotate" : ""}`}
+                                              onClick={() => toggleSection(mIndex, sIndex)}
+                                              title={section.expanded ? "Collapse section" : "Expand section"}
+                                            >
+                                              <i className="bi bi-chevron-down"></i>
+                                            </button>
                                           </div>
 
                                           <div className="section-content">
+                                            <label className="section-label">Section {sIndex + 1}</label>
                                             <div className="section-header-row">
                                               <input
                                                 value={section.title}
@@ -548,19 +555,6 @@ const EditCourse = () => {
                                                 }
                                                 placeholder="Enter section name"
                                               />
-
-                                              <i
-                                                className={`bi bi-chevron-down section-chevron ${section.expanded
-                                                  ? "rotate"
-                                                  : ""
-                                                  }`}
-                                                onClick={() =>
-                                                  toggleSection(
-                                                    mIndex,
-                                                    sIndex
-                                                  )
-                                                }
-                                              ></i>
 
                                               <i
                                                 className="bi bi-trash section-delete"
@@ -594,20 +588,20 @@ const EditCourse = () => {
                                               </div>
                                             )}
 
-                                            <input
-                                              type="file"
+                                            <FileDropZone
+                                              compact
                                               multiple
-                                              accept="image/*,video/*,.pdf,.doc,.docx"
-                                              onChange={(e) => {
-                                                const newFiles = Array.from(e.target.files);
+                                              accept={COURSE_FILE_ACCEPT}
+                                              hint="Drop learning material files here"
+                                              onFiles={(files) => {
+                                                const newFiles = Array.isArray(files) ? files : [files];
                                                 const existingFiles = section.materialFiles || [];
                                                 updateSectionField(
                                                   mIndex,
                                                   sIndex,
-                                                  "materialFiles", // New uploads
+                                                  "materialFiles",
                                                   [...existingFiles, ...newFiles]
                                                 );
-                                                e.target.value = ""; // Reset
                                               }}
                                             />
 
@@ -701,12 +695,13 @@ const EditCourse = () => {
                                               </div>
                                             )}
 
-                                            <input
-                                              type="file"
+                                            <FileDropZone
+                                              compact
                                               multiple
-                                              accept="image/*,video/*,.pdf,.doc,.docx"
-                                              onChange={(e) => {
-                                                const newFiles = Array.from(e.target.files);
+                                              accept={COURSE_FILE_ACCEPT}
+                                              hint="Drop challenge files here"
+                                              onFiles={(files) => {
+                                                const newFiles = Array.isArray(files) ? files : [files];
                                                 const existingFiles = section.challengeFiles || [];
                                                 updateSectionField(
                                                   mIndex,
@@ -714,7 +709,6 @@ const EditCourse = () => {
                                                   "challengeFiles",
                                                   [...existingFiles, ...newFiles]
                                                 );
-                                                e.target.value = "";
                                               }}
                                             />
 

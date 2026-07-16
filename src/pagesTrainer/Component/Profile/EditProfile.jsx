@@ -10,12 +10,16 @@ import {
 import './Profile.css';
 import { useTrainerProfile, useUpdateTrainerProfile } from '../../../hooks/useTrainerProfile';
 import Loader from '../../../components/common/Loader/Loader';
+import FileDropZone from '../../../components/common/FileDropZone/FileDropZone';
+import { uploadToCloudinary } from '../../../utils/cloudinary';
+import { showSuccess, showError } from '../../../utils/toast';
 
 const EditProfile = ({ onCancel, onBack }) => {
-    const { data: profileData, isLoading } = useTrainerProfile();
+    const { data: profileData, isLoading, isError, error } = useTrainerProfile();
     const updateProfile = useUpdateTrainerProfile();
     const [formData, setFormData] = useState(profileData || {});
-    const fileInputRef = React.useRef(null);
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [saving, setSaving] = useState(false);
 
     // Update formData when profileData loads
     React.useEffect(() => {
@@ -24,22 +28,14 @@ const EditProfile = ({ onCancel, onBack }) => {
         }
     }, [profileData]);
 
-    const handleImageClick = () => {
-        fileInputRef.current.click();
-    };
-
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setFormData(prev => ({
-                    ...prev,
-                    avatar: reader.result
-                }));
-            };
-            reader.readAsDataURL(file);
-        }
+    const handleImageFile = (file) => {
+        if (!file) return;
+        setSelectedFile(file);
+        const previewUrl = URL.createObjectURL(file);
+        setFormData((prev) => ({
+            ...prev,
+            profileImage: previewUrl,
+        }));
     };
 
     const handleChange = (e) => {
@@ -50,17 +46,46 @@ const EditProfile = ({ onCancel, onBack }) => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        updateProfile.mutate(formData, {
-            onSuccess: () => {
-                onCancel(); // Close edit mode on success
+        setSaving(true);
+
+        try {
+            const payload = { ...formData };
+            delete payload._id;
+            delete payload.__v;
+            delete payload.createdAt;
+            delete payload.updatedAt;
+
+            if (selectedFile) {
+                const uploaded = await uploadToCloudinary(selectedFile, "profiles");
+                if (uploaded?.url) payload.profileImage = uploaded.url;
+            } else if (formData.profileImage && !formData.profileImage.startsWith("blob:")) {
+                payload.profileImage = formData.profileImage;
+            } else {
+                delete payload.profileImage;
             }
-        });
+
+            updateProfile.mutate(payload, {
+                onSuccess: () => {
+                    showSuccess('Profile updated successfully!');
+                    onCancel();
+                },
+                onError: (err) => showError(err?.message || 'Failed to update profile'),
+                onSettled: () => setSaving(false),
+            });
+        } catch (uploadErr) {
+            setSaving(false);
+            console.error(uploadErr);
+        }
     };
 
     if (isLoading) {
         return <Loader message="Loading profile..." />;
+    }
+
+    if (isError) {
+        return <div className="error-state">Error: {error?.message || "Failed to load profile"}</div>;
     }
 
     return (
@@ -74,12 +99,24 @@ const EditProfile = ({ onCancel, onBack }) => {
                     <div className="profile-sidebar">
                         <div className="avatar-section">
                             <div className="avatar-wrapper">
-                                <div className="avatar-initials">
-                                    {formData.name ? formData.name.charAt(0) : 'T'}
-                                </div>
+                                {formData.profileImage ? (
+                                    <img src={formData.profileImage} alt={formData.name} className="avatar-image" />
+                                ) : (
+                                    <div className="avatar-initials">
+                                        {formData.name ? formData.name.charAt(0) : 'T'}
+                                    </div>
+                                )}
                             </div>
                             <h2 className="profile-name">{formData.name}</h2>
                             <span className="profile-role-badge">{formData.role || 'Trainer'}</span>
+                            <div style={{ marginTop: '12px', width: '100%' }}>
+                                <FileDropZone
+                                    compact
+                                    accept="image/*"
+                                    hint="Drop profile photo"
+                                    onFiles={handleImageFile}
+                                />
+                            </div>
                         </div>
                     </div>
 
@@ -263,7 +300,9 @@ const EditProfile = ({ onCancel, onBack }) => {
 
                             <div className="form-actions">
                                 <button type="button" className="cancel-btn" onClick={onCancel}>Cancel</button>
-                                <button type="submit" className="save-btn"><FaSave /> Save Changes</button>
+                                <button type="submit" className="save-btn" disabled={saving || updateProfile.isPending}>
+                                    <FaSave /> {saving || updateProfile.isPending ? "Saving..." : "Save Changes"}
+                                </button>
                             </div>
                         </form>
                     </div>

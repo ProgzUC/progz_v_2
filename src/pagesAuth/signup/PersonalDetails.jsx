@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import './PersonalDetails.css';
 
-const PersonalDetails = ({ onNext, onCancel }) => {
+const PersonalDetails = ({ onNext, onCancel, initialValues = {} }) => {
 
     const [formData, setFormData] = useState({
         name: '',
@@ -13,7 +13,8 @@ const PersonalDetails = ({ onNext, onCancel }) => {
         phone: '',
         altPhone: '',
         dob: '',
-        address: ''
+        address: '',
+        ...initialValues,
     });
 
     const [errors, setErrors] = useState({});
@@ -69,6 +70,11 @@ const PersonalDetails = ({ onNext, onCancel }) => {
                     isValid = false;
                 }
 
+                if (field.id === 'password' && value.length < 6) {
+                    newErrors[field.id] = "Password must be at least 6 characters";
+                    isValid = false;
+                }
+
                 if (field.type === 'tel' && !phoneRegex.test(value)) {
                     newErrors[field.id] = "Must be exactly 10 digits";
                     isValid = false;
@@ -81,7 +87,7 @@ const PersonalDetails = ({ onNext, onCancel }) => {
             }
         });
 
-        if (formData.confirmPassword && formData.password !== formData.confirmPassword) {
+        if (formData.password && formData.password !== formData.confirmPassword) {
             newErrors.confirmPassword = "Passwords do not match";
             isValid = false;
         }

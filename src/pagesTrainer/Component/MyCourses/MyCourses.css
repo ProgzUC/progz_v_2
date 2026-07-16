@@ -191,7 +191,7 @@
 }
 
 .manage-course-btn {
-    width: 100%;
+    flex: 1;
     background-color: var(--trainer-primary);
     color: white;
     border: none;
@@ -204,8 +204,35 @@
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-top: auto;
     transition: var(--trainer-transition);
+}
+
+.course-card-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 16px;
+}
+
+.delete-course-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #fff;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+    padding: 12px 16px;
+    border-radius: var(--trainer-radius-md);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--trainer-transition);
+}
+
+.delete-course-btn:hover {
+    background: #fef2f2;
+    border-color: #ef4444;
 }
 
 .manage-course-btn:hover {

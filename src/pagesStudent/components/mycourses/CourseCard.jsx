@@ -179,7 +179,9 @@ export default function MyCourses() {
     const [viewLesson, setViewLesson] = useState(null);
 
     // Get selected course from the source of truth
-    const selectedCourse = courses.find(c => c.courseId === selectedCourseId) || courses[0];
+    const selectedCourse = courses.find(
+        (c) => String(c.courseId) === String(selectedCourseId) || String(c.id) === String(selectedCourseId) || String(c._id) === String(selectedCourseId)
+    ) || courses[0];
 
     // Fetch details for selected course to get modules/sections
     const { data: courseDetails, isLoading: detailsLoading } = useCourseProgress(selectedCourse?.courseId);
@@ -193,16 +195,17 @@ export default function MyCourses() {
             const stateCourseId = state?.courseId;
             const isReset = state?.reset;
 
+            const findCourseIndex = (id) => courses.findIndex(
+                (c) => String(c.courseId) === String(id) || String(c.id) === String(id) || String(c._id) === String(id)
+            );
+
             if (isReset) {
-                // If clicked from Nav, show the list (reset details)
                 setShowMobileDetails(false);
-            } else if (stateCourseId && courses.some(c => c.courseId === stateCourseId)) {
-                // If clicked from Profile card or specific link
+            } else if (stateCourseId && findCourseIndex(stateCourseId) !== -1) {
                 setSelectedCourseId(stateCourseId);
                 setShowMobileDetails(true);
             } else if (!selectedCourseId) {
-                // Default initial load
-                setSelectedCourseId(courses[0].courseId);
+                setSelectedCourseId(courses[0].courseId || courses[0].id || courses[0]._id);
                 setShowMobileDetails(false);
             }
         }

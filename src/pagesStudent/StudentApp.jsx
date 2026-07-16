@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
+import { logout } from "../api/authApi";
 import Hero from "./components/Hero";
 import Courses from "./components/Courses/Courses";
 import CategoryPage from "./components/Category/CategoryPage";
@@ -10,26 +11,22 @@ import Introduction from "./components/Introduction/Introduction";
 import StudentAttendance from "./components/attendance/StudentAttendance";
 
 import Header from "./components/Header/Header";
-import Footer from "../pagesTrainer/Component/Navbar/Footer"
+import Footer from "./components/Footer/Footer";
+import CourseDetails from "./components/CourseDetails/CourseDetails";
 import "./StudentGlobal.css";
 
 export default function StudentApp() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Clear authentication data
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('user');
-    sessionStorage.removeItem('accessToken');
-    sessionStorage.removeItem('user');
-
-    // Redirect to login page
+    logout();
     navigate('/');
   };
 
   return (
-    <div className="student-header">
+    <div className="student-app-layout student-header">
       <Header onLogout={handleLogout} />
+      <main className="student-main-content">
       <Routes>
         <Route path="/" element={
           <>
@@ -38,11 +35,13 @@ export default function StudentApp() {
           </>
         } />
         <Route path="/browse" element={<CategoryPage />} />
+        <Route path="/course-details" element={<CourseDetails />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/certificate" element={<CertificateView />} />
         <Route path="/my-courses" element={<Dashboard />} />
         <Route path="/my-attendance" element={<StudentAttendance />} />
       </Routes>
+      </main>
       <Footer />
     </div>
   );

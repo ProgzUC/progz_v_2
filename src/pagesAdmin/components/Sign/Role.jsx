@@ -1,24 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import './UserEnrollment.css';
 
-const roleConfig = [
-    {
-        id: 'instructor',
-        label: 'Instructor',
-        value: 'instructor'
-    },
-    {
-        id: 'student',
-        label: 'Student',
-        value: 'student'
+const getRoleConfig = (subtitle) => {
+    if (subtitle === "Add Student") {
+        return [{ id: 'student', label: 'Student', value: 'student' }];
     }
-];
+    return [{ id: 'trainer', label: 'Instructor', value: 'trainer' }];
+};
 
+const Role = ({ formData, setFormData, onNext, onBack, subtitle }) => {
+    const roleConfig = getRoleConfig(subtitle);
 
-
-
-const Role = ({ formData, setFormData, onNext, onBack }) => {
     return (
         <div className="role-container">
             <h2 className="section-title">Role</h2>

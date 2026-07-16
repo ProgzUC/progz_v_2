@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import './EducationEmployment.css';
 
-const EducationEmployment = ({ onCancel, onSubmit }) => {
+const EducationEmployment = ({ onCancel, onSubmit, initialValues = {} }) => {
 
     const [formData, setFormData] = useState({
         education: '',
         university: '',
         profession: '',
         experience: '',
-        employmentStatus: ''
+        employmentStatus: '',
+        ...initialValues,
     });
 
     const [errors, setErrors] = useState({});

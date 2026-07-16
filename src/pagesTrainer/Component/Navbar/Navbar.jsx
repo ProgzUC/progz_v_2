@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Navbar.css';
+import { logout } from '../../../api/authApi';
 
 const Navbar = ({ activeTab, setActiveTab }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,9 +22,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
     };
 
     const handleLogout = () => {
-        // Clear auth data
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        logout();
         window.location.href = '/';
     };
 

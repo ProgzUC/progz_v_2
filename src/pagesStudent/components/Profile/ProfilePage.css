@@ -487,6 +487,16 @@
     border-bottom: 2px solid #f0fdf4;
 }
 
+.profile-photo-preview {
+    display: block;
+    max-width: 120px;
+    max-height: 120px;
+    margin-top: 10px;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px solid #e5e7eb;
+}
+
 .profile-modal-title {
 
     font-size: 20px;

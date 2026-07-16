@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // /Users/savitha/progz_v_2/src/api/axiosInstance.js
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5002/api";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -10,13 +10,20 @@ const axiosInstance = axios.create({
 });
 
 // Attach access token from localStorage to each request if present
+const getActiveToken = () => {
+  if (sessionStorage.getItem('user') && sessionStorage.getItem('accessToken')) {
+    return sessionStorage.getItem('accessToken');
+  }
+  if (localStorage.getItem('user') && localStorage.getItem('accessToken')) {
+    return localStorage.getItem('accessToken');
+  }
+  return localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+};
+
 axiosInstance.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+  const token = getActiveToken();
   if (token) {
-    console.log("Attaching token to request:", config.url);
     config.headers.Authorization = `Bearer ${token}`;
-  } else {
-    console.warn("No token found for request:", config.url);
   }
   return config;
 });

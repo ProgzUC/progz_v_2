@@ -121,21 +121,78 @@ textarea {
   align-items: flex-start;
 }
 
-.drag-handle {
+.drag-expand-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 4px 6px;
+  min-width: 36px;
+  flex-shrink: 0;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.drag-expand-btn:hover {
+  border-color: #d1d5db;
+  background: #eef0f3;
+}
+
+.drag-expand-grip {
   display: flex;
   align-items: center;
+  justify-content: center;
   color: #9ca3af;
   cursor: grab;
   font-size: 20px;
-  padding-top: 30px;
+  padding: 4px 2px;
+  touch-action: none;
+  user-select: none;
+  transition: color 0.15s;
 }
 
-.drag-handle:active {
+.drag-expand-grip:hover {
+  color: #4b5563;
+}
+
+.drag-expand-grip:active {
   cursor: grabbing;
 }
 
-.module-content {
-  flex: 1;
+.drag-expand-grip svg,
+.drag-expand-grip i {
+  pointer-events: none;
+}
+
+.drag-expand-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #4b5563;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  line-height: 1;
+  transition: 0.15s;
+}
+
+.drag-expand-chevron:hover {
+  color: #2a7d38;
+  background: #e5e7eb;
+}
+
+.drag-expand-chevron.rotate {
+  transform: rotate(180deg);
+}
+
+.drag-expand-btn--sec {
+  align-self: flex-start;
 }
 
 .module-label {
@@ -144,6 +201,10 @@ textarea {
   font-weight: 500;
   color: #6b7280;
   margin-bottom: 8px;
+}
+
+.module-content {
+  flex: 1;
 }
 
 .module-title-row {
@@ -200,20 +261,44 @@ textarea {
   align-items: center;
 }
 
-.drag-handle-sec {
-  display: flex;
-  align-items: center;
-  color: #9ca3af;
-  cursor: grab;
-  font-size: 20px;
+
+.module-box.is-dragging {
+  box-shadow: 0 12px 28px rgba(42, 125, 56, 0.2);
+  border-color: #2a7d38;
+  background: #f0fdf4;
+  z-index: 10;
+  opacity: 0.92;
 }
 
-.drag-handle-sec:active {
-  cursor: grabbing;
+.section-block.is-dragging {
+  box-shadow: 0 8px 20px rgba(42, 125, 56, 0.15);
+  border-color: #2a7d38;
+  background: #f0fdf4;
+  z-index: 10;
+  opacity: 0.92;
+}
+
+.sections-droppable {
+  min-height: 8px;
+  transition: background 0.15s;
+}
+
+.sections-droppable.is-drag-over {
+  background: rgba(42, 125, 56, 0.06);
+  border-radius: 8px;
+  outline: 2px dashed rgba(42, 125, 56, 0.25);
+  outline-offset: 4px;
 }
 
 .section-content {
   flex: 1;
+}
+
+.section-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  margin: 0 0 8px;
 }
 
 .section-header-row {
@@ -224,12 +309,47 @@ textarea {
 
 .section-header-row input {
   flex: 1;
+  min-width: 0;
+}
+
+.section-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.section-expand-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0;
+  transition: 0.15s;
+}
+
+.section-expand-btn:hover,
+.section-expand-btn.is-open {
+  border-color: #2a7d38;
+  background: #f0fdf4;
 }
 
 .section-chevron {
   cursor: pointer;
   font-size: 20px;
+  color: #4b5563;
   transition: 0.2s;
+  pointer-events: none;
+}
+
+.section-expand-btn:hover .section-chevron,
+.section-expand-btn.is-open .section-chevron {
+  color: #2a7d38;
 }
 
 .section-chevron.rotate {

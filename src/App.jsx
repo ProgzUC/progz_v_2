@@ -12,17 +12,41 @@ import AdminApp from "./pagesAdmin/AdminApp"
 import PrivacyPolicy from "./pagesAuth/Privacy"
 
 
+const parseStoredUser = (storage) => {
+  try {
+    const raw = storage.getItem("user");
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    storage.removeItem("user");
+    return null;
+  }
+};
+
 const getAuthData = () => {
-  const token =
-    localStorage.getItem("accessToken") ||
-    sessionStorage.getItem("accessToken");
+  const localToken = localStorage.getItem("accessToken");
+  const sessionToken = sessionStorage.getItem("accessToken");
+  const localUser = parseStoredUser(localStorage);
+  const sessionUser = parseStoredUser(sessionStorage);
 
-  const user =
-    JSON.parse(localStorage.getItem("user")) ||
-    JSON.parse(sessionStorage.getItem("user"));
+  if (sessionToken && sessionUser) {
+    return { token: sessionToken, user: sessionUser };
+  }
+  if (localToken && localUser) {
+    return { token: localToken, user: localUser };
+  }
 
+  const token = localToken || sessionToken;
+  const user = localUser || sessionUser;
   return { token, user };
 };
+
+const Unauthorized = () => (
+  <div style={{ padding: "40px", textAlign: "center", fontFamily: "Inter, sans-serif" }}>
+    <h2>Access Denied</h2>
+    <p>You do not have permission to view this page.</p>
+    <a href="/login" style={{ color: "#198754", fontWeight: 600 }}>Go to Login</a>
+  </div>
+);
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { token, user } = getAuthData();
@@ -46,6 +70,7 @@ const App = () => {
           <Route path="/login" element={<SignIn />} />
           <Route path="/signup" element={<StudentSignup />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
 
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           {/* End of Login Routes */}

@@ -28,7 +28,12 @@ const UserEnrollment = ({ subtitle }) => {
     };
 
     const handleSubmit = () => {
-        createUser(formData, {
+        const payload = {
+            ...formData,
+            role: subtitle === "Add Student" ? "student" : "trainer",
+        };
+
+        createUser(payload, {
             onSuccess: () => {
                 Swal.fire({
                     title: 'Success!',
@@ -47,7 +52,7 @@ const UserEnrollment = ({ subtitle }) => {
                 });
             },
             onError: (err) => {
-                Swal.fire('Error', err?.response?.data?.msg || 'Failed to create user', 'error');
+                Swal.fire('Error', err?.message || 'Failed to create user', 'error');
             }
         });
     };
@@ -65,7 +70,7 @@ const UserEnrollment = ({ subtitle }) => {
             <Sidebar currentStep={currentStep} subtitle={subtitle} />
             <div className="content-area">
                 {currentStep === 1 && <PersonalDetails formData={formData} setFormData={setFormData} onNext={handleNext} onCancel={handleCancel} />}
-                {currentStep === 2 && <Role formData={formData} setFormData={setFormData} onNext={handleNext} onBack={handleBack} />}
+                {currentStep === 2 && <Role formData={formData} setFormData={setFormData} onNext={handleNext} onBack={handleBack} subtitle={subtitle} />}
                 {currentStep === 3 && <EducationDetails formData={formData} setFormData={setFormData} onBack={handleBack} onSubmit={handleSubmit} />}
             </div>
         </div>

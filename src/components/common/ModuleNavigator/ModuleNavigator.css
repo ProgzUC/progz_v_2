@@ -1,0 +1,99 @@
+.module-navigator {
+  position: sticky;
+  top: 72px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 16px;
+  padding: 10px 12px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.module-navigator-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.module-navigator-list {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: thin;
+}
+
+.module-nav-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  color: #374151;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.module-nav-chip:hover {
+  border-color: #2a7d38;
+  background: #f0fdf4;
+}
+
+.module-nav-chip.active {
+  border-color: #2a7d38;
+  background: #2a7d38;
+  color: #ffffff;
+}
+
+.module-nav-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.08);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.module-nav-chip.active .module-nav-num {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.module-nav-text {
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.module-box.is-collapsed {
+  display: none;
+}
+
+.module-box.is-active {
+  border-color: #2a7d38;
+  box-shadow: 0 0 0 2px rgba(42, 125, 56, 0.12);
+}
+
+@media (max-width: 600px) {
+  .module-navigator {
+    flex-direction: column;
+    align-items: flex-start;
+    top: 60px;
+  }
+
+  .module-navigator-list {
+    width: 100%;
+  }
+}

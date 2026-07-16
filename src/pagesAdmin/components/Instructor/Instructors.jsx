@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Instructors.css";
 import Loader from "../../../components/common/Loader/Loader";
 import { useAllUsers, useDeleteUser } from "../../../hooks/useAdminUsers";
@@ -13,16 +13,31 @@ const Instructors = () => {
   // const [instructors, setInstructors] = useState([...]); // Removed static data
   const { data: allUsers = [], isLoading, isError } = useAllUsers();
 
-  const instructors = allUsers.filter((user) => user.role === "trainer");
+  const instructors = allUsers.filter(
+    (user) => user.role === "trainer" || user.role === "instructor"
+  );
 
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filtered = instructors.filter((i) =>
-    i.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = instructors.filter((i) => {
+    const term = search.toLowerCase();
+    return (
+      (i.name || "").toLowerCase().includes(term) ||
+      (i.email || "").toLowerCase().includes(term) ||
+      (i.phone || "").includes(search)
+    );
+  });
 
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [currentPage, totalPages]);
 
   const paginatedData = filtered.slice(
     (currentPage - 1) * itemsPerPage,
@@ -124,7 +139,7 @@ const { mutate: deleteUser } = useDeleteUser();
 
       {/* Pagination */}
       <div className="pagination">
-        <button className="page-arrow" onClick={() => changePage(currentPage - 1)}>
+        <button className="page-arrow" disabled={currentPage === 1} onClick={() => changePage(currentPage - 1)}>
           &lt;
         </button>
 
@@ -138,7 +153,7 @@ const { mutate: deleteUser } = useDeleteUser();
           </button>
         ))}
 
-        <button className="page-arrow" onClick={() => changePage(currentPage + 1)}>
+        <button className="page-arrow" disabled={currentPage === totalPages} onClick={() => changePage(currentPage + 1)}>
           &gt;
         </button>
       </div>

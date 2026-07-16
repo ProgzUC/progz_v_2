@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./CategoryPage.css";
 import coursesData from "../courses.json";
 import CourseBanner from "../CourseBanner/CourseBanner";
@@ -20,6 +21,7 @@ const categories = [
 ];
 
 function CategoryPage() {
+  const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [visibleCount, setVisibleCount] = useState(6);
   const scrollRef = useRef(null);
@@ -86,6 +88,18 @@ function CategoryPage() {
 
   const showMore = () => {
     setVisibleCount((prev) => prev + 6);
+  };
+
+  const openCourseDetails = (course) => {
+    navigate("/student-dashboard/course-details", {
+      state: {
+        course: {
+          ...course,
+          level: "Intermediate",
+          duration: "6 Months",
+        },
+      },
+    });
   };
 
   return (
@@ -157,7 +171,15 @@ function CategoryPage() {
             : ["Fullstack Developer"];
 
           return (
-            <div key={index} className="jc-courses-card">
+            <div
+              key={index}
+              className="jc-courses-card jc-courses-card--clickable"
+              onClick={() => openCourseDetails(course)}
+              onKeyDown={(e) => e.key === "Enter" && openCourseDetails(course)}
+              role="button"
+              tabIndex={0}
+              aria-label={`View details for ${course.title}`}
+            >
               <div className="jc-card-main">
                 <div className="jc-image-container">
                   <img src={course.img} alt={course.title} className="jc-course-img" />

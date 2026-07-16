@@ -24,6 +24,11 @@ export async function login(payload, rememberMe = false) {
         const data = res.data || {};
 
         const storage = rememberMe ? localStorage : sessionStorage;
+        const otherStorage = rememberMe ? sessionStorage : localStorage;
+
+        otherStorage.removeItem("accessToken");
+        otherStorage.removeItem("refreshToken");
+        otherStorage.removeItem("user");
 
         if (data.accessToken) storage.setItem("accessToken", data.accessToken);
         if (data.refreshToken) storage.setItem("refreshToken", data.refreshToken);

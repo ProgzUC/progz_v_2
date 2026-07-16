@@ -18,11 +18,15 @@ import { useTrainerProfile } from '../../../hooks/useTrainerProfile';
 import Loader from '../../../components/common/Loader/Loader';
 
 const Profile = ({ onEdit, onBack }) => {
-    const { data: profileData, isLoading } = useTrainerProfile();
+    const { data: profileData, isLoading, isError, error } = useTrainerProfile();
 
 
     if (isLoading) {
         return <Loader message="Loading profile..." />;
+    }
+
+    if (isError || !profileData) {
+        return <div className="error-state">Error: {error?.message || "Failed to load profile"}</div>;
     }
 
     return (
@@ -37,9 +41,13 @@ const Profile = ({ onEdit, onBack }) => {
                     <div className="profile-sidebar">
                         <div className="avatar-section">
                             <div className="avatar-wrapper">
+                                {profileData.profileImage ? (
+                                    <img src={profileData.profileImage} alt={profileData.name} className="avatar-image" />
+                                ) : (
                                 <div className="avatar-initials">
                                     {profileData.name ? profileData.name.charAt(0) : 'T'}
                                 </div>
+                                )}
                             </div>
                             <h2 className="profile-name">{profileData.name}</h2>
                             <span className="profile-role-badge">{profileData.role || 'Trainer'}</span>

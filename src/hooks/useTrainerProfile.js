@@ -13,7 +13,7 @@ export const useUpdateTrainerProfile = () => {
   return useMutation({
     mutationFn: updateTrainerProfile,
     onSuccess: () => {
-      queryClient.invalidateQueries(["trainerProfile"]);
+      queryClient.invalidateQueries({ queryKey: ["trainerProfile"] });
     },
   });
 };

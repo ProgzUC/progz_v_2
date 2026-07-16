@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './Role.css';
 
-const Role = ({ onNext, onCancel }) => {
-    const [selectedRole, setSelectedRole] = useState(null);
+const Role = ({ onNext, onCancel, initialRole = null }) => {
+    const [selectedRole, setSelectedRole] = useState(initialRole);
 
     const roles = [
         { id: 'trainer', label: 'trainer' },

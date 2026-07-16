@@ -5,6 +5,7 @@ import { useStudentProfile, useUpdateStudentProfile, useChangePassword } from ".
 import { useStudentCourses } from "../../../hooks/useStudentCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
+import FileDropZone from "../../../components/common/FileDropZone/FileDropZone";
 import { uploadToCloudinary } from "../../../utils/cloudinary";
 
 import { BiPhone, BiMapPin, BiBook, BiBriefcase, BiCheckShield, BiTimeFive, BiTrophy, BiShieldQuarter, BiCalendar } from "react-icons/bi";
@@ -57,7 +58,6 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
     const [showCurrentPwd, setShowCurrentPwd] = useState(false);
     const [showNewPwd, setShowNewPwd] = useState(false);
     const [showConfirmPwd, setShowConfirmPwd] = useState(false);
-    const fileInputRef = useRef(null);
     const dateInputRef = useRef(null);
 
     const updateProfile = useUpdateStudentProfile();
@@ -128,16 +128,14 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
         }
     };
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setSelectedFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setPreviewImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
+    const handleImageFile = (file) => {
+        if (!file) return;
+        setSelectedFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPreviewImage(reader.result);
+        };
+        reader.readAsDataURL(file);
     };
 
     const handlePasswordSave = () => {
@@ -243,6 +241,23 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                 <p className="profile-modal-title">{mode === "password" ? "Change Password" : "Edit Profile"}</p>
                 {mode !== "password" && (
                     <>
+                        <p className="profile-modal-section-title">Profile Photo</p>
+                        <div className="profile-input-row">
+                            <FileDropZone
+                                compact
+                                accept="image/*"
+                                hint="Drag profile photo from Google or computer"
+                                onFiles={handleImageFile}
+                            />
+                            {previewImage && (
+                                <img
+                                    src={previewImage}
+                                    alt="Profile preview"
+                                    className="profile-photo-preview"
+                                />
+                            )}
+                        </div>
+
                         <p className="profile-modal-section-title">Personal Details</p>
                         <div className="profile-input-row">
                             <label>Date of Birth</label>

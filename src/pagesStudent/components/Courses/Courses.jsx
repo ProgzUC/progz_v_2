@@ -1,8 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./Courses.css";
 import { BiTimeFive, BiBarChartAlt2, BiBriefcase, BiTrophy } from "react-icons/bi";
 
 export default function Courses() {
+  const navigate = useNavigate();
+
   const courses = [
     {
       id: "da",
@@ -66,6 +69,10 @@ export default function Courses() {
     }
   ];
 
+  const openCourseDetails = (course) => {
+    navigate("/student-dashboard/course-details", { state: { course } });
+  };
+
   return (
     <section className="jc-course-section">
       <div className="student-container">
@@ -75,43 +82,49 @@ export default function Courses() {
         </div>
 
         <div className="jc-course-grid">
-          {courses.map((course) => {
-            return (
-              <div key={course.id} className="jc-courses-card">
-                <div className="jc-card-main">
-                  <div className="jc-image-container">
-                    <img src={course.img} alt={course.title} className="jc-course-img" />
-                    <div className="jc-course-tag">{course.duration}</div>
+          {courses.map((course) => (
+            <div
+              key={course.id}
+              className="jc-courses-card jc-courses-card--clickable"
+              onClick={() => openCourseDetails(course)}
+              onKeyDown={(e) => e.key === "Enter" && openCourseDetails(course)}
+              role="button"
+              tabIndex={0}
+              aria-label={`View details for ${course.title}`}
+            >
+              <div className="jc-card-main">
+                <div className="jc-image-container">
+                  <img src={course.img} alt={course.title} className="jc-course-img" />
+                  <div className="jc-course-tag">{course.duration}</div>
+                </div>
+
+                <div className="jc-course-content">
+                  <div className="jc-meta-row">
+                    <span className="jc-meta-item"><BiBarChartAlt2 /> {course.level}</span>
+                    <span className="jc-meta-item"><BiTimeFive /> {course.duration}</span>
                   </div>
 
-                  <div className="jc-course-content">
-                    <div className="jc-meta-row">
-                      <span className="jc-meta-item"><BiBarChartAlt2 /> {course.level}</span>
-                      <span className="jc-meta-item"><BiTimeFive /> {course.duration}</span>
+                  <p className="jc-courses-card-title">{course.title}</p>
+                  <p className="jc-course-desc">{course.desc}</p>
+
+                  <div className="jc-info-grid">
+                    <div className="jc-info-item">
+                      <label><BiBriefcase /> Roles:</label>
+                      <div className="jc-role-tags">
+                        {course.roles.map((role, idx) => (
+                          <span key={idx} className="jc-role-pill">{role}</span>
+                        ))}
+                      </div>
                     </div>
-
-                    <p className="jc-courses-card-title">{course.title}</p>
-                    <p className="jc-course-desc">{course.desc}</p>
-
-                    <div className="jc-info-grid">
-                      <div className="jc-info-item">
-                        <label><BiBriefcase /> Roles:</label>
-                        <div className="jc-role-tags">
-                          {course.roles.map((role, idx) => (
-                            <span key={idx} className="jc-role-pill">{role}</span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="jc-info-item">
-                        <label><BiTrophy /> Expected Salary:</label>
-                        <span className="jc-salary-text">{course.salary}</span>
-                      </div>
+                    <div className="jc-info-item">
+                      <label><BiTrophy /> Expected Salary:</label>
+                      <span className="jc-salary-text">{course.salary}</span>
                     </div>
                   </div>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          ))}
         </div>
       </div>
     </section>

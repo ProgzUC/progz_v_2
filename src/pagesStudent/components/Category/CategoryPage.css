@@ -220,6 +220,19 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
+.jc-courses-card--clickable {
+  cursor: pointer;
+}
+
+.jc-courses-card.expanded {
+  grid-column: 1 / -1;
+  max-width: 100%;
+}
+
+.jc-courses-card.expanded .jc-card-main {
+  flex-direction: row;
+}
+
 .jc-courses-card:hover {
   transform: translateY(-12px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);

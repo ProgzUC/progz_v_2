@@ -28,7 +28,8 @@ export const useCreateCourse = () => {
     return useMutation({
         mutationFn: createCourse,
         onSuccess: () => {
-            queryClient.invalidateQueries(["courses"]);
+            queryClient.invalidateQueries({ queryKey: ["courses"] });
+            queryClient.invalidateQueries({ queryKey: ["trainerCourses"] });
         },
     });
 };
@@ -42,8 +43,9 @@ export const useUpdateCourse = () => {
         // Let's make it easy for the component: expects { id, data }
         mutationFn: ({ id, data }) => updateCourse(id, data),
         onSuccess: (data, variables) => {
-            queryClient.invalidateQueries(["courses"]);
-            queryClient.invalidateQueries(["courses", variables.id]);
+            queryClient.invalidateQueries({ queryKey: ["courses"] });
+            queryClient.invalidateQueries({ queryKey: ["courses", variables.id] });
+            queryClient.invalidateQueries({ queryKey: ["trainerCourses"] });
         },
     });
 };
@@ -53,7 +55,8 @@ export const useDeleteCourse = () => {
     return useMutation({
         mutationFn: deleteCourse,
         onSuccess: () => {
-            queryClient.invalidateQueries(["courses"]);
+            queryClient.invalidateQueries({ queryKey: ["courses"] });
+            queryClient.invalidateQueries({ queryKey: ["trainerCourses"] });
         },
     });
 };

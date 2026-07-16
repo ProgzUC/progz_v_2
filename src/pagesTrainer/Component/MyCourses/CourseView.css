@@ -4,7 +4,8 @@
   font-family: 'Inter', sans-serif;
   background: var(--trainer-page-bg);
   min-height: 100vh;
-  padding: calc(70px + var(--trainer-spacing-md)) 0 var(--trainer-spacing-xl);
+  /* Flush under fixed navbar — no gray/white gap above banner */
+  padding: 70px 0 var(--trainer-spacing-xl);
   box-sizing: border-box;
   overflow-x: hidden;
   width: 100%;
@@ -18,8 +19,9 @@
 }
 
 .cv-header-bg {
-  background: linear-gradient(90deg, #dcfce7 0%, var(--trainer-primary) 100%);
-  height: 180px;
+  background: linear-gradient(90deg, #0f3d2e 0%, var(--trainer-primary) 55%, #34d399 100%);
+  height: 200px;
+  min-height: 200px;
   width: 100%;
   min-width: 0;
   position: relative;
@@ -28,14 +30,27 @@
   align-items: flex-start;
   padding: var(--trainer-spacing-md) var(--trainer-spacing-lg);
   box-sizing: border-box;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.cv-header-bg.has-thumbnail {
+  background-color: #0f3d2e;
 }
 
 .cv-header-id {
   color: white;
   font-weight: 500;
   font-size: 14px;
-  opacity: 0.9;
   word-break: break-word;
+  max-width: min(100%, 420px);
+  text-align: right;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
 .cv-header-content {
@@ -67,6 +82,14 @@
   flex-shrink: 0;
   border: 4px solid white;
   color: var(--trainer-primary);
+  overflow: hidden;
+}
+
+.cv-icon-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .cv-book-icon {
@@ -294,11 +317,11 @@
 
   .course-view-page,
   .trainer-course-view-page {
-    padding: calc(70px + var(--trainer-spacing-sm)) 0 var(--trainer-spacing-lg);
+    padding: 70px 0 var(--trainer-spacing-lg);
   }
 
   .cv-header-bg {
-    height: 140px;
+    height: 160px;
     padding: 15px var(--trainer-spacing-md);
   }
 
@@ -404,12 +427,16 @@
 
   .course-view-page,
   .trainer-course-view-page {
-    padding: calc(70px + 12px) 12px var(--trainer-spacing-md);
+    padding: 70px 12px var(--trainer-spacing-md);
   }
 
   .cv-header-bg {
-    height: 120px;
+    height: 140px;
     padding: 12px 16px;
+    /* Full-bleed banner even when page has side padding */
+    margin-left: -12px;
+    margin-right: -12px;
+    width: calc(100% + 24px);
   }
 
   .cv-header-content {

@@ -1,15 +1,22 @@
-import React, { useState, useEffect } from "react";
-import {
-  DragDropContext,
-  Droppable,
-  Draggable
-} from "@hello-pangea/dnd";
+import React, { useState, useEffect, useRef } from "react";
 import "./CreateCourse.css";
+import "../../../../components/common/ModuleNavigator/ModuleNavigator.css";
 import { BiX, BiTrash, BiChevronDown, BiGridVertical } from "react-icons/bi";
 import { uploadToCloudinary } from "../../../../utils/cloudinary";
 import { useCreateCourse, useUpdateCourse, useCourse } from "../../../../hooks/useCourses";
-import Swal from "sweetalert2";
+import { confirmDelete } from "../../../../utils/confirmDelete";
+import { showSuccess, showError, showWarning } from "../../../../utils/toast";
 import Loader from "../../../../components/common/Loader/Loader";
+import SortableList from "../../../../components/common/Sortable/SortableList";
+import SortableItem from "../../../../components/common/Sortable/SortableItem";
+import FileDropZone from "../../../../components/common/FileDropZone/FileDropZone";
+import ModuleNavigator from "../../../../components/common/ModuleNavigator/ModuleNavigator";
+import { COURSE_FILE_ACCEPT } from "../../../../utils/fileDrop";
+import {
+  createEmptyModule,
+  createEmptySection,
+  withStableIds,
+} from "../../../../utils/courseBuilder";
 
 const buildCourseState = (data) => ({
   courseName: data.courseName || data.title || "",
@@ -18,7 +25,7 @@ const buildCourseState = (data) => ({
   courseDuration: data.courseDuration || data.duration || "",
   instructor: data.instructor || "",
   thumbnail: data.thumbnail || null,
-  modules: (data.modules || []).map(mod => ({
+  modules: withStableIds((data.modules || []).map(mod => ({
     title: mod.title,
     sections: (mod.sections || []).map(sec => ({
       title: sec.sectionName || sec.title,
@@ -31,7 +38,7 @@ const buildCourseState = (data) => ({
       challengeInstructions: sec.codeChallengeInstructions || "",
       videos: sec.videoReferences || sec.videos || []
     }))
-  }))
+  })))
 });
 
 const emptyState = {
@@ -41,22 +48,7 @@ const emptyState = {
   courseDuration: "",
   instructor: "",
   thumbnail: null,
-  modules: [
-    {
-      title: "",
-      sections: [
-        {
-          title: "",
-          expanded: false,
-          materialFiles: [],
-          notes: "",
-          challengeFiles: [],
-          challengeInstructions: "",
-          videos: [],
-        },
-      ],
-    },
-  ],
+  modules: [createEmptyModule()],
 };
 
 const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
@@ -64,6 +56,8 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const [errors, setErrors] = useState({});
   const [lightbox, setLightbox] = useState({ isOpen: false, type: "", src: "" });
   const [hoveredVideo, setHoveredVideo] = useState(null);
+  const [activeModuleIndex, setActiveModuleIndex] = useState(0);
+  const moduleRefs = useRef({});
 
   const { mutate: createCourseMutation } = useCreateCourse();
   const { mutate: updateCourseMutation } = useUpdateCourse();
@@ -115,47 +109,46 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   };
 
   // ===============
-  // DRAG & DROP
-  // ===============
-
-  const onDragEnd = (result) => {
-    if (!result.destination) return;
-    const { source, destination, type } = result;
-
-    if (type === "module") {
-      const reordered = Array.from(course.modules);
-      const [removed] = reordered.splice(source.index, 1);
-      reordered.splice(destination.index, 0, removed);
-      setCourse((prev) => ({ ...prev, modules: reordered }));
-    }
-
-    if (type === "section") {
-      const modIdx = +source.droppableId;
-      const updated = [...course.modules];
-      const items = Array.from(updated[modIdx].sections);
-      const [removed] = items.splice(source.index, 1);
-      items.splice(destination.index, 0, removed);
-      updated[modIdx].sections = items;
-      setCourse((prev) => ({ ...prev, modules: updated }));
-    }
-  };
-
-  // ===============
   // MODULE HANDLERS
   // ===============
+
+  const goToModule = (index) => {
+    setActiveModuleIndex(index);
+    requestAnimationFrame(() => {
+      const moduleId = course.modules[index]?.id;
+      moduleRefs.current[moduleId]?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    });
+  };
 
   const addModule = () => {
     setCourse((prev) => ({
       ...prev,
-      modules: [...prev.modules, { title: "", sections: [] }],
+      modules: [...prev.modules, createEmptyModule({ sections: [] })],
     }));
+    setActiveModuleIndex(course.modules.length);
   };
 
-  const removeModule = (index) => {
+  const removeModule = async (index) => {
+    const moduleName = course.modules[index]?.title?.trim() || `Module ${index + 1}`;
+    const confirmed = await confirmDelete(
+      "Delete Module?",
+      `Are you sure you want to delete "${moduleName}"? This cannot be undone.`
+    );
+    if (!confirmed) return;
+
     setCourse((prev) => ({
       ...prev,
       modules: prev.modules.filter((_, i) => i !== index),
     }));
+    setActiveModuleIndex((prev) => {
+      if (prev === index) return Math.max(0, index - 1);
+      if (prev > index) return prev - 1;
+      return prev;
+    });
+    showSuccess("Module deleted");
   };
 
   const updateModuleTitle = (index, value) => {
@@ -173,22 +166,23 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
 
   const addSection = (mIndex) => {
     const updated = [...course.modules];
-    updated[mIndex].sections.push({
-      title: "",
-      expanded: false,
-      materialFiles: [],
-      notes: "",
-      challengeFiles: [],
-      challengeInstructions: "",
-      videos: [],
-    });
+    updated[mIndex].sections.push(createEmptySection());
     setCourse({ ...course, modules: updated });
   };
 
-  const removeSection = (mIndex, sIndex) => {
+  const removeSection = async (mIndex, sIndex) => {
+    const sectionName =
+      course.modules[mIndex]?.sections[sIndex]?.title?.trim() || `Section ${sIndex + 1}`;
+    const confirmed = await confirmDelete(
+      "Delete Section?",
+      `Are you sure you want to delete "${sectionName}"? This cannot be undone.`
+    );
+    if (!confirmed) return;
+
     const updated = [...course.modules];
     updated[mIndex].sections.splice(sIndex, 1);
     setCourse({ ...course, modules: updated });
+    showSuccess("Section deleted");
   };
 
   const toggleSection = (mIndex, sIndex) => {
@@ -218,7 +212,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
     if (!link) return;
 
     if (!getYouTubeId(link)) {
-      Swal.fire("Invalid URL", "Please enter a valid YouTube URL", "error");
+      showError("Please enter a valid YouTube URL");
       return;
     }
 
@@ -243,7 +237,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
 
   const handleSubmit = async () => {
     if (!validateForm()) {
-      Swal.fire("Validation Error", "Please fill all required fields correctly.", "warning");
+      showWarning("Please fill all required fields correctly.");
       return;
     }
 
@@ -268,8 +262,8 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
               const formattedNewMaterials = materialUploads.map(f => ({
                 url: f.url,
                 publicId: f.publicId,
-                fileType: f.format,
-                originalName: f.original_filename
+                fileType: f.fileType,
+                originalName: f.originalName,
               }));
               const finalMaterials = [...(sec.savedMaterialFiles || []), ...formattedNewMaterials];
 
@@ -280,8 +274,8 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
               const formattedNewChallenges = challengeUploads.map(f => ({
                 url: f.url,
                 publicId: f.publicId,
-                fileType: f.format,
-                originalName: f.original_filename
+                fileType: f.fileType,
+                originalName: f.originalName,
               }));
               const finalChallenges = [...(sec.savedChallengeFiles || []), ...formattedNewChallenges];
 
@@ -310,22 +304,17 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
 
       const mutationOptions = {
         onSuccess: (data) => {
-          Swal.fire({
-            title: "Success!",
-            text: isEditMode ? "Course updated successfully!" : "Course created successfully!",
-            icon: "success",
-            timer: 1500,
-            showConfirmButton: false
-          });
-          onSave(data); // Call parent callback to switch view
+          showSuccess(isEditMode ? "Course updated successfully!" : "Course created successfully!");
+          onSave(data);
+          setLoading(false);
         },
         onError: (err) => {
-          Swal.fire("Error", err.message || "Operation failed", "error");
+          showError(err.message || "Operation failed");
+          setLoading(false);
         }
       };
 
       if (isEditMode) {
-        // Use editCourseId which correctly resolves _id or courseId from list data
         if (!editCourseId) throw new Error("Missing Course ID for update");
         updateCourseMutation({ id: editCourseId, data: payload }, mutationOptions);
       } else {
@@ -334,8 +323,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
 
     } catch (err) {
       console.error(err);
-      Swal.fire("Error", err.message || "Upload failed", "error");
-    } finally {
+      showError(err.message || "Upload failed");
       setLoading(false);
     }
   };
@@ -392,14 +380,15 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
         <div className="input-grid">
           <div>
             <label>Thumbnail Image</label>
-            <input
-              type="file"
+            <FileDropZone
               accept="image/*"
-              onChange={(e) => {
-                updateField("thumbnail", e.target.files[0]);
-                if (errors.thumbnail) setErrors({ ...errors, thumbnail: null });
+              hint="Drag image from Google or your computer"
+              error={errors.thumbnail}
+              onFiles={(file) => {
+                updateField("thumbnail", file);
+                if (errors.thumbnail) setErrors((prev) => ({ ...prev, thumbnail: null }));
               }}
-            />
+            >
             {course.thumbnail && (
               <div className="file-preview-list">
                 <div className="file-preview-media">
@@ -419,7 +408,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                 </div>
               </div>
             )}
-            {errors.thumbnail && <span className="error-text">{errors.thumbnail}</span>}
+            </FileDropZone>
           </div>
         </div>
 
@@ -429,60 +418,138 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
           <button className="add-btn" onClick={addModule}>+ Add Module</button>
         </div>
 
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="modules" type="module">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {course.modules.map((module, mIndex) => (
-                  <Draggable draggableId={`module-${mIndex}`} index={mIndex} key={mIndex}>
-                    {(provided) => (
-                      <div className="module-box" ref={provided.innerRef} {...provided.draggableProps}>
-                        <div className="module-header-wrapper">
-                          <div className="drag-handle" {...provided.dragHandleProps}>
-                            <BiGridVertical />
-                          </div>
-                          <div className="module-content">
-                            <label className="module-label">Module {mIndex + 1}</label>
-                            <div className="module-title-row">
-                              <input
-                                value={module.title}
-                                onChange={(e) => updateModuleTitle(mIndex, e.target.value)}
-                                placeholder="Enter module name"
-                              />
-                              {errors[`module-${mIndex}`] && <span className="error-text">{errors[`module-${mIndex}`]}</span>}
-                              <BiTrash className="module-delete" onClick={() => removeModule(mIndex)} />
-                            </div>
-                          </div>
-                        </div>
-                        <button className="add-section-btn" onClick={() => addSection(mIndex)}>+ Add Section</button>
+        {course.modules.length > 1 && (
+          <ModuleNavigator
+            modules={course.modules}
+            activeIndex={activeModuleIndex}
+            onSelect={goToModule}
+          />
+        )}
 
-                        <Droppable droppableId={`${mIndex}`} type="section">
-                          {(provided) => (
-                            <div ref={provided.innerRef} {...provided.droppableProps}>
-                              {module.sections.map((section, sIndex) => (
-                                <Draggable draggableId={`sec-${mIndex}-${sIndex}`} index={sIndex} key={sIndex}>
-                                  {(provided) => (
-                                    <div className="section-block" ref={provided.innerRef} {...provided.draggableProps}>
-                                      <div className="section-header-wrapper">
-                                        <div className="drag-handle-sec" {...provided.dragHandleProps}>
-                                          <BiGridVertical />
-                                        </div>
-                                        <div className="section-content">
-                                          <div className="section-header-row">
-                                            <input
-                                              value={section.title}
-                                              onChange={(e) => updateSectionField(mIndex, sIndex, "title", e.target.value)}
-                                              placeholder="Enter section name"
-                                            />
-                                            {errors[`section-${mIndex}-${sIndex}`] && <span className="error-text">{errors[`section-${mIndex}-${sIndex}`]}</span>}
-                                            <BiChevronDown
-                                              className={`section-chevron ${section.expanded ? "rotate" : ""}`}
-                                              onClick={() => toggleSection(mIndex, sIndex)}
-                                            />
-                                            <BiTrash className="section-delete" onClick={() => removeSection(mIndex, sIndex)} />
-                                          </div>
-                                        </div>
-                                      </div>
+        <SortableList
+          items={course.modules}
+          onReorder={(reordered) =>
+            setCourse((prev) => ({ ...prev, modules: reordered }))
+          }
+        >
+          {course.modules.map((module, mIndex) => (
+            <SortableItem key={module.id} id={module.id} className="module-box">
+              {({ setNodeRef, style, attributes, listeners, className }) => (
+                <div
+                  ref={(el) => {
+                    setNodeRef(el);
+                    moduleRefs.current[module.id] = el;
+                  }}
+                  style={style}
+                  className={`${className} ${mIndex === activeModuleIndex ? "is-active" : course.modules.length > 1 ? "is-collapsed" : ""}`}
+                >
+                  <div className="module-header-wrapper">
+                    <div className="drag-expand-btn" onClick={(e) => e.stopPropagation()}>
+                      <div
+                        className="drag-expand-grip"
+                        {...attributes}
+                        {...listeners}
+                        title="Drag to reorder module"
+                      >
+                        <BiGridVertical />
+                      </div>
+                      <button
+                        type="button"
+                        className={`drag-expand-chevron ${mIndex === activeModuleIndex ? "rotate" : ""}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          goToModule(mIndex);
+                        }}
+                        title={mIndex === activeModuleIndex ? "Collapse module" : "Expand module"}
+                      >
+                        <BiChevronDown />
+                      </button>
+                    </div>
+                    <div className="module-content">
+                      <label className="module-label">Module {mIndex + 1}</label>
+                      <div className="module-title-row">
+                        <input
+                          value={module.title}
+                          onChange={(e) => updateModuleTitle(mIndex, e.target.value)}
+                          placeholder="Enter module name"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        {errors[`module-${mIndex}`] && (
+                          <span className="error-text">{errors[`module-${mIndex}`]}</span>
+                        )}
+                        <BiTrash
+                          className="module-delete"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeModule(mIndex);
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {mIndex === activeModuleIndex && (
+                    <>
+                  <button className="add-section-btn" onClick={() => addSection(mIndex)}>
+                    + Add Section
+                  </button>
+
+                  <SortableList
+                    items={module.sections}
+                    className="sections-droppable"
+                    onReorder={(reordered) => {
+                      setCourse((prev) => {
+                        const updated = [...prev.modules];
+                        updated[mIndex] = { ...updated[mIndex], sections: reordered };
+                        return { ...prev, modules: updated };
+                      });
+                    }}
+                  >
+                    {module.sections.map((section, sIndex) => (
+                      <SortableItem key={section.id} id={section.id} className="section-block">
+                        {({ setNodeRef, style, attributes, listeners, className: sectionClass }) => (
+                          <div ref={setNodeRef} style={style} className={sectionClass}>
+                            <div className="section-header-wrapper">
+                              <div className="drag-expand-btn drag-expand-btn--sec">
+                                <div
+                                  className="drag-expand-grip"
+                                  {...attributes}
+                                  {...listeners}
+                                  title="Drag to reorder section"
+                                >
+                                  <BiGridVertical />
+                                </div>
+                                <button
+                                  type="button"
+                                  className={`drag-expand-chevron ${section.expanded ? "rotate" : ""}`}
+                                  onClick={() => toggleSection(mIndex, sIndex)}
+                                  title={section.expanded ? "Collapse section" : "Expand section"}
+                                >
+                                  <BiChevronDown />
+                                </button>
+                              </div>
+                              <div className="section-content">
+                                <label className="section-label">Section {sIndex + 1}</label>
+                                <div className="section-header-row">
+                                  <input
+                                    value={section.title}
+                                    onChange={(e) =>
+                                      updateSectionField(mIndex, sIndex, "title", e.target.value)
+                                    }
+                                    placeholder="Enter section name"
+                                  />
+                                  {errors[`section-${mIndex}-${sIndex}`] && (
+                                    <span className="error-text">
+                                      {errors[`section-${mIndex}-${sIndex}`]}
+                                    </span>
+                                  )}
+                                  <BiTrash
+                                    className="section-delete"
+                                    onClick={() => removeSection(mIndex, sIndex)}
+                                  />
+                                </div>
+                              </div>
+                            </div>
 
                                       {section.expanded && (
                                         <div className="section-details">
@@ -499,13 +566,15 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                               ))}
                                             </div>
                                           )}
-                                          <input
-                                            type="file" multiple
-                                            onChange={(e) => {
-                                              const newFiles = Array.from(e.target.files);
+                                          <FileDropZone
+                                            compact
+                                            multiple
+                                            accept={COURSE_FILE_ACCEPT}
+                                            hint="Drop learning material files here"
+                                            onFiles={(files) => {
+                                              const newFiles = Array.isArray(files) ? files : [files];
                                               const current = section.materialFiles || [];
                                               updateSectionField(mIndex, sIndex, "materialFiles", [...current, ...newFiles]);
-                                              e.target.value = "";
                                             }}
                                           />
                                           {/* Preview New Materials */}
@@ -571,13 +640,15 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                               ))}
                                             </div>
                                           )}
-                                          <input
-                                            type="file" multiple
-                                            onChange={(e) => {
-                                              const newFiles = Array.from(e.target.files);
+                                          <FileDropZone
+                                            compact
+                                            multiple
+                                            accept={COURSE_FILE_ACCEPT}
+                                            hint="Drop challenge files here"
+                                            onFiles={(files) => {
+                                              const newFiles = Array.isArray(files) ? files : [files];
                                               const current = section.challengeFiles || [];
                                               updateSectionField(mIndex, sIndex, "challengeFiles", [...current, ...newFiles]);
-                                              e.target.value = "";
                                             }}
                                           />
                                           {/* Preview New Challenges */}
@@ -686,21 +757,16 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                       )}
                                     </div>
                                   )}
-                                </Draggable>
+                                </SortableItem>
                               ))}
-                              {provided.placeholder}
-                            </div>
-                          )}
-                        </Droppable>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+                  </SortableList>
+                    </>
+                  )}
+                </div>
+              )}
+            </SortableItem>
+          ))}
+        </SortableList>
 
         <div className="footer-actions">
           <button className="cancel-btn" onClick={onBack}>Cancel</button>

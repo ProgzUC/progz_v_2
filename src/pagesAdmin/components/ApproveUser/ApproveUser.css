@@ -38,13 +38,34 @@
 }
 
 /* Table Styling */
-.admin-approve-user-page .table-container {
+.admin-approve-user-page .table-container,
+.admin-approve-user-page .table-responsive {
   width: 100%;
   overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  /* Prevent horizontal scroll container from trapping vertical page scroll */
+  overscroll-behavior: auto;
+  touch-action: pan-x pan-y;
 }
 
+.admin-approve-user-page .approve-user-card {
+  overflow: visible;
+}
+
+.admin-approve-user-page .pending-registrations-card {
+  overflow: visible;
+}
+
+.admin-approve-user-page {
+  overflow-x: hidden;
+  overflow-y: visible;
+  height: auto;
+  max-height: none;
+}
 
 .admin-approve-user-page .user-table {
+  min-width: 720px;
   width: 100%;
   border-collapse: collapse;
 }

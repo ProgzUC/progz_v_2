@@ -11,6 +11,7 @@ export const useAllUsers = () =>
     useQuery({
         queryKey: ["allUsers"],
         queryFn: fetchAllUsers,
+        refetchOnMount: "always",
     });
 
 export const useApproveUser = () => {
@@ -18,8 +19,8 @@ export const useApproveUser = () => {
     return useMutation({
         mutationFn: approveUser,
         onSuccess: () => {
-            queryClient.invalidateQueries(["pendingUsers"]);
-            queryClient.invalidateQueries(["allUsers"]);
+            queryClient.invalidateQueries({ queryKey: ["pendingUsers"] });
+            queryClient.invalidateQueries({ queryKey: ["allUsers"] });
         },
     });
 };
@@ -29,7 +30,7 @@ export const useRejectUser = () => {
     return useMutation({
         mutationFn: rejectUser,
         onSuccess: () => {
-            queryClient.invalidateQueries(["pendingUsers"]);
+            queryClient.invalidateQueries({ queryKey: ["pendingUsers"] });
         },
     });
 };
@@ -39,17 +40,18 @@ export const useDeleteUser = () => {
     return useMutation({
         mutationFn: deleteUser,
         onSuccess: () => {
-            queryClient.invalidateQueries(["allUsers"]);
+            queryClient.invalidateQueries({ queryKey: ["allUsers"] });
         },
     });
 };
+
 export const useUpdateUser = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ id, data }) => updateUser(id, data),
         onSuccess: (data) => {
-            queryClient.invalidateQueries(["allUsers"]);
-            queryClient.invalidateQueries(["user", data.user.id]);
+            queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+            queryClient.invalidateQueries({ queryKey: ["user", data.user.id] });
         },
     });
 };
@@ -59,7 +61,8 @@ export const useAdminCreateUser = () => {
     return useMutation({
         mutationFn: adminCreateUser,
         onSuccess: () => {
-            queryClient.invalidateQueries(["allUsers"]);
+            queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+            queryClient.refetchQueries({ queryKey: ["allUsers"] });
         },
     });
 };
