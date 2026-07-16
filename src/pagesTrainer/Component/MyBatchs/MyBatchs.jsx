@@ -1,6 +1,5 @@
 import React from 'react';
 import './MyBatchs.css';
-import batchesData from './batchesData.json';
 import ActiveBatches from './ActiveBatches';
 
 const MyBatchs = ({ onViewDetails }) => {

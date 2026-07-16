@@ -1,29 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import "./CourseCard.css";
 import Introduction from "../Introduction/Introduction";
 import { useStudentCourses, useCourseProgress } from "../../../hooks/useStudentCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
-
-/* ----------------------------------------------
-   PROGRESS CALCULATOR (for client-side data)
----------------------------------------------- */
-function getProgress(modules) {
-    if (!modules || modules.length === 0) return { done: 0, total: 0, percent: 0 };
-
-    let total = 0;
-    let done = 0;
-
-    modules.forEach((module) => {
-        const sections = module.sections || [];
-        total += sections.length;
-        done += sections.filter(s => s.isCompleted).length;
-    });
-
-    const percent = total > 0 ? Math.round((done / total) * 100) : 0;
-    return { done, total, percent };
-}
 
 /* ----------------------------------------------
    LARGE COURSE CARD (RIGHT SIDE)
@@ -171,7 +152,7 @@ function CourseCurriculum({ modules, setViewLesson }) {
 
 export default function MyCourses() {
     const { data: coursesData, isLoading: listLoading, isError } = useStudentCourses();
-    const courses = coursesData?.enrolledCourses || [];
+    const courses = useMemo(() => coursesData?.enrolledCourses || [], [coursesData?.enrolledCourses]);
 
     const navigate = useNavigate();
     const [selectedCourseId, setSelectedCourseId] = useState(null);
@@ -262,7 +243,7 @@ export default function MyCourses() {
                             <p className="courses-heading ms-5 mt-2">My Courses</p>
 
                             <div className="card-container ms-auto mt-4 mb-4">
-                                {courses.map((course, index) => {
+                                {courses.map((course) => {
                                     const progress = course.progressPercentage || 0;
                                     const completedLessons = course.completedLessons || 0;
                                     const totalLessons = course.totalLessons || 0;

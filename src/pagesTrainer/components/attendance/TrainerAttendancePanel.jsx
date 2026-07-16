@@ -1,13 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./TrainerAttendancePanel.css";
 import { useStartClass, useMarkAttendance, useEndClass, useClassSessions } from "../../../hooks/useClassSession";
 import Swal from "sweetalert2";
 import Loader from "../../../components/common/Loader/Loader";
 
+const mapSessionAttendance = (session) =>
+    (session?.attendance || []).map((a) => ({
+        studentId: a.student._id,
+        studentName: a.student.name,
+        status: a.status,
+    }));
+
 export default function TrainerAttendancePanel({ batch }) {
-    const [activeSession, setActiveSession] = useState(null);
-    const [attendance, setAttendance] = useState([]);
-    const [notes, setNotes] = useState("");
+    const [sessionOverride, setSessionOverride] = useState(null);
+    const [attendanceOverride, setAttendanceOverride] = useState(null);
+    const [notesOverride, setNotesOverride] = useState(null);
     const [elapsedTime, setElapsedTime] = useState(0);
     const [searchQuery, setSearchQuery] = useState("");
 
@@ -20,23 +27,14 @@ export default function TrainerAttendancePanel({ batch }) {
     // Fetch existing sessions to check for active session
     const { data: sessionsData } = useClassSessions(batchIdToUse);
 
-    // Check for existing active session on mount
-    useEffect(() => {
-        if (sessionsData?.sessions) {
-            const activeSess = sessionsData.sessions.find((s) => !s.endTime);
-            if (activeSess && !activeSession) {
-                setActiveSession(activeSess);
-                setAttendance(
-                    activeSess.attendance.map((a) => ({
-                        studentId: a.student._id,
-                        studentName: a.student.name,
-                        status: a.status,
-                    }))
-                );
-                setNotes(activeSess.notes || "");
-            }
-        }
-    }, [sessionsData]);
+    const serverActiveSession = useMemo(
+        () => sessionsData?.sessions?.find((s) => !s.endTime) ?? null,
+        [sessionsData]
+    );
+
+    const activeSession = sessionOverride ?? serverActiveSession;
+    const attendance = attendanceOverride ?? mapSessionAttendance(activeSession);
+    const notes = notesOverride ?? (activeSession?.notes || "");
 
     // Live timer for active session
     useEffect(() => {
@@ -78,16 +76,9 @@ export default function TrainerAttendancePanel({ batch }) {
         try {
             console.log("Starting class for batch ID:", batchIdToUse);
             const session = await startClassMutation.mutateAsync(batchIdToUse);
-            setActiveSession(session);
-
-            // Initialize attendance state
-            setAttendance(
-                session.attendance.map((a) => ({
-                    studentId: a.student._id,
-                    studentName: a.student.name,
-                    status: a.status,
-                }))
-            );
+            setSessionOverride(session);
+            setAttendanceOverride(mapSessionAttendance(session));
+            setNotesOverride(session.notes || "");
 
             Swal.fire({
                 icon: "success",
@@ -109,9 +100,10 @@ export default function TrainerAttendancePanel({ batch }) {
     // Handle attendance toggle
     const handleAttendanceChange = async (studentId, newStatus) => {
         // Update local state optimistically
-        setAttendance((prev) =>
-            prev.map((a) => (a.studentId === studentId ? { ...a, status: newStatus } : a))
-        );
+        setAttendanceOverride((prev) => {
+            const base = prev ?? mapSessionAttendance(activeSession);
+            return base.map((a) => (a.studentId === studentId ? { ...a, status: newStatus } : a));
+        });
 
         // Send to backend
         try {
@@ -136,7 +128,10 @@ export default function TrainerAttendancePanel({ batch }) {
             status: "Present",
         }));
 
-        setAttendance((prev) => prev.map((a) => ({ ...a, status: "Present" })));
+        setAttendanceOverride((prev) => {
+            const base = prev ?? mapSessionAttendance(activeSession);
+            return base.map((a) => ({ ...a, status: "Present" }));
+        });
 
         try {
             await markAttendanceMutation.mutateAsync({
@@ -150,7 +145,7 @@ export default function TrainerAttendancePanel({ batch }) {
                 timer: 1500,
                 showConfirmButton: false,
             });
-        } catch (error) {
+        } catch {
             Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -178,7 +173,7 @@ export default function TrainerAttendancePanel({ batch }) {
                     notes,
                 });
 
-                setActiveSession(endedSession);
+                setSessionOverride(endedSession);
 
                 const presentCount = attendance.filter((a) => a.status === "Present").length;
                 const lateCount = attendance.filter((a) => a.status === "Late").length;
@@ -389,7 +384,7 @@ export default function TrainerAttendancePanel({ batch }) {
                     id="class-notes"
                     placeholder="Add notes about today's class (topics covered, homework, etc.)"
                     value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
+                    onChange={(e) => setNotesOverride(e.target.value)}
                     rows={4}
                     disabled={isEnded}
                 />

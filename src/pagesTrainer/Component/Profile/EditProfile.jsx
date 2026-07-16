@@ -14,7 +14,7 @@ import FileDropZone from '../../../components/common/FileDropZone/FileDropZone';
 import { uploadToCloudinary } from '../../../utils/cloudinary';
 import { showSuccess, showError } from '../../../utils/toast';
 
-const EditProfile = ({ onCancel, onBack }) => {
+const EditProfile = ({ onCancel }) => {
     const { data: profileData, isLoading, isError, error } = useTrainerProfile();
     const updateProfile = useUpdateTrainerProfile();
     const [formData, setFormData] = useState(profileData || {});

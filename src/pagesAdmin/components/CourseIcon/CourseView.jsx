@@ -34,9 +34,8 @@ const CourseView = () => {
 
   // Calculate stats if needed
   const lessonsCount = course.modules?.reduce((acc, mod) => acc + (mod.sections?.length || 0), 0) || 0;
-  const progress = 0; // Backend doesn't seem to provide progress yet for admin view, defaulting to 0 or remove.
 
-  const getViewUrl = (url, fileName) => {
+  const getViewUrl = (url) => {
     if (!url) return "#";
     const lowerUrl = url.toLowerCase();
     const officeExtensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];

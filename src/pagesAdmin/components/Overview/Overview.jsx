@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Overview.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -22,6 +22,8 @@ import {
 
 import { motion } from "framer-motion";
 
+const MotionDiv = motion.div;
+
 const avatar = "https://i.pravatar.cc/40";
 
 const Overview = () => {
@@ -34,8 +36,7 @@ const Overview = () => {
     isLoading
   } = useAdminDashboard();
 
-  // Local state for pagination and table actions
-  const [coursesList, setCoursesList] = useState([]);
+  const [courseOverrides, setCourseOverrides] = useState(null);
   const [page, setPage] = useState(1);
   const rowsPerPage = 3;
 
@@ -43,12 +44,7 @@ const Overview = () => {
   const [deleteItem, setDeleteItem] = useState(null);
   const [studentPopup, setStudentPopup] = useState(null);
 
-  // Sync recentCourses from API to local state for manipulation (edit/delete)
-  useEffect(() => {
-    if (recentCourses && recentCourses.length > 0) {
-      setCoursesList(recentCourses);
-    }
-  }, [recentCourses]);
+  const coursesList = courseOverrides ?? (recentCourses || []);
 
   const totalPages = Math.ceil(coursesList.length / rowsPerPage);
 
@@ -58,14 +54,16 @@ const Overview = () => {
   );
 
   const handleSaveEdit = (updatedCourse) => {
-    setCoursesList((prev) =>
-      prev.map((c) => (c.id === updatedCourse.id ? updatedCourse : c))
+    const base = courseOverrides ?? (recentCourses || []);
+    setCourseOverrides(
+      base.map((c) => (c.id === updatedCourse.id ? updatedCourse : c))
     );
     setEditItem(null);
   };
 
   const handleDelete = (id) => {
-    setCoursesList((prev) => prev.filter((c) => c.id !== id));
+    const base = courseOverrides ?? (recentCourses || []);
+    setCourseOverrides(base.filter((c) => c.id !== id));
     setDeleteItem(null);
   };
 
@@ -120,30 +118,30 @@ const Overview = () => {
 
       {/* Stats */}
       <div className="stats-row">
-        <motion.div className="stats-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        <MotionDiv className="stats-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="icon-box orange"><i className="bi bi-book"></i></div>
           <h5>Total Courses</h5>
           <p className="value">{stats?.courses || 0}</p>
-        </motion.div>
+        </MotionDiv>
 
-        <motion.div className="stats-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        <MotionDiv className="stats-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="icon-box green"><i className="bi bi-person-video"></i></div>
           <h5>Total Instructor</h5>
           <p className="value">{stats?.instructors || 0}</p>
-        </motion.div>
+        </MotionDiv>
 
-        <motion.div className="stats-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+        <MotionDiv className="stats-card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
           <div className="icon-box pink"><i className="bi bi-mortarboard"></i></div>
           <h5>Total Students</h5>
           <p className="value">{stats?.students || 0}</p>
-        </motion.div>
+        </MotionDiv>
       </div>
 
       {/* Charts */}
       <div className="charts-row">
 
         {/* Bar Chart */}
-        <motion.div className="chart-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <MotionDiv className="chart-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <h5 className="chart-title">Monthly Enrollments</h5>
 
           <ResponsiveContainer width="100%" height={250}>
@@ -153,10 +151,10 @@ const Overview = () => {
               <Bar dataKey="value" fill="#22C55E" radius={[10, 10, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
-        </motion.div>
+        </MotionDiv>
 
         {/* Donut Chart */}
-        <motion.div className="chart-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+        <MotionDiv className="chart-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <h5 className="chart-title">User Distribution</h5>
 
           <div className="legend-box">
@@ -199,7 +197,7 @@ const Overview = () => {
               <p>Students</p>
             </div>
           </div>
-        </motion.div>
+        </MotionDiv>
 
       </div>
 

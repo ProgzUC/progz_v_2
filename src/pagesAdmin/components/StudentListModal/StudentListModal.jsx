@@ -1,11 +1,13 @@
 import React from "react";
 import "../Modal.css";
-import { motion } from "framer-motion"; 
+import { motion } from "framer-motion";
+
+const MotionDiv = motion.div;
 
 const StudentListModal = ({ students, onClose }) => {
   return (
     <div className="modal-overlay">
-      <motion.div
+      <MotionDiv
         className="modal-box"
         initial={{ scale: 0.7 }}
         animate={{ scale: 1 }}
@@ -22,7 +24,7 @@ const StudentListModal = ({ students, onClose }) => {
         </div>
 
         <button className="close-btn" onClick={onClose}>Close</button>
-      </motion.div>
+      </MotionDiv>
     </div>
   );
 };

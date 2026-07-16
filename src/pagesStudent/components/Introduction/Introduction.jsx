@@ -30,7 +30,7 @@ const FileItem = ({ name, url }) => {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(blobUrl);
-    } catch (e) {
+    } catch {
       // Fallback if fetch is blocked by CORS
       window.open(url, "_blank");
     }

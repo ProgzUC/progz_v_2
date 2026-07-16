@@ -3,9 +3,10 @@ import "./EnrollStudents.css";
 
 import { useAllUsers } from "../../../hooks/useAdminUsers";
 import { useCourses } from "../../../hooks/useCourses";
-import { useBatches, useCreateBatch, useEnrollStudent } from "../../../hooks/useBatches";
+import { useBatches, useEnrollStudent } from "../../../hooks/useBatches";
 import Swal from "sweetalert2";
 import Loader from "../../../components/common/Loader/Loader";
+import { createId } from "../../../utils/courseBuilder";
 
 import CreateBatchModal from "./CreateBatchModal";
 
@@ -28,7 +29,7 @@ const EnrollStudents = () => {
   // State
   const [selectedStudent, setSelectedStudent] = useState("");
   const [courseSections, setCourseSections] = useState([
-    { id: Date.now(), courseId: "", instructorId: "", batchId: "" }
+    { id: createId(), courseId: "", instructorId: "", batchId: "" }
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -42,7 +43,7 @@ const EnrollStudents = () => {
   };
 
   const addCourse = () => {
-    setCourseSections([...courseSections, { id: Date.now(), courseId: "", instructorId: "", batchId: "" }]);
+    setCourseSections([...courseSections, { id: createId(), courseId: "", instructorId: "", batchId: "" }]);
   };
 
   const deleteCourse = (id) => {

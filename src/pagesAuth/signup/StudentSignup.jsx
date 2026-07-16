@@ -44,7 +44,8 @@ const StudentSignup = () => {
     };
 
     const handleFinalSubmit = async (educationData) => {
-        const { confirmPassword, ...personal } = formData.personalDetails || {};
+        const personal = { ...(formData.personalDetails || {}) };
+        delete personal.confirmPassword;
 
         const completeData = {
             ...personal,

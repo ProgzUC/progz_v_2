@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { useCreateBatch } from "../../../hooks/useBatches";
 import { useCourse } from "../../../hooks/useCourses";

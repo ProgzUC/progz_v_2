@@ -40,7 +40,7 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
 
   const thumbnailUrl = course.thumbnail?.url || null;
 
-  const getViewUrl = (url, fileName) => {
+  const getViewUrl = (url) => {
     if (!url) return "#";
     const lowerUrl = url.toLowerCase();
     const officeExtensions = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];

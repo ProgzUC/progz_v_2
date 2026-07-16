@@ -100,7 +100,7 @@ function TrainerApp() {
                 initialData={selectedBatch}
                 isEditMode={true}
                 onBack={() => setIsEditingCourse(false)}
-                onSave={(updatedData) => {
+                onSave={() => {
                   // Success callback from EditCourse (after API success)
                   setIsEditingCourse(false);
                   setSelectedBatch(null); // Return to list to see updates

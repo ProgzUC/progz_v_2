@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import "./Courses.css";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useCourses, useDeleteCourse } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
+import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 
 const Courses = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Courses = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedInstructor, setSelectedInstructor] = useState("");
 
-  const courses = coursesList || [];
+  const courses = useMemo(() => coursesList || [], [coursesList]);
 
   // Derive unique sorted instructor list for the dropdown
   const instructorOptions = React.useMemo(() => {
@@ -188,8 +189,8 @@ const Courses = () => {
                         <td>
                           <div className="avatar-group">
                             {course.instructor && course.instructor.length > 0 ? (
-                              course.instructor.map((inst, i) => (
-                                 <span>
+                              course.instructor.map((inst) => (
+                                 <span key={inst._id || inst.name}>
                                 {/* // <img
                                 //   key={inst._id || i}
                                 //   src={inst.profilePicture?.url || "https://ui-avatars.com/api/?name=" + (inst.firstName || inst.name || "T") + "&background=random"}
@@ -247,26 +248,13 @@ const Courses = () => {
             </div>
 
             {/* PAGINATION */}
-            {filteredCourses.length > 0 && (
-              <div className="pagination">
-                <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-                  &lt;
-                </button>
-
-                {Array.from({ length: totalPages }, (_, i) => (
-                  <button
-                    key={i}
-                    className={page === i + 1 ? "active" : ""}
-                    onClick={() => setPage(i + 1)}
-                  >
-                    {i + 1}
-                  </button>
-                ))}
-
-                <button disabled={page === totalPages} onClick={() => setPage(page + 1)}>
-                  &gt;
-                </button>
-              </div>
+            {filteredCourses.length > 0 && totalPages > 1 && (
+              <PaginationBar
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+                className="pagination"
+              />
             )}
           </>
         )}

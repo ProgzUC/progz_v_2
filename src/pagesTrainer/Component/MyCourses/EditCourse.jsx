@@ -1,21 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./EditCourse.css";
 import { BiX, BiTrash, BiChevronDown, BiGridVertical, BiPlus } from "react-icons/bi";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const EditCourse = ({ courseData, onCancel, onSave }) => {
-    const [course, setCourse] = useState(courseData || {
+    const [course, setCourse] = useState(() => courseData || {
         title: "",
         courseId: "",
         description: "",
         modules: []
     });
-
-    useEffect(() => {
-        if (courseData) {
-            setCourse(courseData);
-        }
-    }, [courseData]);
 
     const updateField = (field, value) => {
         setCourse((prev) => ({ ...prev, [field]: value }));

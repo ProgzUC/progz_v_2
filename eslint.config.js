@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'BACKEND_TEMPLATE_*.js', 'public/pwabuilder-sw.js']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [

@@ -1,0 +1,10 @@
+.page-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  padding: 8px 4px;
+  color: #888;
+  font-size: 14px;
+  user-select: none;
+}

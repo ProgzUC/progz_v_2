@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./Instructors.css";
 import Loader from "../../../components/common/Loader/Loader";
+import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import { useAllUsers, useDeleteUser } from "../../../hooks/useAdminUsers";
 import { FaTrash, FaEdit, FaEye } from "react-icons/fa";
 import Swal from "sweetalert2";
@@ -30,19 +31,17 @@ const Instructors = () => {
   });
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [search]);
-
-  useEffect(() => {
-    if (currentPage > totalPages) setCurrentPage(totalPages);
-  }, [currentPage, totalPages]);
+  const activePage = Math.min(currentPage, totalPages);
 
   const paginatedData = filtered.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    (activePage - 1) * itemsPerPage,
+    activePage * itemsPerPage
   );
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+    setCurrentPage(1);
+  };
 
 
 const { mutate: deleteUser } = useDeleteUser();
@@ -82,7 +81,7 @@ const { mutate: deleteUser } = useDeleteUser();
             className="inst-search"
             placeholder="Search instructor"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleSearchChange}
           />
 
           <button className="inst-add-btn" onClick={() => navigate("/admin/add-instructor")}>
@@ -109,7 +108,7 @@ const { mutate: deleteUser } = useDeleteUser();
           <tbody>
             {paginatedData.map((item, index) => (
               <tr key={index}>
-                <td className="s-no">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                <td className="s-no">{(activePage - 1) * itemsPerPage + index + 1}</td>
                 <td>{item.name}</td>
                 <td>{item.email}</td>
                 <td>{item.phone}</td>
@@ -138,25 +137,12 @@ const { mutate: deleteUser } = useDeleteUser();
       </div>
 
       {/* Pagination */}
-      <div className="pagination">
-        <button className="page-arrow" disabled={currentPage === 1} onClick={() => changePage(currentPage - 1)}>
-          &lt;
-        </button>
-
-        {[...Array(totalPages)].map((_, i) => (
-          <button
-            key={i}
-            className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
-            onClick={() => changePage(i + 1)}
-          >
-            {i + 1}
-          </button>
-        ))}
-
-        <button className="page-arrow" disabled={currentPage === totalPages} onClick={() => changePage(currentPage + 1)}>
-          &gt;
-        </button>
-      </div>
+      <PaginationBar
+        currentPage={activePage}
+        totalPages={totalPages}
+        onPageChange={changePage}
+        className="pagination"
+      />
 
     </div>
   );

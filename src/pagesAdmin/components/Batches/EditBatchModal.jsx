@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { useUpdateBatch } from "../../../hooks/useBatches";
 import { useCourse } from "../../../hooks/useCourses";
@@ -6,54 +6,38 @@ import { useAllUsers } from "../../../hooks/useAdminUsers";
 import "../Modal.css";
 import "../EnrollStudent/EnrollStudents.css";
 
-const EditBatchModal = ({ isOpen, onClose, batch, coursesList, weekDays }) => {
+const buildBatchData = (batch) => ({
+    name: batch?.name || "",
+    courseId: batch?.course?._id || batch?.course || "",
+    daysOfWeek: batch?.daysOfWeek || [],
+    classTiming: {
+        startTime: batch?.classTiming?.startTime || "",
+        endTime: batch?.classTiming?.endTime || "",
+        timezone: batch?.classTiming?.timezone || "Asia/Kolkata"
+    },
+    meetLink: batch?.meetLink || "",
+    startDate: batch?.startDate ? batch.startDate.split('T')[0] : "",
+    endDate: batch?.endDate ? batch.endDate.split('T')[0] : "",
+    status: batch?.status || "active",
+    trainers: batch?.trainers?.map(t => ({
+        trainer: t.trainer?._id || t.trainer || "",
+        assignedModules: t.assignedModules || [],
+        fromDate: t.fromDate ? t.fromDate.split('T')[0] : "",
+        toDate: t.toDate ? t.toDate.split('T')[0] : "",
+        isCurrent: t.isCurrent !== undefined ? t.isCurrent : true
+    })) || []
+});
+
+const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
     const { mutate: updateBatchMutation } = useUpdateBatch();
     const { data: users } = useAllUsers();
 
     const usersArray = Array.isArray(users) ? users : [];
     const instructorsList = usersArray.filter(u => (u.role || "").toLowerCase() === "trainer" || (u.role || "").toLowerCase() === "instructor");
 
-    const [batchData, setBatchData] = useState({
-        name: "",
-        courseId: "",
-        daysOfWeek: [],
-        classTiming: { startTime: "", endTime: "", timezone: "Asia/Kolkata" },
-        meetLink: "",
-        startDate: "",
-        endDate: "",
-        status: "active",
-        trainers: []
-    });
+    const [batchData, setBatchData] = useState(() => buildBatchData(batch));
 
-    // Fetch full course details when courseId changes to get modules
     const { data: selectedCourse } = useCourse(batchData.courseId);
-
-    // Pre-populate form when batch changes
-    useEffect(() => {
-        if (batch) {
-            setBatchData({
-                name: batch.name || "",
-                courseId: batch.course?._id || batch.course || "",
-                daysOfWeek: batch.daysOfWeek || [],
-                classTiming: {
-                    startTime: batch.classTiming?.startTime || "",
-                    endTime: batch.classTiming?.endTime || "",
-                    timezone: batch.classTiming?.timezone || "Asia/Kolkata"
-                },
-                meetLink: batch.meetLink || "",
-                startDate: batch.startDate ? batch.startDate.split('T')[0] : "",
-                endDate: batch.endDate ? batch.endDate.split('T')[0] : "",
-                status: batch.status || "active",
-                trainers: batch.trainers?.map(t => ({
-                    trainer: t.trainer?._id || t.trainer || "",
-                    assignedModules: t.assignedModules || [],
-                    fromDate: t.fromDate ? t.fromDate.split('T')[0] : "",
-                    toDate: t.toDate ? t.toDate.split('T')[0] : "",
-                    isCurrent: t.isCurrent !== undefined ? t.isCurrent : true
-                })) || []
-            });
-        }
-    }, [batch]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -126,7 +110,6 @@ const EditBatchModal = ({ isOpen, onClose, batch, coursesList, weekDays }) => {
         });
     };
 
-    // Helper to check if a module is already assigned to another trainer
     const isModuleAssignedToOther = (currentTrainerIndex, moduleIndex) => {
         return batchData.trainers.some((trainer, idx) =>
             idx !== currentTrainerIndex && trainer.assignedModules.includes(moduleIndex)
@@ -134,7 +117,6 @@ const EditBatchModal = ({ isOpen, onClose, batch, coursesList, weekDays }) => {
     };
 
     const handleSubmit = () => {
-        // 1. Basic Required Fields
         if (!batchData.name.trim()) {
             Swal.fire("Error", "Batch Name is required", "error");
             return;
@@ -148,13 +130,11 @@ const EditBatchModal = ({ isOpen, onClose, batch, coursesList, weekDays }) => {
             return;
         }
 
-        // 2. Date Integrity
         if (new Date(batchData.endDate) < new Date(batchData.startDate)) {
             Swal.fire("Error", "End date cannot be before start date", "error");
             return;
         }
 
-        // 3. Class Timing
         if (!batchData.classTiming.startTime || !batchData.classTiming.endTime) {
             Swal.fire("Error", "Class start and end times are required", "error");
             return;
@@ -164,13 +144,11 @@ const EditBatchModal = ({ isOpen, onClose, batch, coursesList, weekDays }) => {
             return;
         }
 
-        // 4. Days of Week
         if (batchData.daysOfWeek.length === 0) {
             Swal.fire("Error", "Please select at least one day for the batch", "error");
             return;
         }
 
-        // 5. Trainer Validation
         for (let i = 0; i < batchData.trainers.length; i++) {
             const t = batchData.trainers[i];
             if (!t.trainer) {
@@ -214,14 +192,11 @@ const EditBatchModal = ({ isOpen, onClose, batch, coursesList, weekDays }) => {
         });
     };
 
-    if (!isOpen) return null;
-
     return (
         <div className="modal-overlay">
             <div className="modal-content" style={{ maxWidth: "800px", maxHeight: "90vh", overflowY: "auto" }}>
                 <h3 className="modal-title">Edit Batch</h3>
 
-                {/* Batch Info */}
                 <div className="input-grid-2">
                     <div className="modal-field">
                         <label className="modal-label">Batch Name</label>
@@ -335,7 +310,6 @@ const EditBatchModal = ({ isOpen, onClose, batch, coursesList, weekDays }) => {
                     </div>
                 </div>
 
-                {/* Trainer Assignments */}
                 <div style={{ marginTop: "20px", borderTop: "1px solid #eee", paddingTop: "20px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px" }}>
                         <h4 style={{ margin: 0 }}>Trainers & Modules</h4>
@@ -390,7 +364,6 @@ const EditBatchModal = ({ isOpen, onClose, batch, coursesList, weekDays }) => {
                                 </div>
                             </div>
 
-                            {/* Module Selection */}
                             {selectedCourse && selectedCourse.modules && (
                                 <div className="modal-field">
                                     <label className="modal-label">Assigned Modules</label>
@@ -444,6 +417,20 @@ const EditBatchModal = ({ isOpen, onClose, batch, coursesList, weekDays }) => {
                 </div>
             </div>
         </div>
+    );
+};
+
+const EditBatchModal = ({ isOpen, onClose, batch, coursesList, weekDays }) => {
+    if (!isOpen || !batch) return null;
+
+    return (
+        <EditBatchForm
+            key={batch._id || batch.id}
+            batch={batch}
+            onClose={onClose}
+            coursesList={coursesList}
+            weekDays={weekDays}
+        />
     );
 };
 

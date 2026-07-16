@@ -25,7 +25,7 @@ const EditCourse = () => {
   const [loading, setLoading] = useState(false);
   const [course, setCourse] = useState(null);
   const [showHistory, setShowHistory] = useState(false);
-  const [lightbox, setLightbox] = useState({ isOpen: false, type: "", src: "" });
+  const [, setLightbox] = useState({ isOpen: false, type: "", src: "" });
   const [hoveredVideo, setHoveredVideo] = useState(null);
 
   // Helper to extract YouTube ID

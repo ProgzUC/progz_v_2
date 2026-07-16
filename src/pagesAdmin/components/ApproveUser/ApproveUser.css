@@ -265,8 +265,9 @@
 .admin-approve-user-page .pagination {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
   margin-top: 30px;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
 }
 
@@ -290,8 +291,13 @@
   border-color: #0FA958;
 }
 
-.admin-approve-user-page .pagination button:hover:not(.active) {
+.admin-approve-user-page .pagination button:hover:not(.active):not(:disabled) {
   background: #f5f5f5;
+}
+
+.admin-approve-user-page .pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
 .admin-approve-user-page .page-arrow {

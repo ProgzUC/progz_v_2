@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { usePendingUsers, useApproveUser, useRejectUser } from "../../../hooks/useAdminUsers";
 import Loader from "../../../components/common/Loader/Loader";
+import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import Swal from "sweetalert2";
 import "./ApproveUser.css";
 
@@ -27,10 +28,11 @@ const ApproveUser = () => {
     return matchesTab && matchesSearch;
   });
 
-  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / itemsPerPage));
+  const activePage = Math.min(currentPage, totalPages);
   const paginatedData = filteredUsers.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
+    (activePage - 1) * itemsPerPage,
+    activePage * itemsPerPage
   );
 
   const changePage = (page) => {
@@ -144,7 +146,7 @@ const ApproveUser = () => {
                 ) : (
                   paginatedData.map((user, index) => (
                     <tr key={user._id || user.id}>
-                      <td className="s-no">{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                      <td className="s-no">{(activePage - 1) * itemsPerPage + index + 1}</td>
                       <td className="user-name">{user.name}</td>
                       <td>{user.source || "-"}</td>
                       {activeTab === "student" && <td>{user.zenCourseName || "-"}</td>}
@@ -196,21 +198,12 @@ const ApproveUser = () => {
 
           {/* Pagination */}
           {filteredUsers.length > itemsPerPage && (
-            <div className="pagination">
-              <button className="page-arrow" onClick={() => changePage(currentPage - 1)}>&lt;</button>
-
-              {[...Array(totalPages)].map((_, i) => (
-                <button
-                  key={i}
-                  className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
-                  onClick={() => changePage(i + 1)}
-                >
-                  {i + 1}
-                </button>
-              ))}
-
-              <button className="page-arrow" onClick={() => changePage(currentPage + 1)}>&gt;</button>
-            </div>
+            <PaginationBar
+              currentPage={activePage}
+              totalPages={totalPages}
+              onPageChange={changePage}
+              className="pagination"
+            />
           )}
         </div>
       </div>

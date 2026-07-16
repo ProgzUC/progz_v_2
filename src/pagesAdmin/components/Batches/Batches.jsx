@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import { useBatches, useDeleteBatch } from "../../../hooks/useBatches";
 import { useCourses } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
+import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import CreateBatchModal from "../EnrollStudent/CreateBatchModal";
 import AddStudentToBatchModal from "./AddStudentToBatchModal";
 import EditBatchModal from "./EditBatchModal"; // Import the add student modal
@@ -114,13 +115,6 @@ const Batches = () => {
             .filter(Boolean)
             .join(", ");
     };
-
-    const getFirstInstructorInitials = (batch) => {
-        if (!batch.trainers || batch.trainers.length === 0) return "-";
-        const name = batch.trainers[0].trainer?.name || "U";
-        return name.charAt(0).toUpperCase();
-    };
-
 
     if (isLoading) return <Loader />;
     if (isError) return <div className="error-message">Failed to load batches.</div>;
@@ -292,29 +286,16 @@ const Batches = () => {
                     </table>
                 </div>
 
-                <div className="batches-pagination">
-                    <button
-                        className="page-nav"
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
-                    >&lt;</button>
-
-                    {[...Array(totalPages)].map((_, i) => (
-                        <button
-                            key={i + 1}
-                            className={`page-num ${currentPage === i + 1 ? "active" : ""}`}
-                            onClick={() => handlePageChange(i + 1)}
-                        >
-                            {i + 1}
-                        </button>
-                    ))}
-
-                    <button
-                        className="page-nav"
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
-                    >&gt;</button>
-                </div>
+                {totalPages > 1 && (
+                    <PaginationBar
+                        currentPage={currentPage}
+                        totalPages={totalPages}
+                        onPageChange={handlePageChange}
+                        className="batches-pagination"
+                        arrowClassName="page-nav"
+                        buttonClassName="page-num"
+                    />
+                )}
             </div>
 
             {/* View More Modal */}

@@ -3,13 +3,11 @@ import "./Header.css";
 import { Link, useLocation } from "react-router-dom";
 import { BiGridAlt, BiBookOpen, BiSearch, BiUserCircle, BiLogOut, BiMenu } from "react-icons/bi";
 
-
-export default function Header({ onLogout }) {
+function HeaderContent({ onLogout }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
 
-    /* ----------------------------- NAVIGATION LINKS ----------------------------- */
     const links = [
         { name: "Home", href: "/student-dashboard/", icon: <BiGridAlt /> },
         { name: "My Courses", href: "/student-dashboard/my-courses", icon: <BiBookOpen /> },
@@ -17,7 +15,6 @@ export default function Header({ onLogout }) {
         { name: "Profile", href: "/student-dashboard/profile", icon: <BiUserCircle /> },
     ];
 
-    // Handle scroll effect
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 20);
@@ -26,13 +23,10 @@ export default function Header({ onLogout }) {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    // Close menu when route changes
     useEffect(() => {
-        setIsMenuOpen(false);
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, [location.pathname]);
+    }, []);
 
-    // Body scroll handling
     useEffect(() => {
         if (isMenuOpen) document.body.classList.add("no-scroll");
         else document.body.classList.remove("no-scroll");
@@ -43,13 +37,11 @@ export default function Header({ onLogout }) {
         <nav className={`student-navbar ${scrolled ? 'scrolled' : ''}`}>
             <div className="student-nav-container">
 
-                {/* 1. BRAND LOGO */}
                 <Link to="/student-dashboard/" className="student-brand">
                     <span className="brand-text">ProgZ</span>
                     <span className="brand-badge">Student</span>
                 </Link>
 
-                {/* 2. MOBILE TOGGLE */}
                 <button
                     className={`student-menu-toggle ${isMenuOpen ? 'active' : ''}`}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -60,7 +52,6 @@ export default function Header({ onLogout }) {
                     <span className="bar"></span>
                 </button>
 
-                {/* 3. NAVIGATION LINKS */}
                 <div className={`student-nav-menu ${isMenuOpen ? 'active' : ''}`}>
                     <div className="nav-items">
                         {links.map((link, index) => (
@@ -69,6 +60,7 @@ export default function Header({ onLogout }) {
                                 to={link.href}
                                 state={link.name === "My Courses" ? { reset: true } : {}}
                                 className={`student-nav-item ${location.pathname === link.href ? 'active' : ''}`}
+                                onClick={() => setIsMenuOpen(false)}
                             >
                                 <span className="nav-icon">{link.icon}</span>
                                 {link.name}
@@ -76,7 +68,6 @@ export default function Header({ onLogout }) {
                         ))}
                     </div>
 
-                    {/* 4. LOGOUT BUTTON */}
                     <div className="nav-actions">
                         <button className="student-logout-btn" onClick={onLogout}>
                             <span className="nav-icon"><BiLogOut /></span>
@@ -85,7 +76,6 @@ export default function Header({ onLogout }) {
                     </div>
                 </div>
 
-                {/* Mobile Overlay */}
                 {isMenuOpen && (
                     <div
                         className="student-nav-overlay"
@@ -95,4 +85,9 @@ export default function Header({ onLogout }) {
             </div>
         </nav>
     );
+}
+
+export default function Header({ onLogout }) {
+    const location = useLocation();
+    return <HeaderContent key={location.pathname} onLogout={onLogout} />;
 }
