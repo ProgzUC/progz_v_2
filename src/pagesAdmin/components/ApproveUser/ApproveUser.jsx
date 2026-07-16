@@ -1,19 +1,26 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { usePendingUsers, useApproveUser, useRejectUser } from "../../../hooks/useAdminUsers";
+import { approveUser, rejectUser } from "../../../api/userApi";
 import Loader from "../../../components/common/Loader/Loader";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import Swal from "sweetalert2";
 import "./ApproveUser.css";
 
+const getUserId = (user) => user._id || user.id;
+
 const ApproveUser = () => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const { data: pendingUsers = [], isLoading, isError, error } = usePendingUsers();
   const [activeTab, setActiveTab] = useState("student");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedIds, setSelectedIds] = useState(() => new Set());
+  const [isBulkProcessing, setIsBulkProcessing] = useState(false);
   const itemsPerPage = 6;
 
   const filteredUsers = pendingUsers.filter(user => {
@@ -36,7 +43,85 @@ const ApproveUser = () => {
   );
 
   const changePage = (page) => {
-    if (page >= 1 && page <= totalPages) setCurrentPage(page);
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+      setSelectedIds(new Set());
+    }
+  };
+
+  const pageIds = paginatedData.map(getUserId);
+  const allPageSelected = pageIds.length > 0 && pageIds.every((id) => selectedIds.has(id));
+  const somePageSelected = pageIds.some((id) => selectedIds.has(id));
+
+  const toggleSelect = (id) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAllPage = () => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (allPageSelected) {
+        pageIds.forEach((id) => next.delete(id));
+      } else {
+        pageIds.forEach((id) => next.add(id));
+      }
+      return next;
+    });
+  };
+
+  const clearSelection = () => setSelectedIds(new Set());
+
+  const runBulkAction = async (action) => {
+    const ids = Array.from(selectedIds);
+    if (ids.length === 0) return;
+
+    const isApprove = action === "approve";
+    const result = await Swal.fire({
+      title: isApprove ? "Approve selected users?" : "Reject selected users?",
+      text: `${ids.length} ${activeTab}(s) will be ${isApprove ? "approved" : "rejected"}.`,
+      icon: isApprove ? "question" : "warning",
+      showCancelButton: true,
+      confirmButtonColor: isApprove ? "#0FA958" : "#d33",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: isApprove ? "Yes, approve all" : "Yes, reject all",
+    });
+
+    if (!result.isConfirmed) return;
+
+    setIsBulkProcessing(true);
+    const outcomes = await Promise.allSettled(
+      ids.map((id) => (isApprove ? approveUser(id) : rejectUser(id)))
+    );
+
+    const successCount = outcomes.filter((o) => o.status === "fulfilled").length;
+    const failCount = outcomes.length - successCount;
+
+    await queryClient.invalidateQueries({ queryKey: ["pendingUsers"] });
+    if (isApprove) {
+      await queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+    }
+
+    setSelectedIds(new Set());
+    setIsBulkProcessing(false);
+
+    if (failCount === 0) {
+      Swal.fire(
+        isApprove ? "Approved!" : "Rejected!",
+        `${successCount} user(s) ${isApprove ? "approved" : "rejected"} successfully.`,
+        "success"
+      );
+    } else {
+      Swal.fire(
+        "Partially completed",
+        `${successCount} succeeded, ${failCount} failed.`,
+        successCount > 0 ? "warning" : "error"
+      );
+    }
   };
 
   const { mutate: approve } = useApproveUser();
@@ -97,6 +182,7 @@ const ApproveUser = () => {
             onChange={(e) => {
               setSearchTerm(e.target.value);
               setCurrentPage(1);
+              setSelectedIds(new Set());
             }}
           />
         </div>
@@ -111,6 +197,7 @@ const ApproveUser = () => {
               onClick={() => {
                 setActiveTab("student");
                 setCurrentPage(1);
+                setSelectedIds(new Set());
               }}
             >
               Students
@@ -120,16 +207,63 @@ const ApproveUser = () => {
               onClick={() => {
                 setActiveTab("trainer");
                 setCurrentPage(1);
+                setSelectedIds(new Set());
               }}
             >
               Trainers
             </button>
           </div>
 
+          {selectedIds.size > 0 && (
+            <div className="bulk-actions-bar">
+              <span className="bulk-selection-count">
+                {selectedIds.size} selected
+              </span>
+              <div className="bulk-actions-buttons">
+                <button
+                  type="button"
+                  className="bulk-btn bulk-approve-btn"
+                  disabled={isBulkProcessing}
+                  onClick={() => runBulkAction("approve")}
+                >
+                  Approve Selected
+                </button>
+                <button
+                  type="button"
+                  className="bulk-btn bulk-reject-btn"
+                  disabled={isBulkProcessing}
+                  onClick={() => runBulkAction("reject")}
+                >
+                  Reject Selected
+                </button>
+                <button
+                  type="button"
+                  className="bulk-btn bulk-clear-btn"
+                  disabled={isBulkProcessing}
+                  onClick={clearSelection}
+                >
+                  Clear
+                </button>
+              </div>
+            </div>
+          )}
+
           <div className="table-responsive">
             <table className="user-table">
               <thead>
                 <tr>
+                  <th className="select-col">
+                    <input
+                      type="checkbox"
+                      checked={allPageSelected}
+                      ref={(el) => {
+                        if (el) el.indeterminate = somePageSelected && !allPageSelected;
+                      }}
+                      onChange={toggleSelectAllPage}
+                      disabled={paginatedData.length === 0 || isBulkProcessing}
+                      aria-label="Select all on this page"
+                    />
+                  </th>
                   <th className="s-no">S.No</th>
                   <th>Name</th>
                   <th>Source</th>
@@ -141,11 +275,24 @@ const ApproveUser = () => {
               <tbody>
                 {paginatedData.length === 0 ? (
                   <tr>
-                    <td colSpan={activeTab === "student" ? "6" : "5"} style={{ textAlign: "center" }}>No pending {activeTab}s found</td>
+                    <td colSpan={activeTab === "student" ? "7" : "6"} style={{ textAlign: "center" }}>No pending {activeTab}s found</td>
                   </tr>
                 ) : (
-                  paginatedData.map((user, index) => (
-                    <tr key={user._id || user.id}>
+                  paginatedData.map((user, index) => {
+                    const userId = getUserId(user);
+                    const isSelected = selectedIds.has(userId);
+
+                    return (
+                    <tr key={userId} className={isSelected ? "row-selected" : ""}>
+                      <td className="select-col">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleSelect(userId)}
+                          disabled={isBulkProcessing}
+                          aria-label={`Select ${user.name}`}
+                        />
+                      </td>
                       <td className="s-no">{(activePage - 1) * itemsPerPage + index + 1}</td>
                       <td className="user-name">{user.name}</td>
                       <td>{user.source || "-"}</td>
@@ -190,7 +337,8 @@ const ApproveUser = () => {
                         </button>
                       </td>
                     </tr>
-                  ))
+                    );
+                  })
                 )}
               </tbody>
             </table>
