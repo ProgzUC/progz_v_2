@@ -11,6 +11,8 @@ import SortableList from "../../../../components/common/Sortable/SortableList";
 import SortableItem from "../../../../components/common/Sortable/SortableItem";
 import FileDropZone from "../../../../components/common/FileDropZone/FileDropZone";
 import ModuleNavigator from "../../../../components/common/ModuleNavigator/ModuleNavigator";
+import CoursePreviewModal from "../../../../components/common/CoursePreviewModal/CoursePreviewModal";
+import RichTextEditor from "../../../../components/common/RichTextEditor/RichTextEditor";
 import { COURSE_FILE_ACCEPT } from "../../../../utils/fileDrop";
 import {
   createEmptyModule,
@@ -53,6 +55,7 @@ const emptyState = {
 
 const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [errors, setErrors] = useState({});
   const [lightbox, setLightbox] = useState({ isOpen: false, type: "", src: "" });
   const [hoveredVideo, setHoveredVideo] = useState(null);
@@ -232,8 +235,16 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   };
 
   // =================
-  // SUBMIT HANDLER
+  // PREVIEW + SUBMIT
   // =================
+
+  const handlePreview = () => {
+    if (!validateForm()) {
+      showWarning("Please fill all required fields correctly.");
+      return;
+    }
+    setShowPreview(true);
+  };
 
   const handleSubmit = async () => {
     if (!validateForm()) {
@@ -305,6 +316,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
       const mutationOptions = {
         onSuccess: (data) => {
           showSuccess(isEditMode ? "Course updated successfully!" : "Course created successfully!");
+          setShowPreview(false);
           onSave(data);
           setLoading(false);
         },
@@ -623,9 +635,10 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                           </div>
 
                                           <label>Learning Notes</label>
-                                          <textarea
+                                          <RichTextEditor
                                             value={section.notes}
-                                            onChange={(e) => updateSectionField(mIndex, sIndex, "notes", e.target.value)}
+                                            onChange={(html) => updateSectionField(mIndex, sIndex, "notes", html)}
+                                            placeholder="Add learning notes with formatting..."
                                           />
 
                                           <label>Challenge File</label>
@@ -769,13 +782,23 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
         </SortableList>
 
         <div className="footer-actions">
-          <button className="cancel-btn" onClick={onBack}>Cancel</button>
-          <button className="submit-btn" onClick={handleSubmit}>
-            {isEditMode ? "Save Changes" : "Create Course"}
+          <button className="cancel-btn" onClick={onBack} disabled={loading}>Cancel</button>
+          <button className="submit-btn" onClick={handlePreview} disabled={loading}>
+            {isEditMode ? "Preview & Save" : "Preview & Create"}
           </button>
         </div>
 
       </div>
+
+      {showPreview && (
+        <CoursePreviewModal
+          course={course}
+          isEditMode={isEditMode}
+          loading={loading}
+          onClose={() => setShowPreview(false)}
+          onConfirmSave={handleSubmit}
+        />
+      )}
 
       {/* LIGHTBOX MODAL */}
       {lightbox.isOpen && (

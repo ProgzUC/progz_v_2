@@ -1,0 +1,127 @@
+.rich-text-editor {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.rich-text-editor:focus-within {
+  border-color: #2a7d38;
+  box-shadow: 0 0 0 3px rgba(42, 125, 56, 0.2);
+}
+
+.rich-text-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #e5e7eb;
+  background: #f3f4f6;
+  flex-wrap: wrap;
+}
+
+.rich-text-editor .rich-text-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  padding: 0;
+  margin: 0;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #374151;
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  box-shadow: none;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.rich-text-editor .rich-text-toolbar-btn:hover {
+  background: #e5e7eb;
+  color: #111827;
+  border-color: #9ca3af;
+}
+
+.rich-text-editor .rich-text-toolbar-btn:focus,
+.rich-text-editor .rich-text-toolbar-btn:focus-visible {
+  outline: none;
+  border-color: #2a7d38;
+  box-shadow: 0 0 0 2px rgba(42, 125, 56, 0.2);
+}
+
+.rich-text-editor .rich-text-toolbar-btn i {
+  display: block;
+  font-size: 16px;
+  line-height: 1;
+  color: inherit;
+  pointer-events: none;
+}
+
+.rich-text-toolbar-divider {
+  width: 1px;
+  height: 22px;
+  background: #d1d5db;
+  margin: 0 2px;
+  flex-shrink: 0;
+}
+
+.rich-text-contenteditable {
+  min-height: 120px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #111827;
+  background: #fff;
+  outline: none;
+  width: 100%;
+  resize: vertical;
+}
+
+.rich-text-contenteditable:empty::before {
+  content: attr(data-placeholder);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.rich-text-contenteditable ul,
+.rich-text-content ul {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+  list-style-position: outside;
+}
+
+.rich-text-contenteditable ol,
+.rich-text-content ol {
+  margin: 0.5em 0;
+  padding-left: 1.5em;
+  list-style-position: outside;
+}
+
+.rich-text-contenteditable li,
+.rich-text-content li {
+  margin: 0.25em 0;
+}
+
+.rich-text-contenteditable a,
+.rich-text-content a {
+  color: #2a7d38;
+  text-decoration: underline;
+}
+
+.rich-text-contenteditable p,
+.rich-text-content p {
+  margin: 0 0 0.5em;
+}
+
+.rich-text-contenteditable p:last-child,
+.rich-text-content p:last-child {
+  margin-bottom: 0;
+}

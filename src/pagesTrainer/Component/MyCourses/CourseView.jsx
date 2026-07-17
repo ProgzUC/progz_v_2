@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FaBook } from "react-icons/fa";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import "./CourseView.css";
+import RichTextContent from "../../../components/common/RichTextEditor/RichTextContent";
+import { isHtmlEmpty } from "../../../components/common/RichTextEditor/richTextUtils";
 import { useCourse } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
 
@@ -142,10 +144,10 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                           </div>
                           {expandedSection === idx && (
                             <div className="cv-section-details">
-                              {sec.learningMaterialNotes && (
+                              {!isHtmlEmpty(sec.learningMaterialNotes) && (
                                 <div className="cv-detail-block">
                                   <h4>Notes:</h4>
-                                  <p>{sec.learningMaterialNotes}</p>
+                                  <RichTextContent html={sec.learningMaterialNotes} />
                                 </div>
                               )}
                               {sec.learningMaterialFile && sec.learningMaterialFile.length > 0 && (
@@ -209,7 +211,7 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                                   )}
                                 </div>
                               )}
-                              {!sec.learningMaterialNotes && (!sec.learningMaterialFile || sec.learningMaterialFile.length === 0) && (!sec.videoReferences || sec.videoReferences.length === 0) && !sec.codeChallengeInstructions && (!sec.codeChallengeFile || sec.codeChallengeFile.length === 0) && (
+                              {isHtmlEmpty(sec.learningMaterialNotes) && (!sec.learningMaterialFile || sec.learningMaterialFile.length === 0) && (!sec.videoReferences || sec.videoReferences.length === 0) && !sec.codeChallengeInstructions && (!sec.codeChallengeFile || sec.codeChallengeFile.length === 0) && (
                                 <div className="cv-detail-empty">No content in this section.</div>
                               )}
                             </div>
@@ -286,10 +288,10 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                       {expandedSection === idx && (
                         <div className="cv-section-details">
                           {/* Learning Material Notes */}
-                          {sec.learningMaterialNotes && (
+                          {!isHtmlEmpty(sec.learningMaterialNotes) && (
                             <div className="cv-detail-block">
                               <h4>Notes:</h4>
-                              <p>{sec.learningMaterialNotes}</p>
+                              <RichTextContent html={sec.learningMaterialNotes} />
                             </div>
                           )}
 
@@ -362,7 +364,7 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                           )}
 
                           {/* Empty State if nothing */}
-                          {!sec.learningMaterialNotes && (!sec.learningMaterialFile || sec.learningMaterialFile.length === 0) && (!sec.videoReferences || sec.videoReferences.length === 0) && !sec.codeChallengeInstructions && (!sec.codeChallengeFile || sec.codeChallengeFile.length === 0) && (
+                          {isHtmlEmpty(sec.learningMaterialNotes) && (!sec.learningMaterialFile || sec.learningMaterialFile.length === 0) && (!sec.videoReferences || sec.videoReferences.length === 0) && !sec.codeChallengeInstructions && (!sec.codeChallengeFile || sec.codeChallengeFile.length === 0) && (
                             <div className="cv-detail-empty">No content in this section.</div>
                           )}
                         </div>

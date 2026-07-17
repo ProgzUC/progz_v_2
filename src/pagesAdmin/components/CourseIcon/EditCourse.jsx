@@ -14,6 +14,7 @@ import Loader from "../../../components/common/Loader/Loader";
 import FileDropZone from "../../../components/common/FileDropZone/FileDropZone";
 import { COURSE_FILE_ACCEPT } from "../../../utils/fileDrop";
 import VersionHistory from "./VersionHistory";
+import RichTextEditor from "../../../components/common/RichTextEditor/RichTextEditor";
 
 const EditCourse = () => {
   const navigate = useNavigate();
@@ -668,16 +669,17 @@ const EditCourse = () => {
                                             <label>
                                               Learning Notes
                                             </label>
-                                            <textarea
+                                            <RichTextEditor
                                               value={section.notes}
-                                              onChange={(e) =>
+                                              onChange={(html) =>
                                                 updateSectionField(
                                                   mIndex,
                                                   sIndex,
                                                   "notes",
-                                                  e.target.value
+                                                  html
                                                 )
                                               }
+                                              placeholder="Add learning notes with formatting..."
                                             />
 
                                             <label>

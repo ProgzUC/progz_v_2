@@ -1,5 +1,7 @@
 import React from "react";
 import "./introduction.css";
+import RichTextContent from "../../../components/common/RichTextEditor/RichTextContent";
+import { isHtmlEmpty } from "../../../components/common/RichTextEditor/richTextUtils";
 
 const FileItem = ({ name, url }) => {
   const handleDownload = async () => {
@@ -112,7 +114,7 @@ const Introduction = ({ sectionData, courseName, moduleName }) => {
   } = sectionData;
 
   const displayTitle = sectionName || title || "Lesson";
-  const displayNotes = learningMaterialNotes || notes || "No description available.";
+  const notesHtml = learningMaterialNotes || notes || "";
   const displayChallenge = codeChallengeInstructions || "No instructions provided.";
 
   // Handle inconsistent naming (API vs Frontend conventions)
@@ -154,9 +156,11 @@ const Introduction = ({ sectionData, courseName, moduleName }) => {
           <h2>Learning Materials</h2>
         </div>
 
-        <p className="section-description">
-          {displayNotes}
-        </p>
+        {isHtmlEmpty(notesHtml) ? (
+          <p className="section-description">No description available.</p>
+        ) : (
+          <RichTextContent html={notesHtml} className="section-description" />
+        )}
 
         <div className="file-row">
           {materials.length > 0 ? materials.map((file, index) => (

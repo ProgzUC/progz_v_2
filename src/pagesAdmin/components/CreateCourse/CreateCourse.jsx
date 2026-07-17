@@ -11,6 +11,8 @@ import SortableList from "../../../components/common/Sortable/SortableList";
 import SortableItem from "../../../components/common/Sortable/SortableItem";
 import FileDropZone from "../../../components/common/FileDropZone/FileDropZone";
 import ModuleNavigator from "../../../components/common/ModuleNavigator/ModuleNavigator";
+import CoursePreviewModal from "../../../components/common/CoursePreviewModal/CoursePreviewModal";
+import RichTextEditor from "../../../components/common/RichTextEditor/RichTextEditor";
 import { COURSE_FILE_ACCEPT } from "../../../utils/fileDrop";
 import {
   createEmptyModule,
@@ -20,6 +22,7 @@ import {
 const CreateCourse = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
   const [errors, setErrors] = useState({});
   const [lightbox, setLightbox] = useState({ isOpen: false, type: "", src: "" });
   const [hoveredVideo, setHoveredVideo] = useState(null); // { mIndex, sIndex, vIndex }
@@ -200,8 +203,16 @@ const CreateCourse = () => {
   };
 
   // =================
-  // SUBMIT
+  // PREVIEW + SUBMIT
   // =================
+
+  const handlePreview = () => {
+    if (!validateForm()) {
+      showWarning("Please fill all required fields correctly.");
+      return;
+    }
+    setShowPreview(true);
+  };
 
   const handleSubmit = async () => {
     if (!validateForm()) {
@@ -270,6 +281,7 @@ const CreateCourse = () => {
       await api.post("/courses", payload);
 
       showSuccess("Course created successfully!");
+      setShowPreview(false);
       navigate("/admin/courses");
     } catch (err) {
       console.error(err);
@@ -603,16 +615,17 @@ const CreateCourse = () => {
                                             <label>
                                               Learning Notes
                                             </label>
-                                            <textarea
+                                            <RichTextEditor
                                               value={section.notes}
-                                              onChange={(e) =>
+                                              onChange={(html) =>
                                                 updateSectionField(
                                                   mIndex,
                                                   sIndex,
                                                   "notes",
-                                                  e.target.value
+                                                  html
                                                 )
                                               }
+                                              placeholder="Add learning notes with formatting..."
                                             />
 
                                             <label>
@@ -798,15 +811,26 @@ const CreateCourse = () => {
           <button
             className="cancel-btn"
             onClick={() => navigate("/admin/courses")}
+            disabled={loading}
           >
             Cancel
           </button>
 
-          <button className="submit-btn" onClick={handleSubmit} disabled={loading}>
-            {loading ? "Creating..." : "Create Course"}
+          <button className="submit-btn" onClick={handlePreview} disabled={loading}>
+            Preview & Create
           </button>
         </div>
       </div>
+
+      {showPreview && (
+        <CoursePreviewModal
+          course={course}
+          loading={loading}
+          onClose={() => setShowPreview(false)}
+          onConfirmSave={handleSubmit}
+        />
+      )}
+
       {/* LIGHTBOX MODAL */}
       {lightbox.isOpen && (
         <div className="lightbox-overlay" onClick={closeLightbox}>
