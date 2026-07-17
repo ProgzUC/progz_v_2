@@ -711,18 +711,17 @@ const CreateCourse = () => {
                                             <label>
                                               Challenge Instructions
                                             </label>
-                                            <textarea
-                                              value={
-                                                section.challengeInstructions
-                                              }
-                                              onChange={(e) =>
+                                            <RichTextEditor
+                                              value={section.challengeInstructions}
+                                              onChange={(html) =>
                                                 updateSectionField(
                                                   mIndex,
                                                   sIndex,
                                                   "challengeInstructions",
-                                                  e.target.value
+                                                  html
                                                 )
                                               }
+                                              placeholder="Add challenge instructions with formatting..."
                                             />
 
                                             <div className="video-add-row">

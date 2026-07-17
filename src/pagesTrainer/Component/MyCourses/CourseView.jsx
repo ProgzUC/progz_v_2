@@ -186,10 +186,12 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                                   </ul>
                                 </div>
                               )}
-                              {(sec.codeChallengeInstructions || (sec.codeChallengeFile && sec.codeChallengeFile.length > 0)) && (
+                              {(!isHtmlEmpty(sec.codeChallengeInstructions) || (sec.codeChallengeFile && sec.codeChallengeFile.length > 0)) && (
                                 <div className="cv-detail-block challenge-block">
                                   <h4>Code Challenge:</h4>
-                                  {sec.codeChallengeInstructions && <p>{sec.codeChallengeInstructions}</p>}
+                                  {!isHtmlEmpty(sec.codeChallengeInstructions) && (
+                                    <RichTextContent html={sec.codeChallengeInstructions} />
+                                  )}
                                   {sec.codeChallengeFile && sec.codeChallengeFile.length > 0 && (
                                     <ul className="cv-file-list">
                                       {sec.codeChallengeFile.map((file, i) => (
@@ -211,7 +213,7 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                                   )}
                                 </div>
                               )}
-                              {isHtmlEmpty(sec.learningMaterialNotes) && (!sec.learningMaterialFile || sec.learningMaterialFile.length === 0) && (!sec.videoReferences || sec.videoReferences.length === 0) && !sec.codeChallengeInstructions && (!sec.codeChallengeFile || sec.codeChallengeFile.length === 0) && (
+                              {isHtmlEmpty(sec.learningMaterialNotes) && (!sec.learningMaterialFile || sec.learningMaterialFile.length === 0) && (!sec.videoReferences || sec.videoReferences.length === 0) && isHtmlEmpty(sec.codeChallengeInstructions) && (!sec.codeChallengeFile || sec.codeChallengeFile.length === 0) && (
                                 <div className="cv-detail-empty">No content in this section.</div>
                               )}
                             </div>
@@ -336,10 +338,12 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                           )}
 
                           {/* Code Challenge */}
-                          {(sec.codeChallengeInstructions || (sec.codeChallengeFile && sec.codeChallengeFile.length > 0)) && (
+                          {(!isHtmlEmpty(sec.codeChallengeInstructions) || (sec.codeChallengeFile && sec.codeChallengeFile.length > 0)) && (
                             <div className="cv-detail-block challenge-block">
                               <h4>Code Challenge:</h4>
-                              {sec.codeChallengeInstructions && <p>{sec.codeChallengeInstructions}</p>}
+                              {!isHtmlEmpty(sec.codeChallengeInstructions) && (
+                                <RichTextContent html={sec.codeChallengeInstructions} />
+                              )}
 
                               {sec.codeChallengeFile && sec.codeChallengeFile.length > 0 && (
                                 <ul className="cv-file-list">
@@ -364,7 +368,7 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                           )}
 
                           {/* Empty State if nothing */}
-                          {isHtmlEmpty(sec.learningMaterialNotes) && (!sec.learningMaterialFile || sec.learningMaterialFile.length === 0) && (!sec.videoReferences || sec.videoReferences.length === 0) && !sec.codeChallengeInstructions && (!sec.codeChallengeFile || sec.codeChallengeFile.length === 0) && (
+                          {isHtmlEmpty(sec.learningMaterialNotes) && (!sec.learningMaterialFile || sec.learningMaterialFile.length === 0) && (!sec.videoReferences || sec.videoReferences.length === 0) && isHtmlEmpty(sec.codeChallengeInstructions) && (!sec.codeChallengeFile || sec.codeChallengeFile.length === 0) && (
                             <div className="cv-detail-empty">No content in this section.</div>
                           )}
                         </div>

@@ -115,7 +115,7 @@ const Introduction = ({ sectionData, courseName, moduleName }) => {
 
   const displayTitle = sectionName || title || "Lesson";
   const notesHtml = learningMaterialNotes || notes || "";
-  const displayChallenge = codeChallengeInstructions || "No instructions provided.";
+  const challengeHtml = codeChallengeInstructions || "";
 
   // Handle inconsistent naming (API vs Frontend conventions)
   const materials = learningMaterialFiles.length > 0 ? learningMaterialFiles : learningMaterialFile;
@@ -191,9 +191,11 @@ const Introduction = ({ sectionData, courseName, moduleName }) => {
           <h2>Code Challenge</h2>
         </div>
 
-        <p className="section-description">
-          {displayChallenge}
-        </p>
+        {isHtmlEmpty(challengeHtml) ? (
+          <p className="section-description">No instructions provided.</p>
+        ) : (
+          <RichTextContent html={challengeHtml} className="section-description" />
+        )}
 
         <div className="file-row">
           {challengeFiles.length > 0 ? challengeFiles.map((file, index) => (

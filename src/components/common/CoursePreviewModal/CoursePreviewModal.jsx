@@ -173,10 +173,10 @@ const CoursePreviewModal = ({
                           </div>
                         )}
 
-                        {sec.challengeInstructions && (
+                        {!isHtmlEmpty(sec.challengeInstructions) && (
                           <div className="course-preview-block">
                             <h4>Challenge Instructions</h4>
-                            <p>{sec.challengeInstructions}</p>
+                            <RichTextContent html={sec.challengeInstructions} />
                           </div>
                         )}
 
@@ -219,7 +219,7 @@ const CoursePreviewModal = ({
 
                         {isHtmlEmpty(sec.notes) &&
                           materials.length === 0 &&
-                          !sec.challengeInstructions &&
+                          isHtmlEmpty(sec.challengeInstructions) &&
                           challenges.length === 0 &&
                           !(sec.videos || []).length && (
                             <p className="course-preview-empty">No content added in this section.</p>
