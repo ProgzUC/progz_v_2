@@ -10,35 +10,8 @@ import TrainerApp from "./pagesTrainer/TrainerApp"
 import StudentApp from "./pagesStudent/StudentApp"
 import AdminApp from "./pagesAdmin/AdminApp"
 import PrivacyPolicy from "./pagesAuth/Privacy"
+import { getAuthData } from "./utils/authStorage"
 
-
-const parseStoredUser = (storage) => {
-  try {
-    const raw = storage.getItem("user");
-    return raw ? JSON.parse(raw) : null;
-  } catch {
-    storage.removeItem("user");
-    return null;
-  }
-};
-
-const getAuthData = () => {
-  const localToken = localStorage.getItem("accessToken");
-  const sessionToken = sessionStorage.getItem("accessToken");
-  const localUser = parseStoredUser(localStorage);
-  const sessionUser = parseStoredUser(sessionStorage);
-
-  if (sessionToken && sessionUser) {
-    return { token: sessionToken, user: sessionUser };
-  }
-  if (localToken && localUser) {
-    return { token: localToken, user: localUser };
-  }
-
-  const token = localToken || sessionToken;
-  const user = localUser || sessionUser;
-  return { token, user };
-};
 
 const Unauthorized = () => (
   <div style={{ padding: "40px", textAlign: "center", fontFamily: "Inter, sans-serif" }}>

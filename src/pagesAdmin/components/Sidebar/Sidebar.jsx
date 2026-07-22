@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { triggerManualSync } from "../../../api/userApi";
+import { logout } from "../../../api/authApi";
 import Swal from "sweetalert2";
 import "./Sidebar.css";
 
@@ -20,8 +21,8 @@ const Sidebar = () => {
       confirmButtonText: "Yes, logout!"
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.clear(); // Clear all user data/tokens
-        navigate("/", { replace: true }); // Redirect to login/home
+        logout();
+        navigate("/", { replace: true });
       }
     });
   };

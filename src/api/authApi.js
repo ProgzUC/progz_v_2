@@ -1,4 +1,9 @@
 import axiosInstance from './axiosInstance';
+import {
+  saveAuthSession,
+  clearAuthSession,
+  setAccessToken,
+} from '../utils/authStorage';
 
 /**
  * Signup API
@@ -12,22 +17,18 @@ export async function signup(payload) {
 /**
  * Login API
  * payload: { email, password }
- * stores accessToken/refreshToken in localStorage if returned by backend
+ * stores accessToken/refreshToken in cookies
  */
 export async function login(payload, rememberMe = false) {
     const res = await axiosInstance.post("/auth/login", payload);
     const data = res.data || {};
 
-    const storage = rememberMe ? localStorage : sessionStorage;
-    const otherStorage = rememberMe ? sessionStorage : localStorage;
-
-    otherStorage.removeItem("accessToken");
-    otherStorage.removeItem("refreshToken");
-    otherStorage.removeItem("user");
-
-    if (data.accessToken) storage.setItem("accessToken", data.accessToken);
-    if (data.refreshToken) storage.setItem("refreshToken", data.refreshToken);
-    if (data.user) storage.setItem("user", JSON.stringify(data.user));
+    saveAuthSession({
+        accessToken: data.accessToken,
+        refreshToken: data.refreshToken,
+        user: data.user,
+        rememberMe,
+    });
 
     return data;
 }
@@ -51,20 +52,15 @@ export async function resetPassword(payload, token) {
 }
 
 /**
- * Logout: clears tokens from localStorage
+ * Logout: clears auth cookies and legacy storage
  */
 export function logout() {
-    localStorage.clear();
-    sessionStorage.clear();
+    clearAuthSession();
 }
 
 /**
- * Utility to manually set/clear Authorization header (useful for SSR/tests)
+ * Utility to manually set/clear access token cookie
  */
 export function setAuthToken(token) {
-    if (token) {
-        localStorage.setItem('accessToken', token);
-    } else {
-        localStorage.removeItem('accessToken');
-    }
+    setAccessToken(token);
 }
