@@ -590,7 +590,7 @@ paths:
   /auth/signup:
     post:
       tags: [Auth]
-      summary: Signup (legacy — prefer /users/register)
+      summary: Signup (legacy — prefer /auth/user/register)
       security: []
       requestBody:
         required: true
@@ -644,11 +644,10 @@ paths:
         "400":
           description: Invalid or expired token
 
-  # ==================== USERS ====================
-  /users/register:
+  /auth/user/register:
     post:
-      tags: [Users]
-      summary: Register (creates a pending approval request)
+      tags: [Auth]
+      summary: User Register (creates a pending approval request)
       description: |
         Public signup endpoint used by the student/trainer registration form.
         Account stays **pending** until an admin approves via `POST /users/approve/{id}`.
@@ -662,6 +661,7 @@ paths:
             example:
               name: John Doe
               email: john@example.com
+              password: secret123
               phone: "9876543210"
               altPhone: "9123456780"
               dob: "2000-01-15"
@@ -692,6 +692,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  # ==================== USERS ====================
   /users/admin-create:
     post:
       tags: [Users]

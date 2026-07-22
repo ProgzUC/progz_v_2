@@ -6,7 +6,7 @@ info:
 
     **Auth:** Use `POST /auth/login` — token auto-saves in Swagger UI / Postman (Bearer JWT, not cookies).
 
-    **Register:** `POST /users/register` with `"role": "trainer"` only.
+    **Register:** `POST /auth/user/register` with `"role": "trainer"` only.
   version: 1.0.0
 
 servers:
@@ -17,7 +17,6 @@ servers:
 
 tags:
   - name: Auth
-  - name: Registration
   - name: Trainer
   - name: Courses
   - name: Class Session
@@ -150,10 +149,10 @@ paths:
       responses:
         "200": { description: Reset email sent }
 
-  /users/register:
+  /auth/user/register:
     post:
-      tags: [Registration]
-      summary: Register as Trainer (pending approval)
+      tags: [Auth]
+      summary: User Register as Trainer (pending approval)
       description: Creates a trainer registration request. Admin must approve before login.
       security: []
       requestBody:
