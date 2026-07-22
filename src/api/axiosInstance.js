@@ -5,13 +5,12 @@ const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   (import.meta.env.DEV
     ? "http://localhost:5002/api"
-    : "https://progz-backend.onrender.com/api");
+    : "https://progz-backend.onrender.com/api"); // set VITE_API_BASE_URL for Linode in production
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
   timeout: 60000,
-  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use((config) => {

@@ -19,7 +19,7 @@ export const triggerManualSync = () =>
     axiosInstance.post("/sync/manual").then((res) => res.data);
 
 export const registerUser = (payload) =>
-    axiosInstance.post("/users/register", payload).then((res) => res.data);
+    axiosInstance.post("/auth/user/register", payload).then((res) => res.data);
 
 export const adminCreateUser = (payload) =>
     axiosInstance.post("/users/admin-create", payload).then((res) => res.data);
