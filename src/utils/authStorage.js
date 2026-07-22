@@ -1,141 +1,93 @@
-const TOKEN_KEYS = {
-  accessToken: "accessToken",
-  refreshToken: "refreshToken",
-};
-
+const TOKEN_KEY = "accessToken";
 const USER_KEY = "user";
 
-const REMEMBER_DAYS = 30;
+const SENSITIVE_USER_FIELDS = new Set([
+  "password",
+  "confirmPassword",
+  "phone",
+  "altPhone",
+  "address",
+  "dob",
+  "education",
+  "university",
+  "profession",
+  "experience",
+  "employmentStatus",
+  "skills",
+  "profileImage",
+  "refreshToken",
+  "accessToken",
+]);
 
-const setCookie = (name, value, maxAgeDays) => {
-  if (value == null || value === "") return;
+const sanitizeUser = (user) => {
+  if (!user || typeof user !== "object") return null;
 
-  const encoded = encodeURIComponent(value);
-  const secure = window.location.protocol === "https:" ? "; Secure" : "";
-  const sameSite = "; SameSite=Lax";
+  const safe = {
+    _id: user._id || user.id || null,
+    role: user.role || null,
+    name: user.name || null,
+  };
 
-  if (maxAgeDays) {
-    const maxAge = maxAgeDays * 24 * 60 * 60;
-    document.cookie = `${name}=${encoded}; path=/; Max-Age=${maxAge}${sameSite}${secure}`;
-    return;
-  }
-
-  document.cookie = `${name}=${encoded}; path=/${sameSite}${secure}`;
+  return safe._id && safe.role ? safe : null;
 };
 
-const getCookie = (name) => {
-  const prefix = `${name}=`;
-  const cookies = document.cookie ? document.cookie.split("; ") : [];
-
-  for (const cookie of cookies) {
-    if (cookie.startsWith(prefix)) {
-      return decodeURIComponent(cookie.slice(prefix.length));
-    }
-  }
-
-  return null;
-};
-
-const deleteCookie = (name) => {
-  document.cookie = `${name}=; path=/; Max-Age=0; SameSite=Lax`;
-};
+const getStorage = (rememberMe) => (rememberMe ? localStorage : sessionStorage);
 
 const parseUser = (raw) => {
   if (!raw) return null;
   try {
-    return JSON.parse(raw);
+    return sanitizeUser(JSON.parse(raw));
   } catch {
     return null;
   }
 };
 
-const readLegacyToken = (key) =>
-  sessionStorage.getItem(key) ||
-  localStorage.getItem(key) ||
-  null;
-
-const readLegacyUser = () =>
-  parseUser(sessionStorage.getItem(USER_KEY)) ||
-  parseUser(localStorage.getItem(USER_KEY));
-
-const clearLegacyStorage = () => {
-  [TOKEN_KEYS.accessToken, TOKEN_KEYS.refreshToken, USER_KEY].forEach((key) => {
-    sessionStorage.removeItem(key);
-    localStorage.removeItem(key);
+const clearLegacyCookies = () => {
+  ["accessToken", "refreshToken", "user"].forEach((name) => {
+    document.cookie = `${name}=; path=/; Max-Age=0; SameSite=Lax`;
   });
 };
 
-export const getAccessToken = () => {
-  const cookieToken = getCookie(TOKEN_KEYS.accessToken);
-  if (cookieToken) return cookieToken;
-
-  const legacyToken = readLegacyToken(TOKEN_KEYS.accessToken);
-  if (legacyToken) {
-    setCookie(TOKEN_KEYS.accessToken, legacyToken, REMEMBER_DAYS);
-    sessionStorage.removeItem(TOKEN_KEYS.accessToken);
-    localStorage.removeItem(TOKEN_KEYS.accessToken);
-  }
-
-  return legacyToken;
+const clearAllStorage = () => {
+  [TOKEN_KEY, USER_KEY, "refreshToken"].forEach((key) => {
+    sessionStorage.removeItem(key);
+    localStorage.removeItem(key);
+  });
+  clearLegacyCookies();
 };
 
-export const getRefreshToken = () => {
-  const cookieToken = getCookie(TOKEN_KEYS.refreshToken);
-  if (cookieToken) return cookieToken;
+export const getAccessToken = () =>
+  sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY) || null;
 
-  const legacyToken = readLegacyToken(TOKEN_KEYS.refreshToken);
-  if (legacyToken) {
-    setCookie(TOKEN_KEYS.refreshToken, legacyToken, REMEMBER_DAYS);
-    sessionStorage.removeItem(TOKEN_KEYS.refreshToken);
-    localStorage.removeItem(TOKEN_KEYS.refreshToken);
-  }
+export const getStoredUser = () =>
+  parseUser(sessionStorage.getItem(USER_KEY)) ||
+  parseUser(localStorage.getItem(USER_KEY));
 
-  return legacyToken;
-};
-
-export const getStoredUser = () => {
-  const cookieUser = parseUser(getCookie(USER_KEY));
-  if (cookieUser) return cookieUser;
-
-  const legacyUser = readLegacyUser();
-  if (legacyUser) {
-    setCookie(USER_KEY, JSON.stringify(legacyUser), REMEMBER_DAYS);
-    sessionStorage.removeItem(USER_KEY);
-    localStorage.removeItem(USER_KEY);
-  }
-
-  return legacyUser;
-};
-
-export const saveAuthSession = ({ accessToken, refreshToken, user, rememberMe = true }) => {
+export const saveAuthSession = ({ accessToken, user, rememberMe = false }) => {
   clearAuthSession();
 
-  const persistDays = rememberMe ? REMEMBER_DAYS : null;
+  const storage = getStorage(rememberMe);
 
-  if (accessToken) setCookie(TOKEN_KEYS.accessToken, accessToken, persistDays);
-  if (refreshToken) setCookie(TOKEN_KEYS.refreshToken, refreshToken, persistDays);
-  if (user) setCookie(USER_KEY, JSON.stringify(user), persistDays);
+  if (accessToken) storage.setItem(TOKEN_KEY, accessToken);
+
+  const safeUser = sanitizeUser(user);
+  if (safeUser) storage.setItem(USER_KEY, JSON.stringify(safeUser));
 };
 
 export const clearAuthSession = () => {
-  deleteCookie(TOKEN_KEYS.accessToken);
-  deleteCookie(TOKEN_KEYS.refreshToken);
-  deleteCookie(USER_KEY);
-  clearLegacyStorage();
+  clearAllStorage();
 };
 
 export const getAuthData = () => ({
   token: getAccessToken(),
   user: getStoredUser(),
-  refreshToken: getRefreshToken(),
 });
 
-export const setAccessToken = (token) => {
+export const setAccessToken = (token, rememberMe = true) => {
+  sessionStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(TOKEN_KEY);
+
   if (token) {
-    setCookie(TOKEN_KEYS.accessToken, token, REMEMBER_DAYS);
-    return;
+    getStorage(rememberMe).setItem(TOKEN_KEY, token);
   }
-  deleteCookie(TOKEN_KEYS.accessToken);
-  sessionStorage.removeItem(TOKEN_KEYS.accessToken);
-  localStorage.removeItem(TOKEN_KEYS.accessToken);
 };

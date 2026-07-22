@@ -17,7 +17,8 @@ export async function signup(payload) {
 /**
  * Login API
  * payload: { email, password }
- * stores accessToken/refreshToken in cookies
+ * Stores only access token + minimal user info in session/local storage.
+ * Refresh tokens and full profile data are not persisted on the client.
  */
 export async function login(payload, rememberMe = false) {
     const res = await axiosInstance.post("/auth/login", payload);
@@ -25,7 +26,6 @@ export async function login(payload, rememberMe = false) {
 
     saveAuthSession({
         accessToken: data.accessToken,
-        refreshToken: data.refreshToken,
         user: data.user,
         rememberMe,
     });
@@ -52,14 +52,14 @@ export async function resetPassword(payload, token) {
 }
 
 /**
- * Logout: clears auth cookies and legacy storage
+ * Logout: clears all client auth storage
  */
 export function logout() {
     clearAuthSession();
 }
 
 /**
- * Utility to manually set/clear access token cookie
+ * Utility to manually set/clear access token
  */
 export function setAuthToken(token) {
     setAccessToken(token);
