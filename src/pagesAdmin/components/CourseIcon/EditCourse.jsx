@@ -376,9 +376,10 @@ const EditCourse = () => {
 
         <div className="input-full">
           <label>Course Description</label>
-          <textarea
+          <RichTextEditor
             value={course.courseDescription}
-            onChange={(e) => updateField("courseDescription", e.target.value)}
+            onChange={(html) => updateField("courseDescription", html)}
+            placeholder="Describe the course content..."
           />
         </div>
 

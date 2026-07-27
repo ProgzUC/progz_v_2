@@ -13,6 +13,7 @@ import FileDropZone from "../../../../components/common/FileDropZone/FileDropZon
 import ModuleNavigator from "../../../../components/common/ModuleNavigator/ModuleNavigator";
 import CoursePreviewModal from "../../../../components/common/CoursePreviewModal/CoursePreviewModal";
 import RichTextEditor from "../../../../components/common/RichTextEditor/RichTextEditor";
+import { isHtmlEmpty } from "../../../../components/common/RichTextEditor/richTextUtils";
 import { COURSE_FILE_ACCEPT } from "../../../../utils/fileDrop";
 import {
   createEmptyModule,
@@ -90,7 +91,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const validateForm = () => {
     const newErrors = {};
     if (!course.courseName.trim()) newErrors.courseName = "Course Name is required";
-    if (!course.courseDescription.trim()) newErrors.courseDescription = "Description is required";
+    if (isHtmlEmpty(course.courseDescription)) newErrors.courseDescription = "Description is required";
     if (!course.courseDuration) newErrors.courseDuration = "Duration is required";
     // For edit mode, thumbnail might be existing object, so check validity strictly only if needed
     if (!course.thumbnail) newErrors.thumbnail = "Thumbnail is required";
@@ -380,9 +381,9 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
 
         <div className="input-full">
           <label>Course Description</label>
-          <textarea
+          <RichTextEditor
             value={course.courseDescription}
-            onChange={(e) => updateField("courseDescription", e.target.value)}
+            onChange={(html) => updateField("courseDescription", html)}
             placeholder="Describe the course content..."
           />
           {errors.courseDescription && <span className="error-text">{errors.courseDescription}</span>}

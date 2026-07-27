@@ -4,20 +4,7 @@ import { BiChevronDown, BiChevronUp, BiX } from "react-icons/bi";
 import "./CoursePreviewModal.css";
 import RichTextContent from "../RichTextEditor/RichTextContent";
 import { isHtmlEmpty } from "../RichTextEditor/richTextUtils";
-
-const getFileLabel = (file) => {
-  if (!file) return "File";
-  if (typeof file === "string") return file.split("/").pop() || "File";
-  return file.originalName || file.name || "File";
-};
-
-const getFileUrl = (file) => {
-  if (!file) return null;
-  if (typeof file === "string") return file;
-  if (file.url) return file.url;
-  if (file instanceof File) return URL.createObjectURL(file);
-  return null;
-};
+import SectionDetails from "../CourseCurriculum/SectionDetails";
 
 const getThumbnailUrl = (thumbnail) => {
   if (!thumbnail) return null;
@@ -31,6 +18,7 @@ const CoursePreviewModal = ({
   course,
   isEditMode = false,
   loading = false,
+  viewOnly = false,
   onClose,
   onConfirmSave,
 }) => {
@@ -51,7 +39,7 @@ const CoursePreviewModal = ({
         <div className="course-preview-topbar">
           <div>
             <p className="course-preview-eyebrow">Course Preview</p>
-            <h2>Review before {isEditMode ? "saving" : "creating"}</h2>
+            <h2>{viewOnly ? "Full course overview" : `Review before ${isEditMode ? "saving" : "creating"}`}</h2>
           </div>
           <button type="button" className="course-preview-close" onClick={onClose} aria-label="Close preview">
             <BiX />
@@ -93,7 +81,11 @@ const CoursePreviewModal = ({
 
           <div className="course-preview-section">
             <h3>Description</h3>
-            <p>{course.courseDescription || "No description added."}</p>
+            {isHtmlEmpty(course.courseDescription) ? (
+              <p>No description added.</p>
+            ) : (
+              <RichTextContent html={course.courseDescription} />
+            )}
           </div>
 
           <div className="course-preview-body">
@@ -121,14 +113,7 @@ const CoursePreviewModal = ({
                 <p className="course-preview-empty">No sections in this module.</p>
               )}
               {(activeModule?.sections || []).map((sec, sIndex) => {
-                const materials = [
-                  ...(sec.savedMaterialFiles || []),
-                  ...(sec.materialFiles || []),
-                ];
-                const challenges = [
-                  ...(sec.savedChallengeFiles || []),
-                  ...(sec.challengeFiles || []),
-                ];
+                const sectionTitle = sec.sectionName || sec.title || `Section ${sIndex + 1}`;
                 const isOpen = expandedSection === sIndex;
 
                 return (
@@ -138,92 +123,13 @@ const CoursePreviewModal = ({
                       className="course-preview-section-toggle"
                       onClick={() => setExpandedSection(isOpen ? null : sIndex)}
                     >
-                      <span>{sec.title || `Section ${sIndex + 1}`}</span>
+                      <span>{sectionTitle}</span>
                       {isOpen ? <BiChevronUp /> : <BiChevronDown />}
                     </button>
 
                     {isOpen && (
                       <div className="course-preview-section-body">
-                        {!isHtmlEmpty(sec.notes) && (
-                          <div className="course-preview-block">
-                            <h4>Notes</h4>
-                            <RichTextContent html={sec.notes} />
-                          </div>
-                        )}
-
-                        {materials.length > 0 && (
-                          <div className="course-preview-block">
-                            <h4>Learning Materials ({materials.length})</h4>
-                            <ul>
-                              {materials.map((file, i) => {
-                                const url = getFileUrl(file);
-                                return (
-                                  <li key={i}>
-                                    {url ? (
-                                      <a href={url} target="_blank" rel="noopener noreferrer">
-                                        {getFileLabel(file)}
-                                      </a>
-                                    ) : (
-                                      getFileLabel(file)
-                                    )}
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                        )}
-
-                        {!isHtmlEmpty(sec.challengeInstructions) && (
-                          <div className="course-preview-block">
-                            <h4>Challenge Instructions</h4>
-                            <RichTextContent html={sec.challengeInstructions} />
-                          </div>
-                        )}
-
-                        {challenges.length > 0 && (
-                          <div className="course-preview-block">
-                            <h4>Challenge Files ({challenges.length})</h4>
-                            <ul>
-                              {challenges.map((file, i) => {
-                                const url = getFileUrl(file);
-                                return (
-                                  <li key={i}>
-                                    {url ? (
-                                      <a href={url} target="_blank" rel="noopener noreferrer">
-                                        {getFileLabel(file)}
-                                      </a>
-                                    ) : (
-                                      getFileLabel(file)
-                                    )}
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                        )}
-
-                        {(sec.videos || []).length > 0 && (
-                          <div className="course-preview-block">
-                            <h4>Videos ({sec.videos.length})</h4>
-                            <ul>
-                              {sec.videos.map((v, i) => (
-                                <li key={i}>
-                                  <a href={v} target="_blank" rel="noopener noreferrer">
-                                    {v}
-                                  </a>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-
-                        {isHtmlEmpty(sec.notes) &&
-                          materials.length === 0 &&
-                          isHtmlEmpty(sec.challengeInstructions) &&
-                          challenges.length === 0 &&
-                          !(sec.videos || []).length && (
-                            <p className="course-preview-empty">No content added in this section.</p>
-                          )}
+                        <SectionDetails sec={sec} />
                       </div>
                     )}
                   </div>
@@ -234,23 +140,31 @@ const CoursePreviewModal = ({
         </div>
 
         <div className="course-preview-footer">
-          <button type="button" className="course-preview-edit-btn" onClick={onClose} disabled={loading}>
-            Edit
-          </button>
-          <button
-            type="button"
-            className="course-preview-save-btn"
-            onClick={onConfirmSave}
-            disabled={loading}
-          >
-            {loading
-              ? isEditMode
-                ? "Saving..."
-                : "Creating..."
-              : isEditMode
-                ? "Confirm & Save"
-                : "Confirm & Create"}
-          </button>
+          {viewOnly ? (
+            <button type="button" className="course-preview-save-btn" onClick={onClose}>
+              Close
+            </button>
+          ) : (
+            <>
+              <button type="button" className="course-preview-edit-btn" onClick={onClose} disabled={loading}>
+                Edit
+              </button>
+              <button
+                type="button"
+                className="course-preview-save-btn"
+                onClick={onConfirmSave}
+                disabled={loading}
+              >
+                {loading
+                  ? isEditMode
+                    ? "Saving..."
+                    : "Creating..."
+                  : isEditMode
+                    ? "Confirm & Save"
+                    : "Confirm & Create"}
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
