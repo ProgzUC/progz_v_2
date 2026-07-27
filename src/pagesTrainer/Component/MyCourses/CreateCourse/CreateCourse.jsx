@@ -542,8 +542,8 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                 </button>
                               </div>
                               <div className="section-content">
-                                <label className="section-label">Section {sIndex + 1}</label>
                                 <div className="section-header-row">
+                                  <span className="section-label">Section {sIndex + 1}</span>
                                   <input
                                     value={section.title}
                                     onChange={(e) =>
