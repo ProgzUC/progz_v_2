@@ -86,6 +86,19 @@
   box-shadow: 0 0 0 2px rgba(42, 125, 56, 0.12);
 }
 
+.section-block.is-collapsed {
+  display: none;
+}
+
+.section-block.is-active {
+  border-color: #2a7d38;
+  box-shadow: 0 0 0 2px rgba(42, 125, 56, 0.12);
+}
+
+.section-navigator {
+  margin: 8px 0 12px;
+}
+
 @media (max-width: 600px) {
   .module-navigator {
     flex-direction: column;

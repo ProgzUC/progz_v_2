@@ -61,7 +61,13 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const [lightbox, setLightbox] = useState({ isOpen: false, type: "", src: "" });
   const [hoveredVideo, setHoveredVideo] = useState(null);
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
+  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
   const moduleRefs = useRef({});
+  const sectionRefs = useRef({});
+
+  useEffect(() => {
+    setActiveSectionIndex(0);
+  }, [activeModuleIndex]);
 
   const { mutate: createCourseMutation } = useCreateCourse();
   const { mutate: updateCourseMutation } = useUpdateCourse();
@@ -168,10 +174,25 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   // SECTION HANDLERS
   // =================
 
+  const goToSection = (mIndex, sIndex) => {
+    if (mIndex !== activeModuleIndex) {
+      setActiveModuleIndex(mIndex);
+    }
+    setActiveSectionIndex(sIndex);
+    requestAnimationFrame(() => {
+      const sectionId = course.modules[mIndex]?.sections[sIndex]?.id;
+      sectionRefs.current[sectionId]?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    });
+  };
+
   const addSection = (mIndex) => {
     const updated = [...course.modules];
     updated[mIndex].sections.push(createEmptySection());
     setCourse({ ...course, modules: updated });
+    setActiveSectionIndex(updated[mIndex].sections.length - 1);
   };
 
   const removeSection = async (mIndex, sIndex) => {
@@ -186,13 +207,12 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
     const updated = [...course.modules];
     updated[mIndex].sections.splice(sIndex, 1);
     setCourse({ ...course, modules: updated });
+    setActiveSectionIndex((prev) => {
+      if (prev === sIndex) return Math.max(0, sIndex - 1);
+      if (prev > sIndex) return prev - 1;
+      return prev;
+    });
     showSuccess("Section deleted");
-  };
-
-  const toggleSection = (mIndex, sIndex) => {
-    const updated = [...course.modules];
-    updated[mIndex].sections[sIndex].expanded = !updated[mIndex].sections[sIndex].expanded;
-    setCourse({ ...course, modules: updated });
   };
 
   const updateSectionField = (mIndex, sIndex, field, value) => {
@@ -507,6 +527,15 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                     + Add Section
                   </button>
 
+                  {module.sections.length > 1 && (
+                    <ModuleNavigator
+                      modules={module.sections}
+                      activeIndex={activeSectionIndex}
+                      onSelect={(sIndex) => goToSection(mIndex, sIndex)}
+                      itemPrefix="Section"
+                    />
+                  )}
+
                   <SortableList
                     items={module.sections}
                     className="sections-droppable"
@@ -521,7 +550,14 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                     {module.sections.map((section, sIndex) => (
                       <SortableItem key={section.id} id={section.id} className="section-block">
                         {({ setNodeRef, style, attributes, listeners, className: sectionClass }) => (
-                          <div ref={setNodeRef} style={style} className={sectionClass}>
+                          <div
+                            ref={(el) => {
+                              setNodeRef(el);
+                              sectionRefs.current[section.id] = el;
+                            }}
+                            style={style}
+                            className={`${sectionClass} ${sIndex === activeSectionIndex ? "is-active" : module.sections.length > 1 ? "is-collapsed" : ""}`}
+                          >
                             <div className="section-header-wrapper">
                               <div className="drag-expand-btn drag-expand-btn--sec">
                                 <div
@@ -534,22 +570,21 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                 </div>
                                 <button
                                   type="button"
-                                  className={`drag-expand-chevron ${section.expanded ? "rotate" : ""}`}
-                                  onClick={() => toggleSection(mIndex, sIndex)}
-                                  title={section.expanded ? "Collapse section" : "Expand section"}
+                                  className={`drag-expand-chevron ${sIndex === activeSectionIndex ? "rotate" : ""}`}
+                                  onClick={() => goToSection(mIndex, sIndex)}
+                                  title={sIndex === activeSectionIndex ? "Collapse section" : "Expand section"}
                                 >
                                   <BiChevronDown />
                                 </button>
                               </div>
                               <div className="section-content">
                                 <div className="section-header-row">
-                                  <span className="section-label">Section {sIndex + 1}</span>
                                   <input
                                     value={section.title}
                                     onChange={(e) =>
                                       updateSectionField(mIndex, sIndex, "title", e.target.value)
                                     }
-                                    placeholder="Enter section name"
+                                    placeholder={`Section ${sIndex + 1} name`}
                                   />
                                   {errors[`section-${mIndex}-${sIndex}`] && (
                                     <span className="error-text">
@@ -564,7 +599,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                               </div>
                             </div>
 
-                                      {section.expanded && (
+                                      {sIndex === activeSectionIndex && (
                                         <div className="section-details">
                                           {/* Materials Upload */}
                                           <label>Learning Material Files</label>
