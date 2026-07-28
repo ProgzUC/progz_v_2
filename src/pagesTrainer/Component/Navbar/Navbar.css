@@ -51,10 +51,11 @@
 
 .brand-logo {
     height: 40px;
-    width: auto;
+    width: 40px;
     display: block;
-    object-fit: contain;
+    object-fit: cover;
     border-radius: 8px;
+    background: #fff;
 }
 
 .brand-badge {

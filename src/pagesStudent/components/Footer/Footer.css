@@ -51,10 +51,11 @@
 
 .student-footer .footer-logo img {
     height: 48px;
-    width: auto;
+    width: 48px;
     display: block;
-    object-fit: contain;
+    object-fit: cover;
     border-radius: 10px;
+    background: #fff;
 }
 
 .student-footer .footer-description {
