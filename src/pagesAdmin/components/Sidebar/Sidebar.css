@@ -76,18 +76,21 @@
 }
 
 .admin-sidebar .sidebar-logo-text {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
 }
 
 .admin-sidebar .sidebar-logo-text img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .admin-sidebar .sidebar-title {

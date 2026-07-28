@@ -162,6 +162,7 @@ const SignIn = () => {
         {/* VIEW: LOGIN */}
         {view === "login" && (
           <>
+            <img src="/logo.png" alt="ProgZ" className="auth-brand-logo" />
             <p className="welcome">WELCOME BACK 👋</p>
             <h2 className="auth-title">Login</h2>
             {error && <p className="auth-error">{error}</p>}

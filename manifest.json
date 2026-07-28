@@ -16,13 +16,13 @@
   ],
   "icons": [
     {
-      "src": "https://progz.urbancode.in//uclogo192.png",
+      "src": "/uclogo192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://progz.urbancode.in//uclogo512.png",
+      "src": "/uclogo512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"

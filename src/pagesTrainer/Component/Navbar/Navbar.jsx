@@ -32,7 +32,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
 
                 {/* 1. BRAND LOGO */}
                 <div className="trainer-brand" onClick={() => handleTabClick('home')}>
-                    <span className="brand-text">ProgZ</span>
+                    <img src="/logo.png" alt="ProgZ" className="brand-logo" />
                     <span className="brand-badge">Trainer</span>
                 </div>
 

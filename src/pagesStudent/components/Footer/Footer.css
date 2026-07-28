@@ -49,6 +49,14 @@
     color: rgba(255, 255, 255, 0.8);
 }
 
+.student-footer .footer-logo img {
+    height: 48px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
 .student-footer .footer-description {
     font-size: 14px;
     line-height: 1.6;

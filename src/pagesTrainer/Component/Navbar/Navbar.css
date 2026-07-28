@@ -49,6 +49,14 @@
     letter-spacing: -0.5px;
 }
 
+.brand-logo {
+    height: 40px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
 .brand-badge {
     padding: 2px 8px;
     background: rgba(25, 135, 84, 0.2);

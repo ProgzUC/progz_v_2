@@ -38,7 +38,7 @@ function HeaderContent({ onLogout }) {
             <div className="student-nav-container">
 
                 <Link to="/student-dashboard/" className="student-brand">
-                    <span className="brand-text">ProgZ</span>
+                    <img src="/logo.png" alt="ProgZ" className="brand-logo" />
                     <span className="brand-badge">Student</span>
                 </Link>
 

@@ -50,6 +50,14 @@
   letter-spacing: -0.5px;
 }
 
+.student-brand .brand-logo {
+  height: 40px;
+  width: auto;
+  display: block;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
 .student-brand .brand-badge {
   padding: 2px 8px;
   background: rgba(0, 135, 90, 0.2);

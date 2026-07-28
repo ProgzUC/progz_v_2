@@ -34,7 +34,9 @@ const Footer = () => {
 
                 {/* -------- Brand Information Section -------- */}
                 <div className="footer-section brand-section">
-                    <p className="footer-logo">ProgZ</p>
+                    <p className="footer-logo">
+                        <img src="/logo.png" alt="ProgZ" />
+                    </p>
 
                     <p className="footer-description">
                         Empower your future with world-class courses and expert mentors.
