@@ -55,7 +55,7 @@
     display: block;
     object-fit: cover;
     border-radius: 10px;
-    background: #fff;
+    background: #000;
 }
 
 .student-footer .footer-description {

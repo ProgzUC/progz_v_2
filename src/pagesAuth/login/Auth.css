@@ -29,8 +29,8 @@
   border-radius: 14px;
   margin-bottom: 18px;
   display: block;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: #000;
+  border: none;
 }
 
 .welcome {

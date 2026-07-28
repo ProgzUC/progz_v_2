@@ -84,8 +84,8 @@
   flex-shrink: 0;
   border-radius: 10px;
   overflow: hidden;
-  background: #fff;
-  border: 1px solid #e5e7eb;
+  background: #000;
+  border: none;
 }
 
 .admin-sidebar .sidebar-logo-text img {
