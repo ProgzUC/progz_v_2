@@ -1,14 +1,15 @@
 
 
 
+const FALLBACK_CLOUD_NAME = "dl4m8qrfc";
+const FALLBACK_UPLOAD_PRESET = "urbancode_preset";
+
 export const uploadToCloudinary = async (file, folder = "courses") => {
-    const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-    const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
+    const CLOUD_NAME =
+        import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || FALLBACK_CLOUD_NAME;
+    const UPLOAD_PRESET =
+        import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || FALLBACK_UPLOAD_PRESET;
     if (!file) return null;
-    if (!CLOUD_NAME || !UPLOAD_PRESET) {
-        console.error("Cloudinary configuration missing");
-        throw new Error("Cloudinary configuration missing");
-    }
 
     if (file.size > 10 * 1024 * 1024) {
         throw new Error(`${file.name} exceeds 10MB limit`);
