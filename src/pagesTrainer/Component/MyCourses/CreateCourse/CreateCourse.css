@@ -1,3 +1,55 @@
+/* Curriculum panel inside course builder wizard */
+.course-builder-page .course-curriculum-wrap {
+  display: block;
+  padding: 0;
+  background: transparent;
+  min-height: auto;
+}
+
+.course-builder-page .course-info-wrap {
+  display: block;
+  padding: 0;
+  background: transparent;
+  min-height: auto;
+}
+
+.course-builder-page .cancel-btn,
+.course-builder-page .submit-btn,
+.course-title-modal .submit-btn {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.course-builder-page .cancel-btn {
+  background: #e5e7eb;
+}
+
+.course-builder-page .cancel-btn:hover {
+  border-color: #00a86b;
+}
+
+.course-builder-page .submit-btn,
+.course-title-modal .submit-btn {
+  background: #2a7d38;
+  color: #fff;
+}
+
+.course-builder-page .submit-btn:hover:not(:disabled),
+.course-title-modal .submit-btn:hover:not(:disabled) {
+  background: #1a6b28;
+}
+
+.course-builder-page .submit-btn:disabled,
+.course-title-modal .submit-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .create-course-page {
   padding: 100px 2rem 2rem 2rem;
   /* Clear fixed navbar */
@@ -117,8 +169,8 @@ textarea {
 
 .module-header-wrapper {
   display: flex;
-  gap: 15px;
-  align-items: flex-start;
+  gap: 10px;
+  align-items: center;
 }
 
 .drag-expand-btn {
@@ -196,11 +248,7 @@ textarea {
 }
 
 .module-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: #6b7280;
-  margin-bottom: 8px;
+  display: none;
 }
 
 .module-content {
@@ -219,16 +267,7 @@ textarea {
   padding: 10px;
 }
 
-.module-delete {
-  color: #ef4444;
-  cursor: pointer;
-  font-size: 18px;
-  transition: 0.2s;
-}
-
-.module-delete:hover {
-  color: #dc2626;
-}
+/* module delete now uses section-action-icon styles */
 
 /* ADD SECTION BUTTON */
 .add-section-btn {
@@ -318,8 +357,39 @@ textarea {
 .section-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
+}
+
+.section-action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  color: #9ca3af;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.section-action-icon:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.section-action-icon.drag-handle {
+  cursor: grab;
+  font-size: 14px;
+}
+
+.section-action-delete:hover {
+  color: #ef4444;
+  background: #fef2f2;
 }
 
 .section-expand-btn {

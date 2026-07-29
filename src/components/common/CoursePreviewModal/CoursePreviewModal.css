@@ -20,6 +20,21 @@
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
 }
 
+.course-preview-panel--student {
+  width: min(980px, 100%);
+  background: #f3f4f6;
+}
+
+.course-preview-panel--student .course-preview-scroll {
+  background: #e4e4e4;
+  padding: 12px 14px 8px;
+}
+
+.course-preview-panel--student .course-preview-topbar,
+.course-preview-panel--student .course-preview-footer {
+  background: #fff;
+}
+
 .course-preview-topbar {
   display: flex;
   justify-content: space-between;

@@ -20,6 +20,10 @@ import {
   createEmptySection,
   withStableIds,
 } from "../../../../utils/courseBuilder";
+import CourseTitleModal from "../../../../components/common/CourseBuilder/CourseTitleModal";
+import CourseBuilderShell from "../../../../components/common/CourseBuilder/CourseBuilderShell";
+import CourseInformationPanel from "../../../../components/common/CourseBuilder/CourseInformationPanel";
+import "../../../../components/common/CourseBuilder/CourseBuilder.css";
 
 const buildCourseState = (data) => ({
   courseName: data.courseName || data.title || "",
@@ -56,6 +60,8 @@ const emptyState = {
 
 const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const [loading, setLoading] = useState(false);
+  const [builderStarted, setBuilderStarted] = useState(isEditMode);
+  const [activeStep, setActiveStep] = useState("information");
   const [showPreview, setShowPreview] = useState(false);
   const [errors, setErrors] = useState({});
   const [lightbox, setLightbox] = useState({ isOpen: false, type: "", src: "" });
@@ -94,23 +100,42 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
     }
   }, [fullCourse, isEditMode]);
 
-  const validateForm = () => {
+  const validateInformation = () => {
     const newErrors = {};
     if (!course.courseName.trim()) newErrors.courseName = "Course Name is required";
     if (isHtmlEmpty(course.courseDescription)) newErrors.courseDescription = "Description is required";
     if (!course.courseDuration) newErrors.courseDuration = "Duration is required";
-    // For edit mode, thumbnail might be existing object, so check validity strictly only if needed
     if (!course.thumbnail) newErrors.thumbnail = "Thumbnail is required";
+    setErrors((prev) => ({ ...prev, ...newErrors }));
+    return Object.keys(newErrors).length === 0;
+  };
 
+  const validateCurriculum = () => {
+    const newErrors = {};
     course.modules.forEach((mod, mIndex) => {
       if (!mod.title.trim()) newErrors[`module-${mIndex}`] = "Module Name is required";
       mod.sections.forEach((sec, sIndex) => {
         if (!sec.title.trim()) newErrors[`section-${mIndex}-${sIndex}`] = "Section Name is required";
       });
     });
-
-    setErrors(newErrors);
+    setErrors((prev) => ({ ...prev, ...newErrors }));
     return Object.keys(newErrors).length === 0;
+  };
+
+  const validateForm = () => validateInformation() && validateCurriculum();
+
+  const handleTitleContinue = (title) => {
+    setCourse((prev) => ({ ...prev, courseName: title }));
+    setBuilderStarted(true);
+    setActiveStep("information");
+  };
+
+  const handleStepChange = (step) => {
+    if (step === "curriculum" && activeStep === "information" && !validateInformation()) {
+      showWarning("Please complete all required course information fields.");
+      return;
+    }
+    setActiveStep(step);
   };
 
   const updateField = (field, value) => {
@@ -361,91 +386,8 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
     }
   };
 
-  return (
-    <div className="create-course-page">
-      <div className="create-course-container">
-        <div className="page-header">
-          <h2>{isEditMode ? "Edit Course" : "Create Course"}</h2>
-          <BiX className="close-icon" onClick={onBack} />
-        </div>
-
-        <p className="subtitle">Build your modules and sections</p>
-
-        {(loading || (isEditMode && isFetchingCourse)) && (
-          <Loader message={isFetchingCourse ? "Loading course data..." : isEditMode ? "Updating Course..." : "Creating Course..."} />
-        )}
-
-        {/* BASIC FIELDS */}
-        <div className="input-grid">
-          <div>
-            <label>Course Name</label>
-            <input
-              value={course.courseName}
-              onChange={(e) => updateField("courseName", e.target.value)}
-              placeholder="e.g. Advanced Frontend"
-            />
-            {errors.courseName && <span className="error-text">{errors.courseName}</span>}
-          </div>
-
-          <div>
-            <label>Duration (Hours)</label>
-            <input
-              type="number"
-              value={course.courseDuration}
-              onChange={(e) => updateField("courseDuration", e.target.value)}
-              placeholder="e.g. 40"
-            />
-            {errors.courseDuration && <span className="error-text">{errors.courseDuration}</span>}
-          </div>
-        </div>
-
-        <div className="input-full">
-          <label>Course Description</label>
-          <RichTextEditor
-            value={course.courseDescription}
-            onChange={(html) => updateField("courseDescription", html)}
-            placeholder="Describe the course content..."
-          />
-          {errors.courseDescription && <span className="error-text">{errors.courseDescription}</span>}
-        </div>
-
-        {/* THUMBNAIL UPLOAD */}
-        <div className="input-grid">
-          <div>
-            <label>Thumbnail Image</label>
-            <FileDropZone
-              accept="image/*"
-              hint="Drag image from Google or your computer"
-              error={errors.thumbnail}
-              onFiles={(file) => {
-                updateField("thumbnail", file);
-                if (errors.thumbnail) setErrors((prev) => ({ ...prev, thumbnail: null }));
-              }}
-            >
-            {course.thumbnail && (
-              <div className="file-preview-list">
-                <div className="file-preview-media">
-                  {course.thumbnail instanceof File && (
-                    <span
-                      className="remove-file-btn"
-                      onClick={(e) => { e.stopPropagation(); updateField("thumbnail", null); }}
-                    >×</span>
-                  )}
-                  <div className="image-preview-wrapper" onClick={() => openLightbox("image", course.thumbnail instanceof File ? URL.createObjectURL(course.thumbnail) : course.thumbnail.url)}>
-                    <img
-                      src={course.thumbnail instanceof File ? URL.createObjectURL(course.thumbnail) : course.thumbnail.url}
-                      className="preview-image-consistent"
-                      alt="Preview"
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
-            </FileDropZone>
-          </div>
-        </div>
-
-        {/* MODULES + DND */}
+  const curriculumSection = (
+    <div className="create-course-page course-curriculum-wrap">
         <div className="section-header">
           <h3>Modules</h3>
           <button className="add-btn" onClick={addModule}>+ Add Module</button>
@@ -477,29 +419,8 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                   className={`${className} ${mIndex === activeModuleIndex ? "is-active" : course.modules.length > 1 ? "is-collapsed" : ""}`}
                 >
                   <div className="module-header-wrapper">
-                    <div className="drag-expand-btn" onClick={(e) => e.stopPropagation()}>
-                      <div
-                        className="drag-expand-grip"
-                        {...attributes}
-                        {...listeners}
-                        title="Drag to reorder module"
-                      >
-                        <BiGridVertical />
-                      </div>
-                      <button
-                        type="button"
-                        className={`drag-expand-chevron ${mIndex === activeModuleIndex ? "rotate" : ""}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          goToModule(mIndex);
-                        }}
-                        title={mIndex === activeModuleIndex ? "Collapse module" : "Expand module"}
-                      >
-                        <BiChevronDown />
-                      </button>
-                    </div>
-                    <div className="module-content">
-                      <label className="module-label">Module {mIndex + 1}</label>
+                    <span className="section-order-num">{mIndex + 1}</span>
+                    <div className="module-content" onClick={() => goToModule(mIndex)} style={{ cursor: "pointer" }}>
                       <div className="module-title-row">
                         <input
                           value={module.title}
@@ -510,14 +431,24 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                         {errors[`module-${mIndex}`] && (
                           <span className="error-text">{errors[`module-${mIndex}`]}</span>
                         )}
-                        <BiTrash
-                          className="module-delete"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeModule(mIndex);
-                          }}
-                        />
                       </div>
+                    </div>
+                    <div className="section-actions">
+                      <div
+                        className="section-action-icon drag-handle"
+                        {...attributes}
+                        {...listeners}
+                        title="Drag to reorder"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <BiGridVertical />
+                      </div>
+                      <i className="bi bi-pencil section-action-icon" onClick={() => goToModule(mIndex)} title="Edit module" />
+                      <BiTrash
+                        className="section-action-icon section-action-delete"
+                        onClick={(e) => { e.stopPropagation(); removeModule(mIndex); }}
+                        title="Delete module"
+                      />
                     </div>
                   </div>
 
@@ -559,25 +490,8 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                             className={`${sectionClass} ${sIndex === activeSectionIndex ? "is-active" : module.sections.length > 1 ? "is-collapsed" : ""}`}
                           >
                             <div className="section-header-wrapper">
-                              <div className="drag-expand-btn drag-expand-btn--sec">
-                                <div
-                                  className="drag-expand-grip"
-                                  {...attributes}
-                                  {...listeners}
-                                  title="Drag to reorder section"
-                                >
-                                  <BiGridVertical />
-                                </div>
-                                <button
-                                  type="button"
-                                  className={`drag-expand-chevron ${sIndex === activeSectionIndex ? "rotate" : ""}`}
-                                  onClick={() => goToSection(mIndex, sIndex)}
-                                  title={sIndex === activeSectionIndex ? "Collapse section" : "Expand section"}
-                                >
-                                  <BiChevronDown />
-                                </button>
-                              </div>
-                              <div className="section-content">
+                              <span className="section-order-num">{sIndex + 1}</span>
+                              <div className="section-content" onClick={() => goToSection(mIndex, sIndex)} style={{ cursor: "pointer" }}>
                                 <div className="section-header-row">
                                   <input
                                     value={section.title}
@@ -585,17 +499,30 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                       updateSectionField(mIndex, sIndex, "title", e.target.value)
                                     }
                                     placeholder={`Section ${sIndex + 1} name`}
+                                    onClick={(e) => e.stopPropagation()}
                                   />
                                   {errors[`section-${mIndex}-${sIndex}`] && (
                                     <span className="error-text">
                                       {errors[`section-${mIndex}-${sIndex}`]}
                                     </span>
                                   )}
-                                  <BiTrash
-                                    className="section-delete"
-                                    onClick={() => removeSection(mIndex, sIndex)}
-                                  />
                                 </div>
+                              </div>
+                              <div className="section-actions">
+                                <div
+                                  className="section-action-icon drag-handle"
+                                  {...attributes}
+                                  {...listeners}
+                                  title="Drag to reorder"
+                                >
+                                  <BiGridVertical />
+                                </div>
+                                <i className="bi bi-pencil section-action-icon" onClick={() => goToSection(mIndex, sIndex)} title="Edit section" />
+                                <BiTrash
+                                  className="section-action-icon section-action-delete"
+                                  onClick={() => removeSection(mIndex, sIndex)}
+                                  title="Delete section"
+                                />
                               </div>
                             </div>
 
@@ -817,15 +744,74 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
             </SortableItem>
           ))}
         </SortableList>
+    </div>
+  );
 
-        <div className="footer-actions">
-          <button className="cancel-btn" onClick={onBack} disabled={loading}>Cancel</button>
-          <button className="submit-btn" onClick={handlePreview} disabled={loading}>
-            {isEditMode ? "Preview & Save" : "Preview & Create"}
-          </button>
-        </div>
+  return (
+    <>
+      {!builderStarted && !isEditMode && (
+        <CourseTitleModal onContinue={handleTitleContinue} onClose={onBack} />
+      )}
 
-      </div>
+      {builderStarted && (
+        <CourseBuilderShell
+          activeStep={activeStep}
+          onStepChange={handleStepChange}
+          courseName={course.courseName}
+          footer={
+            <div className="step-footer">
+              <button type="button" className="cancel-btn" onClick={onBack} disabled={loading}>
+                Cancel
+              </button>
+              {activeStep === "information" ? (
+                <button
+                  type="button"
+                  className="submit-btn"
+                  onClick={() => handleStepChange("curriculum")}
+                  disabled={loading || (isEditMode && isFetchingCourse)}
+                >
+                  Continue to Curriculum
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="submit-btn"
+                  onClick={handlePreview}
+                  disabled={loading || (isEditMode && isFetchingCourse)}
+                >
+                  {isEditMode ? "Preview & Save" : "Preview & Create"}
+                </button>
+              )}
+            </div>
+          }
+        >
+          {(loading || (isEditMode && isFetchingCourse)) && (
+            <Loader
+              message={
+                isFetchingCourse
+                  ? "Loading course data..."
+                  : isEditMode
+                    ? "Updating Course..."
+                    : "Creating Course..."
+              }
+            />
+          )}
+
+          {activeStep === "information" && (
+            <div className="course-info-wrap">
+              <CourseInformationPanel
+                course={course}
+                errors={errors}
+                updateField={updateField}
+                setErrors={setErrors}
+                onThumbnailPreview={(src) => openLightbox("image", src)}
+              />
+            </div>
+          )}
+
+          {activeStep === "curriculum" && curriculumSection}
+        </CourseBuilderShell>
+      )}
 
       {showPreview && (
         <CoursePreviewModal
@@ -859,7 +845,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

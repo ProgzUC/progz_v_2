@@ -1,3 +1,63 @@
+/* Buttons inside course builder + title modal */
+.course-builder-page .cancel-btn,
+.course-builder-page .submit-btn,
+.course-title-modal .submit-btn {
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.course-builder-page .cancel-btn,
+.course-title-modal .cancel-btn {
+  background: #e5e7eb;
+}
+
+.course-builder-page .cancel-btn:hover {
+  border-color: #00a86b;
+}
+
+.course-builder-page .submit-btn,
+.course-title-modal .submit-btn {
+  background: #2a7d38;
+  color: #fff;
+}
+
+.course-builder-page .submit-btn:hover:not(:disabled),
+.course-title-modal .submit-btn:hover:not(:disabled) {
+  background: #1a6b28;
+}
+
+.course-builder-page .submit-btn:disabled,
+.course-title-modal .submit-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.course-builder-page .course-info-wrap {
+  display: block;
+  padding: 0;
+  background: transparent;
+  min-height: auto;
+}
+
+/* Curriculum panel inside course builder wizard */
+.course-builder-page .course-curriculum-wrap {
+  display: block;
+  padding: 0;
+  background: transparent;
+  min-height: auto;
+}
+
+.course-builder-page .course-curriculum-wrap .create-course-container {
+  box-shadow: none;
+  padding: 0;
+  max-width: none;
+}
+
 /* MAIN PAGE LAYOUT */
 .admin-create-course-page {
   display: flex;
@@ -274,8 +334,8 @@ input:focus,
 
 .module-header-wrapper {
   display: flex;
-  gap: 15px;
-  align-items: flex-start;
+  gap: 10px;
+  align-items: center;
 }
 
 .admin-create-course-page .drag-expand-btn,
@@ -378,11 +438,7 @@ input:focus,
 
 .admin-create-course-page .module-label,
 .create-course-page .module-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 500;
-  color: #6b7280;
-  margin-bottom: 8px;
+  display: none;
 }
 
 .admin-create-course-page .module-content,
@@ -405,16 +461,7 @@ input:focus,
   padding: 10px;
 }
 
-.admin-create-course-page .module-delete {
-  color: #ef4444;
-  cursor: pointer;
-  font-size: 18px;
-  transition: 0.2s;
-}
-
-.admin-create-course-page .module-delete:hover {
-  color: #dc2626;
-}
+/* module delete now uses section-action-icon styles */
 
 /* ADD SECTION BUTTON */
 .admin-create-course-page .add-section-btn {
@@ -444,8 +491,66 @@ input:focus,
 .admin-create-course-page .section-header-wrapper,
 .create-course-page .section-header-wrapper {
   display: flex;
-  gap: 15px;
+  gap: 10px;
   align-items: center;
+}
+
+.admin-create-course-page .section-order-num,
+.create-course-page .section-order-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.admin-create-course-page .section-actions,
+.create-course-page .section-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.admin-create-course-page .section-action-icon,
+.create-course-page .section-action-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  color: #9ca3af;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.admin-create-course-page .section-action-icon:hover,
+.create-course-page .section-action-icon:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.admin-create-course-page .section-action-icon.drag-handle,
+.create-course-page .section-action-icon.drag-handle {
+  cursor: grab;
+  font-size: 14px;
+}
+
+.admin-create-course-page .section-action-delete:hover,
+.create-course-page .section-action-delete:hover {
+  color: #ef4444;
+  background: #fef2f2;
 }
 
 .admin-create-course-page .module-box.is-dragging {
@@ -513,18 +618,7 @@ input:focus,
   transform: rotate(180deg);
 }
 
-.admin-create-course-page .section-delete,
-.create-course-page .section-delete {
-  color: #ef4444;
-  cursor: pointer;
-  font-size: 18px;
-  transition: 0.2s;
-}
-
-.admin-create-course-page .section-delete:hover,
-.create-course-page .section-delete:hover {
-  color: #dc2626;
-}
+/* old section-edit-icon / section-delete-icon replaced by section-action-icon */
 
 /* SECTION DETAILS (EXPANDED AREA) */
 .admin-create-course-page .section-details {

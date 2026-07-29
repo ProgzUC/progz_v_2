@@ -19,10 +19,16 @@ import {
   createEmptyModule,
   createEmptySection,
 } from "../../../utils/courseBuilder";
+import CourseTitleModal from "../../../components/common/CourseBuilder/CourseTitleModal";
+import CourseBuilderShell from "../../../components/common/CourseBuilder/CourseBuilderShell";
+import CourseInformationPanel from "../../../components/common/CourseBuilder/CourseInformationPanel";
+import "../../../components/common/CourseBuilder/CourseBuilder.css";
 
 const CreateCourse = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [builderStarted, setBuilderStarted] = useState(false);
+  const [activeStep, setActiveStep] = useState("information");
   const [showPreview, setShowPreview] = useState(false);
   const [errors, setErrors] = useState({});
   const [lightbox, setLightbox] = useState({ isOpen: false, type: "", src: "" });
@@ -44,22 +50,42 @@ const CreateCourse = () => {
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
-  const validateForm = () => {
+  const validateInformation = () => {
     const newErrors = {};
     if (!course.courseName.trim()) newErrors.courseName = "Course Name is required";
     if (isHtmlEmpty(course.courseDescription)) newErrors.courseDescription = "Course Description is required";
     if (!course.courseDuration) newErrors.courseDuration = "Duration is required";
     if (!course.thumbnail) newErrors.thumbnail = "Thumbnail Image is required";
+    setErrors((prev) => ({ ...prev, ...newErrors }));
+    return Object.keys(newErrors).length === 0;
+  };
 
+  const validateCurriculum = () => {
+    const newErrors = {};
     course.modules.forEach((mod, mIndex) => {
       if (!mod.title.trim()) newErrors[`module-${mIndex}`] = "Module Name is required";
       mod.sections.forEach((sec, sIndex) => {
         if (!sec.title.trim()) newErrors[`section-${mIndex}-${sIndex}`] = "Section Name is required";
       });
     });
-
-    setErrors(newErrors);
+    setErrors((prev) => ({ ...prev, ...newErrors }));
     return Object.keys(newErrors).length === 0;
+  };
+
+  const validateForm = () => validateInformation() && validateCurriculum();
+
+  const handleTitleContinue = (title) => {
+    setCourse((prev) => ({ ...prev, courseName: title }));
+    setBuilderStarted(true);
+    setActiveStep("information");
+  };
+
+  const handleStepChange = (step) => {
+    if (step === "curriculum" && activeStep === "information" && !validateInformation()) {
+      showWarning("Please complete all required course information fields.");
+      return;
+    }
+    setActiveStep(step);
   };
 
   const [course, setCourse] = useState({
@@ -311,92 +337,8 @@ const CreateCourse = () => {
     }
   };
 
-  return (
-    <div className="admin-create-course-page">
-      <div className="create-course-container">
-        <div className="page-header">
-          <h2>Create Course</h2>
-          <i
-            className="bi bi-x-lg close-icon"
-            onClick={() => navigate("/admin/courses")}
-          ></i>
-        </div>
-
-        <p className="subtitle">Build your modules and sections</p>
-
-        {loading && <Loader />}
-
-        {/* BASIC FIELDS */}
-        <div className="input-grid">
-          <div>
-            <label>Course Name</label>
-            <input
-              value={course.courseName}
-              onChange={(e) => updateField("courseName", e.target.value)}
-              placeholder="e.g. Advanced React"
-            />
-            {errors.courseName && <span className="error-text">{errors.courseName}</span>}
-          </div>
-
-          <div>
-            <label>Duration (Hours)</label>
-            <input
-              type="number"
-              value={course.courseDuration}
-              onChange={(e) => updateField("courseDuration", e.target.value)}
-            />
-            {errors.courseDuration && <span className="error-text">{errors.courseDuration}</span>}
-          </div>
-        </div>
-
-        <div className="input-full">
-          <label>Course Description</label>
-          <RichTextEditor
-            value={course.courseDescription}
-            onChange={(html) => updateField("courseDescription", html)}
-            placeholder="Describe the course content..."
-          />
-          {errors.courseDescription && <span className="error-text">{errors.courseDescription}</span>}
-        </div>
-
-        <div className="input-grid">
-          <div>
-            <label>Thumbnail Image</label>
-            <FileDropZone
-              accept="image/*"
-              hint="Drag image from Google or your computer"
-              error={errors.thumbnail}
-              onFiles={(file) => {
-                updateField("thumbnail", file);
-                if (errors.thumbnail) setErrors((prev) => ({ ...prev, thumbnail: null }));
-              }}
-            >
-            {course.thumbnail && course.thumbnail instanceof File && (
-              <div className="file-preview-list">
-                <div className="file-preview-media">
-                  <span
-                    className="remove-file-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      updateField("thumbnail", null);
-                    }}
-                  >×</span>
-                  <div className="image-preview-wrapper" onClick={() => openLightbox("image", URL.createObjectURL(course.thumbnail))}>
-                    <img
-                      src={URL.createObjectURL(course.thumbnail)}
-                      className="preview-image-consistent"
-                      alt="Preview"
-                    />
-                  </div>
-                  <p className="file-name-media" title={course.thumbnail.name}>{course.thumbnail.name}</p>
-                </div>
-              </div>
-            )}
-            </FileDropZone>
-          </div>
-        </div>
-
-        {/* MODULES + DND */}
+  const curriculumSection = (
+    <div className="admin-create-course-page course-curriculum-wrap">
         <div className="section-header">
           <h3>Modules</h3>
           <button className="add-btn" onClick={addModule}>
@@ -430,48 +372,34 @@ const CreateCourse = () => {
                   className={`${className} ${mIndex === activeModuleIndex ? "is-active" : course.modules.length > 1 ? "is-collapsed" : ""}`}
                 >
                   <div className="module-header-wrapper">
-                    <div className="drag-expand-btn" onClick={(e) => e.stopPropagation()}>
-                      <div
-                        className="drag-expand-grip"
-                        {...attributes}
-                        {...listeners}
-                        title="Drag to reorder module"
-                      >
-                        <i className="bi bi-grip-vertical"></i>
-                      </div>
-                      <button
-                        type="button"
-                        className={`drag-expand-chevron ${mIndex === activeModuleIndex ? "rotate" : ""}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          goToModule(mIndex);
-                        }}
-                        title={mIndex === activeModuleIndex ? "Collapse module" : "Expand module"}
-                      >
-                        <i className="bi bi-chevron-down"></i>
-                      </button>
-                    </div>
-
-                    <div className="module-content">
-                      <label className="module-label">Module {mIndex + 1}</label>
+                    <span className="section-order-num">{mIndex + 1}</span>
+                    <div className="module-content" onClick={() => goToModule(mIndex)} style={{ cursor: "pointer" }}>
                       <div className="module-title-row">
                         <input
                           value={module.title}
-                          onChange={(e) =>
-                            updateModuleTitle(mIndex, e.target.value)
-                          }
+                          onChange={(e) => updateModuleTitle(mIndex, e.target.value)}
                           placeholder="Enter module name"
                           onClick={(e) => e.stopPropagation()}
                         />
                         {errors[`module-${mIndex}`] && <span className="error-text">{errors[`module-${mIndex}`]}</span>}
-                        <i
-                          className="bi bi-trash module-delete"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            removeModule(mIndex);
-                          }}
-                        ></i>
                       </div>
+                    </div>
+                    <div className="section-actions">
+                      <div
+                        className="section-action-icon drag-handle"
+                        {...attributes}
+                        {...listeners}
+                        title="Drag to reorder"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <i className="bi bi-grip-vertical"></i>
+                      </div>
+                      <i className="bi bi-pencil section-action-icon" onClick={() => goToModule(mIndex)} title="Edit module"></i>
+                      <i
+                        className="bi bi-trash section-action-icon section-action-delete"
+                        onClick={(e) => { e.stopPropagation(); removeModule(mIndex); }}
+                        title="Delete module"
+                      ></i>
                     </div>
                   </div>
 
@@ -516,51 +444,35 @@ const CreateCourse = () => {
                             className={`${sectionClass} ${sIndex === activeSectionIndex ? "is-active" : module.sections.length > 1 ? "is-collapsed" : ""}`}
                           >
                             <div className="section-header-wrapper">
-                              <div className="drag-expand-btn drag-expand-btn--sec">
-                                <div
-                                  className="drag-expand-grip"
-                                  {...attributes}
-                                  {...listeners}
-                                  title="Drag to reorder section"
-                                >
-                                  <i className="bi bi-grip-vertical"></i>
-                                </div>
-                                <button
-                                  type="button"
-                                  className={`drag-expand-chevron ${sIndex === activeSectionIndex ? "rotate" : ""}`}
-                                  onClick={() => goToSection(mIndex, sIndex)}
-                                  title={sIndex === activeSectionIndex ? "Collapse section" : "Expand section"}
-                                >
-                                  <i className="bi bi-chevron-down"></i>
-                                </button>
-                              </div>
-
-                              <div className="section-content">
+                              <span className="section-order-num">{sIndex + 1}</span>
+                              <div className="section-content" onClick={() => goToSection(mIndex, sIndex)} style={{ cursor: "pointer" }}>
                                 <div className="section-header-row">
                                   <input
                                     value={section.title}
                                     onChange={(e) =>
-                                      updateSectionField(
-                                        mIndex,
-                                        sIndex,
-                                        "title",
-                                        e.target.value
-                                      )
+                                      updateSectionField(mIndex, sIndex, "title", e.target.value)
                                     }
                                     placeholder={`Section ${sIndex + 1} name`}
+                                    onClick={(e) => e.stopPropagation()}
                                   />
                                   {errors[`section-${mIndex}-${sIndex}`] && <span className="error-text">{errors[`section-${mIndex}-${sIndex}`]}</span>}
-
-                                  <i
-                                    className="bi bi-trash section-delete"
-                                    onClick={() =>
-                                      removeSection(
-                                        mIndex,
-                                        sIndex
-                                      )
-                                    }
-                                  ></i>
                                 </div>
+                              </div>
+                              <div className="section-actions">
+                                <div
+                                  className="section-action-icon drag-handle"
+                                  {...attributes}
+                                  {...listeners}
+                                  title="Drag to reorder"
+                                >
+                                  <i className="bi bi-grip-vertical"></i>
+                                </div>
+                                <i className="bi bi-pencil section-action-icon" onClick={() => goToSection(mIndex, sIndex)} title="Edit section"></i>
+                                <i
+                                  className="bi bi-trash section-action-icon section-action-delete"
+                                  onClick={() => removeSection(mIndex, sIndex)}
+                                  title="Delete section"
+                                ></i>
                               </div>
                             </div>
 
@@ -840,22 +752,72 @@ const CreateCourse = () => {
             </SortableItem>
           ))}
         </SortableList>
+    </div>
+  );
 
-        {/* FOOTER */}
-        <div className="footer-actions">
-          <button
-            className="cancel-btn"
-            onClick={() => navigate("/admin/courses")}
-            disabled={loading}
-          >
-            Cancel
-          </button>
+  return (
+    <>
+      {!builderStarted && (
+        <CourseTitleModal
+          onContinue={handleTitleContinue}
+          onClose={() => navigate("/admin/courses")}
+        />
+      )}
 
-          <button className="submit-btn" onClick={handlePreview} disabled={loading}>
-            Preview & Create
-          </button>
-        </div>
-      </div>
+      {builderStarted && (
+        <CourseBuilderShell
+          activeStep={activeStep}
+          onStepChange={handleStepChange}
+          courseName={course.courseName}
+          footer={
+            <div className="step-footer">
+              <button
+                type="button"
+                className="cancel-btn"
+                onClick={() => navigate("/admin/courses")}
+                disabled={loading}
+              >
+                Cancel
+              </button>
+              {activeStep === "information" ? (
+                <button
+                  type="button"
+                  className="submit-btn"
+                  onClick={() => handleStepChange("curriculum")}
+                  disabled={loading}
+                >
+                  Continue to Curriculum
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="submit-btn"
+                  onClick={handlePreview}
+                  disabled={loading}
+                >
+                  Preview & Create
+                </button>
+              )}
+            </div>
+          }
+        >
+          {loading && <Loader />}
+
+          {activeStep === "information" && (
+            <div className="admin-create-course-page course-info-wrap">
+              <CourseInformationPanel
+                course={course}
+                errors={errors}
+                updateField={updateField}
+                setErrors={setErrors}
+                onThumbnailPreview={(src) => openLightbox("image", src)}
+              />
+            </div>
+          )}
+
+          {activeStep === "curriculum" && curriculumSection}
+        </CourseBuilderShell>
+      )}
 
       {showPreview && (
         <CoursePreviewModal
@@ -888,7 +850,7 @@ const CreateCourse = () => {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 
