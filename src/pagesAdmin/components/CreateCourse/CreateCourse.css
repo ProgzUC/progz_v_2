@@ -523,9 +523,9 @@ input:focus,
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
   color: #9ca3af;
   font-size: 13px;
   cursor: pointer;
@@ -533,6 +533,12 @@ input:focus,
   border: none;
   background: transparent;
   padding: 0;
+}
+
+.admin-create-course-page .section-action-icon svg,
+.create-course-page .section-action-icon svg {
+  width: 13px;
+  height: 13px;
 }
 
 .admin-create-course-page .section-action-icon:hover,
@@ -545,6 +551,12 @@ input:focus,
 .create-course-page .section-action-icon.drag-handle {
   cursor: grab;
   font-size: 14px;
+}
+
+.admin-create-course-page .section-action-icon.drag-handle svg,
+.create-course-page .section-action-icon.drag-handle svg {
+  width: 14px;
+  height: 14px;
 }
 
 .admin-create-course-page .section-action-delete:hover,

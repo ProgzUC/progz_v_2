@@ -365,9 +365,9 @@ textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
   color: #9ca3af;
   font-size: 13px;
   cursor: pointer;
@@ -375,6 +375,11 @@ textarea {
   border: none;
   background: transparent;
   padding: 0;
+}
+
+.section-action-icon svg {
+  width: 13px;
+  height: 13px;
 }
 
 .section-action-icon:hover {
@@ -385,6 +390,11 @@ textarea {
 .section-action-icon.drag-handle {
   cursor: grab;
   font-size: 14px;
+}
+
+.section-action-icon.drag-handle svg {
+  width: 14px;
+  height: 14px;
 }
 
 .section-action-delete:hover {
