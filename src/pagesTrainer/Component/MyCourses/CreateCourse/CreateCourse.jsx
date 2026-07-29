@@ -68,6 +68,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const [hoveredVideo, setHoveredVideo] = useState(null);
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+  const [editingField, setEditingField] = useState(null);
   const moduleRefs = useRef({});
   const sectionRefs = useRef({});
 
@@ -426,7 +427,10 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                           value={module.title}
                           onChange={(e) => updateModuleTitle(mIndex, e.target.value)}
                           placeholder="Enter module name"
+                          readOnly={editingField !== `module-${mIndex}`}
                           onClick={(e) => e.stopPropagation()}
+                          onBlur={() => setEditingField(null)}
+                          ref={(el) => { if (editingField === `module-${mIndex}` && el) el.focus(); }}
                         />
                         {errors[`module-${mIndex}`] && (
                           <span className="error-text">{errors[`module-${mIndex}`]}</span>
@@ -443,7 +447,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                       >
                         <BiGridVertical />
                       </div>
-                      <i className="bi bi-pencil section-action-icon" onClick={() => goToModule(mIndex)} title="Edit module" />
+                      <i className="bi bi-pencil section-action-icon" onClick={() => setEditingField(`module-${mIndex}`)} title="Edit module" />
                       <BiTrash
                         className="section-action-icon section-action-delete"
                         onClick={(e) => { e.stopPropagation(); removeModule(mIndex); }}
@@ -499,7 +503,10 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                       updateSectionField(mIndex, sIndex, "title", e.target.value)
                                     }
                                     placeholder={`Section ${sIndex + 1} name`}
+                                    readOnly={editingField !== `section-${mIndex}-${sIndex}`}
                                     onClick={(e) => e.stopPropagation()}
+                                    onBlur={() => setEditingField(null)}
+                                    ref={(el) => { if (editingField === `section-${mIndex}-${sIndex}` && el) el.focus(); }}
                                   />
                                   {errors[`section-${mIndex}-${sIndex}`] && (
                                     <span className="error-text">
@@ -517,7 +524,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                 >
                                   <BiGridVertical />
                                 </div>
-                                <i className="bi bi-pencil section-action-icon" onClick={() => goToSection(mIndex, sIndex)} title="Edit section" />
+                                <i className="bi bi-pencil section-action-icon" onClick={() => setEditingField(`section-${mIndex}-${sIndex}`)} title="Edit section" />
                                 <BiTrash
                                   className="section-action-icon section-action-delete"
                                   onClick={() => removeSection(mIndex, sIndex)}

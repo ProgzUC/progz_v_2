@@ -35,6 +35,7 @@ const CreateCourse = () => {
   const [hoveredVideo, setHoveredVideo] = useState(null); // { mIndex, sIndex, vIndex }
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
   const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+  const [editingField, setEditingField] = useState(null);
   const moduleRefs = useRef({});
   const sectionRefs = useRef({});
 
@@ -379,7 +380,10 @@ const CreateCourse = () => {
                           value={module.title}
                           onChange={(e) => updateModuleTitle(mIndex, e.target.value)}
                           placeholder="Enter module name"
+                          readOnly={editingField !== `module-${mIndex}`}
                           onClick={(e) => e.stopPropagation()}
+                          onBlur={() => setEditingField(null)}
+                          ref={(el) => { if (editingField === `module-${mIndex}` && el) el.focus(); }}
                         />
                         {errors[`module-${mIndex}`] && <span className="error-text">{errors[`module-${mIndex}`]}</span>}
                       </div>
@@ -394,7 +398,7 @@ const CreateCourse = () => {
                       >
                         <i className="bi bi-grip-vertical"></i>
                       </div>
-                      <i className="bi bi-pencil section-action-icon" onClick={() => goToModule(mIndex)} title="Edit module"></i>
+                      <i className="bi bi-pencil section-action-icon" onClick={() => setEditingField(`module-${mIndex}`)} title="Edit module"></i>
                       <i
                         className="bi bi-trash section-action-icon section-action-delete"
                         onClick={(e) => { e.stopPropagation(); removeModule(mIndex); }}
@@ -453,7 +457,10 @@ const CreateCourse = () => {
                                       updateSectionField(mIndex, sIndex, "title", e.target.value)
                                     }
                                     placeholder={`Section ${sIndex + 1} name`}
+                                    readOnly={editingField !== `section-${mIndex}-${sIndex}`}
                                     onClick={(e) => e.stopPropagation()}
+                                    onBlur={() => setEditingField(null)}
+                                    ref={(el) => { if (editingField === `section-${mIndex}-${sIndex}` && el) el.focus(); }}
                                   />
                                   {errors[`section-${mIndex}-${sIndex}`] && <span className="error-text">{errors[`section-${mIndex}-${sIndex}`]}</span>}
                                 </div>
@@ -467,7 +474,7 @@ const CreateCourse = () => {
                                 >
                                   <i className="bi bi-grip-vertical"></i>
                                 </div>
-                                <i className="bi bi-pencil section-action-icon" onClick={() => goToSection(mIndex, sIndex)} title="Edit section"></i>
+                                <i className="bi bi-pencil section-action-icon" onClick={() => setEditingField(`section-${mIndex}-${sIndex}`)} title="Edit section"></i>
                                 <i
                                   className="bi bi-trash section-action-icon section-action-delete"
                                   onClick={() => removeSection(mIndex, sIndex)}

@@ -565,6 +565,16 @@ input:focus,
   background: #fef2f2;
 }
 
+.admin-create-course-page .module-title-row input[readonly],
+.create-course-page .module-title-row input[readonly],
+.admin-create-course-page .section-header-row input[readonly],
+.create-course-page .section-header-row input[readonly] {
+  background: transparent;
+  border-color: transparent;
+  cursor: default;
+  outline: none;
+}
+
 .admin-create-course-page .module-box.is-dragging {
   box-shadow: 0 12px 28px rgba(26, 107, 40, 0.2);
   border-color: #1a6b28;

@@ -402,6 +402,14 @@ textarea {
   background: #fef2f2;
 }
 
+.module-title-row input[readonly],
+.section-header-row input[readonly] {
+  background: transparent;
+  border-color: transparent;
+  cursor: default;
+  outline: none;
+}
+
 .section-expand-btn {
   display: inline-flex;
   align-items: center;
