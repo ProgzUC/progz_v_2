@@ -158,138 +158,240 @@ textarea {
   background: #0f172a;
 }
 
+/* CURRICULUM PAGE HEADER */
+.curriculum-page-header {
+  margin-bottom: 20px;
+}
+
+.curriculum-page-header h3 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.curriculum-page-header p {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.curriculum-module-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 /* MODULE BOX */
 .module-box {
-  background: #f9fafb;
-  padding: 20px;
-  border-radius: 10px;
-  margin-top: 20px;
+  background: #fff;
+  padding: 0;
+  border-radius: 12px;
+  margin-top: 0;
   border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+.module-box.is-active {
+  border-color: #bbf7d0;
+  box-shadow: 0 0 0 1px rgba(42, 125, 56, 0.08);
 }
 
 .module-header-wrapper {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
+  padding: 14px 16px;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
 }
 
-.drag-expand-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 4px 6px;
-  min-width: 36px;
-  flex-shrink: 0;
-  transition: border-color 0.15s, background 0.15s;
+.module-header-wrapper.is-open {
+  background: #f0fdf4;
+  border-bottom: 1px solid #dcfce7;
 }
 
-.drag-expand-btn:hover {
-  border-color: #d1d5db;
-  background: #eef0f3;
-}
-
-.drag-expand-grip {
-  display: flex;
+.module-chevron,
+.chapter-chevron {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #9ca3af;
-  cursor: grab;
-  font-size: 20px;
-  padding: 4px 2px;
-  touch-action: none;
-  user-select: none;
-  transition: color 0.15s;
-}
-
-.drag-expand-grip:hover {
-  color: #4b5563;
-}
-
-.drag-expand-grip:active {
-  cursor: grabbing;
-}
-
-.drag-expand-grip svg,
-.drag-expand-grip i {
-  pointer-events: none;
-}
-
-.drag-expand-chevron {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 24px;
+  height: 24px;
   border: none;
   background: transparent;
-  color: #4b5563;
+  color: #6b7280;
   font-size: 18px;
   cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 4px;
-  line-height: 1;
-  transition: 0.15s;
+  padding: 0;
+  flex-shrink: 0;
+  transition: transform 0.2s;
 }
 
-.drag-expand-chevron:hover {
-  color: #2a7d38;
-  background: #e5e7eb;
-}
-
-.drag-expand-chevron.rotate {
+.module-chevron.rotate,
+.chapter-chevron.rotate {
   transform: rotate(180deg);
 }
 
-.drag-expand-btn--sec {
-  align-self: flex-start;
-}
-
-.module-label {
-  display: none;
+.module-num-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #2a7d38 0%, #1a5c28 100%);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
 }
 
 .module-content {
   flex: 1;
+  min-width: 0;
 }
 
 .module-title-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .module-title-row input {
   flex: 1;
-  padding: 10px;
+  min-width: 120px;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  background: transparent;
+}
+
+.module-title-row input:not([readonly]) {
+  border-color: #d1d5db;
+  background: #fff;
+}
+
+.chapter-count-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #dcfce7;
+  color: #166534;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.module-body {
+  padding: 12px 16px 16px;
+  background: #fff;
 }
 
 /* module delete now uses section-action-icon styles */
 
-/* ADD SECTION BUTTON */
-.add-section-btn {
-  margin-top: 10px;
-  background: #475569;
-  color: white;
+/* ADD CHAPTER / SECTION BUTTONS */
+.add-chapter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  background: transparent;
+  color: #2a7d38;
   border: none;
-  padding: 8px 14px;
-  border-radius: 6px;
+  padding: 6px 0;
+  font-size: 14px;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.2s;
 }
 
-.add-section-btn:hover {
-  background: #334155;
+.add-chapter-icon,
+.add-module-dashed-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1.5px dashed #86efac;
+  border-radius: 8px;
+  color: #2a7d38;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.add-module-dashed-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin-top: 16px;
+  padding: 18px 20px;
+  background: #fff;
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.add-module-dashed-btn:hover {
+  border-color: #2a7d38;
+  background: #f0fdf4;
+}
+
+.add-module-dashed-btn strong {
+  display: block;
+  font-size: 15px;
+  color: #111827;
+}
+
+.add-module-dashed-btn small {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.add-section-btn {
+  display: none;
 }
 
 /* SECTION BLOCK */
 .section-header-wrapper {
   display: flex;
-  gap: 15px;
+  gap: 8px;
   align-items: center;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.chapter-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.chapter-sep {
+  color: #9ca3af;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.chapter-doc-icon {
+  color: #6b7280;
+  font-size: 14px;
+  flex-shrink: 0;
 }
 
 
@@ -343,10 +445,19 @@ textarea {
 
 .section-block {
   background: #ffffff;
-  padding: 12px 14px;
+  padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid #e5e7eb;
-  margin-top: 10px;
+  margin-top: 8px;
+}
+
+.section-block.is-active {
+  border-color: #86efac;
+  background: #fafffe;
+}
+
+.section-block.is-collapsed {
+  display: block;
 }
 
 .section-header-row input {
@@ -400,6 +511,24 @@ textarea {
 .section-action-delete:hover {
   color: #ef4444;
   background: #fef2f2;
+}
+
+/* Edit/delete hidden until section is clicked/active; drag handle stays visible */
+.section-block .section-actions .bi-pencil,
+.section-block .section-actions .section-action-delete {
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  overflow: hidden;
+  margin: 0;
+  transition: opacity 0.15s ease, width 0.15s ease;
+}
+
+.section-block.is-active .section-actions .bi-pencil,
+.section-block.is-active .section-actions .section-action-delete {
+  opacity: 1;
+  pointer-events: auto;
+  width: 18px;
 }
 
 .module-title-row input[readonly],

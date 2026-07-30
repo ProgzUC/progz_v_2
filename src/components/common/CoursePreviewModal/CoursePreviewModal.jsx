@@ -14,7 +14,11 @@ const CoursePreviewModal = ({
   if (!course) return null;
 
   return (
-    <div className="course-preview-overlay" role="dialog" aria-modal="true">
+    <div
+      className="course-preview-overlay course-preview-overlay--student"
+      role="dialog"
+      aria-modal="true"
+    >
       <div className="course-preview-panel course-preview-panel--student">
         <div className="course-preview-topbar">
           <div>

@@ -78,7 +78,11 @@
 }
 
 .module-box.is-collapsed {
-  display: none;
+  display: block;
+  opacity: 1;
+  max-height: none;
+  overflow: visible;
+  pointer-events: auto;
 }
 
 .module-box.is-active {
@@ -87,7 +91,11 @@
 }
 
 .section-block.is-collapsed {
-  display: none;
+  display: block;
+  opacity: 1;
+  max-height: none;
+  overflow: visible;
+  pointer-events: auto;
 }
 
 .section-block.is-active {

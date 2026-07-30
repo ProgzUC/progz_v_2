@@ -34,13 +34,13 @@ const CreateCourse = () => {
   const [lightbox, setLightbox] = useState({ isOpen: false, type: "", src: "" });
   const [hoveredVideo, setHoveredVideo] = useState(null); // { mIndex, sIndex, vIndex }
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
-  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+  const [activeSectionIndex, setActiveSectionIndex] = useState(-1);
   const [editingField, setEditingField] = useState(null);
   const moduleRefs = useRef({});
   const sectionRefs = useRef({});
 
   useEffect(() => {
-    setActiveSectionIndex(0);
+    setActiveSectionIndex(-1);
   }, [activeModuleIndex]);
 
   // Helper to extract YouTube ID
@@ -111,7 +111,8 @@ const CreateCourse = () => {
   // ===============
 
   const goToModule = (index) => {
-    setActiveModuleIndex(index);
+    setActiveModuleIndex((prev) => (prev === index ? -1 : index));
+    if (index === activeModuleIndex) return;
     requestAnimationFrame(() => {
       const moduleId = course.modules[index]?.id;
       moduleRefs.current[moduleId]?.scrollIntoView({
@@ -165,8 +166,10 @@ const CreateCourse = () => {
   const goToSection = (mIndex, sIndex) => {
     if (mIndex !== activeModuleIndex) {
       setActiveModuleIndex(mIndex);
+      setActiveSectionIndex(sIndex);
+    } else {
+      setActiveSectionIndex((prev) => (prev === sIndex ? -1 : sIndex));
     }
-    setActiveSectionIndex(sIndex);
     requestAnimationFrame(() => {
       const sectionId = course.modules[mIndex]?.sections[sIndex]?.id;
       sectionRefs.current[sectionId]?.scrollIntoView({
@@ -340,23 +343,14 @@ const CreateCourse = () => {
 
   const curriculumSection = (
     <div className="admin-create-course-page course-curriculum-wrap">
-        <div className="section-header">
-          <h3>Modules</h3>
-          <button className="add-btn" onClick={addModule}>
-            + Add Module
-          </button>
+        <div className="curriculum-page-header">
+          <h3>Course Content</h3>
+          <p>Organize your course into modules and add sections</p>
         </div>
-
-        {course.modules.length > 1 && (
-          <ModuleNavigator
-            modules={course.modules}
-            activeIndex={activeModuleIndex}
-            onSelect={goToModule}
-          />
-        )}
 
         <SortableList
           items={course.modules}
+          className="curriculum-module-list"
           onReorder={(reordered) =>
             setCourse((prev) => ({ ...prev, modules: reordered }))
           }
@@ -370,11 +364,27 @@ const CreateCourse = () => {
                     moduleRefs.current[module.id] = el;
                   }}
                   style={style}
-                  className={`${className} ${mIndex === activeModuleIndex ? "is-active" : course.modules.length > 1 ? "is-collapsed" : ""}`}
+                  className={`${className} ${mIndex === activeModuleIndex ? "is-active" : ""}`}
                 >
-                  <div className="module-header-wrapper">
-                    <span className="section-order-num">{mIndex + 1}</span>
-                    <div className="module-content" onClick={() => goToModule(mIndex)} style={{ cursor: "pointer" }}>
+                  <div
+                    className={`module-header-wrapper ${mIndex === activeModuleIndex ? "is-open" : ""}`}
+                    onClick={() => goToModule(mIndex)}
+                  >
+                    <button
+                      type="button"
+                      className={`module-chevron ${mIndex === activeModuleIndex ? "rotate" : ""}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        goToModule(mIndex);
+                      }}
+                      title={mIndex === activeModuleIndex ? "Collapse" : "Expand"}
+                    >
+                      <i className="bi bi-chevron-down"></i>
+                    </button>
+                    <span className="module-num-badge">
+                      {String(mIndex + 1).padStart(2, "0")}
+                    </span>
+                    <div className="module-content">
                       <div className="module-title-row">
                         <input
                           value={module.title}
@@ -385,46 +395,37 @@ const CreateCourse = () => {
                           onBlur={() => setEditingField(null)}
                           ref={(el) => { if (editingField === `module-${mIndex}` && el) el.focus(); }}
                         />
+                        <span className="chapter-count-badge">
+                          {module.sections.length} {module.sections.length === 1 ? "section" : "sections"}
+                        </span>
                         {errors[`module-${mIndex}`] && <span className="error-text">{errors[`module-${mIndex}`]}</span>}
                       </div>
                     </div>
-                    <div className="section-actions">
+                    <div className="section-actions" onClick={(e) => e.stopPropagation()}>
+                      {mIndex === activeModuleIndex && (
+                        <>
+                          <i className="bi bi-pencil section-action-icon" onClick={() => setEditingField(`module-${mIndex}`)} title="Edit module"></i>
+                          <i
+                            className="bi bi-trash section-action-icon section-action-delete"
+                            onClick={() => removeModule(mIndex)}
+                            title="Delete module"
+                          ></i>
+                        </>
+                      )}
                       <div
                         className="section-action-icon drag-handle"
                         {...attributes}
                         {...listeners}
                         title="Drag to reorder"
-                        onClick={(e) => e.stopPropagation()}
                       >
                         <i className="bi bi-grip-vertical"></i>
                       </div>
-                      <i className="bi bi-pencil section-action-icon" onClick={() => setEditingField(`module-${mIndex}`)} title="Edit module"></i>
-                      <i
-                        className="bi bi-trash section-action-icon section-action-delete"
-                        onClick={(e) => { e.stopPropagation(); removeModule(mIndex); }}
-                        title="Delete module"
-                      ></i>
                     </div>
                   </div>
 
                   {mIndex === activeModuleIndex && (
                     <>
-                  <button
-                    className="add-section-btn"
-                    onClick={() => addSection(mIndex)}
-                  >
-                    + Add Section
-                  </button>
-
-                  {module.sections.length > 1 && (
-                    <ModuleNavigator
-                      modules={module.sections}
-                      activeIndex={activeSectionIndex}
-                      onSelect={(sIndex) => goToSection(mIndex, sIndex)}
-                      itemPrefix="Section"
-                    />
-                  )}
-
+                  <div className="module-body">
                   <SortableList
                     items={module.sections}
                     className="sections-droppable"
@@ -445,11 +446,23 @@ const CreateCourse = () => {
                               sectionRefs.current[section.id] = el;
                             }}
                             style={style}
-                            className={`${sectionClass} ${sIndex === activeSectionIndex ? "is-active" : module.sections.length > 1 ? "is-collapsed" : ""}`}
+                            className={`${sectionClass} ${sIndex === activeSectionIndex ? "is-active" : ""}`}
                           >
-                            <div className="section-header-wrapper">
-                              <span className="section-order-num">{sIndex + 1}</span>
-                              <div className="section-content" onClick={() => goToSection(mIndex, sIndex)} style={{ cursor: "pointer" }}>
+                            <div className="section-header-wrapper" onClick={() => goToSection(mIndex, sIndex)}>
+                              <button
+                                type="button"
+                                className={`chapter-chevron ${sIndex === activeSectionIndex ? "rotate" : ""}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  goToSection(mIndex, sIndex);
+                                }}
+                              >
+                                <i className="bi bi-chevron-down"></i>
+                              </button>
+                              <span className="chapter-label">SECTION {sIndex + 1}</span>
+                              <span className="chapter-sep">|</span>
+                              <i className="bi bi-file-earmark-text chapter-doc-icon"></i>
+                              <div className="section-content">
                                 <div className="section-header-row">
                                   <input
                                     value={section.title}
@@ -465,7 +478,17 @@ const CreateCourse = () => {
                                   {errors[`section-${mIndex}-${sIndex}`] && <span className="error-text">{errors[`section-${mIndex}-${sIndex}`]}</span>}
                                 </div>
                               </div>
-                              <div className="section-actions">
+                              <div className="section-actions" onClick={(e) => e.stopPropagation()}>
+                                {sIndex === activeSectionIndex && (
+                                  <>
+                                    <i className="bi bi-pencil section-action-icon" onClick={() => setEditingField(`section-${mIndex}-${sIndex}`)} title="Edit section"></i>
+                                    <i
+                                      className="bi bi-trash section-action-icon section-action-delete"
+                                      onClick={() => removeSection(mIndex, sIndex)}
+                                      title="Delete section"
+                                    ></i>
+                                  </>
+                                )}
                                 <div
                                   className="section-action-icon drag-handle"
                                   {...attributes}
@@ -474,12 +497,6 @@ const CreateCourse = () => {
                                 >
                                   <i className="bi bi-grip-vertical"></i>
                                 </div>
-                                <i className="bi bi-pencil section-action-icon" onClick={() => setEditingField(`section-${mIndex}-${sIndex}`)} title="Edit section"></i>
-                                <i
-                                  className="bi bi-trash section-action-icon section-action-delete"
-                                  onClick={() => removeSection(mIndex, sIndex)}
-                                  title="Delete section"
-                                ></i>
                               </div>
                             </div>
 
@@ -752,6 +769,11 @@ const CreateCourse = () => {
                   </SortableItem>
                 ))}
                   </SortableList>
+                  <button type="button" className="add-chapter-btn" onClick={() => addSection(mIndex)}>
+                    <span className="add-chapter-icon">+</span>
+                    Add more sections
+                  </button>
+                  </div>
                     </>
                   )}
                 </div>
@@ -759,6 +781,14 @@ const CreateCourse = () => {
             </SortableItem>
           ))}
         </SortableList>
+
+        <button type="button" className="add-module-dashed-btn" onClick={addModule}>
+          <span className="add-module-dashed-icon">+</span>
+          <span>
+            <strong>Add New Module</strong>
+            <small>Organize your course with modules.</small>
+          </span>
+        </button>
     </div>
   );
 

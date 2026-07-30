@@ -67,13 +67,13 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const [lightbox, setLightbox] = useState({ isOpen: false, type: "", src: "" });
   const [hoveredVideo, setHoveredVideo] = useState(null);
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
-  const [activeSectionIndex, setActiveSectionIndex] = useState(0);
+  const [activeSectionIndex, setActiveSectionIndex] = useState(-1);
   const [editingField, setEditingField] = useState(null);
   const moduleRefs = useRef({});
   const sectionRefs = useRef({});
 
   useEffect(() => {
-    setActiveSectionIndex(0);
+    setActiveSectionIndex(-1);
   }, [activeModuleIndex]);
 
   const { mutate: createCourseMutation } = useCreateCourse();
@@ -149,7 +149,8 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   // ===============
 
   const goToModule = (index) => {
-    setActiveModuleIndex(index);
+    setActiveModuleIndex((prev) => (prev === index ? -1 : index));
+    if (index === activeModuleIndex) return;
     requestAnimationFrame(() => {
       const moduleId = course.modules[index]?.id;
       moduleRefs.current[moduleId]?.scrollIntoView({
@@ -203,8 +204,10 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const goToSection = (mIndex, sIndex) => {
     if (mIndex !== activeModuleIndex) {
       setActiveModuleIndex(mIndex);
+      setActiveSectionIndex(sIndex);
+    } else {
+      setActiveSectionIndex((prev) => (prev === sIndex ? -1 : sIndex));
     }
-    setActiveSectionIndex(sIndex);
     requestAnimationFrame(() => {
       const sectionId = course.modules[mIndex]?.sections[sIndex]?.id;
       sectionRefs.current[sectionId]?.scrollIntoView({
@@ -389,21 +392,14 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
 
   const curriculumSection = (
     <div className="create-course-page course-curriculum-wrap">
-        <div className="section-header">
-          <h3>Modules</h3>
-          <button className="add-btn" onClick={addModule}>+ Add Module</button>
+        <div className="curriculum-page-header">
+          <h3>Course Content</h3>
+          <p>Organize your course into modules and add sections</p>
         </div>
-
-        {course.modules.length > 1 && (
-          <ModuleNavigator
-            modules={course.modules}
-            activeIndex={activeModuleIndex}
-            onSelect={goToModule}
-          />
-        )}
 
         <SortableList
           items={course.modules}
+          className="curriculum-module-list"
           onReorder={(reordered) =>
             setCourse((prev) => ({ ...prev, modules: reordered }))
           }
@@ -417,11 +413,27 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                     moduleRefs.current[module.id] = el;
                   }}
                   style={style}
-                  className={`${className} ${mIndex === activeModuleIndex ? "is-active" : course.modules.length > 1 ? "is-collapsed" : ""}`}
+                  className={`${className} ${mIndex === activeModuleIndex ? "is-active" : ""}`}
                 >
-                  <div className="module-header-wrapper">
-                    <span className="section-order-num">{mIndex + 1}</span>
-                    <div className="module-content" onClick={() => goToModule(mIndex)} style={{ cursor: "pointer" }}>
+                  <div
+                    className={`module-header-wrapper ${mIndex === activeModuleIndex ? "is-open" : ""}`}
+                    onClick={() => goToModule(mIndex)}
+                  >
+                    <button
+                      type="button"
+                      className={`module-chevron ${mIndex === activeModuleIndex ? "rotate" : ""}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        goToModule(mIndex);
+                      }}
+                      title={mIndex === activeModuleIndex ? "Collapse" : "Expand"}
+                    >
+                      <BiChevronDown />
+                    </button>
+                    <span className="module-num-badge">
+                      {String(mIndex + 1).padStart(2, "0")}
+                    </span>
+                    <div className="module-content">
                       <div className="module-title-row">
                         <input
                           value={module.title}
@@ -432,45 +444,39 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                           onBlur={() => setEditingField(null)}
                           ref={(el) => { if (editingField === `module-${mIndex}` && el) el.focus(); }}
                         />
+                        <span className="chapter-count-badge">
+                          {module.sections.length} {module.sections.length === 1 ? "section" : "sections"}
+                        </span>
                         {errors[`module-${mIndex}`] && (
                           <span className="error-text">{errors[`module-${mIndex}`]}</span>
                         )}
                       </div>
                     </div>
-                    <div className="section-actions">
+                    <div className="section-actions" onClick={(e) => e.stopPropagation()}>
+                      {mIndex === activeModuleIndex && (
+                        <>
+                          <i className="bi bi-pencil section-action-icon" onClick={() => setEditingField(`module-${mIndex}`)} title="Edit module" />
+                          <BiTrash
+                            className="section-action-icon section-action-delete"
+                            onClick={() => removeModule(mIndex)}
+                            title="Delete module"
+                          />
+                        </>
+                      )}
                       <div
                         className="section-action-icon drag-handle"
                         {...attributes}
                         {...listeners}
                         title="Drag to reorder"
-                        onClick={(e) => e.stopPropagation()}
                       >
                         <BiGridVertical />
                       </div>
-                      <i className="bi bi-pencil section-action-icon" onClick={() => setEditingField(`module-${mIndex}`)} title="Edit module" />
-                      <BiTrash
-                        className="section-action-icon section-action-delete"
-                        onClick={(e) => { e.stopPropagation(); removeModule(mIndex); }}
-                        title="Delete module"
-                      />
                     </div>
                   </div>
 
                   {mIndex === activeModuleIndex && (
                     <>
-                  <button className="add-section-btn" onClick={() => addSection(mIndex)}>
-                    + Add Section
-                  </button>
-
-                  {module.sections.length > 1 && (
-                    <ModuleNavigator
-                      modules={module.sections}
-                      activeIndex={activeSectionIndex}
-                      onSelect={(sIndex) => goToSection(mIndex, sIndex)}
-                      itemPrefix="Section"
-                    />
-                  )}
-
+                  <div className="module-body">
                   <SortableList
                     items={module.sections}
                     className="sections-droppable"
@@ -491,11 +497,23 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                               sectionRefs.current[section.id] = el;
                             }}
                             style={style}
-                            className={`${sectionClass} ${sIndex === activeSectionIndex ? "is-active" : module.sections.length > 1 ? "is-collapsed" : ""}`}
+                            className={`${sectionClass} ${sIndex === activeSectionIndex ? "is-active" : ""}`}
                           >
-                            <div className="section-header-wrapper">
-                              <span className="section-order-num">{sIndex + 1}</span>
-                              <div className="section-content" onClick={() => goToSection(mIndex, sIndex)} style={{ cursor: "pointer" }}>
+                            <div className="section-header-wrapper" onClick={() => goToSection(mIndex, sIndex)}>
+                              <button
+                                type="button"
+                                className={`chapter-chevron ${sIndex === activeSectionIndex ? "rotate" : ""}`}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  goToSection(mIndex, sIndex);
+                                }}
+                              >
+                                <BiChevronDown />
+                              </button>
+                              <span className="chapter-label">SECTION {sIndex + 1}</span>
+                              <span className="chapter-sep">|</span>
+                              <i className="bi bi-file-earmark-text chapter-doc-icon"></i>
+                              <div className="section-content">
                                 <div className="section-header-row">
                                   <input
                                     value={section.title}
@@ -515,7 +533,17 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                   )}
                                 </div>
                               </div>
-                              <div className="section-actions">
+                              <div className="section-actions" onClick={(e) => e.stopPropagation()}>
+                                {sIndex === activeSectionIndex && (
+                                  <>
+                                    <i className="bi bi-pencil section-action-icon" onClick={() => setEditingField(`section-${mIndex}-${sIndex}`)} title="Edit section" />
+                                    <BiTrash
+                                      className="section-action-icon section-action-delete"
+                                      onClick={() => removeSection(mIndex, sIndex)}
+                                      title="Delete section"
+                                    />
+                                  </>
+                                )}
                                 <div
                                   className="section-action-icon drag-handle"
                                   {...attributes}
@@ -524,12 +552,6 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                 >
                                   <BiGridVertical />
                                 </div>
-                                <i className="bi bi-pencil section-action-icon" onClick={() => setEditingField(`section-${mIndex}-${sIndex}`)} title="Edit section" />
-                                <BiTrash
-                                  className="section-action-icon section-action-delete"
-                                  onClick={() => removeSection(mIndex, sIndex)}
-                                  title="Delete section"
-                                />
                               </div>
                             </div>
 
@@ -744,6 +766,11 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                 </SortableItem>
                               ))}
                   </SortableList>
+                  <button type="button" className="add-chapter-btn" onClick={() => addSection(mIndex)}>
+                    <span className="add-chapter-icon">+</span>
+                    Add more sections
+                  </button>
+                  </div>
                     </>
                   )}
                 </div>
@@ -751,6 +778,14 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
             </SortableItem>
           ))}
         </SortableList>
+
+        <button type="button" className="add-module-dashed-btn" onClick={addModule}>
+          <span className="add-module-dashed-icon">+</span>
+          <span>
+            <strong>Add New Module</strong>
+            <small>Organize your course with modules.</small>
+          </span>
+        </button>
     </div>
   );
 

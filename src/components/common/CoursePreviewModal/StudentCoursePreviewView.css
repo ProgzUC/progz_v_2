@@ -1,17 +1,25 @@
 .student-course-preview-view {
   margin-top: 0 !important;
   background: #e4e4e4;
-  border-radius: 12px;
-  padding: 20px 22px 28px;
-  min-height: 420px;
+  border-radius: 0;
+  padding: 28px 40px 48px;
+  min-height: 100%;
+  width: 100%;
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
 }
 
 .student-course-preview-view .student-preview-large-card {
-  margin: 0 auto 28px;
+  margin: 0 0 28px;
+  width: 100%;
+  max-width: none;
 }
 
 .student-course-preview-view .course-curriculum-container {
-  margin: 0 auto;
+  margin: 0;
+  width: 100%;
 }
 
 .student-preview-empty {
@@ -22,8 +30,15 @@
 }
 
 .student-course-preview-view .lesson-content-view {
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
+  width: 100%;
+}
+
+@media (max-width: 800px) {
+  .student-course-preview-view {
+    padding: 16px 14px 32px;
+  }
 }
 
 .student-course-preview-view .jc-back-btn {

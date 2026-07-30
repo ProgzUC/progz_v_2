@@ -235,6 +235,9 @@
   box-shadow: var(--trainer-shadow-sm);
   word-break: break-word;
   overflow-wrap: break-word;
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
 }
 
 /* Columns Grid (desktop) — legacy, hidden */
@@ -250,7 +253,7 @@
 /* Curriculum accordion (modules expand in place) */
 .cv-curriculum {
   width: 100%;
-  max-width: 860px;
+  max-width: none;
 }
 
 .cv-accordion {
