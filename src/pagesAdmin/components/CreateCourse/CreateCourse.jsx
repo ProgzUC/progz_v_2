@@ -5,6 +5,7 @@ import "../../../components/common/ModuleNavigator/ModuleNavigator.css";
 import { uploadToCloudinary } from "../../../utils/cloudinary";
 import api from "../../../api/axiosInstance";
 import { confirmDelete } from "../../../utils/confirmDelete";
+import { promptInput } from "../../../utils/promptInput";
 import { showSuccess, showError, showWarning } from "../../../utils/toast";
 import Loader from "../../../components/common/Loader/Loader";
 import SortableList from "../../../components/common/Sortable/SortableList";
@@ -223,14 +224,16 @@ const CreateCourse = () => {
     setCourse({ ...course, modules: updated });
   };
 
-  const addVideo = (mIndex, sIndex) => {
-    const link = prompt("Enter video link (YouTube only)");
+  const addVideo = async (mIndex, sIndex) => {
+    const link = await promptInput({
+      title: "Add Video",
+      inputLabel: "YouTube video link",
+      placeholder: "https://www.youtube.com/watch?v=...",
+      confirmText: "Add Video",
+      validate: (value) =>
+        getYouTubeId(value) ? undefined : "Please enter a valid YouTube URL (youtube.com or youtu.be)",
+    });
     if (!link) return;
-
-    if (!getYouTubeId(link)) {
-      showError("Please enter a valid YouTube URL (youtube.com or youtu.be)");
-      return;
-    }
 
     const updated = [...course.modules];
     // VideoReferences in schema is array of strings

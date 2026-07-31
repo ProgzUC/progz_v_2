@@ -9,6 +9,7 @@ import "../CreateCourse/CreateCourse.css"; // Reuse styling
 import { uploadToCloudinary } from "../../../utils/cloudinary";
 import { useCourse, useUpdateCourse, useRollbackCourse } from "../../../hooks/useCourses";
 import { confirmDelete } from "../../../utils/confirmDelete";
+import { promptInput } from "../../../utils/promptInput";
 import { showSuccess, showError } from "../../../utils/toast";
 import Loader from "../../../components/common/Loader/Loader";
 import FileDropZone from "../../../components/common/FileDropZone/FileDropZone";
@@ -196,8 +197,15 @@ const EditCourse = () => {
     setLightbox({ isOpen: true, type, src });
   };
 
-  const addVideo = (mIndex, sIndex) => {
-    const link = prompt("Enter video link");
+  const addVideo = async (mIndex, sIndex) => {
+    const link = await promptInput({
+      title: "Add Video",
+      inputLabel: "YouTube video link",
+      placeholder: "https://www.youtube.com/watch?v=...",
+      confirmText: "Add Video",
+      validate: (value) =>
+        getYouTubeId(value) ? undefined : "Please enter a valid YouTube URL",
+    });
     if (!link) return;
 
     updateSectionField(mIndex, sIndex, "videos", [

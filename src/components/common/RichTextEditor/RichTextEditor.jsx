@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { promptInput } from "../../../utils/promptInput";
 import "./RichTextEditor.css";
 
 const TOOLBAR_ITEMS = [
@@ -51,9 +52,15 @@ const RichTextEditor = ({ value = "", onChange, placeholder = "Write notes here.
     emitChange();
   };
 
-  const handleToolbarClick = (item) => {
+  const handleToolbarClick = async (item) => {
     if (item.command === "link") {
-      const url = window.prompt("Enter link URL");
+      const url = await promptInput({
+        title: "Insert Link",
+        inputLabel: "URL",
+        placeholder: "https://example.com",
+        confirmText: "Insert",
+        inputType: "url",
+      });
       if (!url) return;
       exec("createLink", url);
       return;
