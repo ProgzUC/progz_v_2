@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
-import { FaFacebook, FaApple } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 import pattern from "../../assets/login/pattern.png";
 import "./Auth.css";
 import { login, forgotPassword } from "../../api/authApi";
@@ -21,43 +19,49 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
+  const [fieldErrors, setFieldErrors] = useState({});
 
   // Forgot Password State  
   const [forgotEmail, setForgotEmail] = useState("");
-
-
 
   // General State
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState(""); // For popups
 
-  // ================= CONFIG ARRAYS =================
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const forgotFields = [
-    {
-      id: "forgotEmail",
-      label: "Enter your Email",
-      type: "email",
-      placeholder: "e.g. jane@example.com",
-      value: forgotEmail,
-      setValue: setForgotEmail,
-      icon: <FiMail />,
-      name: "email"
+  const validateLogin = () => {
+    const next = {};
+    const trimmedEmail = email.trim();
+
+    if (!trimmedEmail) {
+      next.email = "Email is required";
+    } else if (!emailRegex.test(trimmedEmail)) {
+      next.email = "Please enter a valid email address";
     }
-  ];
 
+    if (!password) {
+      next.password = "Password is required";
+    } else if (password.length < 6) {
+      next.password = "Password must be at least 6 characters";
+    }
 
+    setFieldErrors(next);
+    return Object.keys(next).length === 0;
+  };
 
   // ================= HANDLERS =================
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    if (!validateLogin()) return;
+
     setLoading(true);
 
     try {
-      const data = await login({ email, password }, rememberMe);
+      const data = await login({ email: email.trim(), password }, rememberMe);
       const role = data.role ?? data.user?.role;
 
       if (role === "admin") navigate("/admin");
@@ -76,11 +80,14 @@ const SignIn = () => {
     e.preventDefault();
     setError("");
     setSuccessMessage("");
+    setFieldErrors({});
 
-    // Basic Email Validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(forgotEmail)) {
-      setError("Please enter a valid email address.");
+    if (!forgotEmail.trim()) {
+      setFieldErrors({ forgotEmail: "Email is required" });
+      return;
+    }
+    if (!emailRegex.test(forgotEmail.trim())) {
+      setFieldErrors({ forgotEmail: "Please enter a valid email address" });
       return;
     }
 
@@ -96,32 +103,6 @@ const SignIn = () => {
   };
 
 
-
-  // ================= RENDER HELPERS =================
-
-  // Generic Input Renderer
-  const renderInputs = (fields, handleChange) => {
-    return fields.map((field) => (
-      <div className="auth-input-group" key={field.id}>
-        <label>{field.label}</label>
-        <div className="input-wrapper">
-          <span className="input-icon-wrapper">{field.icon}</span>
-          <input
-            type={field.type}
-            placeholder={field.placeholder}
-            value={field.value}
-            name={field.name}
-            onChange={(e) => handleChange ? handleChange(field.name, e.target.value) : field.setValue(e.target.value)}
-          />
-          {field.isPassword && (
-            <div className="eye-icon" onClick={field.togglePass}>
-              {field.showPass ? <FiEye /> : <FiEyeOff />}
-            </div>
-          )}
-        </div>
-      </div>
-    ));
-  };
 
   // Popup Component
   const SuccessPopup = ({ msg, actionName, onAction }) => (
@@ -166,8 +147,8 @@ const SignIn = () => {
             <h2 className="auth-title">Login</h2>
             {error && <p className="auth-error">{error}</p>}
 
-            <form onSubmit={handleLogin} className="auth-form">
-              <div className="auth-input-group">
+            <form onSubmit={handleLogin} className="auth-form" noValidate>
+              <div className={`auth-input-group ${fieldErrors.email ? "has-error" : ""}`}>
                 <label>Email</label>
                 <div className="input-wrapper">
                   <FiMail className="input-icon" />
@@ -175,13 +156,17 @@ const SignIn = () => {
                     type="email"
                     placeholder="Enter your email address"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: "" }));
+                    }}
                     autoComplete="username"
                   />
                 </div>
+                {fieldErrors.email && <span className="field-error">{fieldErrors.email}</span>}
               </div>
 
-              <div className="auth-input-group">
+              <div className={`auth-input-group ${fieldErrors.password ? "has-error" : ""}`}>
                 <label>Password</label>
                 <div className="input-wrapper">
                   <FiLock className="input-icon" />
@@ -189,13 +174,17 @@ const SignIn = () => {
                     type={showPass ? "text" : "password"}
                     placeholder="Enter your Password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                      if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: "" }));
+                    }}
                     autoComplete="current-password"
                   />
                   <div className="eye-icon" onClick={() => setShowPass(!showPass)}>
                     {showPass ? <FiEye /> : <FiEyeOff />}
                   </div>
                 </div>
+                {fieldErrors.password && <span className="field-error">{fieldErrors.password}</span>}
               </div>
 
               <div className="options-row">
@@ -239,8 +228,24 @@ const SignIn = () => {
             <p className="auth-subtitle">Enter your email and we'll send you a link to reset your password.</p>
             {error && <p className="auth-error">{error}</p>}
 
-            <form onSubmit={handleForgotSubmit} className="auth-form">
-              {renderInputs(forgotFields)}
+            <form onSubmit={handleForgotSubmit} className="auth-form" noValidate>
+              <div className={`auth-input-group ${fieldErrors.forgotEmail ? "has-error" : ""}`}>
+                <label>Enter your Email</label>
+                <div className="input-wrapper">
+                  <FiMail className="input-icon" />
+                  <input
+                    type="email"
+                    placeholder="e.g. jane@example.com"
+                    value={forgotEmail}
+                    name="email"
+                    onChange={(e) => {
+                      setForgotEmail(e.target.value);
+                      if (fieldErrors.forgotEmail) setFieldErrors((prev) => ({ ...prev, forgotEmail: "" }));
+                    }}
+                  />
+                </div>
+                {fieldErrors.forgotEmail && <span className="field-error">{fieldErrors.forgotEmail}</span>}
+              </div>
               <button className="login-btn" type="submit" disabled={loading}>
                 {loading ? "Sending..." : "Send Reset Link"}
               </button>

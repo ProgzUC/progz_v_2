@@ -35,7 +35,7 @@
   font-size: 36px;
   font-weight: 700;
   color: #000;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 
 .auth-form {
@@ -44,28 +44,44 @@
 
 /* INPUT STYLING */
 .auth-input-group {
-  margin-bottom: 25px;
+  margin-bottom: 16px;
 }
 
-label {
+.auth-input-group label {
   font-size: 14px;
   font-weight: 600;
   color: #333;
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 
 .input-wrapper {
   display: flex;
   align-items: center;
   border-bottom: 1.5px solid #ddd;
-  padding-bottom: 8px;
+  padding-bottom: 6px;
   position: relative;
   transition: border-color 0.3s;
 }
 
+.auth-input-group.has-error .input-wrapper {
+  border-bottom-color: #d32f2f;
+}
+
 .input-wrapper:focus-within {
   border-bottom-color: #0f8b57;
+}
+
+.auth-input-group.has-error .input-wrapper:focus-within {
+  border-bottom-color: #d32f2f;
+}
+
+.field-error {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #d32f2f;
 }
 
 .input-icon {
@@ -109,7 +125,8 @@ label {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  margin-top: 4px;
   font-size: 13px;
 }
 
@@ -127,8 +144,7 @@ label {
 .remember input {
   width: 16px;
   height: 16px;
-  accent-color: #555;
-  /* Neutral checkbox color */
+  accent-color: #0f8b57;
   cursor: pointer;
 }
 
@@ -166,7 +182,7 @@ label {
 /* REGISTER TEXT */
 .register-text {
   text-align: center;
-  margin-top: 25px;
+  margin-top: 18px;
   font-size: 14px;
   color: #333;
   font-weight: 500;
@@ -266,7 +282,7 @@ label {
   padding: 10px 15px;
   border-radius: 8px;
   font-size: 13px;
-  margin-bottom: 25px;
+  margin-bottom: 16px;
   display: flex;
   align-items: center;
   border: 1px solid #fad2cf;

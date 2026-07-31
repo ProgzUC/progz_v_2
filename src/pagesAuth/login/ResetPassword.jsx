@@ -22,6 +22,7 @@ const ResetPassword = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
+    const [fieldErrors, setFieldErrors] = useState({});
 
     const resetFields = [
         {
@@ -55,14 +56,19 @@ const ResetPassword = () => {
         setError("");
         setSuccessMessage("");
 
-        if (resetData.newPassword.length < 6) {
-            setError("Password must be at least 6 characters.");
-            return;
+        const next = {};
+        if (!resetData.newPassword) {
+            next.newPassword = "Password is required";
+        } else if (resetData.newPassword.length < 6) {
+            next.newPassword = "Password must be at least 6 characters";
         }
-        if (resetData.newPassword !== resetData.confirmPassword) {
-            setError("Passwords do not match.");
-            return;
+        if (!resetData.confirmPassword) {
+            next.confirmPassword = "Please confirm your password";
+        } else if (resetData.newPassword !== resetData.confirmPassword) {
+            next.confirmPassword = "Passwords do not match";
         }
+        setFieldErrors(next);
+        if (Object.keys(next).length > 0) return;
 
         setLoading(true);
         try {
@@ -77,14 +83,17 @@ const ResetPassword = () => {
 
     const handleResetDataChange = (field, value) => {
         setResetData((prev) => ({ ...prev, [field]: value }));
+        if (fieldErrors[field]) {
+            setFieldErrors((prev) => ({ ...prev, [field]: "" }));
+        }
     };
 
     const renderInputs = (fields, handleChange) => {
         return fields.map((field) => (
-            <div className="auth-input-group" key={field.id}>
+            <div className={`auth-input-group ${fieldErrors[field.name] ? "has-error" : ""}`} key={field.id}>
                 <label>{field.label}</label>
                 <div className="input-wrapper">
-                    <span className="input-icon-wrapper">{field.icon}</span>
+                    <span className="input-icon">{field.icon}</span>
                     <input
                         type={field.type}
                         placeholder={field.placeholder}
@@ -102,6 +111,9 @@ const ResetPassword = () => {
                         </div>
                     )}
                 </div>
+                {fieldErrors[field.name] && (
+                    <span className="field-error">{fieldErrors[field.name]}</span>
+                )}
             </div>
         ));
     };
