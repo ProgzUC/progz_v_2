@@ -92,7 +92,7 @@ const EditProfile = ({ onCancel }) => {
         <div className="profile-wrapper">
             <div className="profile-container">
                 <div className="profile-header">
-                    <h1>Profile</h1>
+                    <button className="back-btn" onClick={onCancel} aria-label="Back"><FaArrowLeft /></button>
                 </div>
 
                 <div className="profile-card">
@@ -108,7 +108,6 @@ const EditProfile = ({ onCancel }) => {
                                 )}
                             </div>
                             <h2 className="profile-name">{formData.name}</h2>
-                            <span className="profile-role-badge">{formData.role || 'Trainer'}</span>
                             <div style={{ marginTop: '12px', width: '100%' }}>
                                 <FileDropZone
                                     compact

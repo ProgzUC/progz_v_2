@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
 import { Link, useLocation } from "react-router-dom";
-import { BiGridAlt, BiBookOpen, BiSearch, BiUserCircle, BiLogOut, BiMenu } from "react-icons/bi";
+import { BiGridAlt, BiBookOpen, BiSearch, BiUserCircle, BiLogOut } from "react-icons/bi";
 
 function HeaderContent({ onLogout }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -39,7 +39,6 @@ function HeaderContent({ onLogout }) {
 
                 <Link to="/student-dashboard/" className="student-brand">
                     <img src="/logo.png" alt="ProgZ" className="brand-logo" />
-                    <span className="brand-badge">Student</span>
                 </Link>
 
                 <button
@@ -54,21 +53,26 @@ function HeaderContent({ onLogout }) {
 
                 <div className={`student-nav-menu ${isMenuOpen ? 'active' : ''}`}>
                     <div className="nav-items">
-                        {links.map((link, index) => (
+                        {links.map((link, index) => {
+                            const isActive = location.pathname === link.href;
+
+                            return (
                             <Link
                                 key={index}
                                 to={link.href}
                                 state={link.name === "My Courses" ? { reset: true } : {}}
-                                className={`student-nav-item ${location.pathname === link.href ? 'active' : ''}`}
+                                className={`student-nav-item ${isActive ? 'active' : ''}`}
                                 onClick={() => setIsMenuOpen(false)}
                             >
                                 <span className="nav-icon">{link.icon}</span>
                                 {link.name}
                             </Link>
-                        ))}
+                            );
+                        })}
                     </div>
 
-                    <div className="nav-actions">
+                    <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span className="brand-badge">Student</span>
                         <button className="student-logout-btn" onClick={onLogout}>
                             <span className="nav-icon"><BiLogOut /></span>
                             <span>Log Out</span>

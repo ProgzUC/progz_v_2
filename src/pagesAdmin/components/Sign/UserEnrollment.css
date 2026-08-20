@@ -3,8 +3,8 @@
   flex-direction: row;
   width: 100%;
   min-height: calc(100vh - 40px);
-  background-color: #ffffff;
-  font-family: 'Poppins', sans-serif;
+  background-color: var(--color-surface);
+  font-family: var(--font-family-base), sans-serif;
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;
@@ -16,13 +16,13 @@
   width: 25%;
   min-width: 250px;
   max-width: 330px;
-  background-color: #1987544D;
+  background-color: var(--color-primary)4D;
   padding: 30px 20px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   min-height: 100%;
-  border-radius: 20px;
+  border-radius: var(--radius-lg);
   margin-right: 30px;
 }
 
@@ -32,7 +32,7 @@
   font-weight: 700;
   color: #000;
   margin: 0 0 50px 0;
-  font-family: sans-serif;
+  font-family: var(--font-family-base), sans-serif;
 }
 
 .sidebar-header h2 {
@@ -70,7 +70,7 @@
   width: 4px !important;
   height: 188px !important;
   /* Perfectly bridges the gap */
-  background-color: #94A3B8 !important;
+  background-color: var(--color-text-muted) !important;
   z-index: 0;
 }
 
@@ -84,7 +84,7 @@
   width: 4px !important;
   height: 0 !important;
   /* Starts at top with 0 height */
-  background-color: #198754 !important;
+  background-color: var(--color-primary) !important;
   z-index: 1;
   transition: height 0.6s ease-in-out;
   /* Flows from top to bottom */
@@ -115,13 +115,13 @@
 
 .step-item.active .step-indicator,
 .step-item.completed .step-indicator {
-  background-color: #198754;
-  color: white;
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
   border: none;
 }
 
 .step-label {
-  font-family: sans-serif;
+  font-family: var(--font-family-base), sans-serif;
   font-size: 16px;
   font-weight: 500;
   color: #333;
@@ -186,7 +186,7 @@
 .form-control {
   background: #EFEFEF;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   padding: 10px 14px;
   /* Compact padding */
   font-size: 14px;
@@ -198,8 +198,8 @@
 }
 
 .form-control:focus {
-  background: #FFFFFF;
-  border-color: #198754 !important;
+  background: var(--color-surface);
+  border-color: var(--color-primary) !important;
   box-shadow: none !important;
   outline: none !important;
 }
@@ -235,7 +235,7 @@ textarea.form-control {
 }
 
 .password-toggle:hover {
-  color: #198754;
+  color: var(--color-primary);
 }
 
 .password-toggle svg {
@@ -282,7 +282,7 @@ textarea.form-control {
 .btn-next,
 .btn-submit {
   padding: 8px 30px;
-  border-radius: 20px;
+  border-radius: var(--radius-lg);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -292,25 +292,25 @@ textarea.form-control {
 
 .btn-cancel {
   border: 1.5px solid #ccc;
-  background: white;
+  background: var(--color-surface);
   color: #333;
 }
 
 .btn-cancel:hover {
-  border-color: #00a86b;
-  color: #00a86b;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .btn-next,
 .btn-submit {
-  background: #198754;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
 }
 
 .btn-next:hover,
 .btn-submit:hover {
-  background: #146c43;
-  border-color: #00a86b;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary);
 }
 
 /* Validation Styles */
@@ -363,14 +363,14 @@ textarea.form-control {
 }
 
 .role-radio:checked+.role-custom-radio {
-  border-color: #198754;
+  border-color: var(--color-primary);
 }
 
 .role-radio:checked+.role-custom-radio::after {
   content: '';
   width: 10px;
   height: 10px;
-  background-color: #198754;
+  background-color: var(--color-primary);
   border-radius: 50%;
 }
 
@@ -406,7 +406,7 @@ textarea.form-control {
     height: auto;
     margin-right: 0;
     margin-bottom: 30px;
-    border-radius: 20px;
+    border-radius: var(--radius-lg);
   }
 
   .steps-container {
@@ -488,7 +488,7 @@ textarea.form-control {
   .step-line {
     width: 70% !important;
     height: 4px !important;
-    background: #9CA3AF !important;
+    background: var(--color-text-muted) !important;
     left: 120px !important;
     position: relative;
     top: -40px !important;
@@ -605,7 +605,7 @@ textarea.form-control {
   .step-line {
     width: 50% !important;
     height: 4px !important;
-    background: #9CA3AF !important;
+    background: var(--color-text-muted) !important;
     position: absolute !important;
     top: 22px !important;
     /* aligns between circles */

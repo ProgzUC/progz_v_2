@@ -62,19 +62,7 @@ const CreateCourse = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const validateCurriculum = () => {
-    const newErrors = {};
-    course.modules.forEach((mod, mIndex) => {
-      if (!mod.title.trim()) newErrors[`module-${mIndex}`] = "Module Name is required";
-      mod.sections.forEach((sec, sIndex) => {
-        if (!sec.title.trim()) newErrors[`section-${mIndex}-${sIndex}`] = "Section Name is required";
-      });
-    });
-    setErrors((prev) => ({ ...prev, ...newErrors }));
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validateForm = () => validateInformation() && validateCurriculum();
+  const validateForm = () => validateInformation();
 
   const handleTitleContinue = (title) => {
     setCourse((prev) => ({ ...prev, courseName: title }));
@@ -83,10 +71,6 @@ const CreateCourse = () => {
   };
 
   const handleStepChange = (step) => {
-    if (step === "curriculum" && activeStep === "information" && !validateInformation()) {
-      showWarning("Please complete all required course information fields.");
-      return;
-    }
     setActiveStep(step);
   };
 

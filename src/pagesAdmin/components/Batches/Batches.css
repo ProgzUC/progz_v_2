@@ -1,8 +1,8 @@
 .admin-batches-page {
     padding: 20px 40px;
-    background-color: #F8F9FA;
+    background-color: var(--color-bg);
     min-height: 100vh;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-family-base), sans-serif;
 }
 
 .admin-batches-page .batches-header-main {
@@ -26,7 +26,7 @@
     font-size: 15px !important;
     font-weight: 600 !important;
     transition: all 0.2s ease;
-    border-radius: 10px !important;
+    border-radius: var(--radius-md) !important;
     position: relative;
     top: 25px;
     /* Moves it down more to align better with filter box below */
@@ -46,9 +46,9 @@
 }
 
 .admin-batches-page .stat-card {
-    background: white;
+    background: var(--color-surface);
     padding: 12px 24px;
-    border-radius: 16px;
+    border-radius: var(--radius-lg);
     min-width: 160px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     display: flex;
@@ -57,13 +57,13 @@
 }
 
 .admin-batches-page .stat-label {
-    color: #888;
+    color: var(--color-text-muted);
     font-size: 12px;
     font-weight: 500;
 }
 
 .admin-batches-page .stat-value {
-    color: #10a358;
+    color: var(--color-primary-bright);
     font-size: 24px;
     font-weight: 700;
 }
@@ -79,10 +79,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background: white;
+    background: var(--color-surface);
     padding: 8px 16px;
     border-radius: 12px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--color-border);
     width: 300px;
     transition: all 0.2s;
 }
@@ -107,17 +107,17 @@
     outline: none;
     width: 100%;
     font-size: 14px;
-    color: #374151;
+    color: var(--color-text);
 }
 
 .admin-batches-page .filter-controls {
     display: flex;
     align-items: center;
     gap: 12px;
-    background: white;
+    background: var(--color-surface);
     padding: 8px 16px;
     border-radius: 12px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--color-border);
     transition: all 0.2s;
 }
 
@@ -128,13 +128,13 @@
 
 .admin-batches-page .filter-icon {
     font-size: 20px;
-    color: #6b7280;
+    color: var(--color-text-secondary);
 }
 
 .admin-batches-page .filter-select {
     border: none;
     background: transparent;
-    color: #374151;
+    color: var(--color-text);
     font-size: 15px;
     font-weight: 500;
     outline: none !important;
@@ -154,7 +154,7 @@
 }
 
 .admin-batches-page .batches-table-container {
-    background: white;
+    background: var(--color-surface);
     border-radius: 24px;
     padding: 25px 30px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
@@ -167,7 +167,7 @@
 }
 
 .admin-batches-page .table-title {
-    color: #888;
+    color: var(--color-text-muted);
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 20px;
@@ -184,7 +184,7 @@
     font-weight: 400;
     font-size: 13px;
     padding-bottom: 12px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--color-bg-muted);
 }
 
 .admin-batches-page .batches-table th:nth-child(4),
@@ -216,7 +216,7 @@
 
 .admin-batches-page .view-more {
     font-size: 11px;
-    color: #3b82f6;
+    color: var(--color-primary);
     cursor: pointer;
     margin-top: 4px;
 }
@@ -232,7 +232,7 @@
     height: 32px;
     border-radius: 50%;
     background-color: #7c3aed;
-    color: white;
+    color: var(--color-text-on-primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -246,7 +246,7 @@
     justify-content: center;
     gap: 8px;
     padding: 6px 16px;
-    border-radius: 20px;
+    border-radius: var(--radius-lg);
     font-size: 10px;
     font-weight: 500;
     min-width: 115px;
@@ -260,29 +260,29 @@
 
 .admin-batches-page .status-active {
     background-color: #ecfdf5;
-    color: #10b981;
+    color: var(--color-success);
 }
 
 .admin-batches-page .status-active .dot {
-    background-color: #10b981;
+    background-color: var(--color-success);
 }
 
 .admin-batches-page .status-completed {
-    background-color: #f3f4f6;
-    color: #6b7280;
+    background-color: var(--color-bg-muted);
+    color: var(--color-text-secondary);
 }
 
 .admin-batches-page .status-completed .dot {
-    background-color: #6b7280;
+    background-color: var(--color-text-secondary);
 }
 
 .admin-batches-page .status-inactive {
-    background-color: #fef2f2;
-    color: #ef4444;
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
 }
 
 .admin-batches-page .status-inactive .dot {
-    background-color: #ef4444;
+    background-color: var(--color-error);
 }
 
 .admin-batches-page .delete-icon {
@@ -293,16 +293,16 @@
 }
 
 .admin-batches-page .delete-icon:hover {
-    color: #ef4444;
+    color: var(--color-error);
 }
 
 .admin-batches-page .bulk-delete-btn {
     display: flex;
     align-items: center;
     gap: 8px;
-    background-color: #fef2f2;
-    color: #ef4444;
-    border: 1px solid #fee2e2;
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
+    border: 1px solid var(--color-error-bg);
     padding: 10px 16px;
     border-radius: 12px;
     font-size: 14px;
@@ -313,14 +313,14 @@
 }
 
 .admin-batches-page .bulk-delete-btn:hover {
-    background-color: #fee2e2;
+    background-color: var(--color-error-bg);
     transform: translateY(-1px);
 }
 
 .admin-batches-page .batch-checkbox {
     width: 18px;
     height: 18px;
-    accent-color: #10a358;
+    accent-color: var(--color-primary-bright);
     cursor: pointer;
     border-radius: 4px;
 }
@@ -359,12 +359,12 @@
 }
 
 .admin-batches-page .page-num.active {
-    background-color: #10a358;
-    color: white;
+    background-color: var(--color-primary-bright);
+    color: var(--color-text-on-primary);
 }
 
 .admin-batches-page .page-num:hover:not(.active) {
-    background-color: #f0f0f0;
+    background-color: var(--color-bg-muted);
 }
 
 /* ================================

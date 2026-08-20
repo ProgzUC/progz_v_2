@@ -1,6 +1,6 @@
 .student-course-preview-view {
   margin-top: 0 !important;
-  background: #e4e4e4;
+  background: var(--color-bg);
   border-radius: 0;
   padding: 28px 40px 48px;
   min-height: 100%;
@@ -58,7 +58,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-surface);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
   display: inline-flex;
   align-items: center;

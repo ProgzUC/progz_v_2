@@ -17,7 +17,7 @@
 .course-builder-page .submit-btn,
 .course-title-modal .submit-btn {
   padding: 12px 20px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 2px solid transparent;
   font-size: 15px;
   cursor: pointer;
@@ -26,22 +26,22 @@
 }
 
 .course-builder-page .cancel-btn {
-  background: #e5e7eb;
+  background: var(--color-border);
 }
 
 .course-builder-page .cancel-btn:hover {
-  border-color: #00a86b;
+  border-color: var(--color-primary);
 }
 
 .course-builder-page .submit-btn,
 .course-title-modal .submit-btn {
-  background: #2a7d38;
-  color: #fff;
+  background: var(--color-primary);
+  color: var(--color-surface);
 }
 
 .course-builder-page .submit-btn:hover:not(:disabled),
 .course-title-modal .submit-btn:hover:not(:disabled) {
-  background: #1a6b28;
+  background: var(--color-primary-hover);
 }
 
 .course-builder-page .submit-btn:disabled,
@@ -51,10 +51,16 @@
 }
 
 .create-course-page {
-  padding: 100px 2rem 2rem 2rem;
-  /* Clear fixed navbar */
-  background-color: #f8fafc;
+  padding: var(--page-top-offset) 2rem 2rem;
+  background-color: var(--color-bg-muted);
   min-height: 100vh;
+}
+
+.course-builder-page .create-course-page,
+.course-builder-page .create-course-page.course-curriculum-wrap {
+  padding: 0;
+  min-height: auto;
+  background: transparent;
 }
 
 
@@ -79,8 +85,8 @@
 }
 
 .close-icon:hover {
-  color: #2a7d38;
-  /* Changed from #1a6b28 to match user request */
+  color: var(--color-primary);
+  /* Changed from var(--color-primary-hover) to match user request */
 }
 
 .subtitle {
@@ -100,54 +106,53 @@
   margin-top: 20px;
 }
 
-label {
+.create-course-page label {
   font-weight: 600;
   margin-bottom: 8px;
   display: block;
 }
 
-input,
-textarea,
-select {
+.create-course-page input,
+.create-course-page textarea,
+.create-course-page select {
   width: 100%;
   padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border-strong);
   outline: none;
   font-size: 14px;
   transition: 0.2s;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: #2a7d38;
-  /* Changed from #6366f1 to green */
+.create-course-page input:focus,
+.create-course-page textarea:focus,
+.create-course-page select:focus {
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(42, 125, 56, 0.2);
 }
 
-textarea {
+.create-course-page textarea {
   height: 120px;
   resize: vertical;
 }
 
 /* SECTION TITLES */
-.section-header {
+.create-course-page .section-header {
   margin-top: 35px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.section-header h3 {
+.create-course-page .section-header h3 {
   font-size: 20px;
   font-weight: 700;
 }
 
 .add-btn {
   padding: 8px 14px;
-  background: #1e293b;
-  color: white;
+  background: var(--color-text);
+  color: var(--color-text-on-primary);
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -155,7 +160,7 @@ textarea {
 }
 
 .add-btn:hover {
-  background: #0f172a;
+  background: var(--color-text);
 }
 
 /* CURRICULUM PAGE HEADER */
@@ -167,13 +172,13 @@ textarea {
   margin: 0 0 4px;
   font-size: 22px;
   font-weight: 700;
-  color: #111827;
+  color: var(--color-text);
 }
 
 .curriculum-page-header p {
   margin: 0;
   font-size: 14px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .curriculum-module-list {
@@ -184,16 +189,16 @@ textarea {
 
 /* MODULE BOX */
 .module-box {
-  background: #fff;
+  background: var(--color-surface);
   padding: 0;
   border-radius: 12px;
   margin-top: 0;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   overflow: hidden;
 }
 
 .module-box.is-active {
-  border-color: #bbf7d0;
+  border-color: var(--color-primary-light);
   box-shadow: 0 0 0 1px rgba(42, 125, 56, 0.08);
 }
 
@@ -202,14 +207,14 @@ textarea {
   gap: 12px;
   align-items: center;
   padding: 14px 16px;
-  background: #fff;
+  background: var(--color-surface);
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .module-header-wrapper.is-open {
-  background: #f0fdf4;
-  border-bottom: 1px solid #dcfce7;
+  background: var(--color-primary-soft);
+  border-bottom: 1px solid var(--color-primary-light);
 }
 
 .module-chevron,
@@ -221,7 +226,7 @@ textarea {
   height: 24px;
   border: none;
   background: transparent;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-size: 18px;
   cursor: pointer;
   padding: 0;
@@ -240,9 +245,9 @@ textarea {
   justify-content: center;
   width: 36px;
   height: 36px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #2a7d38 0%, #1a5c28 100%);
-  color: #fff;
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, var(--color-primary) 0%, #1a5c28 100%);
+  color: var(--color-surface);
   font-size: 13px;
   font-weight: 700;
   flex-shrink: 0;
@@ -269,13 +274,13 @@ textarea {
   border-radius: 6px;
   font-size: 15px;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text);
   background: transparent;
 }
 
 .module-title-row input:not([readonly]) {
-  border-color: #d1d5db;
-  background: #fff;
+  border-color: var(--color-border-strong);
+  background: var(--color-surface);
 }
 
 .chapter-count-badge {
@@ -283,8 +288,8 @@ textarea {
   align-items: center;
   padding: 3px 10px;
   border-radius: 999px;
-  background: #dcfce7;
-  color: #166534;
+  background: var(--color-primary-light);
+  color: var(--color-success-text);
   font-size: 12px;
   font-weight: 600;
   white-space: nowrap;
@@ -293,38 +298,78 @@ textarea {
 
 .module-body {
   padding: 12px 16px 16px;
-  background: #fff;
+  background: var(--color-surface);
 }
 
 /* module delete now uses section-action-icon styles */
 
 /* ADD CHAPTER / SECTION BUTTONS */
-.add-chapter-btn {
-  display: inline-flex;
+.create-course-page .add-chapter-btn {
+  display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   margin-top: 12px;
-  background: transparent;
-  color: #2a7d38;
-  border: none;
-  padding: 6px 0;
+  width: 100%;
+  height: 44px;
+  box-sizing: border-box;
+  background: #ecfdf5;
+  color: var(--color-primary);
+  border: 1.5px dashed var(--color-primary-muted);
+  border-radius: 14px;
+  padding: 0 16px;
+  font-family: inherit;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
+  line-height: 1;
+  justify-content: flex-start;
+  text-align: left;
+  transition: background 0.18s ease, border-color 0.18s ease;
 }
 
-.add-chapter-icon,
-.add-module-dashed-icon {
+.create-course-page .add-chapter-btn:hover {
+  background: #dff9ef;
+  border-color: var(--color-primary);
+}
+
+.create-course-page .add-chapter-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 28px;
   height: 28px;
-  border: 1.5px dashed #86efac;
+  border: 1.5px dashed var(--color-primary-muted);
   border-radius: 8px;
-  color: #2a7d38;
-  font-size: 18px;
+  color: var(--color-primary);
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.create-course-page .add-chapter-icon svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+.create-course-page .add-chapter-label {
+  display: inline-flex;
+  align-items: center;
   line-height: 1;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.add-module-dashed-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.add-module-dashed-icon svg {
+  display: block;
 }
 
 .add-module-dashed-btn {
@@ -333,31 +378,59 @@ textarea {
   gap: 14px;
   width: 100%;
   margin-top: 16px;
-  padding: 18px 20px;
-  background: #fff;
+  padding: 16px 20px;
+  min-height: 72px;
+  box-sizing: border-box;
+  background: var(--color-surface);
   border: 1.5px dashed #cbd5e1;
   border-radius: 12px;
   cursor: pointer;
   text-align: left;
+  font-family: inherit;
   transition: border-color 0.15s, background 0.15s;
 }
 
 .add-module-dashed-btn:hover {
-  border-color: #2a7d38;
-  background: #f0fdf4;
+  border-color: var(--color-primary);
+  background: #f8fffb;
 }
 
 .add-module-dashed-btn strong {
   display: block;
   font-size: 15px;
-  color: #111827;
+  color: var(--color-text);
+  text-transform: none;
 }
 
 .add-module-dashed-btn small {
   display: block;
   margin-top: 2px;
   font-size: 13px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
+}
+
+.add-module-dashed-btn .add-module-dashed-icon {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  box-shadow: 0 8px 18px rgba(6, 78, 59, 0.16);
+}
+
+.add-module-dashed-btn .add-module-dashed-icon svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+}
+
+.add-module-dashed-btn > span:last-child {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  min-height: 40px;
 }
 
 .add-section-btn {
@@ -370,43 +443,50 @@ textarea {
   gap: 8px;
   align-items: center;
   cursor: pointer;
-  padding: 4px 0;
+  padding: 6px 0;
+  min-height: 40px;
 }
 
 .chapter-label {
   font-size: 12px;
   font-weight: 700;
-  color: #374151;
+  color: var(--color-text);
   letter-spacing: 0.04em;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .chapter-sep {
-  color: #9ca3af;
+  color: var(--color-text-muted);
   font-weight: 600;
   flex-shrink: 0;
 }
 
 .chapter-doc-icon {
-  color: #6b7280;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-secondary);
   font-size: 14px;
   flex-shrink: 0;
+  line-height: 1;
 }
 
 
 .module-box.is-dragging {
   box-shadow: 0 12px 28px rgba(42, 125, 56, 0.2);
-  border-color: #2a7d38;
-  background: #f0fdf4;
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
   z-index: 10;
   opacity: 0.92;
 }
 
 .section-block.is-dragging {
   box-shadow: 0 8px 20px rgba(42, 125, 56, 0.15);
-  border-color: #2a7d38;
-  background: #f0fdf4;
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
   z-index: 10;
   opacity: 0.92;
 }
@@ -418,7 +498,7 @@ textarea {
 
 .sections-droppable.is-drag-over {
   background: rgba(42, 125, 56, 0.06);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   outline: 2px dashed rgba(42, 125, 56, 0.25);
   outline-offset: 4px;
 }
@@ -430,7 +510,7 @@ textarea {
 .section-label {
   font-size: 12px;
   font-weight: 600;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin: 0;
   white-space: nowrap;
   flex-shrink: 0;
@@ -444,15 +524,15 @@ textarea {
 }
 
 .section-block {
-  background: #ffffff;
+  background: var(--color-surface);
   padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
   margin-top: 8px;
 }
 
 .section-block.is-active {
-  border-color: #86efac;
+  border-color: var(--color-primary-muted);
   background: #fafffe;
 }
 
@@ -479,7 +559,7 @@ textarea {
   width: 18px;
   height: 18px;
   border-radius: 4px;
-  color: #9ca3af;
+  color: var(--color-text-muted);
   font-size: 13px;
   cursor: pointer;
   transition: all 0.15s ease;
@@ -494,8 +574,8 @@ textarea {
 }
 
 .section-action-icon:hover {
-  background: #f3f4f6;
-  color: #374151;
+  background: var(--color-bg-muted);
+  color: var(--color-text);
 }
 
 .section-action-icon.drag-handle {
@@ -509,8 +589,8 @@ textarea {
 }
 
 .section-action-delete:hover {
-  color: #ef4444;
-  background: #fef2f2;
+  color: var(--color-error);
+  background: var(--color-error-bg);
 }
 
 /* Edit/delete hidden until section is clicked/active; drag handle stays visible */
@@ -545,9 +625,9 @@ textarea {
   justify-content: center;
   width: 34px;
   height: 34px;
-  border: 1px solid #e5e7eb;
-  background: #f9fafb;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   padding: 0;
   transition: 0.15s;
@@ -555,8 +635,8 @@ textarea {
 
 .section-expand-btn:hover,
 .section-expand-btn.is-open {
-  border-color: #2a7d38;
-  background: #f0fdf4;
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
 }
 
 .section-chevron {
@@ -569,7 +649,7 @@ textarea {
 
 .section-expand-btn:hover .section-chevron,
 .section-expand-btn.is-open .section-chevron {
-  color: #2a7d38;
+  color: var(--color-primary);
 }
 
 .section-chevron.rotate {
@@ -577,14 +657,14 @@ textarea {
 }
 
 .section-delete {
-  color: #ef4444;
+  color: var(--color-error);
   cursor: pointer;
   font-size: 18px;
   transition: 0.2s;
 }
 
 .section-delete:hover {
-  color: #dc2626;
+  color: var(--color-error);
 }
 
 /* SECTION DETAILS (EXPANDED AREA) */
@@ -606,7 +686,7 @@ textarea {
 }
 
 .section-details input[type="file"] {
-  background: #f1f5f9;
+  background: var(--color-bg-muted);
   border: 1px dashed #cbd5e1;
   padding: 12px;
 }
@@ -616,16 +696,60 @@ textarea {
   justify-content: space-between;
   align-items: center;
   margin-top: 12px;
+  gap: 12px;
 }
 
-.add-video-btn {
-  color: #4f46e5;
+.video-add-row label {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.add-video-btn-small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--color-primary-muted);
+  border-radius: 10px;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
 }
 
-.add-video-btn:hover {
-  text-decoration: underline;
+.add-video-btn-small:hover {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(6, 78, 59, 0.16);
+}
+
+.add-video-btn-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(6, 78, 59, 0.08);
+  flex-shrink: 0;
+}
+
+.add-video-btn-small:hover .add-video-btn-icon {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.add-video-btn-icon svg {
+  display: block;
+  font-size: 14px;
 }
 
 .video-item {
@@ -644,10 +768,21 @@ textarea {
   gap: 15px;
 }
 
+.create-course-page .footer-actions .cancel-btn,
+.create-course-page .footer-actions .submit-btn,
+.create-course-page .step-footer .cancel-btn,
+.create-course-page .step-footer .submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  line-height: 1;
+}
+
 .cancel-btn,
 .submit-btn {
   padding: 12px 20px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: none;
   font-size: 15px;
   cursor: pointer;
@@ -655,16 +790,16 @@ textarea {
 }
 
 .cancel-btn {
-  background: #e5e7eb;
+  background: var(--color-border);
 }
 
 .submit-btn {
-  background: #2a7d38;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
 }
 
 .submit-btn:hover {
-  background: #15613b;
+  background: var(--color-primary-hover);
 }
 
 /* -----------------------------
@@ -672,7 +807,7 @@ textarea {
 ----------------------------- */
 
 @media (max-width: 850px) {
-  .create-course-page {
+  .create-course-page:not(.course-curriculum-wrap) {
     padding: 1.5rem;
   }
 
@@ -686,7 +821,7 @@ textarea {
 }
 
 @media (max-width: 600px) {
-  .create-course-page {
+  .create-course-page:not(.course-curriculum-wrap) {
     padding: 0;
   }
 
@@ -718,12 +853,12 @@ textarea {
 
   .module-box {
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
   }
 
   .section-block {
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
   }
 
   .section-header-row input {
@@ -756,15 +891,15 @@ textarea {
   width: 100px;
   height: 110px;
   padding: 8px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   transition: 0.2s;
 }
 
 .file-preview-media:hover {
-  border-color: #ef4444;
-  background: #fef2f2;
+  border-color: var(--color-error);
+  background: var(--color-error-bg);
 }
 
 .preview-image-consistent {
@@ -776,7 +911,7 @@ textarea {
 
 .file-name-media {
   font-size: 11px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   margin-top: 5px;
   text-align: center;
   max-width: 100%;
@@ -787,9 +922,9 @@ textarea {
 
 /* CHIP PREVIEW (Docs/Files) */
 .file-preview-chip {
-  background: #f1f5f9;
-  border: 1px solid #e2e8f0;
-  border-radius: 20px;
+  background: var(--color-bg-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: 6px 14px;
   align-items: center;
   display: flex;
@@ -802,13 +937,13 @@ textarea {
   width: 16px;
   height: 16px;
   font-size: 9px;
-  background: #ef4444;
-  border: 1px solid white;
+  background: var(--color-error);
+  border: 1px solid var(--color-surface);
 }
 
 .file-chip-text {
   font-size: 13px;
-  color: #374151;
+  color: var(--color-text);
   font-weight: 500;
   max-width: 180px;
   white-space: nowrap;
@@ -821,8 +956,8 @@ textarea {
   position: absolute;
   top: -5px;
   right: -5px;
-  background: #ef4444;
-  color: white;
+  background: var(--color-error);
+  color: var(--color-text-on-primary);
   border-radius: 50%;
   width: 18px;
   height: 18px;
@@ -831,13 +966,13 @@ textarea {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  border: 1px solid white;
+  border: 1px solid var(--color-surface);
   z-index: 10;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .remove-file-btn:hover {
-  background: #dc2626;
+  background: var(--color-error);
 }
 
 /* PDF CARD */
@@ -845,9 +980,9 @@ textarea {
   position: relative;
   width: 100px;
   height: 110px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -858,8 +993,8 @@ textarea {
 }
 
 .pdf-preview-card:hover {
-  border-color: #ef4444;
-  background: #fef2f2;
+  border-color: var(--color-error);
+  background: var(--color-error-bg);
 }
 
 .pdf-icon-wrapper {
@@ -884,7 +1019,7 @@ textarea {
   position: relative;
   width: 200px;
   height: 115px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   background: #000;
   cursor: pointer;
@@ -919,8 +1054,8 @@ textarea {
   right: 5px;
   width: 22px;
   height: 22px;
-  background: #ef4444;
-  color: white;
+  background: var(--color-error);
+  color: var(--color-text-on-primary);
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -928,11 +1063,11 @@ textarea {
   font-size: 14px;
   cursor: pointer;
   z-index: 20;
-  border: 1px solid white;
+  border: 1px solid var(--color-surface);
 }
 
 .remove-video-btn:hover {
-  background: #dc2626;
+  background: var(--color-error);
 }
 
 /* LIGHTBOX OVERLAY */
@@ -978,11 +1113,11 @@ textarea {
   top: -40px;
   right: -10px;
   font-size: 30px;
-  color: white;
+  color: var(--color-text-on-primary);
   cursor: pointer;
   transition: 0.2s;
 }
 
 .lightbox-close:hover {
-  color: #2a7d38;
+  color: var(--color-primary);
 }

@@ -1,0 +1,318 @@
+/* Shared app footer — used across student, trainer, admin, and auth pages */
+
+.app-footer {
+    background-color: var(--color-footer-bg);
+    color: rgba(255, 255, 255, 0.75);
+    padding: 80px 0 0;
+    font-family: var(--font-family-base);
+    width: 100%;
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.app-footer .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2.2fr 1fr 1.2fr 1fr 2fr;
+    gap: 40px;
+    padding: 0 20px;
+}
+
+.app-footer .footer-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.app-footer .brand-section {
+    max-width: 320px;
+}
+
+.app-footer .footer-logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.app-footer .footer-logo-img {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+    border-radius: var(--radius-sm);
+    background: var(--color-text);
+}
+
+.app-footer .footer-logo-text {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-surface);
+    letter-spacing: 0.5px;
+}
+
+.app-footer .footer-description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 25px;
+}
+
+.app-footer .social-icons {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.app-footer .social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.08);
+    color: var(--color-surface);
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.app-footer .social-icon:hover {
+    background-color: var(--color-primary-bright);
+    color: var(--color-surface);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.app-footer .footer-heading {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.app-footer .footer-subheading {
+    margin-top: 20px;
+}
+
+.app-footer .footer-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.app-footer .footer-links-list li {
+    margin-bottom: 12px;
+}
+
+.app-footer .footer-link {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 14.5px;
+    transition: all 0.2s ease;
+    display: inline-block;
+}
+
+.app-footer .footer-link:hover {
+    color: var(--color-surface);
+    transform: translateX(4px);
+}
+
+.app-footer .newsletter-section {
+    max-width: 300px;
+}
+
+.app-footer .newsletter-description {
+    font-size: 14px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+}
+
+.app-footer .newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.app-footer .input-group-container {
+    display: flex;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    padding: 10px 16px;
+    transition: all 0.3s ease;
+}
+
+.app-footer .input-group-container:focus-within {
+    border-color: var(--color-primary-bright);
+    background-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+.app-footer .input-icon {
+    color: rgba(255, 255, 255, 0.5);
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.app-footer .newsletter-input {
+    border: none;
+    background: transparent !important;
+    outline: none;
+    color: var(--color-surface) !important;
+    width: 100%;
+    font-size: 14.5px;
+    padding: 0;
+}
+
+.app-footer .newsletter-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.app-footer .newsletter-btn {
+    background-color: var(--color-primary-bright);
+    color: var(--color-surface);
+    border: none;
+    border-radius: 30px;
+    padding: 12px 24px;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+    width: 100%;
+}
+
+.app-footer .newsletter-btn:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+}
+
+.app-footer .newsletter-btn:active {
+    transform: translateY(0);
+}
+
+.app-footer .btn-icon {
+    font-size: 12px;
+}
+
+.app-footer .footer-bottom {
+    background-color: var(--color-footer-bar);
+    padding: 25px 0;
+    margin-top: 60px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.app-footer .footer-bottom-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.app-footer .copyright {
+    font-size: 13.5px;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.app-footer .middle-link .website-link {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.app-footer .middle-link .website-link:hover {
+    color: var(--color-primary-bright);
+}
+
+.app-footer .legal-links {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.app-footer .legal-link {
+    font-size: 13.5px;
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.app-footer .legal-link:hover {
+    color: var(--color-surface);
+}
+
+.app-footer .legal-separator {
+    color: rgba(255, 255, 255, 0.15);
+    font-size: 12px;
+}
+
+@media (max-width: 992px) {
+    .app-footer {
+        padding: 60px 0 0;
+    }
+
+    .app-footer .footer-content {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 35px;
+    }
+
+    .app-footer .brand-section {
+        grid-column: span 3;
+        max-width: 500px;
+        margin-bottom: 10px;
+    }
+
+    .app-footer .newsletter-section {
+        grid-column: span 3;
+        max-width: 450px;
+        margin-top: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-footer .footer-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .app-footer .brand-section,
+    .app-footer .newsletter-section {
+        grid-column: span 1;
+        max-width: 100%;
+    }
+
+    .app-footer .brand-section {
+        align-items: center;
+        text-align: center;
+    }
+
+    .app-footer .social-icons {
+        justify-content: center;
+    }
+
+    .app-footer .footer-bottom-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+}

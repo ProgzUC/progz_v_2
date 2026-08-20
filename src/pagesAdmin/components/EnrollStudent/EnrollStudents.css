@@ -9,7 +9,7 @@
 
 /* White card */
 .admin-enroll-students-page .enroll-container {
-  background: #ffffff;
+  background: var(--color-surface);
   width: 75%;
   max-width: 1100px;
   padding: 50px 70px;
@@ -22,7 +22,7 @@
   font-size: 32px;
   font-weight: 700;
   margin-bottom: 40px;
-  color: #999;
+  color: var(--color-text-muted);
 }
 
 .admin-enroll-students-page .section {
@@ -33,7 +33,7 @@
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 15px;
-  color: #999 !important;
+  color: var(--color-text-muted) !important;
 
 }
 
@@ -52,11 +52,11 @@
 
 /* Add course button */
 .admin-enroll-students-page .add-course-btn {
-  border: 1px solid #22c55e;
-  background: white;
-  color: #22c55e;
+  border: 1px solid var(--color-primary-bright);
+  background: var(--color-surface);
+  color: var(--color-primary-bright);
   padding: 8px 16px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
   cursor: pointer;
 }
@@ -80,8 +80,8 @@
   width: 100%;
   padding: 14px;
   background: #f7f7f7;
-  border-radius: 10px;
-  border: 1px solid #eaeaea;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
   margin-bottom: 15px;
   font-size: 15px;
   color: #333;
@@ -90,7 +90,7 @@
 }
 
 .admin-enroll-students-page .input-select option {
-  background-color: #fff;
+  background-color: var(--color-surface);
   color: #333;
 }
 
@@ -121,7 +121,7 @@
   background: #00c166;
   padding: 14px 45px;
   border-radius: 30px;
-  color: white;
+  color: var(--color-text-on-primary);
   border: none;
   font-size: 16px;
   font-weight: 600;
@@ -143,9 +143,9 @@
 }
 
 .modal-content {
-  background: white;
+  background: var(--color-surface);
   padding: 30px;
-  border-radius: 16px;
+  border-radius: var(--radius-lg);
   width: 90%;
   max-width: 550px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
@@ -155,7 +155,7 @@
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 25px;
-  color: #1a1a1a;
+  color: var(--color-text);
 }
 
 .modal-field {
@@ -174,8 +174,8 @@
   width: 100%;
   padding: 12px 14px;
   background: #f7f7f7;
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   font-size: 15px;
   box-sizing: border-box;
   color: #333;
@@ -185,7 +185,7 @@
 .modal-input:focus {
   outline: none;
   border-color: #00a35a;
-  background: white;
+  background: var(--color-surface);
 }
 
 .days-checkbox-group {
@@ -219,8 +219,8 @@
 .admin-enroll-students-page .cancel-btn {
   padding: 10px 24px;
   background: #f5f5f5;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
@@ -235,11 +235,11 @@
   padding: 10px 24px;
   background: #00c166;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  color: white;
+  color: var(--color-text-on-primary);
 }
 
 .create-btn:hover {

@@ -46,10 +46,10 @@
     min-width: 250px;
     padding: 10px 16px;
     border: 2px solid #dee2e6;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     font-size: 15px;
     color: #212529;
-    background: #fff;
+    background: var(--color-surface);
     cursor: pointer;
     transition: border-color 0.3s ease;
 }
@@ -109,7 +109,7 @@
 }
 
 .overview-card {
-    background: #fff;
+    background: var(--color-surface);
     border-radius: 12px;
     padding: 24px;
     display: flex;
@@ -128,7 +128,7 @@
     height: 64px;
     border-radius: 12px;
     background: linear-gradient(135deg, #0066cc, #0099ff);
-    color: #fff;
+    color: var(--color-surface);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -150,7 +150,7 @@
 
 /* Student Reports Section */
 .student-reports-section {
-    background: #fff;
+    background: var(--color-surface);
     border-radius: 12px;
     padding: 30px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
@@ -171,11 +171,11 @@
 }
 
 .export-btn {
-    background: #198754;
-    color: #fff;
+    background: var(--color-primary);
+    color: var(--color-surface);
     border: none;
     padding: 10px 20px;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
@@ -186,7 +186,7 @@
 }
 
 .export-btn:hover {
-    background: #157347;
+    background: var(--color-primary-hover);
 }
 
 /* No Data State */
@@ -218,7 +218,7 @@
 }
 
 .report-table thead tr {
-    background: #f8f9fa;
+    background: var(--color-bg);
 }
 
 .report-table th {
@@ -238,7 +238,7 @@
 }
 
 .report-table tbody tr:hover {
-    background: #f8f9fa;
+    background: var(--color-bg);
 }
 
 .report-table td {
@@ -259,7 +259,7 @@
     height: 40px;
     border-radius: 50%;
     background: linear-gradient(135deg, #0066cc, #0099ff);
-    color: #fff;
+    color: var(--color-surface);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -283,7 +283,7 @@
 
 .count-badge.present {
     background: #d1f2eb;
-    color: #198754;
+    color: var(--color-primary);
 }
 
 .count-badge.late {
@@ -319,7 +319,7 @@
 }
 
 .percentage-bar.good .percentage-fill {
-    background: linear-gradient(90deg, #198754, #20c997);
+    background: linear-gradient(90deg, var(--color-primary), #20c997);
 }
 
 .percentage-bar.average .percentage-fill {

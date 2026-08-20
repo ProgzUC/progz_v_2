@@ -49,10 +49,9 @@ export default function CourseInformationPanel({
         {errors.courseDescription && <span className="error-text">{errors.courseDescription}</span>}
       </div>
 
-      <div className="input-grid">
-        <div>
-          <label>Thumbnail Image</label>
-          <FileDropZone
+      <div className="input-full">
+        <label>Thumbnail Image</label>
+        <FileDropZone
             accept="image/*"
             hint="Drag image from Google or your computer"
             error={errors.thumbnail}
@@ -85,7 +84,6 @@ export default function CourseInformationPanel({
               </div>
             )}
           </FileDropZone>
-        </div>
       </div>
     </>
   );

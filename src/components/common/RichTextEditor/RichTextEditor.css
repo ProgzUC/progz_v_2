@@ -1,14 +1,14 @@
 .rich-text-editor {
   width: 100%;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background: #fff;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
   overflow: hidden;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .rich-text-editor:focus-within {
-  border-color: #2a7d38;
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(42, 125, 56, 0.2);
 }
 
@@ -17,8 +17,8 @@
   align-items: center;
   gap: 6px;
   padding: 8px 10px;
-  border-bottom: 1px solid #e5e7eb;
-  background: #f3f4f6;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-muted);
   flex-wrap: wrap;
 }
 
@@ -31,10 +31,10 @@
   min-width: 34px;
   padding: 0;
   margin: 0;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--color-border-strong);
   border-radius: 6px;
-  background: #ffffff;
-  color: #374151;
+  background: var(--color-surface);
+  color: var(--color-text);
   cursor: pointer;
   font-size: 16px;
   line-height: 1;
@@ -43,15 +43,15 @@
 }
 
 .rich-text-editor .rich-text-toolbar-btn:hover {
-  background: #e5e7eb;
-  color: #111827;
-  border-color: #9ca3af;
+  background: var(--color-border);
+  color: var(--color-text);
+  border-color: var(--color-text-muted);
 }
 
 .rich-text-editor .rich-text-toolbar-btn:focus,
 .rich-text-editor .rich-text-toolbar-btn:focus-visible {
   outline: none;
-  border-color: #2a7d38;
+  border-color: var(--color-primary);
   box-shadow: 0 0 0 2px rgba(42, 125, 56, 0.2);
 }
 
@@ -66,7 +66,7 @@
 .rich-text-toolbar-divider {
   width: 1px;
   height: 22px;
-  background: #d1d5db;
+  background: var(--color-border-strong);
   margin: 0 2px;
   flex-shrink: 0;
 }
@@ -78,8 +78,8 @@
   padding: 12px;
   font-size: 14px;
   line-height: 1.6;
-  color: #111827;
-  background: #fff;
+  color: var(--color-text);
+  background: var(--color-surface);
   outline: none;
   width: 100%;
   resize: vertical;
@@ -87,7 +87,7 @@
 
 .rich-text-contenteditable:empty::before {
   content: attr(data-placeholder);
-  color: #9ca3af;
+  color: var(--color-text-muted);
   pointer-events: none;
 }
 
@@ -112,7 +112,7 @@
 
 .rich-text-contenteditable a,
 .rich-text-content a {
-  color: #2a7d38;
+  color: var(--color-primary);
   text-decoration: underline;
 }
 

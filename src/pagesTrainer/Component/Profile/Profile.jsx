@@ -1,18 +1,16 @@
 import React from 'react';
 import {
     FaArrowLeft,
-    FaCamera,
     FaEnvelope,
-    FaPhone,
     FaMapMarkerAlt,
     FaUser,
     FaCalendarAlt,
-    FaLock,
     FaGraduationCap,
     FaBriefcase,
     FaIdBadge,
     FaEdit
 } from 'react-icons/fa';
+import { MdPhone } from 'react-icons/md';
 import './Profile.css';
 import { useTrainerProfile } from '../../../hooks/useTrainerProfile';
 import Loader from '../../../components/common/Loader/Loader';
@@ -33,167 +31,196 @@ const Profile = ({ onEdit, onBack }) => {
         <div className="profile-wrapper">
             <div className="profile-container">
                 <div className="profile-header">
-                    <button className="back-btn" onClick={onBack}><FaArrowLeft /></button>
-                    <h1>Profile</h1>
+                    <button className="back-btn" onClick={onBack} aria-label="Back"><FaArrowLeft /></button>
                 </div>
 
-                <div className="profile-card">
-                    <div className="profile-sidebar">
-                        <div className="avatar-section">
-                            <div className="avatar-wrapper">
-                                {profileData.profileImage ? (
-                                    <img src={profileData.profileImage} alt={profileData.name} className="avatar-image" />
-                                ) : (
+                <div className="profile-hero-card">
+                    <div className="hero-top">
+                        <div className="avatar-wrapper">
+                            {profileData.profileImage ? (
+                                <img src={profileData.profileImage} alt={profileData.name} className="avatar-image" />
+                            ) : (
                                 <div className="avatar-initials">
                                     {profileData.name ? profileData.name.charAt(0) : 'T'}
                                 </div>
-                                )}
-                            </div>
-                            <h2 className="profile-name">{profileData.name}</h2>
-                            <span className="profile-role-badge">{profileData.role || 'Trainer'}</span>
+                            )}
+                        </div>
 
-                            <div className="sidebar-info">
-                                <div className="info-item">
-                                    <FaEnvelope /> <span>{profileData.email}</span>
-                                </div>
-                                <div className="info-item">
-                                    <FaPhone /> <span>{profileData.phone}</span>
-                                </div>
-                                {profileData.address && (
-                                    <div className="info-item">
-                                        <FaMapMarkerAlt /> <span>{profileData.address}</span>
-                                    </div>
-                                )}
+                        <div className="hero-identity">
+                            <div className="hero-name-row">
+                                <h2 className="profile-name">{profileData.name}</h2>
                             </div>
+
+                            <div className="hero-contacts">
+                                <div className="info-item">
+                                    <FaEnvelope /> <span className="email-text">{profileData.email}</span>
+                                </div>
+                                <div className="info-item">
+                                    <MdPhone /> <span>{profileData.phone}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button className="edit-profile-btn" onClick={onEdit}>
+                            Edit Profile <FaEdit />
+                        </button>
+                    </div>
+
+                    <div className="hero-stats">
+                        <div className="hero-stat">
+                            <div className="detail-icon tone-green"><FaIdBadge /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Role</span>
+                                <span className="detail-value">{profileData.role}</span>
+                            </div>
+                        </div>
+                        <div className="hero-stat">
+                            <div className="detail-icon tone-purple"><FaEnvelope /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Email</span>
+                                <span className="detail-value email-text">{profileData.email}</span>
+                            </div>
+                        </div>
+                        <div className="hero-stat">
+                            <div className="detail-icon tone-blue"><MdPhone /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Mobile</span>
+                                <span className="detail-value">{profileData.phone}</span>
+                            </div>
+                        </div>
+                        {profileData.address && (
+                            <div className="hero-stat">
+                                <div className="detail-icon tone-orange"><FaMapMarkerAlt /></div>
+                                <div className="detail-content">
+                                    <span className="detail-label">Location</span>
+                                    <span className="detail-value">{profileData.address}</span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                <section className="details-section">
+                    <div className="section-header">
+                        <div className="section-title-group">
+                            <span className="section-title-icon"><FaUser /></span>
+                            <h2>Personal Details</h2>
                         </div>
                     </div>
 
-                    <div className="profile-main">
-                        <section className="details-section bordered-section">
-                            <div className="section-header">
-                                <div className="section-title-group">
-                                    <h2>Personal Details</h2>
-                                    <p>Manage your personal information and address</p>
-                                </div>
-                                <button className="edit-profile-btn" onClick={onEdit}>
-                                    <FaEdit /> Edit Profile
-                                </button>
+                    <div className="details-grid">
+                        <div className="detail-box">
+                            <div className="detail-icon tone-green"><FaUser /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Full Name</span>
+                                <span className="detail-value">{profileData.name}</span>
                             </div>
-
-                            <div className="details-grid">
-                                <div className="detail-box">
-                                    <div className="detail-icon"><FaUser /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Full Name</span>
-                                        <span className="detail-value">{profileData.name}</span>
-                                    </div>
-                                </div>
-                                <div className="detail-box">
-                                    <div className="detail-icon"><FaEnvelope /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Email Address</span>
-                                        <span className="detail-value">{profileData.email}</span>
-                                    </div>
-                                </div>
-                                <div className="detail-box">
-                                    <div className="detail-icon"><FaPhone /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Mobile Number</span>
-                                        <span className="detail-value">{profileData.phone}</span>
-                                    </div>
-                                </div>
-                                <div className="detail-box">
-                                    <div className="detail-icon"><FaPhone /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Alternate Mobile Number</span>
-                                        <span className="detail-value">{profileData.altPhone || ''}</span>
-                                    </div>
-                                </div>
-                                <div className="detail-box">
-                                    <div className="detail-icon"><FaCalendarAlt /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Date of Birth</span>
-                                        <span className="detail-value">{profileData.dob || ''}</span>
-                                    </div>
-                                </div>
-                                <div className="detail-box">
-                                    <div className="detail-icon"><FaUser /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Gender</span>
-                                        <span className="detail-value">{profileData.gender || ''}</span>
-                                    </div>
-                                </div>
-                                <div className="detail-box address-box">
-                                    <div className="detail-icon"><FaMapMarkerAlt /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Address</span>
-                                        <span className="detail-value">{profileData.address || ''}</span>
-                                    </div>
-                                </div>
+                        </div>
+                        <div className="detail-box">
+                            <div className="detail-icon tone-purple"><FaEnvelope /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Email Address</span>
+                                <span className="detail-value email-text">{profileData.email}</span>
                             </div>
-                        </section>
-
-                        <section className="details-section bordered-section">
-                            <div className="section-header">
-                                <div className="section-title-group">
-                                    <h2>Education & Employment Details</h2>
-                                </div>
+                        </div>
+                        <div className="detail-box">
+                            <div className="detail-icon tone-blue"><MdPhone /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Mobile Number</span>
+                                <span className="detail-value">{profileData.phone}</span>
                             </div>
-
-                            <div className="details-grid">
-                                <div className="detail-box">
-                                    <div className="detail-icon"><FaIdBadge /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Role</span>
-                                        <span className="detail-value">{profileData.role}</span>
-                                    </div>
-                                </div>
-                                <div className="detail-box">
-                                    <div className="detail-icon"><FaGraduationCap /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Education</span>
-                                        <span className="detail-value">{profileData.education || ''}</span>
-                                    </div>
-                                </div>
-                                <div className="detail-box">
-                                    <div className="detail-icon"><FaMapMarkerAlt /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">University/School</span>
-                                        <span className="detail-value">{profileData.university || ''}</span>
-                                    </div>
-                                </div>
-                                <div className="detail-box">
-                                    <div className="detail-icon"><FaBriefcase /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Profession</span>
-                                        <span className="detail-value">{profileData.profession || ''}</span>
-                                    </div>
-                                </div>
-                                <div className="detail-box">
-                                    <div className="detail-icon"><FaBriefcase /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Experience</span>
-                                        <span className="detail-value">{profileData.experience || ''}</span>
-                                    </div>
-                                </div>
-                                <div className="detail-box">
-                                    <div className="detail-icon"><FaIdBadge /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Employment Status</span>
-                                        <span className="detail-value">{profileData.employmentStatus || ''}</span>
-                                    </div>
-                                </div>
-                                <div className="detail-box address-box">
-                                    <div className="detail-icon"><FaEdit /></div>
-                                    <div className="detail-content">
-                                        <span className="detail-label">Skills</span>
-                                        <span className="detail-value">{profileData.skills || ''}</span>
-                                    </div>
-                                </div>
+                        </div>
+                        <div className="detail-box">
+                            <div className="detail-icon tone-teal"><MdPhone /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Alternate Mobile Number</span>
+                                <span className="detail-value">{profileData.altPhone || ''}</span>
                             </div>
-                        </section>
+                        </div>
+                        <div className="detail-box">
+                            <div className="detail-icon tone-orange"><FaCalendarAlt /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Date of Birth</span>
+                                <span className="detail-value">{profileData.dob || ''}</span>
+                            </div>
+                        </div>
+                        <div className="detail-box">
+                            <div className="detail-icon tone-pink"><FaUser /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Gender</span>
+                                <span className="detail-value">{profileData.gender || ''}</span>
+                            </div>
+                        </div>
+                        <div className="detail-box address-box">
+                            <div className="detail-icon tone-green"><FaMapMarkerAlt /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Address</span>
+                                <span className="detail-value">{profileData.address || ''}</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </section>
+
+                <section className="details-section">
+                    <div className="section-header">
+                        <div className="section-title-group">
+                            <span className="section-title-icon"><FaBriefcase /></span>
+                            <h2>Education & Employment</h2>
+                        </div>
+                    </div>
+
+                    <div className="details-grid">
+                        <div className="detail-box">
+                            <div className="detail-icon tone-green"><FaIdBadge /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Role</span>
+                                <span className="detail-value">{profileData.role}</span>
+                            </div>
+                        </div>
+                        <div className="detail-box">
+                            <div className="detail-icon tone-teal"><FaGraduationCap /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Education</span>
+                                <span className="detail-value">{profileData.education || ''}</span>
+                            </div>
+                        </div>
+                        <div className="detail-box">
+                            <div className="detail-icon tone-purple"><FaMapMarkerAlt /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">University/School</span>
+                                <span className="detail-value">{profileData.university || ''}</span>
+                            </div>
+                        </div>
+                        <div className="detail-box">
+                            <div className="detail-icon tone-orange"><FaBriefcase /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Profession</span>
+                                <span className="detail-value">{profileData.profession || ''}</span>
+                            </div>
+                        </div>
+                        <div className="detail-box">
+                            <div className="detail-icon tone-blue"><FaBriefcase /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Experience</span>
+                                <span className="detail-value">{profileData.experience || ''}</span>
+                            </div>
+                        </div>
+                        <div className="detail-box">
+                            <div className="detail-icon tone-orange"><FaIdBadge /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Employment Status</span>
+                                <span className="detail-value">{profileData.employmentStatus || ''}</span>
+                            </div>
+                        </div>
+                        <div className="detail-box address-box">
+                            <div className="detail-icon tone-pink"><FaEdit /></div>
+                            <div className="detail-content">
+                                <span className="detail-label">Skills</span>
+                                <span className="detail-value">{profileData.skills || ''}</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     );

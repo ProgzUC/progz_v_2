@@ -51,7 +51,7 @@
 }
 
 .close-btn:hover {
-    color: #2a7d38;
+    color: var(--color-primary);
     /* Matches CreateCourse.css */
     transform: rotate(90deg);
 }
@@ -74,7 +74,7 @@
     padding: 12px 16px;
     border: 1px solid var(--trainer-border);
     border-radius: var(--trainer-radius-md);
-    background: white;
+    background: var(--color-surface);
     font-size: 14px;
     color: var(--trainer-text);
     outline: none;
@@ -83,7 +83,7 @@
 
 .trainer-edit-course-page .form-group input:focus,
 .trainer-edit-course-page .form-group textarea:focus {
-    border-color: #2a7d38;
+    border-color: var(--color-primary);
     /* Changed from var(--trainer-primary) to green */
     box-shadow: 0 0 0 3px rgba(42, 125, 56, 0.2);
 }
@@ -118,7 +118,7 @@
     font-weight: 600;
     font-size: 14px;
     cursor: pointer;
-    background: white !important;
+    background: var(--color-surface) !important;
     border: 1px solid var(--trainer-border) !important;
     color: var(--trainer-text-muted) !important;
     transition: var(--trainer-transition);
@@ -135,7 +135,7 @@
     font-size: 14px;
     cursor: pointer;
     background: var(--trainer-primary) !important;
-    color: white !important;
+    color: var(--color-text-on-primary) !important;
     border: none !important;
     transition: var(--trainer-transition);
     box-shadow: var(--trainer-shadow-sm);

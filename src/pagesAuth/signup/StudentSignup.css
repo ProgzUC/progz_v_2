@@ -1,7 +1,15 @@
+.signup-page-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
 .signup-container {
-    min-height: 100vh;
+    flex: 1;
+    min-height: 0;
     position: relative;
-    background-color: #F8F9FA;
+    background-color: var(--color-bg);
 }
 
 .signup-container .main-content {

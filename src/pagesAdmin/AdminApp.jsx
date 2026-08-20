@@ -48,6 +48,7 @@ export default function AdminApp() {
             <div className="layout">
               <Sidebar />
               <div className="content">
+                <div className="admin-page-body">
                 <Routes>
                   <Route path="/" element={<Navigate to="overview" replace />} />
 
@@ -77,6 +78,7 @@ export default function AdminApp() {
                   <Route path="recycle-bin" element={<RecycleBin />} />
                   <Route path="reports/attendance" element={<AttendanceReport />} />
                 </Routes>
+                </div>
               </div>
             </div>
           }

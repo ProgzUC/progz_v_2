@@ -1,3 +1,13 @@
+@import './styles/theme.css';
+@import './styles/components.css';
+
+.unauthorized-page-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--color-bg);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -77,18 +87,19 @@ input[type="radio"] {
 
 select {
   color-scheme: light;
-  background-color: #fff;
-  color: #111;
+  background-color: var(--color-surface);
+  color: var(--color-text);
 }
 
 option {
-  background: #fff !important;
-  color: #111;
+  background: var(--color-surface) !important;
+  color: var(--color-text);
 }
 
 /* Prevent footer, headers, and sidebars from appearing when a loader is active */
 body:has(.loader-container) .footer,
 body:has(.loader-container) .student-footer,
+body:has(.loader-container) .app-footer,
 body:has(.loader-container) footer,
 body:has(.loader-container) .student-navbar,
 body:has(.loader-container) .trainer-navbar,
@@ -107,8 +118,7 @@ body:has(.loader-container) .loader-container {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #F8F9FA;
-  /* Matching the app background */
+  background-color: var(--color-bg);
   z-index: 9999;
   display: flex;
   justify-content: center;

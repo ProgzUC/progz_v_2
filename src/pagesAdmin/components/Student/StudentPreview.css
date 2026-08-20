@@ -1,13 +1,13 @@
 /* Main Container */
 .ep-container {
-    background: #ffffff;
+    background: var(--color-surface);
     width: 100%;
     max-width: 900px;
     margin: 0 auto;
     border-radius: 0 0 12px 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     overflow: hidden;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-family-base), sans-serif;
     padding-bottom: 20px;
 }
 
@@ -17,7 +17,7 @@
     /* Looks slightly taller in the screenshot */
     background: linear-gradient(90deg, #b2fefa 0%, #0ed2f7 100%);
     /* Adjusted to a lighter teal/cyan gradient */
-    background: linear-gradient(90deg, #e3fdf5 0%, #00a86b 100%);
+    background: linear-gradient(90deg, #e3fdf5 0%, var(--color-primary) 100%);
     /* Closer match to green */
     width: 100%;
     margin-bottom: 10px;
@@ -41,7 +41,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: white;
+    background: var(--color-surface);
     border: 2px solid #000;
     display: flex;
     justify-content: center;
@@ -62,7 +62,7 @@
 
 .ep-user-text p {
     font-size: 12px;
-    color: #999;
+    color: var(--color-text-muted);
     margin: 2px 0 0 0;
 }
 
@@ -70,7 +70,7 @@
 .ep-edit-btn {
     background: #009b4d;
     /* Exact green */
-    color: white;
+    color: var(--color-text-on-primary);
     border: none;
     padding: 8px 24px;
     border-radius: 5px;
@@ -132,8 +132,8 @@
 }
 
 .ep-input.editable {
-    background: #ffffff;
-    border: 1px solid #ddd;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
 }
 
 .ep-input:focus {
@@ -153,7 +153,7 @@
 .ep-input.as-textarea {
     height: 100px;
     resize: none;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-family-base), sans-serif;
 }
 
 /* Radio Buttons */
@@ -178,7 +178,7 @@
 .ep-radio-custom {
     width: 16px;
     height: 16px;
-    border: 1px solid #aaa;
+    border: 1px solid var(--color-text-muted);
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -202,13 +202,13 @@
     margin-top: 30px;
     display: flex;
     justify-content: flex-end;
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid var(--color-border);
     padding-top: 20px;
     gap: 10px;
 }
 
 .ep-cancel-btn {
-    background: white;
+    background: var(--color-surface);
     border: 1px solid #ccc;
     color: #333;
     font-weight: 600;
@@ -220,7 +220,7 @@
 }
 
 .ep-save-btn {
-    background: white;
+    background: var(--color-surface);
     border: 1px solid #009b4d;
     color: #009b4d;
     font-weight: 600;
@@ -233,8 +233,8 @@
 
 .ep-cancel-btn:hover,
 .ep-save-btn:hover {
-    border-color: #00a86b !important;
-    color: #00a86b !important;
+    border-color: var(--color-primary) !important;
+    color: var(--color-primary) !important;
 }
 
 /* Responsive */

@@ -1,10 +1,10 @@
 /* Recycle Bin Page */
 .admin-recycle-bin-page {
     padding: 40px 50px;
-    background-color: #F8F9FA;
+    background-color: var(--color-bg);
     /* Match other admin pages */
     min-height: 100vh;
-    font-family: 'Poppins', sans-serif;
+    font-family: var(--font-family-base), sans-serif;
 }
 
 .admin-recycle-bin-page .recycle-bin-header-main {
@@ -23,8 +23,8 @@
 
 /* Card Styling */
 .admin-recycle-bin-page .recycle-bin-card {
-    background: #FFFFFF;
-    border-radius: 16px;
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
     padding: 30px 25px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
     min-height: 400px;
@@ -42,10 +42,10 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background: white;
+    background: var(--color-surface);
     padding: 8px 16px;
     border-radius: 12px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--color-border);
     width: 300px;
     transition: all 0.2s;
 }
@@ -57,7 +57,7 @@
 }
 
 .admin-recycle-bin-page .search-icon {
-    color: #9ca3af;
+    color: var(--color-text-muted);
     font-size: 14px;
 }
 
@@ -68,7 +68,7 @@
     -webkit-box-shadow: none !important;
     width: 100%;
     font-size: 14px;
-    color: #374151;
+    color: var(--color-text);
     background: transparent !important;
 }
 
@@ -89,7 +89,7 @@
     font-weight: 400;
     color: #bbb;
     padding-bottom: 18px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--color-bg-muted);
     padding: 0 15px 18px 15px;
 }
 
@@ -120,7 +120,7 @@
 
 .admin-recycle-bin-page .item-name {
     font-weight: 400;
-    color: #999;
+    color: var(--color-text-muted);
 }
 
 .admin-recycle-bin-page .item-type {
@@ -129,17 +129,17 @@
 }
 
 .admin-recycle-bin-page .item-type.user {
-    color: #108a5d;
+    color: var(--color-primary);
     /* Greenish for users */
 }
 
 .admin-recycle-bin-page .item-type.course {
-    color: #3b82f6;
+    color: var(--color-primary);
     /* Blueish for courses */
 }
 
 .admin-recycle-bin-page .item-type.batch {
-    color: #f59e0b;
+    color: var(--color-warning);
     /* Amber/Orange for batches */
 }
 
@@ -172,21 +172,21 @@
 }
 
 .admin-recycle-bin-page .restore-btn {
-    color: #22C55E;
+    color: var(--color-primary-bright);
     /* Green for restore */
 }
 
 .admin-recycle-bin-page .restore-btn:hover {
-    background-color: #DCFCE7;
+    background-color: var(--color-primary-light);
 }
 
 .admin-recycle-bin-page .delete-btn {
-    color: #EF4444;
+    color: var(--color-error);
     /* Red for permanent delete */
 }
 
 .admin-recycle-bin-page .delete-btn:hover {
-    background-color: #FEE2E2;
+    background-color: var(--color-error-bg);
 }
 
 /* Empty State */
@@ -196,13 +196,13 @@
     align-items: center;
     justify-content: center;
     padding: 60px 0;
-    color: #aaa;
+    color: var(--color-text-muted);
 }
 
 .admin-recycle-bin-page .empty-state i {
     font-size: 48px;
     margin-bottom: 15px;
-    color: #ddd;
+    color: var(--color-border);
 }
 
 .admin-recycle-bin-page .empty-state p {

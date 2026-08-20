@@ -57,7 +57,7 @@
 
 .start-class-btn {
     background: var(--trainer-primary);
-    color: white;
+    color: var(--color-text-on-primary);
     border: none;
     padding: 16px 48px;
     font-size: 18px;
@@ -80,8 +80,8 @@
 
 /* Session Header */
 .session-header {
-    background: linear-gradient(135deg, var(--trainer-primary) 0%, #10b981 100%);
-    color: white;
+    background: linear-gradient(135deg, var(--trainer-primary) 0%, var(--color-success) 100%);
+    color: var(--color-text-on-primary);
     padding: var(--trainer-spacing-lg);
     border-radius: var(--trainer-radius-lg);
     display: flex;
@@ -160,11 +160,11 @@
 
 .summary-card.late .card-icon {
     background: #fffbeb;
-    color: #f59e0b;
+    color: var(--color-warning);
 }
 
 .summary-card.absent .card-icon {
-    background: #fef2f2;
+    background: var(--color-error-bg);
     color: var(--trainer-error);
 }
 
@@ -211,7 +211,7 @@
     border: 1px solid var(--trainer-border);
     border-radius: var(--trainer-radius-md);
     font-size: 14px;
-    background: white;
+    background: var(--color-surface);
     transition: var(--trainer-transition);
 }
 
@@ -238,7 +238,7 @@
 
 .mark-all-present-btn:hover {
     background: var(--trainer-primary);
-    color: white;
+    color: var(--color-text-on-primary);
 }
 
 /* Student Attendance List */
@@ -306,7 +306,7 @@
 }
 
 .attendance-btn {
-    background: white;
+    background: var(--color-surface);
     border: 1px solid var(--trainer-border);
     color: var(--trainer-text-muted);
     padding: 6px 14px;
@@ -328,19 +328,19 @@
 .attendance-btn.present.active {
     background: var(--trainer-primary);
     border-color: var(--trainer-primary);
-    color: white;
+    color: var(--color-text-on-primary);
 }
 
 .attendance-btn.late.active {
-    background: #f59e0b;
-    border-color: #f59e0b;
-    color: white;
+    background: var(--color-warning);
+    border-color: var(--color-warning);
+    color: var(--color-text-on-primary);
 }
 
 .attendance-btn.absent.active {
     background: var(--trainer-error);
     border-color: var(--trainer-error);
-    color: white;
+    color: var(--color-text-on-primary);
 }
 
 /* Class Notes */
@@ -376,7 +376,7 @@
     font-family: inherit;
     resize: vertical;
     transition: var(--trainer-transition);
-    background: white;
+    background: var(--color-surface);
 }
 
 .class-notes-section textarea:focus {
@@ -389,7 +389,7 @@
 .end-class-btn {
     width: 100%;
     background: var(--trainer-error);
-    color: white;
+    color: var(--color-text-on-primary);
     border: none;
     padding: 16px;
     font-size: 16px;

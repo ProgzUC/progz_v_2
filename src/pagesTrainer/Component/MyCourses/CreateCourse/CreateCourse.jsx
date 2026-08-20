@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./CreateCourse.css";
 import "../../../../components/common/ModuleNavigator/ModuleNavigator.css";
-import { BiX, BiTrash, BiChevronDown, BiGridVertical } from "react-icons/bi";
+import { BiX, BiTrash, BiChevronDown, BiGridVertical, BiPlus } from "react-icons/bi";
 import { uploadToCloudinary } from "../../../../utils/cloudinary";
 import { useCreateCourse, useUpdateCourse, useCourse } from "../../../../hooks/useCourses";
 import { confirmDelete } from "../../../../utils/confirmDelete";
@@ -21,6 +21,13 @@ import {
   createEmptySection,
   withStableIds,
 } from "../../../../utils/courseBuilder";
+import {
+  getYouTubeId,
+  getGoogleDriveFileId,
+  toGoogleDrivePreviewUrl,
+  normalizeVideoUrlForStorage,
+  isValidVideoUrl,
+} from "../../../../utils/videoUrl";
 import CourseTitleModal from "../../../../components/common/CourseBuilder/CourseTitleModal";
 import CourseBuilderShell from "../../../../components/common/CourseBuilder/CourseBuilderShell";
 import CourseInformationPanel from "../../../../components/common/CourseBuilder/CourseInformationPanel";
@@ -85,14 +92,6 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const editCourseId = isEditMode ? (initialData?._id || initialData?.courseId) : null;
   const { data: fullCourse, isLoading: isFetchingCourse } = useCourse(editCourseId);
 
-  // Helper to extract YouTube ID
-  const getYouTubeId = (url) => {
-    if (!url) return null;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-  };
-
   const [course, setCourse] = useState(emptyState);
 
   // When the full course data is fetched from the API, populate the form
@@ -112,19 +111,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const validateCurriculum = () => {
-    const newErrors = {};
-    course.modules.forEach((mod, mIndex) => {
-      if (!mod.title.trim()) newErrors[`module-${mIndex}`] = "Module Name is required";
-      mod.sections.forEach((sec, sIndex) => {
-        if (!sec.title.trim()) newErrors[`section-${mIndex}-${sIndex}`] = "Section Name is required";
-      });
-    });
-    setErrors((prev) => ({ ...prev, ...newErrors }));
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validateForm = () => validateInformation() && validateCurriculum();
+  const validateForm = () => validateInformation();
 
   const handleTitleContinue = (title) => {
     setCourse((prev) => ({ ...prev, courseName: title }));
@@ -133,10 +120,6 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   };
 
   const handleStepChange = (step) => {
-    if (step === "curriculum" && activeStep === "information" && !validateInformation()) {
-      showWarning("Please complete all required course information fields.");
-      return;
-    }
     setActiveStep(step);
   };
 
@@ -264,16 +247,17 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const addVideo = async (mIndex, sIndex) => {
     const link = await promptInput({
       title: "Add Video",
-      inputLabel: "YouTube video link",
-      placeholder: "https://www.youtube.com/watch?v=...",
+      placeholder: "Paste YouTube or Google Drive URL",
       confirmText: "Add Video",
       validate: (value) =>
-        getYouTubeId(value) ? undefined : "Please enter a valid YouTube URL",
+        isValidVideoUrl(value)
+          ? undefined
+          : "Please enter a valid YouTube or Google Drive URL",
     });
     if (!link) return;
 
     const updated = [...course.modules];
-    updated[mIndex].sections[sIndex].videos.push(link);
+    updated[mIndex].sections[sIndex].videos.push(normalizeVideoUrlForStorage(link));
     setCourse({ ...course, modules: updated });
   };
 
@@ -713,12 +697,27 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
 
                                           <div className="video-add-row">
                                             <label>Video References</label>
-                                            <button className="add-video-btn-small" onClick={() => addVideo(mIndex, sIndex)}>+ Add Video</button>
+                                            <button
+                                              type="button"
+                                              className="add-video-btn-small"
+                                              onClick={() => addVideo(mIndex, sIndex)}
+                                            >
+                                              <span className="add-video-btn-icon">
+                                                <BiPlus />
+                                              </span>
+                                              <span>Add Video</span>
+                                            </button>
                                           </div>
                                           <div className="video-list-container" style={{ marginTop: '10px', display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
                                             {section.videos.map((v, i) => {
                                               const params = getYouTubeId(v);
+                                              const drivePreview = toGoogleDrivePreviewUrl(v);
                                               const isHovered = hoveredVideo?.mIndex === mIndex && hoveredVideo?.sIndex === sIndex && hoveredVideo?.vIndex === i;
+                                              const lightboxSrc = params
+                                                ? params
+                                                : drivePreview
+                                                  ? drivePreview
+                                                  : null;
 
                                               return (
                                                 <div
@@ -726,7 +725,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                                   className="video-item-wrapper"
                                                   onMouseEnter={() => setHoveredVideo({ mIndex, sIndex, vIndex: i })}
                                                   onMouseLeave={() => setHoveredVideo(null)}
-                                                  onClick={() => openLightbox("video", params)}
+                                                  onClick={() => lightboxSrc && openLightbox("video", lightboxSrc)}
                                                 >
                                                   <span
                                                     className="remove-video-btn"
@@ -755,6 +754,15 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                                         />
                                                       )}
                                                     </>
+                                                  ) : drivePreview ? (
+                                                    <iframe
+                                                      className="video-preview-iframe"
+                                                      src={drivePreview}
+                                                      title="Google Drive video"
+                                                      frameBorder="0"
+                                                      allow="autoplay; encrypted-media"
+                                                      style={{ pointerEvents: 'none' }}
+                                                    ></iframe>
                                                   ) : (
                                                     <p className="video-item error-text">Invalid Video Link: {v}</p>
                                                   )}
@@ -770,8 +778,10 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                               ))}
                   </SortableList>
                   <button type="button" className="add-chapter-btn" onClick={() => addSection(mIndex)}>
-                    <span className="add-chapter-icon">+</span>
-                    Add more sections
+                    <span className="add-chapter-icon" aria-hidden="true">
+                      <BiPlus />
+                    </span>
+                    <span className="add-chapter-label">Add more sections</span>
                   </button>
                   </div>
                     </>
@@ -783,10 +793,12 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
         </SortableList>
 
         <button type="button" className="add-module-dashed-btn" onClick={addModule}>
-          <span className="add-module-dashed-icon">+</span>
+          <span className="add-module-dashed-icon">
+            <BiPlus />
+          </span>
           <span>
-            <strong>Add New Module</strong>
-            <small>Organize your course with modules.</small>
+            <strong>Add new module</strong>
+            <small>Organize your course into chapters of related sections</small>
           </span>
         </button>
     </div>
@@ -880,8 +892,12 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
               <iframe
                 width="100%"
                 height="100%"
-                src={`https://www.youtube.com/embed/${lightbox.src}?autoplay=1`}
-                title="YouTube video player"
+                src={
+                  getGoogleDriveFileId(lightbox.src)
+                    ? lightbox.src
+                    : `https://www.youtube.com/embed/${lightbox.src}?autoplay=1`
+                }
+                title="Video player"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen

@@ -2,7 +2,7 @@
     width: 100%;
     min-height: 100vh;
     background-color: var(--trainer-page-bg);
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-family-base), sans-serif;
 }
 
 .my-batchs-hero {
@@ -12,8 +12,8 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    background: linear-gradient(180deg, #dcfce7 0%, var(--trainer-page-bg) 100%);
-    padding: 100px var(--trainer-spacing-lg) var(--trainer-spacing-lg);
+    background: linear-gradient(180deg, var(--color-primary-light) 0%, var(--trainer-page-bg) 100%);
+    padding: var(--page-top-offset) var(--trainer-spacing-lg) var(--trainer-spacing-lg);
 }
 
 .my-batchs-title {

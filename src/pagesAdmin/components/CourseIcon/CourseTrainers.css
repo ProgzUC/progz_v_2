@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
 .manage-instructors-container {
   position: fixed;
   inset: 0;
@@ -7,17 +5,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'inter', sans-serif;
+  font-family: var(--font-family-base), sans-serif;
   padding: 20px;
   z-index: 9999;
 }
 
 .manage-card {
-  background: linear-gradient(180deg, #e6f9f0 0%, #ffffff 100%);
+  background: linear-gradient(180deg, #e6f9f0 0%, var(--color-surface) 100%);
   width: 100%;
   max-width: 620px;
   padding: 40px 35px;
-  border-radius: 20px;
+  border-radius: var(--radius-lg);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
   position: relative;
 }
@@ -53,7 +51,7 @@
 .title {
   font-size: 24px;
   font-weight: 600;
-  color: #000000;
+  color: var(--color-text);
   margin-bottom: 0;
   /* closer to subtitle */
 }
@@ -92,11 +90,11 @@
   height: 44px;
   padding: 0 40px; /* Space for search icon left, chevron right */
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 14px;
   font-family: inherit;
   color: #333;
-  background: #FFFFFF;
+  background: var(--color-surface);
   box-sizing: border-box;
   transition: all 0.2s;
   cursor: text;
@@ -117,7 +115,7 @@
   left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: #aaa;
+  color: var(--color-text-muted);
   font-size: 14px;
   pointer-events: none;
 }
@@ -142,9 +140,9 @@
   top: calc(100% + 4px);
   left: 0;
   right: 0;
-  background: #fff;
+  background: var(--color-surface);
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   max-height: 220px;
   overflow-y: auto;
@@ -177,13 +175,13 @@
 }
 
 .dropdown-item.empty {
-  color: #999;
+  color: var(--color-text-muted);
   text-align: center;
   font-style: italic;
   cursor: default;
 }
 .dropdown-item.empty:hover {
-  background: #fff;
+  background: var(--color-surface);
 }
 
 /* MAIN ROW FIX */
@@ -206,10 +204,10 @@
   height: 44px;
   padding: 0 16px;
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 14px;
   appearance: none;
-  background: #FFFFFF;
+  background: var(--color-surface);
   /* Explicit white */
   color: #333;
   cursor: pointer;
@@ -228,7 +226,7 @@
 
 .custom-select:focus {
   outline: none;
-  border-color: #ddd;
+  border-color: var(--color-border);
   /* Remove separate highlight color */
   box-shadow: none;
 }
@@ -249,11 +247,11 @@
   margin-left: auto;
   min-width: 110px;
   height: 36px;
-  background: #FFFFFF;
+  background: var(--color-surface);
   /* Explicit white */
   color: #008F4C;
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -263,7 +261,7 @@
 }
 
 .add-btn:hover {
-  background: #fff;
+  background: var(--color-surface);
   /* removes black hover */
   border-color: #008F4C;
 }
@@ -303,7 +301,7 @@
 .remove-btn {
   min-width: 110px;
   height: 36px;
-  background: #FFFFFF;
+  background: var(--color-surface);
   /* Explicit white */
   color: rgb(231, 77, 77);
   border: 1px solid #e0e0e0;
@@ -316,18 +314,18 @@
 }
 
 .remove-btn:hover {
-  background: #fff;
+  background: var(--color-surface);
   border-color: rgb(231, 77, 77);
 }
 
 
 /* Empty State */
 .empty-msg {
-  color: #999;
+  color: var(--color-text-muted);
   font-size: 14px;
   font-style: normal;
 
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-family-base), sans-serif;
 
   margin-top: 10px;
 }
@@ -342,11 +340,11 @@
 .done-btn {
   min-width: 110px;
   height: 36px;
-  background: #FFFFFF;
+  background: var(--color-surface);
   /* Explicit white */
   color: #008F4C;
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -356,7 +354,7 @@
 }
 
 .done-btn:hover {
-  background: #fff;
+  background: var(--color-surface);
   border-color: #008F4C;
 }
 
@@ -394,7 +392,7 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--color-bg-muted);
     /*  separator for clarity in stacked view */
     margin-bottom: 10px;
     padding-bottom: 15px;

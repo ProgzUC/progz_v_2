@@ -14,6 +14,11 @@ export async function signup(payload) {
     return res.data;
 }
 
+export async function getMe() {
+    const res = await axiosInstance.get('/auth/me');
+    return res.data;
+}
+
 /**
  * Login API
  * payload: { email, password }
@@ -24,13 +29,17 @@ export async function login(payload, rememberMe = false) {
     const res = await axiosInstance.post("/auth/login", payload);
     const data = res.data || {};
 
+    const meData = await getMe();
+
     saveAuthSession({
-        accessToken: data.accessToken,
-        user: data.user,
+        user: meData.user,
         rememberMe,
     });
 
-    return data;
+    return {
+        ...data,
+        ...meData,
+    };
 }
 
 /**
@@ -52,15 +61,13 @@ export async function resetPassword(payload, token) {
 }
 
 /**
- * Logout: clears all client auth storage
+ * Logout: clears server cookies & client auth storage
  */
-export function logout() {
+export async function logout() {
+    try {
+        await axiosInstance.post("/auth/logout");
+    } catch {
+        // ignore errors on logout request
+    }
     clearAuthSession();
-}
-
-/**
- * Utility to manually set/clear access token
- */
-export function setAuthToken(token) {
-    setAccessToken(token);
 }

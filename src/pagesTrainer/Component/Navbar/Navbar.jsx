@@ -21,8 +21,8 @@ const Navbar = ({ activeTab, setActiveTab }) => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const handleLogout = () => {
-        logout();
+    const handleLogout = async () => {
+        await logout();
         window.location.href = '/';
     };
 
@@ -33,7 +33,6 @@ const Navbar = ({ activeTab, setActiveTab }) => {
                 {/* 1. BRAND LOGO */}
                 <div className="trainer-brand" onClick={() => handleTabClick('home')}>
                     <img src="/logo.png" alt="ProgZ" className="brand-logo" />
-                    <span className="brand-badge">Trainer</span>
                 </div>
 
                 {/* 2. MOBILE TOGGLE */}
@@ -85,8 +84,9 @@ const Navbar = ({ activeTab, setActiveTab }) => {
 
                     {/* 4. LOGOUT BUTTON (Inside menu for mobile, Flexed on desktop) */}
                     <div className="nav-actions">
+                        <span className="brand-badge">Trainer</span>
                         <button className="trainer-logout-btn" onClick={handleLogout}>
-                            <i className="bi bi-box-arrow-right"></i>
+                            <span className="nav-icon"><i className="bi bi-box-arrow-right"></i></span>
                             <span>Log Out</span>
                         </button>
                     </div>

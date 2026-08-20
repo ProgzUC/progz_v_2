@@ -1,11 +1,10 @@
 //package imports
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom"
 import "./App.css"
 //importing componenents
 import SignIn from "./pagesAuth/login/SignIn"
 import StudentSignup from "./pagesAuth/signup/StudentSignup"
 import ResetPassword from "./pagesAuth/login/ResetPassword"
-import { Navigate } from "react-router-dom"
 import TrainerApp from "./pagesTrainer/TrainerApp"
 import StudentApp from "./pagesStudent/StudentApp"
 import AdminApp from "./pagesAdmin/AdminApp"
@@ -13,21 +12,31 @@ import PrivacyPolicy from "./pagesAuth/Privacy"
 import { getAuthData } from "./utils/authStorage"
 
 
+const CompilerRedirect = () => {
+  const location = useLocation();
+  return <Navigate to={`/student-dashboard/compiler${location.search}`} replace />;
+};
+
 const Unauthorized = () => (
-  <div style={{ padding: "40px", textAlign: "center", fontFamily: "Inter, sans-serif" }}>
-    <h2>Access Denied</h2>
-    <p>You do not have permission to view this page.</p>
-    <a href="/login" style={{ color: "#198754", fontWeight: 600 }}>Go to Login</a>
+  <div className="unauthorized-page-layout">
+    <div style={{ padding: "40px", textAlign: "center", fontFamily: "var(--font-family-base)", flex: 1 }}>
+      <h2>Access Denied</h2>
+      <p>You do not have permission to view this page.</p>
+      <a href="/login" style={{ color: "var(--color-primary)", fontWeight: 600 }}>Go to Login</a>
+    </div>
   </div>
 );
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const { token, user } = getAuthData();
+  const { user, isAuthenticated } = getAuthData();
 
-  if (!token || !user) return <Navigate to="/login" />;
+  if (!isAuthenticated || !user) return <Navigate to="/login" replace />;
 
-  if (!allowedRoles.includes(user.role))
-    return <Navigate to="/unauthorized" />;
+  const normalizedAllowed = allowedRoles.map((r) => String(r).toLowerCase());
+  const userRole = String(user.role || "").toLowerCase();
+
+  if (!normalizedAllowed.includes(userRole))
+    return <Navigate to="/unauthorized" replace />;
 
   return children;
 };
@@ -46,6 +55,7 @@ const App = () => {
           <Route path="/unauthorized" element={<Unauthorized />} />
 
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/compiler" element={<CompilerRedirect />} />
           {/* End of Login Routes */}
 
           {/* Protected Routes */}

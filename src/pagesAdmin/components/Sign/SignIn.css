@@ -4,8 +4,8 @@
     display: flex;
     width: 100vw;
     height: 100vh;
-    background-color: #ffffff;
-    font-family: 'Poppins', sans-serif;
+    background-color: var(--color-surface);
+    font-family: var(--font-family-base), sans-serif;
     overflow: hidden;
 }
 
@@ -75,20 +75,20 @@
     color: #333;
     background: #F5F5F5;
     border: 1px solid transparent;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     outline: none;
     transition: all 0.3s ease;
     box-sizing: border-box;
 }
 
 .input-wrapper input:focus {
-    background: #FFFFFF;
-    border-color: #198754;
+    background: var(--color-surface);
+    border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(25, 135, 84, 0.1);
 }
 
 .input-wrapper input::placeholder {
-    color: #999;
+    color: var(--color-text-muted);
 }
 
 .eye-icon {
@@ -101,7 +101,7 @@
 }
 
 .eye-icon:hover {
-    color: #198754;
+    color: var(--color-primary);
 }
 
 /* Options Row */
@@ -125,19 +125,19 @@
     width: 18px;
     height: 18px;
     cursor: pointer;
-    accent-color: #198754;
+    accent-color: var(--color-primary);
 }
 
 .forgot {
     font-size: 14px;
-    color: #198754;
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s;
 }
 
 .forgot:hover {
-    color: #146c43;
+    color: var(--color-primary-hover);
     text-decoration: underline;
 }
 
@@ -147,17 +147,17 @@
     padding: 14px;
     font-size: 16px;
     font-weight: 600;
-    color: #ffffff;
-    background: #198754;
+    color: var(--color-surface);
+    background: var(--color-primary);
     border: none;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     cursor: pointer;
     transition: all 0.3s ease;
     margin-bottom: 20px;
 }
 
 .login-btn:hover {
-    background: #146c43;
+    background: var(--color-primary-hover);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
 }
@@ -175,7 +175,7 @@
 }
 
 .register-link {
-    color: #198754;
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: 600;
     margin-left: 4px;
@@ -183,7 +183,7 @@
 }
 
 .register-link:hover {
-    color: #146c43;
+    color: var(--color-primary-hover);
     text-decoration: underline;
 }
 
@@ -207,7 +207,7 @@
     top: 50%;
     width: 40%;
     height: 1px;
-    background: #ddd;
+    background: var(--color-border);
 }
 
 .or-text::before {
@@ -239,7 +239,7 @@
 }
 
 .social-icon.apple {
-    color: #000000;
+    color: var(--color-text);
 }
 
 

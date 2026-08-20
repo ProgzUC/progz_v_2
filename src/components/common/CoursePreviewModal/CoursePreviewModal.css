@@ -11,14 +11,14 @@
 
 .course-preview-overlay--student {
   padding: 0;
-  background: #e4e4e4;
+  background: var(--color-bg);
 }
 
 .course-preview-panel {
   width: min(1100px, 100%);
   max-height: 92vh;
-  background: #fff;
-  border-radius: 16px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -31,12 +31,12 @@
   max-height: 100vh;
   max-width: none;
   border-radius: 0;
-  background: #e4e4e4;
+  background: var(--color-bg);
   box-shadow: none;
 }
 
 .course-preview-panel--student .course-preview-scroll {
-  background: #e4e4e4;
+  background: var(--color-bg);
   padding: 0;
   flex: 1;
   min-height: 0;
@@ -44,7 +44,7 @@
 
 .course-preview-panel--student .course-preview-topbar,
 .course-preview-panel--student .course-preview-footer {
-  background: #fff;
+  background: var(--color-surface);
   flex-shrink: 0;
 }
 
@@ -54,7 +54,7 @@
   align-items: flex-start;
   gap: 12px;
   padding: 18px 22px;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .course-preview-eyebrow {
@@ -69,12 +69,12 @@
 .course-preview-topbar h2 {
   margin: 4px 0 0;
   font-size: 20px;
-  color: #111827;
+  color: var(--color-text);
 }
 
 .course-preview-close {
   border: none;
-  background: #f3f4f6;
+  background: var(--color-bg-muted);
   width: 36px;
   height: 36px;
   padding: 0;
@@ -85,7 +85,7 @@
   justify-content: center;
   line-height: 0;
   cursor: pointer;
-  color: #374151;
+  color: var(--color-text);
 }
 
 .course-preview-close svg {
@@ -105,7 +105,7 @@
   height: 120px;
   border-radius: 12px;
   background: linear-gradient(90deg, #0f172a, #0fa958);
-  color: #fff;
+  color: var(--color-surface);
   display: flex;
   align-items: flex-end;
   padding: 14px 16px;
@@ -126,9 +126,9 @@
 .course-preview-icon {
   width: 64px;
   height: 64px;
-  border-radius: 16px;
-  background: #fff;
-  border: 3px solid #fff;
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  border: 3px solid var(--color-surface);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
   display: grid;
   place-items: center;
@@ -154,14 +154,14 @@
 .course-preview-title-text h1 {
   margin: 0;
   font-size: 22px;
-  color: #111827;
+  color: var(--color-text);
   line-height: 1.25;
   word-break: break-word;
 }
 
 .course-preview-title-text p {
   margin: 6px 0 0;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-size: 14px;
 }
 
@@ -174,7 +174,7 @@
 .course-preview-sections h3 {
   margin: 0 0 8px;
   font-size: 15px;
-  color: #374151;
+  color: var(--color-text);
 }
 
 .course-preview-section p {
@@ -192,8 +192,8 @@
 }
 
 .course-preview-modules {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 12px;
 }
@@ -203,7 +203,7 @@
   text-align: left;
   border: 1px solid transparent;
   background: transparent;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   padding: 10px 12px;
   margin-bottom: 6px;
   cursor: pointer;
@@ -212,12 +212,12 @@
 .course-preview-module-btn span {
   display: block;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text);
   font-size: 14px;
 }
 
 .course-preview-module-btn small {
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .course-preview-module-btn.active {
@@ -226,7 +226,7 @@
 }
 
 .course-preview-section-card {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   border-radius: 12px;
   margin-bottom: 10px;
   overflow: hidden;
@@ -239,16 +239,16 @@
   align-items: center;
   gap: 10px;
   border: none;
-  background: #fff;
+  background: var(--color-surface);
   padding: 12px 14px;
   cursor: pointer;
   font-weight: 600;
-  color: #111827;
+  color: var(--color-text);
 }
 
 .course-preview-section-body {
   padding: 0 14px 14px;
-  border-top: 1px solid #f3f4f6;
+  border-top: 1px solid var(--color-bg-muted);
 }
 
 .course-preview-block {
@@ -284,8 +284,8 @@
   justify-content: flex-end;
   gap: 10px;
   padding: 16px 22px;
-  border-top: 1px solid #e5e7eb;
-  background: #fff;
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 .course-preview-panel--student .course-preview-footer {
@@ -300,7 +300,7 @@
 
 .course-preview-edit-btn,
 .course-preview-save-btn {
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   padding: 10px 18px;
   font-weight: 600;
   font-size: 14px;
@@ -308,15 +308,15 @@
 }
 
 .course-preview-edit-btn {
-  background: #fff;
+  background: var(--color-surface);
   border: 1px solid #d1d5db;
-  color: #374151;
+  color: var(--color-text);
 }
 
 .course-preview-save-btn {
   background: #0fa958;
   border: 1px solid #0fa958;
-  color: #fff;
+  color: var(--color-surface);
 }
 
 .course-preview-edit-btn:disabled,

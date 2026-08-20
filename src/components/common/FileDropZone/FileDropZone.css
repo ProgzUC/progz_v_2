@@ -5,7 +5,7 @@
 .file-drop-zone {
   position: relative;
   border: 2px dashed #cbd5e1;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   background: #f8fafc;
   padding: 24px 16px;
   text-align: center;
@@ -45,19 +45,19 @@
   margin: 0;
   font-size: 14px;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-text);
 }
 
 .file-drop-or {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .file-drop-error {
   display: block;
   margin-top: 6px;
   font-size: 12px;
-  color: #ef4444;
+  color: var(--color-error);
 }
 
 .file-drop-zone-compact {

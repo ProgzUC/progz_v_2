@@ -19,9 +19,9 @@ const Sidebar = () => {
       confirmButtonColor: "#d33",
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, logout!"
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        logout();
+        await logout();
         navigate("/", { replace: true });
       }
     });
@@ -76,7 +76,7 @@ const Sidebar = () => {
       {/* Logo */}
       <div className="sidebar-header">
         <div className="sidebar-logo-text"><img src="/admin/logo.png" alt="Logo" /></div>
-        {!collapsed && <h3 className="sidebar-title">Admin Portal</h3>}
+        {!collapsed && <h3 className="sidebar-title">Portal</h3>}
       </div>
 
       {/* Menu */}
@@ -177,10 +177,13 @@ const Sidebar = () => {
         <div
           className="menu-item"
           onClick={handleLogout}
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}
         >
-          <i className="bi bi-box-arrow-right"></i>
-          {!collapsed && <span>Logout</span>}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+            <i className="bi bi-box-arrow-right"></i>
+            {!collapsed && <span>Logout</span>}
+          </div>
+          {!collapsed && <span className="brand-badge" style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '12px' }}>Admin</span>}
         </div>
       </nav>
     </div>

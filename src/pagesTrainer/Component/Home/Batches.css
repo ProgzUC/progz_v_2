@@ -112,7 +112,7 @@
     font-size: 22px;
     font-weight: 700;
     margin: 0 0 var(--trainer-spacing-sm) 0;
-    color: #1a1a1a;
+    color: var(--color-text);
     line-height: 1.35;
     letter-spacing: -0.01em;
 }
@@ -264,7 +264,7 @@
     font-size: 17px;
     font-weight: 700;
     margin-bottom: 12px;
-    color: #1a1a1a;
+    color: var(--color-text);
     line-height: 1.35;
 }
 
@@ -294,7 +294,7 @@
 
 .trainer-home-batches .batches-join-btn.active {
     background: var(--trainer-primary);
-    color: white;
+    color: var(--color-text-on-primary);
 }
 
 .trainer-home-batches .batches-join-btn.active:hover {

@@ -1,0 +1,547 @@
+/* ================================================================
+   DONEZO EMERALD — Reusable UI Components
+   Import after theme.css
+   ================================================================ */
+
+/* ── Buttons ── */
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: 12px 24px;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  border-radius: var(--radius-full);
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ds-btn-primary {
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  box-shadow: var(--shadow-btn);
+}
+
+.ds-btn-primary:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.ds-btn-secondary {
+  background: var(--color-surface);
+  color: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+}
+
+.ds-btn-secondary:hover {
+  background: var(--color-primary-soft);
+  transform: translateY(-1px);
+}
+
+.ds-btn-ghost {
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1.5px solid var(--color-border);
+}
+
+.ds-btn-ghost:hover {
+  background: var(--color-bg-muted);
+  border-color: var(--color-border-hover);
+  color: var(--color-text);
+}
+
+.ds-btn-icon {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  box-shadow: var(--shadow-xs);
+}
+
+.ds-btn-icon:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Cards ── */
+.ds-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.ds-card:hover {
+  box-shadow: var(--shadow-card-hover);
+}
+
+.ds-card-dark {
+  background: var(--color-primary-gradient);
+  color: var(--color-text-on-primary);
+  border: none;
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.ds-card-dark * {
+  color: var(--color-text-on-primary);
+}
+
+/* ── Inputs ── */
+.ds-input,
+.ds-select,
+.ds-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.ds-input:focus,
+.ds-select:focus,
+.ds-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-focus-ring);
+}
+
+.ds-input::placeholder,
+.ds-textarea::placeholder {
+  color: var(--color-text-muted);
+}
+
+.ds-search {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 10px 16px;
+  background: var(--color-bg-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+}
+
+.ds-search input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  outline: none;
+}
+
+/* ── Badges / Pills ── */
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ds-badge-primary {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+.ds-badge-success {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+.ds-badge-warning {
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
+}
+
+.ds-badge-error {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.ds-badge-info {
+  background: var(--color-info-bg);
+  color: var(--color-info);
+}
+
+/* ── Progress ── */
+.ds-progress {
+  width: 100%;
+  height: 8px;
+  background: var(--color-bg-muted);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.ds-progress-fill {
+  height: 100%;
+  background: var(--color-primary-bright);
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+}
+
+/* ── Sidebar Navigation (Donezo style) ── */
+.ds-sidebar {
+  width: var(--sidebar-width);
+  background: var(--color-bg-sidebar);
+  height: 100vh;
+  padding: var(--spacing-md) var(--spacing-sm);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transition: width var(--transition-slow);
+}
+
+.ds-sidebar.collapsed {
+  width: var(--sidebar-collapsed);
+}
+
+.ds-sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.ds-sidebar-item:hover {
+  background: var(--color-navbar-hover-bg);
+  color: var(--color-navbar-hover-text);
+}
+
+.admin-sidebar .menu-item,
+.ds-sidebar-item {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
+.ds-sidebar-item.active {
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.ds-sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px;
+  background: var(--color-primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+/* ── Top Navbar ── */
+.ds-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--navbar-height);
+  background: var(--color-navbar-bg);
+  border-bottom: 1px solid var(--color-navbar-border);
+  box-shadow: var(--shadow-navbar);
+  z-index: 1000;
+  transition: all var(--transition-base);
+}
+
+.ds-navbar.scrolled {
+  height: var(--navbar-height-scrolled);
+  background: var(--color-navbar-bg);
+}
+
+.ds-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+  color: var(--color-navbar-text-muted);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+}
+
+.ds-nav-item:hover {
+  color: var(--color-navbar-hover-text);
+  background: var(--color-navbar-hover-bg);
+}
+
+.ds-nav-item.active {
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ── Typography Utilities ── */
+.ds-heading-1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  line-height: var(--line-height-tight);
+}
+
+.ds-heading-2 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  line-height: var(--line-height-tight);
+}
+
+.ds-heading-3 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  line-height: var(--line-height-tight);
+}
+
+.ds-text-muted {
+  color: var(--color-text-secondary);
+}
+
+.ds-text-light {
+  color: var(--color-text-muted);
+}
+
+/* ── Container ── */
+.ds-container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--spacing-xl);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ── Bootstrap Overrides ── */
+.btn-primary,
+.btn-success {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-text-on-primary) !important;
+  box-shadow: var(--shadow-btn) !important;
+  border-radius: var(--radius-md) !important;
+  font-weight: var(--font-weight-semibold);
+  transition: all var(--transition-base);
+}
+
+.btn-primary:hover,
+.btn-success:hover,
+.btn-primary:focus,
+.btn-success:focus,
+.btn-primary:active {
+  background-color: var(--color-primary-hover) !important;
+  border-color: var(--color-primary-hover) !important;
+  color: var(--color-text-on-primary) !important;
+  transform: translateY(-1px);
+}
+
+.btn-outline-primary,
+.btn-outline-success {
+  color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  background-color: transparent !important;
+  border-radius: var(--radius-md) !important;
+  font-weight: var(--font-weight-semibold);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-success:hover {
+  background-color: var(--color-primary-soft) !important;
+  color: var(--color-primary) !important;
+}
+
+.bg-primary,
+.bg-success {
+  background-color: var(--color-primary) !important;
+}
+
+.text-primary,
+.text-success {
+  color: var(--color-primary) !important;
+}
+
+.border-primary,
+.border-success {
+  border-color: var(--color-border) !important;
+}
+
+.badge-primary,
+.badge.bg-primary,
+.badge-success,
+.badge.bg-success {
+  background-color: var(--color-primary-soft) !important;
+  color: var(--color-primary) !important;
+  font-weight: var(--font-weight-semibold);
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+}
+
+/* ── Form Focus ── */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px var(--color-focus-ring) !important;
+  outline: none;
+}
+
+/* ── Card Aliases ── */
+.card,
+.student-card,
+.trainer-card {
+  border-radius: var(--radius-xl) !important;
+  border: 1px solid var(--color-border) !important;
+  background-color: var(--color-surface) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: transform var(--transition-base), box-shadow var(--transition-base) !important;
+}
+
+.card:hover,
+.student-card:hover,
+.trainer-card:hover {
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* ── Navbar Global Rules ── */
+.student-navbar,
+.trainer-navbar,
+.admin-navbar,
+header.navbar {
+  background: var(--color-navbar-bg) !important;
+  border-bottom: 1px solid var(--color-navbar-border) !important;
+  box-shadow: var(--shadow-navbar) !important;
+}
+
+.student-navbar.scrolled,
+.trainer-navbar.scrolled {
+  background: var(--color-navbar-bg) !important;
+}
+
+.student-nav-item,
+.trainer-navbar .nav-item {
+  color: var(--color-navbar-text-muted) !important;
+}
+
+.student-nav-item:hover,
+.trainer-navbar .nav-item:hover {
+  color: var(--color-navbar-hover-text) !important;
+  background: var(--color-navbar-hover-bg) !important;
+}
+
+.student-nav-item.active,
+.trainer-navbar .nav-item.active {
+  color: var(--color-text-on-primary) !important;
+  background: var(--color-primary) !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+.student-logout-btn,
+.trainer-logout-btn {
+  background: var(--color-primary-soft) !important;
+  border: 1px solid var(--color-primary-muted) !important;
+  color: var(--color-primary) !important;
+}
+
+.student-logout-btn:hover,
+.trainer-logout-btn:hover {
+  background: var(--color-primary) !important;
+  color: var(--color-text-on-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+/* ── Legacy Utilities ── */
+.donezo-dark-card {
+  background: var(--color-primary-gradient) !important;
+  color: var(--color-text-on-primary) !important;
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.donezo-dark-card * {
+  color: var(--color-text-on-primary) !important;
+}
+
+.donezo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  background-color: var(--color-primary-soft);
+  color: var(--color-primary);
+}
+
+/* ── Responsive Containers ── */
+@media (max-width: 1200px) {
+  .ds-container {
+    padding: 0 var(--spacing-md);
+  }
+}
+
+@media (max-width: 768px) {
+  .ds-container {
+    padding: 0 var(--spacing-sm);
+  }
+
+  .ds-heading-1 {
+    font-size: var(--font-size-3xl);
+  }
+
+  .ds-heading-2 {
+    font-size: var(--font-size-2xl);
+  }
+
+  .ds-heading-3 {
+    font-size: var(--font-size-xl);
+  }
+}
+
+@media (max-width: 480px) {
+  .ds-container {
+    padding: 0 var(--spacing-xs);
+  }
+
+  .ds-btn {
+    padding: 10px 20px;
+    font-size: var(--font-size-xs);
+  }
+}

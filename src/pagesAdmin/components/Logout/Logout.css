@@ -22,10 +22,10 @@
 
 .add-btn {
   background: #2aa96b;
-  color: white;
+  color: var(--color-text-on-primary);
   padding: 8px 16px;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   cursor: pointer;
 }
 
@@ -36,7 +36,7 @@
 /* Table */
 .table-container {
   margin-top: 20px;
-  background: white;
+  background: var(--color-surface);
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0px 4px 12px rgba(0,0,0,0.05);
@@ -103,10 +103,10 @@ th {
   border-radius: 6px;
   border: 1px solid #ccc;
   cursor: pointer;
-  background: white;
+  background: var(--color-surface);
 }
 
 .pagination .active {
   background: #2aa96b;
-  color: white;
+  color: var(--color-text-on-primary);
 }

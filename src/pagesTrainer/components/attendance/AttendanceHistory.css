@@ -34,7 +34,7 @@
     border: 1px solid var(--trainer-border);
     border-radius: var(--trainer-radius-md);
     font-size: 13px;
-    background: white;
+    background: var(--color-surface);
     color: var(--trainer-text);
     transition: var(--trainer-transition);
 }
@@ -185,13 +185,13 @@
 }
 
 .status-badge.live {
-    background-color: #fef2f2;
-    color: #ef4444;
+    background-color: var(--color-error-bg);
+    color: var(--color-error);
 }
 
 .status-badge.completed {
-    background-color: #f0fdf4;
-    color: #198754;
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary);
 }
 
 .status-indicator {
@@ -226,8 +226,8 @@
 }
 
 .summary-pill.p { color: var(--trainer-primary); }
-.summary-pill.l { color: #f59e0b; }
-.summary-pill.a { color: #ef4444; }
+.summary-pill.l { color: var(--color-warning); }
+.summary-pill.a { color: var(--color-error); }
 
 .summary-dot {
     width: 8px;

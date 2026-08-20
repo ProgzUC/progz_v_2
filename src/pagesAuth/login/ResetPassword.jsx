@@ -138,6 +138,7 @@ const ResetPassword = () => {
     );
 
     return (
+        <div className="auth-page-layout">
         <div className="auth-container">
             {/* SUCCESS POPUP */}
             {successMessage && (
@@ -166,6 +167,7 @@ const ResetPassword = () => {
             <div className="auth-right">
                 <img src={pattern} alt="pattern" className="pattern" />
             </div>
+        </div>
         </div>
     );
 };

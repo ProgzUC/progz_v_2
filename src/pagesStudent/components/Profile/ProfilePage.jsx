@@ -4,48 +4,72 @@ import "./ProfilePage.css";
 import { useStudentProfile, useUpdateStudentProfile, useChangePassword } from "../../../hooks/useStudentProfile";
 import { useStudentCourses } from "../../../hooks/useStudentCourses";
 import Loader from "../../../components/common/Loader/Loader";
-import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
 import FileDropZone from "../../../components/common/FileDropZone/FileDropZone";
 import { uploadToCloudinary } from "../../../utils/cloudinary";
 
-import { BiPhone, BiMapPin, BiBook, BiBriefcase, BiCheckShield, BiTimeFive, BiTrophy, BiShieldQuarter, BiCalendar } from "react-icons/bi";
+import { MdPhone } from "react-icons/md";
+import {
+    FaEnvelope,
+    FaMapMarkerAlt,
+    FaUser,
+    FaCalendarAlt,
+    FaGraduationCap,
+    FaBriefcase,
+    FaIdBadge,
+    FaEdit,
+    FaShieldAlt,
+    FaArrowLeft
+} from "react-icons/fa";
+import { 
+    BiBook, 
+    BiTimeFive, 
+    BiTrophy, 
+    BiCalendar,
+    BiTrendingUp
+} from "react-icons/bi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import Swal from "sweetalert2";
 
+const THUMB_SKIP_WORDS = new Set([
+    "complete", "course", "courses", "the", "a", "an", "and",
+    "of", "for", "in", "to", "with", "using", "web", "development",
+]);
 
-/* ============================
-   USER INITIALS AVATAR
-   ============================ */
-const UserAvatar = ({ name, imageUrl }) => {
-    const initials = (name || "User")
-        .split(' ')
-        .map(word => word[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2);
+function getThumbLines(name) {
+    const words = String(name || "Course")
+        .replace(/[^a-zA-Z0-9\s]/g, " ")
+        .trim()
+        .split(/\s+/)
+        .filter((word) => word && !THUMB_SKIP_WORDS.has(word.toLowerCase()));
+
+    if (words.length === 0) {
+        const first = String(name || "Course").trim().split(/\s+/)[0] || "Course";
+        return [first.toUpperCase()];
+    }
+
+    if (words.length === 1) return [words[0].toUpperCase()];
+    return [words[0].toUpperCase(), words[1].toUpperCase()];
+}
+
+function CourseThumb({ courseName }) {
+    const lines = getThumbLines(courseName);
 
     return (
-        <div className="profile-avatar-container">
-            <div className="profile-avatar-wrapper">
-                {imageUrl ? (
-                    <img src={imageUrl} alt={name} className="profile-image-avatar" />
-                ) : (
-                    <div className="profile-initials-avatar">{initials}</div>
-                )}
-                <div className="verify-badge" title="Verified Student">
-                    <BiCheckShield />
-                </div>
-            </div>
-            <div className="profile-user-info">
-                <p className="profile-user-name">{name}</p>
-                <span className="profile-user-status">Active Student</span>
-            </div>
+        <div className="profile-course-thumb fullstack-thumb">
+            <div className="fullstack-grid" aria-hidden="true" />
+            <div className="fullstack-code" aria-hidden="true">{'</>'}</div>
+            <p className="profile-course-thumb-title fullstack-title">
+                {lines.map((line) => (
+                    <span key={line}>{line}</span>
+                ))}
+            </p>
         </div>
     );
-};
+}
 
 /* ============================
    EDIT PROFILE MODAL COMPONENT
-============================ */
+   ============================ */
 const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
     const [form, setForm] = useState(currentData);
     const [currentPwdInput, setCurrentPwdInput] = useState("");
@@ -223,6 +247,12 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                 onSuccess: (updatedData) => {
                     if (onSave) onSave(updatedData);
                     onClose();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Profile Updated',
+                        text: 'Your profile has been successfully updated!',
+                        confirmButtonColor: '#0F4C3A'
+                    });
                 },
                 onError: (err) => {
                     setError(err?.message || "Failed to update profile.");
@@ -302,6 +332,7 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                                     onChange={handleChange}
                                     placeholder="Please specify"
                                     style={{ marginTop: '10px' }}
+                                    className="profile-input-other-gender"
                                     autoFocus
                                 />
                             )}
@@ -424,78 +455,193 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
 };
 
 /* ============================
-   INFO COMPONENT
-============================ */
-const Info = ({ profile, ongoingCount, completedCount, openEdit, openPassword }) => {
+   PROFILE HERO + DETAILS
+   ============================ */
+const Info = ({ profile, openEdit, openPassword }) => {
     if (!profile) return null;
 
+    const initial = profile.name ? profile.name.charAt(0).toUpperCase() : "S";
+
     return (
-        <div className="profile-sidebar">
-            <UserAvatar name={profile.name} imageUrl={profile.profileImage} />
+        <>
+            <div className="sp-hero-card">
+                <div className="sp-hero-top">
+                    <div className="sp-avatar-wrapper">
+                        {profile.profileImage ? (
+                            <img src={profile.profileImage} alt={profile.name} className="sp-avatar-image" />
+                        ) : (
+                            <div className="sp-avatar-initials">{initial}</div>
+                        )}
+                    </div>
 
-            <div className="profile-details-card">
-                <div className="profile-detail-item">
-                    <div className="detail-icon"><BiPhone /></div>
-                    <div className="detail-info">
-                        <label>Phone</label>
-                        <span>{profile.phone || "Not provided"}</span>
+                    <div className="sp-hero-identity">
+                        <div className="sp-hero-name-row">
+                            <h2 className="sp-profile-name">{profile.name}</h2>
+                        </div>
+                        <div className="sp-hero-contacts">
+                            <div className="sp-info-item">
+                                <FaEnvelope /> <span className="email-text">{profile.email}</span>
+                            </div>
+                            <div className="sp-info-item">
+                                <MdPhone /> <span>{profile.phone}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="sp-hero-actions">
+                        <button className="sp-edit-btn" onClick={openEdit}>
+                            Edit Profile <FaEdit />
+                        </button>
+                        <button className="sp-security-btn" onClick={openPassword}>
+                            Security Settings <FaShieldAlt />
+                        </button>
                     </div>
                 </div>
-                <div className="profile-detail-item">
-                    <div className="detail-icon"><BiMapPin /></div>
-                    <div className="detail-info">
-                        <label>Address</label>
-                        <span>{profile.location || "Not provided"}</span>
+
+                <div className="sp-hero-stats">
+                    <div className="sp-hero-stat">
+                        <div className="sp-detail-icon tone-green"><FaIdBadge /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Role</span>
+                            <span className="sp-detail-value">Student</span>
+                        </div>
                     </div>
-                </div>
-                <div className="profile-detail-item">
-                    <div className="detail-icon"><BiBook /></div>
-                    <div className="detail-info">
-                        <label>Education</label>
-                        <span>{profile.education || "Not provided"}</span>
+                    <div className="sp-hero-stat">
+                        <div className="sp-detail-icon tone-purple"><FaEnvelope /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Email</span>
+                            <span className="sp-detail-value email-text">{profile.email}</span>
+                        </div>
                     </div>
-                </div>
-                <div className="profile-detail-item">
-                    <div className="detail-icon"><BiBriefcase /></div>
-                    <div className="detail-info">
-                        <label>Profession</label>
-                        <span>{profile.jobTitle || "Not provided"}</span>
+                    <div className="sp-hero-stat">
+                        <div className="sp-detail-icon tone-blue"><MdPhone /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Mobile</span>
+                            <span className="sp-detail-value">{profile.phone}</span>
+                        </div>
+                    </div>
+                    <div className="sp-hero-stat">
+                        <div className="sp-detail-icon tone-orange"><FaMapMarkerAlt /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Location</span>
+                            <span className="sp-detail-value">{profile.location || ""}</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div className="profile-action-btns">
-                <button className="profile-btn-edit active-btn" onClick={openEdit}>
-                    Edit Profile
-                </button>
-                <button className="profile-btn-password outline-btn" onClick={openPassword}>
-                    Security Settings
-                </button>
-            </div>
+            <section className="sp-details-section">
+                <div className="sp-section-header">
+                    <div className="sp-section-title-group">
+                        <span className="sp-section-title-icon"><FaUser /></span>
+                        <h2>Personal Details</h2>
+                    </div>
+                </div>
+                <div className="sp-details-grid">
+                    <div className="sp-detail-box">
+                        <div className="sp-detail-icon tone-green"><FaUser /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Full Name</span>
+                            <span className="sp-detail-value">{profile.name}</span>
+                        </div>
+                    </div>
+                    <div className="sp-detail-box">
+                        <div className="sp-detail-icon tone-purple"><FaEnvelope /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Email Address</span>
+                            <span className="sp-detail-value email-text">{profile.email}</span>
+                        </div>
+                    </div>
+                    <div className="sp-detail-box">
+                        <div className="sp-detail-icon tone-blue"><MdPhone /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Mobile Number</span>
+                            <span className="sp-detail-value">{profile.phone}</span>
+                        </div>
+                    </div>
+                    <div className="sp-detail-box">
+                        <div className="sp-detail-icon tone-orange"><FaCalendarAlt /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Date of Birth</span>
+                            <span className="sp-detail-value">{profile.dob || ""}</span>
+                        </div>
+                    </div>
+                    <div className="sp-detail-box">
+                        <div className="sp-detail-icon tone-pink"><FaUser /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Gender</span>
+                            <span className="sp-detail-value">{profile.gender || ""}</span>
+                        </div>
+                    </div>
+                    <div className="sp-detail-box sp-address-box">
+                        <div className="sp-detail-icon tone-green"><FaMapMarkerAlt /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Address</span>
+                            <span className="sp-detail-value">{profile.location || ""}</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            <div className="profile-stats-grid">
-                <div className="stat-card ongoing">
-                    <div className="stat-icon"><BiTimeFive /></div>
-                    <div className="stat-data">
-                        <span className="count">{ongoingCount}</span>
-                        <span className="label">Ongoing</span>
+            <section className="sp-details-section">
+                <div className="sp-section-header">
+                    <div className="sp-section-title-group">
+                        <span className="sp-section-title-icon"><FaBriefcase /></span>
+                        <h2>Education & Employment</h2>
                     </div>
                 </div>
-                <div className="stat-card completed">
-                    <div className="stat-icon"><BiTrophy /></div>
-                    <div className="stat-data">
-                        <span className="count">{completedCount}</span>
-                        <span className="label">Completed</span>
+                <div className="sp-details-grid">
+                    <div className="sp-detail-box">
+                        <div className="sp-detail-icon tone-teal"><FaGraduationCap /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Education</span>
+                            <span className="sp-detail-value">{profile.education || ""}</span>
+                        </div>
+                    </div>
+                    <div className="sp-detail-box">
+                        <div className="sp-detail-icon tone-purple"><FaMapMarkerAlt /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">University/School</span>
+                            <span className="sp-detail-value">{profile.university || ""}</span>
+                        </div>
+                    </div>
+                    <div className="sp-detail-box">
+                        <div className="sp-detail-icon tone-orange"><FaBriefcase /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Profession</span>
+                            <span className="sp-detail-value">{profile.jobTitle || ""}</span>
+                        </div>
+                    </div>
+                    <div className="sp-detail-box">
+                        <div className="sp-detail-icon tone-blue"><FaBriefcase /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Experience</span>
+                            <span className="sp-detail-value">{profile.experience || ""}</span>
+                        </div>
+                    </div>
+                    <div className="sp-detail-box">
+                        <div className="sp-detail-icon tone-orange"><FaIdBadge /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Employment Status</span>
+                            <span className="sp-detail-value">{profile.employmentStatus || ""}</span>
+                        </div>
+                    </div>
+                    <div className="sp-detail-box sp-address-box">
+                        <div className="sp-detail-icon tone-pink"><FaEdit /></div>
+                        <div className="sp-detail-content">
+                            <span className="sp-detail-label">Skills</span>
+                            <span className="sp-detail-value">{profile.skills || ""}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </section>
+        </>
     );
 };
 
 /* ============================
    COURSE GRID COMPONENT
-============================ */
+   ============================ */
 const CourseGrid = ({ courses, profileName }) => {
     const [filter, setFilter] = useState("ongoing");
     const navigate = useNavigate();
@@ -520,16 +666,17 @@ const CourseGrid = ({ courses, profileName }) => {
 
     return (
         <div className="profile-courses-main">
-            <div className="profile-filter-tabs">
-                <button className={`profile-tab ${filter === "ongoing" ? "active" : ""}`} onClick={() => setFilter("ongoing")}>
-                    Ongoing Courses
-                </button>
-                <button className={`profile-tab ${filter === "completed" ? "active" : ""}`} onClick={() => setFilter("completed")}>
-                    Completed Courses
-                </button>
+            <div className="profile-courses-header">
+                <h2 className="profile-courses-title">My Courses</h2>
+                <div className="profile-filter-tabs">
+                    <button className={`profile-tab ${filter === "ongoing" ? "active" : ""}`} onClick={() => setFilter("ongoing")}>
+                        Ongoing
+                    </button>
+                    <button className={`profile-tab ${filter === "completed" ? "active" : ""}`} onClick={() => setFilter("completed")}>
+                        Completed
+                    </button>
+                </div>
             </div>
-
-            <div className="profile-tab-line"></div>
 
             <div className="profile-courses-grid-scroll">
                 <div className="profile-courses-grid">
@@ -545,45 +692,41 @@ const CourseGrid = ({ courses, profileName }) => {
                                 style={{ cursor: "pointer" }}
                             >
                                 <div className="profile-course-card-top">
-                                    <ImageWithFallback
-                                        src={c.thumbnail?.url || c.courseImage || c.img}
-                                        alt={c.courseName || c.title}
-                                        className="profile-card-image"
-                                        fallbackText={c.courseName || c.title}
-                                    />
-                                    <div className="profile-card-overlay-btn">
-                                        <span>{"< >"}</span>
-                                    </div>
+                                    <CourseThumb courseName={c.courseName || c.title} />
+                                    <span className={`profile-card-badge ${isCompleted ? 'badge-completed' : 'badge-progress'}`}>
+                                        {isCompleted ? "COMPLETED" : "IN PROGRESS"}
+                                    </span>
                                 </div>
                                 <div className="profile-course-card-body">
                                     <p className="profile-course-title">{c.courseName || c.title}</p>
+                                    
+                                    <span className="profile-course-lessons-count">
+                                        {c.completedLessons || 0} of {c.totalLessons || 0} Lessons
+                                    </span>
 
                                     <div className="profile-card-progress-area">
-                                        <div className="profile-card-progress-label">
-                                            <span>Progress</span>
-                                            <span>{progress}%</span>
-                                        </div>
                                         <div className="profile-card-progress-track">
                                             <div className="profile-card-progress-fill" style={{ width: `${progress}%` }} />
+                                        </div>
+                                        <div className="profile-card-progress-label">
+                                            <span>{progress}% Progress</span>
                                         </div>
                                     </div>
 
                                     <div className="profile-card-footer">
-                                        <div className="profile-lesson-info">
-                                            <img src="/student/lesson_icon.png" alt="lessons" className="profile-card-icon" />
-                                            <span>{c.completedLessons || 0} of {c.totalLessons || 0} Lessons</span>
-                                        </div>
-                                        {isCompleted && (
+                                        {isCompleted ? (
                                             <button className="profile-view-cert" onClick={(e) => handleCertificate(e, c)}>
                                                 🎉 View Certificate
                                             </button>
+                                        ) : (
+                                            <span className="last-accessed-text">Last accessed recently</span>
                                         )}
                                     </div>
                                 </div>
                             </div>
                         );
                     })}
-                    {filteredCourses.length === 0 && <p className="profile-no-courses">No courses found.</p>}
+                    {filteredCourses.length === 0 && <p className="profile-no-courses">No courses found in this category.</p>}
                 </div>
             </div>
         </div>
@@ -592,8 +735,9 @@ const CourseGrid = ({ courses, profileName }) => {
 
 /* ============================
    MAIN PROFILE PAGE
-============================ */
+   ============================ */
 const ProfilePage = () => {
+    const navigate = useNavigate();
     const { data: profile, isLoading: profileLoading, refetch: refetchProfile } = useStudentProfile();
     const { data: coursesData, isLoading: coursesLoading } = useStudentCourses();
 
@@ -608,22 +752,69 @@ const ProfilePage = () => {
     const completedCount = courses.filter(c => (c.progressPercentage || 0) === 100).length;
     const ongoingCount = courses.filter(c => (c.progressPercentage || 0) < 100).length;
 
+    // Advanced Metrics for the Stats Cards Row
+    const totalLessons = courses.reduce((acc, c) => acc + (c.totalLessons || 0), 0);
+    const totalCompletedLessons = courses.reduce((acc, c) => acc + (c.completedLessons || 0), 0);
+    const overallProgress = totalLessons > 0 ? Math.round((totalCompletedLessons / totalLessons) * 100) : 0;
+
     return (
         <div className="profile-root">
             <div className="profile-container-outer">
-                <div className="profile-dashboard-card">
-                    <div className="profile-banner-gradient" />
-                    <div className="profile-main-layout">
-                        <Info
-                            profile={profile}
-                            ongoingCount={ongoingCount}
-                            completedCount={completedCount}
-                            openEdit={() => { setModalMode("edit"); setIsModelOpen(true); }}
-                            openPassword={() => { setModalMode("password"); setIsModelOpen(true); }}
-                        />
-                        <CourseGrid courses={courses} profileName={profile?.name} />
+                <div className="profile-greeting-header">
+                    <button
+                        type="button"
+                        className="sp-back-btn"
+                        onClick={() => navigate('/student-dashboard')}
+                        aria-label="Back"
+                    >
+                        <FaArrowLeft />
+                    </button>
+                </div>
+
+                <Info
+                    profile={profile}
+                    openEdit={() => { setModalMode("edit"); setIsModelOpen(true); }}
+                    openPassword={() => { setModalMode("password"); setIsModelOpen(true); }}
+                />
+
+                <div className="profile-stats-row">
+                    <div className="profile-stat-card stat-ongoing">
+                        <div className="stat-icon-wrapper"><BiBook /></div>
+                        <div className="stat-data">
+                            <span className="stat-label">Ongoing Courses</span>
+                            <span className="stat-value">{ongoingCount}</span>
+                            <span className="stat-subtext">Keep learning!</span>
+                        </div>
+                    </div>
+                    <div className="profile-stat-card stat-completed">
+                        <div className="stat-icon-wrapper"><BiTrophy /></div>
+                        <div className="stat-data">
+                            <span className="stat-label">Completed Courses</span>
+                            <span className="stat-value">{completedCount}</span>
+                            <span className="stat-subtext">Keep it up!</span>
+                        </div>
+                    </div>
+                    <div className="profile-stat-card stat-lessons">
+                        <div className="stat-icon-wrapper"><BiTimeFive /></div>
+                        <div className="stat-data">
+                            <span className="stat-label">Total Lessons</span>
+                            <span className="stat-value">{totalLessons}</span>
+                            <span className="stat-subtext">Across all courses</span>
+                        </div>
+                    </div>
+                    <div className="profile-stat-card stat-progress">
+                        <div className="stat-icon-wrapper"><BiTrendingUp /></div>
+                        <div className="stat-data">
+                            <span className="stat-label">Overall Progress</span>
+                            <span className="stat-value">{overallProgress}%</span>
+                            <span className="stat-subtext">Keep going strong!</span>
+                        </div>
                     </div>
                 </div>
+
+                <section className="sp-details-section">
+                    <CourseGrid courses={courses} profileName={profile?.name} />
+                </section>
             </div>
 
             {isModelOpen && (

@@ -1,52 +1,50 @@
 /* =========================================
-   STUDENT NAVBAR STYLES (DARK THEME)
+   STUDENT NAVBAR — Donezo Green Theme
    ========================================= */
 
-/* 1. MAIN NAVBAR WRAPPER */
 .student-navbar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 70px;
-  background: rgba(17, 17, 17, 0.95);
-  /* Dark background */
+  height: var(--navbar-height);
+  background: var(--color-navbar-bg);
   backdrop-filter: blur(10px);
   z-index: 1000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
+  border-bottom: 1px solid var(--color-navbar-border);
+  box-shadow: var(--shadow-navbar);
+  transition: all var(--transition-base);
 }
 
 .student-navbar.scrolled {
-  height: 60px;
-  background: rgba(10, 10, 10, 0.98);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  height: var(--navbar-height-scrolled);
+  background: var(--color-navbar-bg);
 }
 
 .student-nav-container {
-  max-width: 1400px;
+  max-width: var(--container-wide);
   height: 100%;
   margin: 0 auto;
-  padding: 0 30px;
+  padding: 0 var(--spacing-xl);
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-/* 2. BRAND LOGO */
+/* ── Brand Logo ── */
 .student-brand {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-xs);
   cursor: pointer;
   user-select: none;
   text-decoration: none;
 }
 
 .student-brand .brand-text {
-  font-size: 24px;
-  font-weight: 800;
-  color: #ffffff;
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-extrabold);
+  color: var(--color-navbar-text);
   letter-spacing: -0.5px;
 }
 
@@ -55,23 +53,25 @@
   width: 40px;
   display: block;
   object-fit: contain;
-  border-radius: 8px;
-  background: #000;
+  border-radius: var(--radius-sm);
+  background: var(--color-primary);
 }
 
 .student-brand .brand-badge {
   padding: 2px 8px;
-  background: rgba(0, 135, 90, 0.2);
-  color: #00d68f;
+  background: rgba(16, 185, 129, 0.25);
+  color: var(--color-primary-bright);
   font-size: 11px;
   text-transform: uppercase;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   letter-spacing: 0.5px;
-  border-radius: 4px;
-  margin-top: 2px;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
 }
 
-/* 3. CENTER NAVIGATION */
+/* ── Center Navigation ── */
 .student-nav-menu {
   display: flex;
   align-items: center;
@@ -83,22 +83,23 @@
 .nav-items {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--spacing-xs);
 }
 
 .student-nav-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-xs);
+  min-height: 40px;
   padding: 8px 16px;
   background: transparent;
   border: none;
-  font-size: 15px;
-  font-weight: 500;
-  color: #a0a0a0;
-  border-radius: 8px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-navbar-text-muted);
+  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out;
+  transition: color var(--transition-base), background-color var(--transition-base);
   text-decoration: none;
 }
 
@@ -108,50 +109,49 @@
   align-items: center;
 }
 
-/* Hover State */
 .student-nav-item:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-navbar-hover-text);
+  background: var(--color-navbar-hover-bg);
 }
 
-/* Active State */
 .student-nav-item.active {
-  color: #ffffff;
-  background: var(--student-success, #00875a);
-  font-weight: 600;
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
 }
 
-
-/* 4. ACTIONS (LOGOUT) */
+/* ── Actions (Logout) ── */
 .nav-actions {
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
 .student-logout-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 20px;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 30px;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  min-height: 40px;
+  padding: 8px 16px;
+  background: var(--color-primary-soft);
+  border: 1px solid var(--color-primary-muted);
+  color: var(--color-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-full);
   cursor: pointer;
-  transition: background-color 0.25s ease-in-out, color 0.25s ease-in-out, transform 0.25s ease-in-out;
+  transition: background-color var(--transition-base), color var(--transition-base), transform var(--transition-base);
 }
 
 .student-logout-btn:hover {
-  background: #ffffff;
-  color: #000000;
-  border-color: #ffffff;
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  border-color: var(--color-primary);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
 }
 
-/* 5. MOBILE MENU TOGGLE */
+/* ── Mobile Menu Toggle ── */
 .student-menu-toggle {
   display: none;
   flex-direction: column;
@@ -168,14 +168,13 @@
 .student-menu-toggle .bar {
   width: 100%;
   height: 2px;
-  background: #ffffff;
+  background: var(--color-navbar-text);
   border-radius: 2px;
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
 }
 
-
 /* =========================================
-   RESPONSIVE (TABLET & MOBILE)
+   RESPONSIVE
    ========================================= */
 
 @media (max-width: 992px) {
@@ -185,33 +184,36 @@
 
   .student-nav-item {
     padding: 8px 12px;
-    font-size: 14px;
+    font-size: var(--font-size-sm);
   }
 }
 
 @media (max-width: 768px) {
+  .student-nav-container {
+    padding: 0 var(--spacing-md);
+  }
+
   .student-menu-toggle {
     display: flex;
   }
 
-  /* Side Drawer Menu */
   .student-nav-menu {
     position: fixed;
     top: 0;
     right: 0;
     width: 280px;
     height: 100vh;
-    background: #1a1a1a;
+    background: var(--color-navbar-bg);
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
     padding: 80px 30px 30px;
     margin: 0;
-    box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-xl);
     transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform var(--transition-slow);
     z-index: 1001;
-    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-left: 1px solid var(--color-navbar-border);
   }
 
   .student-nav-menu.active {
@@ -221,7 +223,7 @@
   .nav-items {
     flex-direction: column;
     width: 100%;
-    gap: 10px;
+    gap: var(--spacing-xs);
     margin-bottom: auto;
   }
 
@@ -229,28 +231,26 @@
     width: 100%;
     justify-content: flex-start;
     padding: 12px 16px;
-    font-size: 16px;
-    color: #cccccc;
+    font-size: var(--font-size-base);
+    color: var(--color-navbar-text-muted);
   }
 
   .student-nav-item:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-navbar-hover-bg);
+    color: var(--color-navbar-hover-text);
   }
 
   .nav-actions {
     width: 100%;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    padding-top: 20px;
+    border-top: 1px solid var(--color-navbar-border);
+    padding-top: var(--spacing-md);
   }
 
   .student-logout-btn {
     width: 100%;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
   }
 
-  /* Toggle Animation */
   .student-menu-toggle.active .bar:nth-child(1) {
     transform: translateY(9px) rotate(45deg);
   }
@@ -263,11 +263,10 @@
     transform: translateY(-9px) rotate(-45deg);
   }
 
-  /* Mobile Overlay */
   .student-nav-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 1000;
     backdrop-filter: blur(4px);
     animation: fadeIn 0.3s ease;
@@ -275,11 +274,6 @@
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

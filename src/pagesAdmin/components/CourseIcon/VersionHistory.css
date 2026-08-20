@@ -14,7 +14,7 @@
 
 /* Drawer Container */
 .vh-drawer {
-    background: white;
+    background: var(--color-surface);
     width: 400px;
     height: 100%;
     box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
@@ -45,9 +45,9 @@
 
 /* Header */
 .vh-header {
-    background: linear-gradient(90deg, #F0FDF4 0%, #10B981 100%);
+    background: linear-gradient(90deg, var(--color-primary-soft) 0%, var(--color-success) 100%);
     padding: 20px;
-    color: white;
+    color: var(--color-text-on-primary);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -62,7 +62,7 @@
 .vh-close-btn {
     background: none;
     border: none;
-    color: white;
+    color: var(--color-text-on-primary);
     font-size: 24px;
     cursor: pointer;
     line-height: 1;
@@ -83,7 +83,7 @@
 .vh-item {
     background: #f9f9f9;
     border: 1px solid #eee;
-    border-radius: 8px;
+    border-radius: var(--radius-sm);
     padding: 15px;
     margin-bottom: 15px;
     transition: all 0.2s ease;
@@ -98,20 +98,20 @@
     top: 0;
     bottom: 0;
     width: 4px;
-    background: #ddd;
+    background: var(--color-border);
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
 }
 
 .vh-item:hover {
-    background: white;
+    background: var(--color-surface);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transform: translateY(-2px);
 }
 
 /* Highlight latest or specific version style if needed */
 .vh-item.active::before {
-    background: #10B981;
+    background: var(--color-success);
 }
 
 .vh-timestamp {
@@ -132,9 +132,9 @@
 
 /* Rollback Button */
 .vh-rollback-btn {
-    background: white;
-    border: 1px solid #10B981;
-    color: #10B981;
+    background: var(--color-surface);
+    border: 1px solid var(--color-success);
+    color: var(--color-success);
     padding: 6px 15px;
     border-radius: 6px;
     font-size: 13px;
@@ -149,12 +149,12 @@
 }
 
 .vh-rollback-btn:hover {
-    background: #F0FDF4;
+    background: var(--color-primary-soft);
 }
 
 .vh-empty {
     text-align: center;
-    color: #999;
+    color: var(--color-text-muted);
     font-style: italic;
     margin-top: 50px;
 }

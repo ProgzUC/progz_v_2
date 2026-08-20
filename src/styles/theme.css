@@ -1,0 +1,248 @@
+/* ================================================================
+   DONEZO EMERALD — Centralized Design System
+   Single source of truth for the entire application
+   ================================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* ── Core Palette (Donezo Reference) ── */
+  --color-primary: #064E3B;
+  --color-primary-hover: #053D2E;
+  --color-primary-active: #042F23;
+  --color-primary-soft: #D1FAE5;
+  --color-primary-light: #ECFDF5;
+  --color-primary-muted: #6EE7B7;
+  --color-primary-bright: #10B981;
+  --color-primary-gradient: linear-gradient(135deg, #064E3B 0%, #10B981 100%);
+
+  --color-bg: #F9FAFB;
+  --color-bg-muted: #F3F4F6;
+  --color-bg-sidebar: #FFFFFF;
+  --color-surface: #FFFFFF;
+  --color-card-bg: #FFFFFF;
+  --color-surface-dark: #053D2E;
+
+  --color-text: #111827;
+  --color-text-secondary: #6B7280;
+  --color-text-muted: #9CA3AF;
+  --color-text-on-primary: #FFFFFF;
+
+  --color-border: #E5E7EB;
+  --color-border-strong: #D1D5DB;
+  --color-border-hover: #D1D5DB;
+  --color-focus-ring: rgba(6, 78, 59, 0.22);
+
+  /* ── Navbar / Footer ── */
+  --color-navbar-bg: #FFFFFF;
+  --color-navbar-border: #E5E7EB;
+  --color-navbar-text: #111827;
+  --color-navbar-text-muted: #6B7280;
+  --color-navbar-hover-bg: #D1FAE5;
+  --color-navbar-hover-text: #064E3B;
+  --color-footer-bg: #064E3B;
+  --color-footer-bg-mid: #053D2E;
+  --color-footer-bar: #042F23;
+
+  /* ── Status ── */
+  --color-success: #10B981;
+  --color-success-bg: #D1FAE5;
+  --color-warning: #D97706;
+  --color-warning-bg: #FEF3C7;
+  --color-error: #DC2626;
+  --color-error-bg: #FEE2E2;
+  --color-info: #0284C7;
+  --color-info-bg: #E0F2FE;
+  --color-pending: #F87171;
+  --color-pending-bg: #FEE2E2;
+
+  /* ── Typography ── */
+  --font-family-base: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-4xl: 2.25rem;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.625;
+
+  /* ── Spacing ── */
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 20px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+  --spacing-3xl: 64px;
+
+  /* ── Geometry ── */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+  --radius-full: 9999px;
+
+  /* ── Shadows ── */
+  --shadow-xs: 0 1px 2px rgba(6, 78, 59, 0.04);
+  --shadow-sm: 0 2px 8px rgba(6, 78, 59, 0.06);
+  --shadow-md: 0 6px 20px rgba(6, 78, 59, 0.08);
+  --shadow-lg: 0 12px 32px rgba(6, 78, 59, 0.10);
+  --shadow-xl: 0 20px 48px rgba(6, 78, 59, 0.12);
+  --shadow-card-hover: 0 8px 24px rgba(6, 78, 59, 0.12);
+  --shadow-navbar: 0 1px 0 rgba(17, 24, 39, 0.04), 0 8px 24px rgba(17, 24, 39, 0.06);
+  --shadow-btn: 0 4px 14px rgba(6, 78, 59, 0.22);
+
+  /* ── Transitions ── */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
+  --transition-slow: 0.35s ease;
+
+  /* ── Layout ── */
+  --sidebar-width: 280px;
+  --sidebar-collapsed: 85px;
+  --navbar-height: 70px;
+  --navbar-height-scrolled: 60px;
+  --page-top-offset: calc(var(--navbar-height) + 24px);
+  --container-max: 1280px;
+  --container-wide: 1400px;
+
+  /* ── Module Aliases (Student) ── */
+  --student-primary: var(--color-primary);
+  --student-primary-hover: var(--color-primary-hover);
+  --student-primary-light: var(--color-primary-soft);
+  --student-card-bg: var(--color-surface);
+  --student-bg: var(--color-bg);
+  --student-page-bg: var(--color-bg);
+  --student-text: var(--color-text);
+  --student-text-muted: var(--color-text-secondary);
+  --student-text-light: var(--color-text-muted);
+  --student-success: var(--color-success);
+  --student-warning: var(--color-warning);
+  --student-error: var(--color-error);
+  --student-info: var(--color-info);
+  --student-border: var(--color-border);
+  --student-divider: var(--color-bg-muted);
+  --student-shadow-sm: var(--shadow-sm);
+  --student-shadow-md: var(--shadow-md);
+  --student-shadow-lg: var(--shadow-lg);
+  --student-spacing-xs: var(--spacing-xs);
+  --student-spacing-sm: var(--spacing-sm);
+  --student-spacing-md: var(--spacing-md);
+  --student-spacing-lg: var(--spacing-xl);
+  --student-spacing-xl: var(--spacing-2xl);
+  --student-radius-sm: var(--radius-sm);
+  --student-radius-md: var(--radius-md);
+  --student-radius-lg: var(--radius-lg);
+  --student-radius-xl: var(--radius-xl);
+  --student-transition: var(--transition-base);
+
+  /* ── Module Aliases (Trainer) ── */
+  --trainer-primary: var(--color-primary);
+  --trainer-primary-hover: var(--color-primary-hover);
+  --trainer-primary-light: var(--color-primary-soft);
+  --trainer-card-bg: var(--color-surface);
+  --trainer-bg: var(--color-bg);
+  --trainer-page-bg: var(--color-bg);
+  --trainer-text: var(--color-text);
+  --trainer-text-muted: var(--color-text-secondary);
+  --trainer-text-light: var(--color-text-muted);
+  --trainer-success: var(--color-success);
+  --trainer-warning: var(--color-warning);
+  --trainer-error: var(--color-error);
+  --trainer-info: var(--color-info);
+  --trainer-border: var(--color-border);
+  --trainer-divider: var(--color-bg-muted);
+  --trainer-shadow-sm: var(--shadow-sm);
+  --trainer-shadow-md: var(--shadow-md);
+  --trainer-shadow-lg: var(--shadow-lg);
+  --trainer-spacing-xs: var(--spacing-xs);
+  --trainer-spacing-sm: var(--spacing-sm);
+  --trainer-spacing-md: var(--spacing-md);
+  --trainer-spacing-lg: var(--spacing-xl);
+  --trainer-spacing-xl: var(--spacing-2xl);
+  --trainer-radius-sm: var(--radius-sm);
+  --trainer-radius-md: var(--radius-md);
+  --trainer-radius-lg: var(--radius-lg);
+  --trainer-radius-xl: var(--radius-xl);
+  --trainer-transition: var(--transition-base);
+
+  /* ── Module Aliases (Admin) ── */
+  --admin-primary: var(--color-primary);
+  --admin-primary-hover: var(--color-primary-hover);
+  --admin-card-bg: var(--color-surface);
+  --admin-bg: var(--color-bg);
+  --admin-border: var(--color-border);
+}
+
+/* ── Base Reset ── */
+html,
+body,
+#root {
+  font-family: var(--font-family-base);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Global: no blinking text caret on non-input UI ── */
+*:not(input):not(textarea):not(select):not([contenteditable="true"]) {
+  caret-color: transparent;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="button"]):not([type="submit"]):not([type="reset"]),
+textarea,
+[contenteditable="true"] {
+  caret-color: auto;
+}
+
+button,
+img,
+svg,
+picture,
+video,
+canvas,
+[role="img"],
+[class*="avatar"],
+[class*="Avatar"],
+[class*="thumb"],
+[class*="Thumb"],
+[class*="logo"],
+[class*="Logo"],
+[class*="icon"],
+[class*="Icon"] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+button:focus,
+button:focus-visible,
+[tabindex]:not([contenteditable="true"]):focus,
+[tabindex]:not([contenteditable="true"]):focus-visible,
+div:focus:not([contenteditable="true"]),
+span:focus:not([contenteditable="true"]),
+section:focus:not([contenteditable="true"]) {
+  caret-color: transparent;
+}
+
+[tabindex]:not([contenteditable="true"]):focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+button:focus:not(:focus-visible),
+[tabindex]:not([contenteditable="true"]):focus:not(:focus-visible) {
+  outline: none;
+}

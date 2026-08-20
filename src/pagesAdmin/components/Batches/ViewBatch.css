@@ -11,10 +11,10 @@
 }
 
 .view-batch-page .back-btn {
-    background: #10a358 !important;
+    background: var(--color-primary-bright) !important;
     border: none !important;
     padding: 10px 24px !important;
-    border-radius: 10px !important;
+    border-radius: var(--radius-md) !important;
     cursor: pointer !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -22,7 +22,7 @@
     gap: 8px !important;
     font-size: 14px !important;
     font-weight: 600 !important;
-    color: white !important;
+    color: var(--color-text-on-primary) !important;
     margin-bottom: 30px !important;
     transition: all 0.2s ease !important;
     text-decoration: none !important;
@@ -45,11 +45,11 @@
 .view-batch-page .header-title h1 {
     margin: 0;
     font-size: 32px;
-    color: #111827;
+    color: var(--color-text);
 }
 
 .view-batch-page .view-batch-card {
-    background: white;
+    background: var(--color-surface);
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 24px;
@@ -59,7 +59,7 @@
 .view-batch-page .card-title {
     font-size: 20px;
     font-weight: 600;
-    color: #111827;
+    color: var(--color-text);
     margin: 0 0 20px 0;
     display: flex;
     align-items: center;
@@ -80,7 +80,7 @@
 
 .view-batch-page .info-label {
     font-size: 13px;
-    color: #6b7280;
+    color: var(--color-text-secondary);
     font-weight: 500;
     display: flex;
     align-items: center;
@@ -89,12 +89,12 @@
 
 .view-batch-page .info-value {
     font-size: 15px;
-    color: #111827;
+    color: var(--color-text);
     font-weight: 500;
 }
 
 .view-batch-page .info-value a {
-    color: #3b82f6;
+    color: var(--color-primary);
     text-decoration: none;
 }
 
@@ -110,9 +110,9 @@
 }
 
 .view-batch-page .trainer-item {
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
     padding: 16px;
 }
 
@@ -128,7 +128,7 @@
     height: 48px;
     border-radius: 50%;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    color: var(--color-text-on-primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -139,20 +139,20 @@
 .view-batch-page .trainer-info h3 {
     margin: 0;
     font-size: 16px;
-    color: #111827;
+    color: var(--color-text);
 }
 
 .view-batch-page .trainer-meta {
     display: flex;
     gap: 12px;
     font-size: 13px;
-    color: #6b7280;
+    color: var(--color-text-secondary);
     margin-top: 4px;
 }
 
 .view-batch-page .current-badge {
-    background: #10b981;
-    color: white;
+    background: var(--color-success);
+    color: var(--color-text-on-primary);
     padding: 2px 8px;
     border-radius: 12px;
     font-size: 11px;
@@ -162,12 +162,12 @@
 .view-batch-page .assigned-modules {
     margin-top: 12px;
     padding-top: 12px;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid var(--color-border);
 }
 
 .view-batch-page .assigned-modules strong {
     font-size: 13px;
-    color: #374151;
+    color: var(--color-text);
 }
 
 .view-batch-page .assigned-modules ul {
@@ -177,7 +177,7 @@
 
 .view-batch-page .assigned-modules li {
     font-size: 14px;
-    color: #6b7280;
+    color: var(--color-text-secondary);
     margin: 4px 0;
 }
 
@@ -190,13 +190,13 @@
 }
 
 .view-batch-page .module-item {
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
     overflow: hidden;
 }
 
 .view-batch-page .module-header {
-    background: #f9fafb;
+    background: var(--color-bg);
     padding: 16px;
     cursor: pointer;
     display: flex;
@@ -206,7 +206,7 @@
 }
 
 .view-batch-page .module-header:hover {
-    background: #f3f4f6;
+    background: var(--color-bg-muted);
 }
 
 .view-batch-page .module-title-section {
@@ -217,13 +217,13 @@
 
 .view-batch-page .expand-icon {
     font-size: 12px;
-    color: #6b7280;
+    color: var(--color-text-secondary);
 }
 
 .view-batch-page .module-header h3 {
     margin: 0;
     font-size: 16px;
-    color: #111827;
+    color: var(--color-text);
 }
 
 .view-batch-page .module-trainer {
@@ -231,40 +231,40 @@
     align-items: center;
     gap: 6px;
     font-size: 14px;
-    color: #6b7280;
-    background: white;
+    color: var(--color-text-secondary);
+    background: var(--color-surface);
     padding: 6px 12px;
     border-radius: 6px;
 }
 
 .view-batch-page .module-content {
     padding: 16px;
-    background: white;
+    background: var(--color-surface);
 }
 
 .view-batch-page .module-description {
-    color: #6b7280;
+    color: var(--color-text-secondary);
     font-size: 14px;
     margin: 0 0 16px 0;
 }
 
 .view-batch-page .sections-list h4 {
     font-size: 14px;
-    color: #374151;
+    color: var(--color-text);
     margin: 0 0 12px 0;
 }
 
 .view-batch-page .section-item {
     padding: 12px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
     margin-bottom: 8px;
     background: #fafafa;
 }
 
 .view-batch-page .section-item.completed {
-    background: #f0fdf4;
-    border-color: #86efac;
+    background: var(--color-primary-soft);
+    border-color: var(--color-primary-muted);
 }
 
 .view-batch-page .section-header {
@@ -278,7 +278,7 @@
     align-items: center;
     gap: 10px;
     font-size: 14px;
-    color: #111827;
+    color: var(--color-text);
     font-weight: 500;
 }
 
@@ -287,11 +287,11 @@
 }
 
 .view-batch-page .status-icon.completed {
-    color: #10b981;
+    color: var(--color-success);
 }
 
 .view-batch-page .status-icon.pending {
-    color: #9ca3af;
+    color: var(--color-text-muted);
 }
 
 .view-batch-page .completion-info {
@@ -308,7 +308,7 @@
 }
 
 .view-batch-page .completed-date {
-    color: #6b7280;
+    color: var(--color-text-secondary);
 }
 
 /* Students */
@@ -324,9 +324,9 @@
     align-items: center;
     gap: 12px;
     padding: 12px;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
 }
 
 .view-batch-page .student-avatar {
@@ -334,7 +334,7 @@
     height: 40px;
     border-radius: 50%;
     background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
+    color: var(--color-text-on-primary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -345,17 +345,17 @@
 .view-batch-page .student-info h4 {
     margin: 0;
     font-size: 14px;
-    color: #111827;
+    color: var(--color-text);
 }
 
 .view-batch-page .student-email {
     font-size: 12px;
-    color: #6b7280;
+    color: var(--color-text-secondary);
 }
 
 .view-batch-page .empty-message {
     text-align: center;
-    color: #9ca3af;
+    color: var(--color-text-muted);
     font-size: 14px;
     padding: 20px;
 }
@@ -366,7 +366,7 @@
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
-    border-radius: 20px;
+    border-radius: var(--radius-lg);
     font-size: 13px;
     font-weight: 600;
 }
@@ -378,30 +378,30 @@
 }
 
 .view-batch-page .status-active {
-    background: #d1fae5;
+    background: var(--color-success-bg);
     color: #065f46;
 }
 
 .view-batch-page .status-active .dot {
-    background: #10b981;
+    background: var(--color-success);
 }
 
 .view-batch-page .status-completed {
-    background: #dbeafe;
+    background: var(--color-primary-soft);
     color: #1e40af;
 }
 
 .view-batch-page .status-completed .dot {
-    background: #3b82f6;
+    background: var(--color-primary);
 }
 
 .view-batch-page .status-upcoming {
-    background: #fef3c7;
+    background: var(--color-warning-bg);
     color: #92400e;
 }
 
 .view-batch-page .status-upcoming .dot {
-    background: #f59e0b;
+    background: var(--color-warning);
 }
 
 /* Responsive */

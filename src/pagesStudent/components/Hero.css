@@ -5,7 +5,7 @@
   /* Set to 100% of viewport height */
   display: flex;
   align-items: center;
-  color: #ffffff;
+  color: var(--color-surface);
   overflow: hidden;
   background: #000;
   /* Fallback */
@@ -101,7 +101,7 @@
 
 .hero-sub {
   font-size: clamp(14px, 2vw, 18px);
-  color: #f0f0f0;
+  color: var(--color-bg-muted);
   margin: 0 0 40px;
   max-width: 600px;
   font-weight: 400;
@@ -120,7 +120,7 @@
   right: 0;
   bottom: 0;
   height: 250px;
-  background: linear-gradient(180deg, rgba(228, 228, 228, 0) 0%, #E4E4E4 100%);
+  background: linear-gradient(180deg, rgba(228, 228, 228, 0) 0%, var(--color-bg) 100%);
   z-index: 6;
   pointer-events: none;
 }
@@ -136,7 +136,7 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-  color: white;
+  color: var(--color-text-on-primary);
   opacity: 0.8;
   animation: bounce 2s infinite;
 }
@@ -170,8 +170,8 @@
 .mouse-wheel {
   width: 22px;
   height: 36px;
-  border: 2px solid white;
-  border-radius: 20px;
+  border: 2px solid var(--color-surface);
+  border-radius: var(--radius-lg);
   position: relative;
 }
 
@@ -179,7 +179,7 @@
   content: '';
   width: 4px;
   height: 4px;
-  background: white;
+  background: var(--color-surface);
   position: absolute;
   top: 8px;
   left: 50%;
@@ -374,13 +374,13 @@
 
 /* Button 1: Continue Learning */
 .continue-learning-btn {
-  background: #198754;
+  background: var(--color-primary);
   box-shadow: 0px 4px 15px rgba(25, 135, 84, 0.3);
 }
 
 /* Button 2: Browse All Courses */
 .browse-all-btn {
-  background: #FFFFFF;
+  background: var(--color-surface);
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -392,20 +392,20 @@
 }
 
 .continue-learning-btn .btn-text {
-  color: #FFFFFF;
+  color: var(--color-surface);
 }
 
 .browse-all-btn .btn-text {
-  color: #198754;
+  color: var(--color-primary);
 }
 
 .continue-learning-btn .icon-svg {
-  color: #FFFFFF;
+  color: var(--color-surface);
   font-size: 14px;
 }
 
 .browse-all-btn .icon-svg {
-  color: #198754;
+  color: var(--color-primary);
   font-size: 18px;
 }
 
@@ -519,6 +519,6 @@
 .browse-all-btn:hover {
   box-shadow: 0 10px 25px rgba(255, 255, 255, 0.5) !important;
   /* White/Bright Glow */
-  background: #f8f9fa;
+  background: var(--color-bg);
   /* Slight dim on hover */
 }

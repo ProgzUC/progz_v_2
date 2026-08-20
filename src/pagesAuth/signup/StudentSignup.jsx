@@ -119,11 +119,13 @@ const StudentSignup = () => {
     };
 
     return (
+        <div className="signup-page-layout">
         <div className="signup-container">
             <LeftSidebar activeStep={activeStep} completedSteps={completedSteps} />
             <div className="main-content">
                 {renderCurrentStep()}
             </div>
+        </div>
         </div>
     );
 };

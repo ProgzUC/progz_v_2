@@ -4,10 +4,10 @@
 
 .admin-overview-page {
   padding: 20px 40px;
-  background: #f8f9fa;
+  background: var(--color-bg);
   width: 100%;
   min-height: 100vh;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-family-base), sans-serif;
 }
 
 /* ---------------- HEADER ---------------- */
@@ -21,26 +21,26 @@
 .admin-overview-page .dashboard-title {
   font-size: 32px;
   font-weight: 700;
-  color: #374151;
+  color: var(--color-text);
 }
 
 .admin-overview-page .dashboard-subtitle {
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
 .admin-overview-page .btn-generate {
-  background: white;
-  border: 1px solid #22c55e;
-  color: #22c55e;
+  background: var(--color-surface);
+  border: 1px solid var(--color-primary-bright);
+  color: var(--color-primary-bright);
   padding: 10px 25px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   font-weight: 600;
   cursor: pointer;
 }
 
 .admin-overview-page .btn-generate:hover {
-  background: #22c55e;
-  color: white;
+  background: var(--color-primary-bright);
+  color: var(--color-surface);
 }
 
 /* ---------------- STATS ---------------- */
@@ -52,10 +52,10 @@
 
 .admin-overview-page .stats-card {
   flex: 1;
-  background: white;
+  background: var(--color-surface);
   padding: 22px;
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-overview-page .icon-box {
@@ -70,18 +70,18 @@
 }
 
 .admin-overview-page .orange {
-  background: #ffeede;
-  color: #ff6b00;
+  background: var(--color-warning-bg);
+  color: var(--color-warning);
 }
 
 .admin-overview-page .green {
-  background: #e0f7e9;
-  color: #00a86b;
+  background: var(--color-success-bg);
+  color: var(--color-primary-bright);
 }
 
 .admin-overview-page .pink {
-  background: #ffe7f1;
-  color: #ff2b88;
+  background: var(--color-error-bg);
+  color: var(--color-error);
 }
 
 .admin-overview-page .stats-card h5 {
@@ -103,8 +103,8 @@
 }
 
 .admin-overview-page .chart-card {
-  background: white;
-  border-radius: 20px;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
   padding: 25px;
   width: 100%;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
@@ -114,7 +114,7 @@
 .admin-overview-page .chart-title {
   margin-bottom: 10px;
   font-weight: 600;
-  color: #374151;
+  color: var(--color-text);
 }
 
 /* ---------------- USER DISTRIBUTION FIX ---------------- */
@@ -142,7 +142,7 @@
 }
 
 .admin-overview-page .legend-dot.students {
-  background: #22c55e;
+  background: var(--color-primary-bright);
 }
 
 .admin-overview-page .donut-wrapper {
@@ -180,14 +180,14 @@
 
 .admin-overview-page .table-card {
   flex: 1;
-  background: white;
+  background: var(--color-surface);
   padding: 25px;
-  border-radius: 20px;
+  border-radius: var(--radius-lg);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .admin-overview-page .table-card h5 {
-  color: #555555;
+  color: var(--color-text-secondary);
   font-weight: 600;
   margin-bottom: 20px;
   padding-left: 0;
@@ -201,14 +201,14 @@
 .admin-overview-page .table-card th {
   text-align: left;
   padding-bottom: 12px;
-  color: #555555;
+  color: var(--color-text-secondary);
   font-weight: 600;
 }
 
 .admin-overview-page .table-card td {
   padding: 12px 0;
   border-bottom: 1px solid #f1f1f1;
-  color: #666666;
+  color: var(--color-text-secondary);
   font-size: 14px;
   font-weight: 600;
 }
@@ -227,7 +227,7 @@
   height: 28px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #fff;
+  border: 2px solid var(--color-surface);
 }
 
 .admin-overview-page .more-count {
@@ -240,7 +240,7 @@
 
 .admin-overview-page .course-name,
 .admin-overview-page .student-name {
-  color: #666666 !important;
+  color: var(--color-text-secondary) !important;
   font-weight: 600;
 }
 

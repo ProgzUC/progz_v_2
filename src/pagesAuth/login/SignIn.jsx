@@ -62,11 +62,12 @@ const SignIn = () => {
 
     try {
       const data = await login({ email: email.trim(), password }, rememberMe);
-      const role = data.role ?? data.user?.role;
+      const role = data.role ?? data.user?.role ?? data?.data?.user?.role ?? data?.data?.role;
+      const normalizedRole = String(role || "").toLowerCase();
 
-      if (role === "admin") navigate("/admin");
-      else if (role === "trainer") navigate("/trainer-dashboard");
-      else if (role === "student") navigate("/student-dashboard");
+      if (normalizedRole === "admin") navigate("/admin");
+      else if (normalizedRole === "trainer" || normalizedRole === "instructor") navigate("/trainer-dashboard");
+      else if (normalizedRole === "student") navigate("/student-dashboard");
       else setError("Invalid role");
 
     } catch (err) {
@@ -122,6 +123,7 @@ const SignIn = () => {
   );
 
   return (
+    <div className="auth-page-layout">
     <div className="auth-container">
       {/* SUCCESS POPUP */}
       {successMessage && (
@@ -262,6 +264,7 @@ const SignIn = () => {
         <img src={pattern} alt="pattern" className="pattern" />
       </div>
 
+    </div>
     </div>
   );
 };

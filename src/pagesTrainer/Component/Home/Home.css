@@ -9,7 +9,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: calc(70px + var(--trainer-spacing-md)) var(--trainer-spacing-lg) 100px;
+    padding: calc(var(--page-top-offset) + var(--trainer-spacing-md)) var(--trainer-spacing-lg) 100px;
     overflow: hidden;
     box-sizing: border-box;
 }
@@ -67,7 +67,7 @@
 /* Use Global Button Styles via Component Inheritance or Direct Application */
 .trainer-home .btn-primary {
     background: var(--trainer-primary);
-    color: white;
+    color: var(--color-text-on-primary);
     border: none;
     padding: 14px 28px;
     border-radius: var(--trainer-radius-md);
@@ -88,7 +88,7 @@
 }
 
 .trainer-home .btn-secondary {
-    background: white;
+    background: var(--color-surface);
     color: var(--trainer-primary);
     border: 2px solid var(--trainer-primary);
     padding: 14px 28px;

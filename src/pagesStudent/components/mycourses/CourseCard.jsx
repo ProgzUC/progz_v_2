@@ -5,35 +5,68 @@ import Introduction from "../Introduction/Introduction";
 import { useStudentCourses, useCourseProgress } from "../../../hooks/useStudentCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
+import { BiCodeAlt } from "react-icons/bi";
+import { getLessonCompilerMode } from "../../../utils/compilerMode";
+
+const THUMB_SKIP_WORDS = new Set([
+    "complete", "course", "courses", "the", "a", "an", "and",
+    "of", "for", "in", "to", "with", "using", "web", "development",
+]);
+
+function getThumbLines(name) {
+    const words = String(name || "Course")
+        .replace(/[^a-zA-Z0-9\s]/g, " ")
+        .trim()
+        .split(/\s+/)
+        .filter((word) => word && !THUMB_SKIP_WORDS.has(word.toLowerCase()));
+
+    if (words.length === 0) {
+        const first = String(name || "Course").trim().split(/\s+/)[0] || "Course";
+        return [first.toUpperCase()];
+    }
+
+    if (words.length === 1) return [words[0].toUpperCase()];
+    return [words[0].toUpperCase(), words[1].toUpperCase()];
+}
+
+function CourseThumb({ courseName }) {
+    const lines = getThumbLines(courseName);
+
+    return (
+        <div className="large-thumb large-thumb-brand fullstack-thumb">
+            <div className="fullstack-grid" aria-hidden="true" />
+            <div className="fullstack-code" aria-hidden="true">
+                {'</>'}
+            </div>
+            <p className="large-thumb-serif fullstack-title">
+                {lines.map((line) => (
+                    <span key={line}>{line}</span>
+                ))}
+            </p>
+        </div>
+    );
+}
 
 /* ----------------------------------------------
    LARGE COURSE CARD (RIGHT SIDE)
 ---------------------------------------------- */
-import { BiTimeFive, BiBarChartAlt2, BiBook } from "react-icons/bi";
-
 function LargeCourseCard({ course }) {
     const progress = course.progressPercentage || 0;
+    const completed = course.completedLessons || 0;
+    const total = course.totalLessons || 0;
 
     return (
-        <div className="large-card premium-shadow">
+        <div className="large-card">
             <div className="large-thumb-container">
-                <ImageWithFallback
-                    src={course.thumbnail?.url}
-                    alt={course.courseName}
-                    className="large-thumb"
-                    fallbackText={course.courseName}
-                />
-                <div className="large-badge">Enrolled</div>
+                <CourseThumb courseName={course.courseName} />
+                <div className="large-badge">
+                    <span className="badge-dot">•</span> Enrolled
+                </div>
             </div>
 
             <div className="large-content">
-                {/* <div className="large-meta-top">
-                    <span className="large-meta-item"><BiBarChartAlt2 /> {course.level || "Intermediate"}</span>
-                    <span className="large-meta-item"><BiTimeFive /> {course.duration || "Self-paced"}</span>
-                </div> */}
-
                 <p className="large-title">{course.courseName}</p>
-                <p className="large-batch-info">{course.batchName}</p>
+                <span className="large-batch-pill">{course.batchName || "Full Stack"}</span>
 
                 <div className="large-progress-section">
                     <div className="progress-info-row">
@@ -46,13 +79,9 @@ function LargeCourseCard({ course }) {
                             style={{ width: `${progress}%` }}
                         />
                     </div>
-                </div>
-
-                <div className="large-lessons-summary">
-                    <BiBook className="lesson-icon" />
-                    <span>
-                        <strong>{course.completedLessons || 0}</strong> of {course.totalLessons || 0} Lessons Completed
-                    </span>
+                    <p className="large-lessons-summary">
+                        {completed} of {total} lessons completed
+                    </p>
                 </div>
             </div>
         </div>
@@ -62,26 +91,43 @@ function LargeCourseCard({ course }) {
 /* ----------------------------------------------
    LESSON ROW
 ---------------------------------------------- */
-function LessonRow({ number, title, isLocked, onOpen }) {
+function LessonRow({ title, isLocked, onOpen, section }) {
+    const navigate = useNavigate();
+    const mode = getLessonCompilerMode(section);
+
+    const handlePractice = (e) => {
+        e.stopPropagation();
+        if (isLocked) return;
+        navigate(`/student-dashboard/compiler?mode=${mode}`);
+    };
+
     return (
         <div className="lesson-row">
-            <div className="lesson-number">{number}</div>
+            <i className="bi bi-circle lesson-circle-icon"></i>
             <div className="lesson-title">{title}</div>
 
             <div className="lesson-action">
+                <button
+                    type="button"
+                    className="practice-btn"
+                    onClick={handlePractice}
+                    disabled={isLocked}
+                    title={isLocked ? "Trainer has not released this lesson yet" : "Practice in compiler"}
+                >
+                    <BiCodeAlt className="practice-icon" />
+                    Practice
+                </button>
+
                 {isLocked ? (
                     <i className="bi bi-lock-fill lock-icon"></i>
                 ) : (
-                    <button className="open-btn" onClick={onOpen}>Open</button>
+                    <button type="button" className="open-btn" onClick={onOpen}>Open</button>
                 )}
             </div>
         </div>
     );
 }
 
-/* ----------------------------------------------
-   CURRICULUM TABS
----------------------------------------------- */
 /* ----------------------------------------------
    COURSE CURRICULUM (ACCORDION STYLE)
 ---------------------------------------------- */
@@ -94,27 +140,38 @@ function CourseCurriculum({ modules, setViewLesson }) {
 
     if (!modules || modules.length === 0) return null;
 
+    const totalLessons = modules.reduce((acc, m) => acc + (m.sections?.length || 0), 0);
+
     return (
         <div className="course-curriculum-container">
-            <p className="curriculum-main-title">Course Curriculum</p>
+            <div className="curriculum-header-row">
+                <p className="curriculum-main-title">Course Curriculum</p>
+                <span className="curriculum-stats">{modules.length} modules · {totalLessons} lessons</span>
+            </div>
 
             <div className="curriculum-accordion">
                 {modules.map((module, mIdx) => {
                     const isExpanded = expandedModuleIdx === mIdx;
                     const lessonCount = module.sections?.length || 0;
+                    const completedCount = (module.sections || []).filter((s) => s.isCompleted === true).length;
+                    const isModuleComplete = lessonCount > 0 && completedCount === lessonCount;
+                    const moduleNum = String(mIdx + 1).padStart(2, '0');
 
                     return (
-                        <div key={mIdx} className={`module-accordion-item ${isExpanded ? 'active' : ''}`}>
+                        <div key={mIdx} className={`module-accordion-item ${isExpanded ? 'active' : ''} ${isModuleComplete ? 'is-complete' : ''}`}>
                             <button
                                 className="module-header"
                                 onClick={() => toggleModule(mIdx)}
                                 aria-expanded={isExpanded}
                             >
-                                <div className="module-header-left">
-                                    <i className={`bi bi-chevron-down accordion-icon ${isExpanded ? 'expanded' : ''}`}></i>
+                                <span className="module-num">{moduleNum}</span>
+                                <div className="module-header-copy">
                                     <span className="module-title">{module.moduleName || module.title}</span>
+                                    <span className="module-meta">{lessonCount} {lessonCount === 1 ? 'lesson' : 'lessons'}</span>
                                 </div>
-                                <span className="module-meta">{lessonCount} {lessonCount === 1 ? 'Lesson' : 'Lessons'}</span>
+                                <span className={`module-status ${isModuleComplete ? 'complete' : ''}`}>
+                                    {isModuleComplete ? 'Completed' : ''}
+                                </span>
                             </button>
 
                             <div
@@ -127,15 +184,15 @@ function CourseCurriculum({ modules, setViewLesson }) {
                                 <div className="module-lessons-list">
                                     {module.sections?.map((section, sIdx) => {
                                         const sectionTitle = section.sectionName || section.title;
-                                        const isCompleted = section.isCompleted === true;
-                                        const isLocked = !isCompleted;
+                                        const isReleased = section.isCompleted === true;
+                                        const isLocked = !isReleased;
 
                                         return (
                                             <LessonRow
                                                 key={sIdx}
-                                                number={sIdx + 1}
                                                 title={sectionTitle}
                                                 isLocked={isLocked}
+                                                section={section}
                                                 onOpen={() => setViewLesson(section)}
                                             />
                                         );
@@ -192,14 +249,29 @@ export default function MyCourses() {
         }
     }, [courses, selectedCourseId, location.state]);
 
-    // Merge list data with detailed data
+    // Merge course modules with lessonProgress so lock/unlock reflects trainer releases
     const displayCourse = selectedCourse ? (() => {
-        const modules = courseDetails?.course?.modules || selectedCourse.modules || [];
+        const rawModules = courseDetails?.course?.modules || selectedCourse.modules || [];
+        const lessonProgress = courseDetails?.lessonProgress || [];
+
+        const modules = rawModules.map((module, modIdx) => ({
+            ...module,
+            sections: (module.sections || []).map((section, secIdx) => {
+                const progress = lessonProgress.find(
+                    (p) => Number(p.moduleIndex) === modIdx && Number(p.sectionIndex) === secIdx
+                );
+                return {
+                    ...section,
+                    isCompleted: progress?.isCompleted === true || section.isCompleted === true,
+                };
+            }),
+        }));
+
         return {
             ...selectedCourse,
-            modules: modules,
+            modules,
             enrolledAt: courseDetails?.enrollmentDate || selectedCourse.enrolledAt,
-            lessonProgress: courseDetails?.lessonProgress || []
+            lessonProgress,
         };
     })() : null;
 
@@ -232,85 +304,111 @@ export default function MyCourses() {
         return <Loader message="Loading..." />;
     }
 
-    return (
-        <div className={`container-fluid student-mycourses-page ${showMobileDetails ? 'mobile-show-details' : ''}`}>
-            <div className="row">
+    const selectCourse = (courseId) => {
+        setSelectedCourseId(courseId);
+        setShowMobileDetails(true);
+        setViewLesson(null);
+        if (window.innerWidth <= 1024) {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    };
 
-                {/* LEFT SIDE */}
-                <div className="col-4 p-0">
-                    <div className="left-shadow">
-                        <div className="left-section">
-                            <p className="courses-heading ms-5 mt-2">My Courses</p>
+    const courseList = (
+        <>
+            <div className="courses-header-left">
+                <h1 className="courses-heading">My Courses</h1>
+                <span className="active-badge">{courses.length} active</span>
+            </div>
 
-                            <div className="card-container ms-auto mt-4 mb-4">
-                                {courses.map((course) => {
-                                    const progress = course.progressPercentage || 0;
-                                    const completedLessons = course.completedLessons || 0;
-                                    const totalLessons = course.totalLessons || 0;
-                                    const isSelected = displayCourse?.courseId === course.courseId;
+            <div className="card-container">
+                {courses.map((course) => {
+                    const progress = course.progressPercentage || 0;
+                    const completedLessons = course.completedLessons || 0;
+                    const totalLessons = course.totalLessons || 0;
+                    const isSelected = displayCourse?.courseId === course.courseId;
+                    const initial = course.courseName ? course.courseName.charAt(0).toUpperCase() : "C";
 
-                                    return (
-                                        <React.Fragment key={course.courseId}>
+                    return (
+                        <div
+                            key={course.courseId}
+                            className={`course-card ${isSelected ? 'selected-card' : ''}`}
+                            onClick={() => selectCourse(course.courseId)}
+                        >
+                            <div className="card-content">
+                                <ImageWithFallback
+                                    src={course.thumbnail?.url}
+                                    alt={course.courseName}
+                                    className="course-thumb"
+                                    fallbackText={initial}
+                                />
+
+                                <div className="card-details">
+                                    <div className="tag-box">
+                                        <span className="tag-text">{course.batchName || "COURSE"}</span>
+                                    </div>
+
+                                    <p className="course-title">{course.courseName}</p>
+
+                                    <div className="bottom-row">
+                                        <span className="percent">{progress}%</span>
+
+                                        <div className="progress-bar-mini">
                                             <div
-                                                className={`course-card ${isSelected ? 'selected-card' : ''}`}
-                                                onClick={() => {
-                                                    setSelectedCourseId(course.courseId);
-                                                    setShowMobileDetails(true);
-                                                    setViewLesson(null);
-                                                    // Scroll to top when selecting on mobile
-                                                    if (window.innerWidth <= 1024) {
-                                                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                                                    }
-                                                }}
-                                                style={{ cursor: "pointer" }}
-                                            >
-                                                <div className="card-content">
-                                                    <ImageWithFallback
-                                                        src={course.thumbnail?.url}
-                                                        alt={course.courseName}
-                                                        className="course-thumb"
-                                                        fallbackText={course.courseName}
-                                                    />
+                                                className="progress-fill-mini"
+                                                style={{ width: `${progress}%` }}
+                                            />
+                                        </div>
 
-                                                    <div className="card-details">
-                                                        <div className="tag-box">
-                                                            <span className="tag-text">{course.batchName || "Course"}</span>
-                                                        </div>
-
-                                                        <p className="course-title">{course.courseName}</p>
-
-
-                                                        <div className="progress-bar">
-                                                            <div
-                                                                className="progress-fill"
-                                                                style={{ width: `${progress}%` }}
-                                                            />
-                                                        </div>
-
-                                                        <div className="bottom-row">
-                                                            <span className="percent">{progress}%</span>
-
-                                                            <div className="lessons">
-                                                                <i className="bi bi-book lesson-icon"></i>
-                                                                <span className="lesson-text">
-                                                                    {completedLessons} of {totalLessons} Lessons
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                        </React.Fragment>
-                                    );
-                                })}
+                                        <div className="lessons">
+                                            <i className="bi bi-journal-text lesson-icon"></i>
+                                            <span className="lesson-text">
+                                                {completedLessons} of {totalLessons} Lessons
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    );
+                })}
+            </div>
+        </>
+    );
+
+    return (
+        <div className={`container-fluid student-mycourses-page ${showMobileDetails ? 'mobile-show-details' : ''}`}>
+            <div className="mycourses-layout">
+                <aside className="mycourses-rail" aria-label="Course list">
+                    <nav className="rail-nav">
+                        {courses.map((course) => {
+                            const isSelected = displayCourse?.courseId === course.courseId;
+                            const initial = course.courseName ? course.courseName.charAt(0).toUpperCase() : "C";
+
+                            return (
+                                <button
+                                    key={course.courseId}
+                                    type="button"
+                                    className={`rail-item ${isSelected ? "active" : ""}`}
+                                    onClick={() => selectCourse(course.courseId)}
+                                >
+                                    <span className="rail-icon">{initial}</span>
+                                    <span className="rail-text">
+                                        <span className="rail-item-title">{course.courseName}</span>
+                                        <span className="rail-item-meta">
+                                            {course.progressPercentage || 0}% · {(course.completedLessons || 0)}/{(course.totalLessons || 0)} lessons
+                                        </span>
+                                    </span>
+                                </button>
+                            );
+                        })}
+                    </nav>
+                </aside>
+
+                <div className="mycourses-mobile-list">
+                    {courseList}
                 </div>
 
-                {/* RIGHT SIDE */}
-                <div className="col-8 right-section">
+                <div className="right-section">
                     {viewLesson ? (
                         <div className="lesson-content-view">
                             <button
@@ -333,22 +431,16 @@ export default function MyCourses() {
                         </div>
                     ) : (
                         <>
-                            {/* Hide back button on desktop/tablet unless from Profile */}
                             {(location.state?.fromProfile || window.innerWidth <= 768) && (
                                 <button
                                     className="jc-back-btn mb-4"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        // 1. If we explicitly came from the Profile page, go back there
                                         if (location.state?.fromProfile) {
                                             navigate('/student-dashboard/profile');
-                                        }
-                                        // 2. If we are on mobile and viewing a course, go back to the list
-                                        else if (showMobileDetails && window.innerWidth <= 768) {
+                                        } else if (showMobileDetails && window.innerWidth <= 768) {
                                             setShowMobileDetails(false);
-                                        }
-                                        // 3. Absolute fallback: standard history back
-                                        else {
+                                        } else {
                                             navigate(-1);
                                         }
                                     }}
@@ -381,6 +473,7 @@ export default function MyCourses() {
         </div>
     );
 }
+
 
 
 

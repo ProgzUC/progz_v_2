@@ -14,25 +14,29 @@ export default function CourseBuilderShell({
   return (
     <div className="course-builder-page">
       <div className="course-builder-layout">
-        <aside className="course-builder-sidebar">
+        <aside className="course-builder-sidebar" aria-label="Course builder steps">
           {courseName && (
             <div className="sidebar-course-title" title={courseName}>
               {courseName}
             </div>
           )}
 
-          {COURSE_BUILDER_STEPS.map((step) => (
-            <button
-              key={step.id}
-              type="button"
-              className={`sidebar-step ${activeStep === step.id ? "active" : ""}`}
-              onClick={() => onStepChange(step.id)}
-            >
-              <i className={`bi ${step.icon}`} />
-              <span>{step.label}</span>
-              <i className="bi bi-chevron-right step-chevron" />
-            </button>
-          ))}
+          <nav className="course-builder-rail-nav">
+            {COURSE_BUILDER_STEPS.map((step) => (
+              <button
+                key={step.id}
+                type="button"
+                className={`sidebar-step ${activeStep === step.id ? "active" : ""}`}
+                onClick={() => onStepChange(step.id)}
+                title={step.label}
+              >
+                <span className="sidebar-step-icon">
+                  <i className={`bi ${step.icon}`} />
+                </span>
+                <span className="sidebar-step-text">{step.label}</span>
+              </button>
+            ))}
+          </nav>
         </aside>
 
         <main className="course-builder-main">

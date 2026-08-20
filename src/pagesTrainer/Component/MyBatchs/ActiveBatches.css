@@ -110,7 +110,7 @@
 }
 
 .trainer-active-batches-page .batch-card__status.completed {
-  background: #fee2e2;
+  background: var(--color-error-bg);
   color: var(--trainer-error);
 }
 
@@ -181,7 +181,7 @@
   border: none;
   cursor: pointer;
   background: var(--trainer-primary);
-  color: #fff;
+  color: var(--color-surface);
   font-weight: 700;
   font-size: 12px;
   padding: 8px 20px;

@@ -13,7 +13,6 @@ import EditProfile from './Component/Profile/EditProfile'
 import initialProfileData from './Component/Profile/profileData.json'
 import './TrainerGlobal.css'
 import './TrainerApp.css'
-import Footer from './Component/Navbar/Footer'
 import { useTrainerBootstrap } from '../hooks/useTrainerBootstrap'
 import Loader from '../components/common/Loader/Loader'
 
@@ -116,6 +115,10 @@ function TrainerApp() {
           ) : (
             <MyCourses
               onManageCourse={(course) => setSelectedBatch(course)}
+              onEditCourse={(course) => {
+                setSelectedBatch(course);
+                setIsEditingCourse(true);
+              }}
               onCreateNew={() => setIsCreatingCourse(true)}
             />
           )
@@ -140,7 +143,6 @@ function TrainerApp() {
           )
         )}
       </main>
-      <Footer />
     </div>
   )
 }

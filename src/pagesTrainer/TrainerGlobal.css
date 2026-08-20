@@ -1,71 +1,13 @@
 /* ================================
-   TRAINER GLOBAL STYLES
+   TRAINER MODULE — Uses Central Design System
    ================================ */
-
-/* CSS Variables for Trainer Theme (Matches Student Design System - GREEN) */
-:root {
-    /* Primary Colors - Student green theme */
-    --trainer-primary: #198754;
-    --trainer-primary-hover: #146c43;
-    --trainer-primary-light: #dcfce7;
-
-    /* Background Colors */
-    --trainer-bg: #E4E4E4;
-    --trainer-card-bg: #ffffff;
-    --trainer-page-bg: #E4E4E4;
-
-    /* Text Colors */
-    --trainer-text: #1a1a1ad2;
-    --trainer-text-muted: #64748b;
-    --trainer-text-light: #94a3b8;
-
-    /* Border & Divider */
-    --trainer-border: #e2e8f0;
-    --trainer-divider: #f1f5f9;
-
-    /* Status Colors */
-    --trainer-success: #10b981;
-    --trainer-warning: #f59e0b;
-    --trainer-error: #ef4444;
-    --trainer-info: #06b6d4;
-
-    /* Shadows */
-    --trainer-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-    --trainer-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-    --trainer-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.12);
-
-    /* Spacing */
-    --trainer-spacing-xs: 8px;
-    --trainer-spacing-sm: 12px;
-    --trainer-spacing-md: 20px;
-    --trainer-spacing-lg: 32px;
-    --trainer-spacing-xl: 48px;
-
-    /* Border Radius */
-    --trainer-radius-sm: 6px;
-    --trainer-radius-md: 12px;
-    --trainer-radius-lg: 16px;
-    --trainer-radius-xl: 24px;
-
-    /* Transitions */
-    --trainer-transition: 0.25s ease-in-out;
-}
-
-/* Global Background for Trainer Module - Matching Student */
-html,
-body,
-#root {
-    background-color: #E4E4E4 !important;
-    min-height: 100vh;
-    margin: 0;
-}
 
 /* ================================
    UTILITY CLASSES
    ================================ */
 
 .trainer-container {
-    max-width: 1280px;
+    max-width: var(--container-max);
     margin: 0 auto;
     padding: 0 var(--trainer-spacing-lg);
     width: 100%;
@@ -78,48 +20,50 @@ body,
     border-radius: var(--trainer-radius-lg);
     padding: var(--trainer-spacing-lg);
     box-shadow: var(--trainer-shadow-md);
+    border: 1px solid var(--color-border);
     transition: transform var(--trainer-transition), box-shadow var(--trainer-transition);
 }
 
 .trainer-card:hover {
     box-shadow: var(--trainer-shadow-lg);
-    transform: translateY(-3px) scale(1.02);
+    transform: translateY(-2px);
 }
 
 .trainer-btn-primary {
     background: var(--trainer-primary);
-    color: white;
+    color: var(--color-text-on-primary);
     border: none;
     padding: 12px 24px;
-    border-radius: var(--trainer-radius-md);
-    font-weight: 500;
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-semibold);
     cursor: pointer;
+    box-shadow: var(--shadow-btn);
     transition: transform var(--trainer-transition), box-shadow var(--trainer-transition), background-color var(--trainer-transition);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: var(--spacing-xs);
 }
 
 .trainer-btn-primary:hover {
     background: var(--trainer-primary-hover);
     transform: translateY(-2px);
-    box-shadow: var(--trainer-shadow-md), 0 0 20px rgba(25, 135, 84, 0.25);
+    box-shadow: var(--shadow-md);
 }
 
 .trainer-btn-secondary {
-    background: white;
+    background: var(--color-surface);
     color: var(--trainer-primary);
-    border: 2px solid var(--trainer-primary);
+    border: 1.5px solid var(--trainer-primary);
     padding: 12px 24px;
-    border-radius: var(--trainer-radius-md);
-    font-weight: 500;
+    border-radius: var(--radius-full);
+    font-weight: var(--font-weight-semibold);
     cursor: pointer;
     transition: transform var(--trainer-transition), background-color var(--trainer-transition), border-color var(--trainer-transition);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: var(--spacing-xs);
 }
 
 .trainer-btn-secondary:hover {
@@ -128,21 +72,21 @@ body,
 }
 
 /* ================================
-   STANDARD BACK BUTTON (circle + label)
+   BACK BUTTON
    ================================ */
 .trainer-back-btn {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--spacing-sm);
     background: transparent;
     border: none;
     padding: 0;
     cursor: pointer;
     font-family: inherit;
     color: var(--trainer-text);
-    font-size: 15px;
-    font-weight: 500;
-    transition: color 0.2s ease;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    transition: color var(--transition-fast);
 }
 
 .trainer-back-btn:hover {
@@ -154,10 +98,10 @@ body,
     height: 40px;
     min-width: 40px;
     min-height: 40px;
-    border-radius: 50%;
-    background: white;
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
     border: 1px solid var(--trainer-border);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--shadow-xs);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -168,7 +112,7 @@ body,
 
 .trainer-back-btn:hover .trainer-back-btn-circle {
     border-color: var(--trainer-primary);
-    box-shadow: 0 4px 12px rgba(25, 135, 84, 0.15);
+    box-shadow: var(--shadow-sm);
     transform: translateX(-2px);
     color: var(--trainer-primary);
 }
@@ -183,49 +127,32 @@ body,
     white-space: nowrap;
 }
 
-@media (max-width: 480px) {
-    .trainer-back-btn {
-        font-size: 14px;
-    }
-
-    .trainer-back-btn-circle {
-        width: 36px;
-        height: 36px;
-        min-width: 36px;
-        min-height: 36px;
-    }
-
-    .trainer-back-btn-circle svg {
-        font-size: 16px;
-    }
-}
-
 /* ================================
    TYPOGRAPHY
    ================================ */
 
 .trainer-heading-1 {
-    font-size: 36px;
-    font-weight: 600;
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
     color: var(--trainer-text);
     margin-bottom: var(--trainer-spacing-md);
-    line-height: 1.2;
+    line-height: var(--line-height-tight);
 }
 
 .trainer-heading-2 {
-    font-size: 28px;
-    font-weight: 500;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-semibold);
     color: var(--trainer-text);
     margin-bottom: var(--trainer-spacing-sm);
-    line-height: 1.3;
+    line-height: var(--line-height-tight);
 }
 
 .trainer-heading-3 {
-    font-size: 22px;
-    font-weight: 500;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-semibold);
     color: var(--trainer-text);
     margin-bottom: var(--trainer-spacing-sm);
-    line-height: 1.4;
+    line-height: var(--line-height-tight);
 }
 
 .trainer-text-muted {
@@ -245,28 +172,28 @@ body,
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
-    border-radius: 16px;
-    font-size: 12px;
-    font-weight: 500;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
 }
 
 .trainer-badge-success {
-    background: #d1fae5;
+    background: var(--color-success-bg);
     color: var(--trainer-success);
 }
 
 .trainer-badge-warning {
-    background: #fef3c7;
+    background: var(--color-warning-bg);
     color: var(--trainer-warning);
 }
 
 .trainer-badge-error {
-    background: #fee2e2;
+    background: var(--color-error-bg);
     color: var(--trainer-error);
 }
 
 .trainer-badge-info {
-    background: #cffafe;
+    background: var(--color-info-bg);
     color: var(--trainer-info);
 }
 
@@ -276,7 +203,7 @@ body,
 }
 
 /* ================================
-   VISUAL POLISH (motion, glow, focus)
+   VISUAL POLISH
    ================================ */
 
 @keyframes trainerFadeIn {
@@ -284,6 +211,7 @@ body,
         opacity: 0;
         transform: translateY(6px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -298,8 +226,8 @@ body,
 .trainer-app textarea:focus,
 .trainer-app select:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(25, 135, 84, 0.25);
-    transition: box-shadow 0.2s ease-in-out;
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+    transition: box-shadow var(--transition-fast);
 }
 
 /* ================================
@@ -312,27 +240,21 @@ body,
     }
 }
 
-@media (max-width: 1024px) {
-    .trainer-container {
-        padding: 0 var(--trainer-spacing-md);
-    }
-}
-
 @media (max-width: 768px) {
     .trainer-container {
         padding: 0 var(--trainer-spacing-sm);
     }
 
     .trainer-heading-1 {
-        font-size: 30px;
+        font-size: var(--font-size-3xl);
     }
 
     .trainer-heading-2 {
-        font-size: 24px;
+        font-size: var(--font-size-2xl);
     }
 
     .trainer-heading-3 {
-        font-size: 20px;
+        font-size: var(--font-size-xl);
     }
 
     .trainer-card {
@@ -346,15 +268,15 @@ body,
     }
 
     .trainer-heading-1 {
-        font-size: 26px;
+        font-size: var(--font-size-2xl);
     }
 
     .trainer-heading-2 {
-        font-size: 22px;
+        font-size: var(--font-size-xl);
     }
 
     .trainer-heading-3 {
-        font-size: 18px;
+        font-size: var(--font-size-lg);
     }
 
     .trainer-card {
@@ -364,6 +286,21 @@ body,
     .trainer-btn-primary,
     .trainer-btn-secondary {
         padding: 10px 20px;
-        font-size: 14px;
+        font-size: var(--font-size-sm);
+    }
+
+    .trainer-back-btn {
+        font-size: var(--font-size-sm);
+    }
+
+    .trainer-back-btn-circle {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+    }
+
+    .trainer-back-btn-circle svg {
+        font-size: 16px;
     }
 }

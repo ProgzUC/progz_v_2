@@ -1,7 +1,7 @@
 /* Main Container */
 .course-view-page {
-  font-family: 'Poppins', sans-serif;
-  background: white;
+  font-family: var(--font-family-base), sans-serif;
+  background: var(--color-surface);
   min-height: 100vh;
   padding-bottom: 40px;
 }
@@ -13,7 +13,7 @@
 }
 
 .cv-header-bg {
-  background: linear-gradient(90deg, #0f3d2e 0%, #10B981 55%, #34d399 100%);
+  background: linear-gradient(90deg, #0f3d2e 0%, var(--color-success) 55%, var(--color-primary-muted) 100%);
   height: 200px;
   width: 100%;
   position: relative;
@@ -32,14 +32,14 @@
 }
 
 .cv-header-id {
-  color: white;
+  color: var(--color-text-on-primary);
   font-weight: 500;
   font-size: 14px;
   max-width: min(100%, 420px);
   text-align: right;
   word-break: break-word;
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(6px);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
@@ -56,7 +56,7 @@
 .cv-icon-circle {
   width: 100px;
   height: 100px;
-  background: linear-gradient(135deg, #6EE7B7 0%, #10B981 100%);
+  background: linear-gradient(135deg, #6EE7B7 0%, var(--color-success) 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -64,7 +64,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin-right: 25px;
   flex-shrink: 0;
-  border: 4px solid white;
+  border: 4px solid var(--color-surface);
   overflow: hidden;
 }
 
@@ -76,7 +76,7 @@
 }
 
 .cv-book-icon {
-  color: white;
+  color: var(--color-text-on-primary);
   font-size: 36px;
 }
 
@@ -106,14 +106,14 @@
 .cv-progress-container {
   width: 150px;
   height: 6px;
-  background: #E5E7EB;
+  background: var(--color-border);
   border-radius: 3px;
   overflow: hidden;
 }
 
 .cv-progress-bar {
   height: 100%;
-  background: #10B981;
+  background: var(--color-success);
 }
 
 .cv-progress-text {
@@ -123,8 +123,8 @@
 
 .cv-edit-btn {
   margin-top: 55px;
-  background: #10B981;
-  color: white;
+  background: var(--color-success);
+  color: var(--color-text-on-primary);
   border: none;
   border-radius: 6px;
   padding: 10px 30px;
@@ -145,9 +145,9 @@
 }
 
 .cv-preview-btn {
-  background: #fff;
+  background: var(--color-surface);
   color: #059669;
-  border: 1px solid #10B981;
+  border: 1px solid var(--color-success);
   border-radius: 6px;
   padding: 10px 24px;
   font-weight: 500;
@@ -191,13 +191,13 @@
 }
 
 .cv-description-box {
-  background: #F3F4F6;
+  background: var(--color-bg-muted);
   min-height: 80px;
   padding: 16px 20px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   margin-bottom: 40px;
   line-height: 1.6;
-  color: #374151;
+  color: var(--color-text);
   word-break: break-word;
   overflow-wrap: break-word;
   width: 100%;
@@ -263,13 +263,13 @@
   gap: 14px;
   padding: 14px 16px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #6EE7B7 0%, #10B981 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #6EE7B7 0%, var(--color-success) 100%);
+  color: var(--color-surface);
 }
 
 .cv-active-topic .cv-module-index {
   background: rgba(255, 255, 255, 0.22);
-  color: #fff;
+  color: var(--color-surface);
 }
 
 .cv-active-topic .cv-module-meta {
@@ -278,22 +278,22 @@
 
 .cv-drill-list > .cv-module-toggle,
 .cv-drill-list > .cv-section-toggle {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   border-radius: 12px;
-  background: #fff;
+  background: var(--color-surface);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .cv-module-card {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--color-border);
   border-radius: 14px;
-  background: #fff;
+  background: var(--color-surface);
   overflow: hidden;
   transition: box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .cv-module-card.open {
-  border-color: #86efac;
+  border-color: var(--color-primary-muted);
   box-shadow: 0 6px 18px rgba(16, 185, 129, 0.12);
 }
 
@@ -305,20 +305,20 @@
   gap: 12px;
   padding: 16px 18px;
   border: none;
-  background: #f3f4f6;
+  background: var(--color-bg-muted);
   cursor: pointer;
   text-align: left;
-  color: #111827;
+  color: var(--color-text);
   transition: background 0.2s ease;
 }
 
 .cv-module-toggle:hover {
-  background: #e5e7eb;
+  background: var(--color-border);
 }
 
 .cv-module-toggle.active {
-  background: linear-gradient(135deg, #6EE7B7 0%, #10B981 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #6EE7B7 0%, var(--color-success) 100%);
+  color: var(--color-surface);
 }
 
 .cv-module-toggle.active .cv-list-icon,
@@ -337,7 +337,7 @@
 .cv-module-index {
   width: 40px;
   height: 40px;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.85);
   color: #059669;
   font-weight: 700;
@@ -350,7 +350,7 @@
 
 .cv-module-toggle.active .cv-module-index {
   background: rgba(255, 255, 255, 0.22);
-  color: #fff;
+  color: var(--color-surface);
 }
 
 .cv-module-toggle-text {
@@ -369,14 +369,14 @@
 
 .cv-module-meta {
   font-size: 12px;
-  color: #6b7280;
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
 .cv-module-body {
   padding: 12px 14px 16px;
   background: #fafafa;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -384,14 +384,14 @@
 }
 
 .cv-section-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  background: #fff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
   overflow: hidden;
 }
 
 .cv-section-card.open {
-  border-color: #86efac;
+  border-color: var(--color-primary-muted);
 }
 
 .cv-section-toggle {
@@ -402,16 +402,16 @@
   gap: 10px;
   padding: 12px 14px;
   border: none;
-  background: #fff;
+  background: var(--color-surface);
   cursor: pointer;
   text-align: left;
   font-size: 14px;
   font-weight: 500;
-  color: #374151;
+  color: var(--color-text);
 }
 
 .cv-section-toggle:hover {
-  background: #f9fafb;
+  background: var(--color-bg);
 }
 
 .cv-section-toggle.active {
@@ -447,7 +447,7 @@
 }
 
 .cv-list-item {
-  background: #E5E5E5;
+  background: var(--color-border);
   border-radius: 30px;
   padding: 15px 25px;
   display: flex;
@@ -475,13 +475,13 @@
 }
 
 .cv-list-item.active {
-  background: linear-gradient(135deg, #6EE7B7 0%, #10B981 100%);
-  color: white;
+  background: linear-gradient(135deg, #6EE7B7 0%, var(--color-success) 100%);
+  color: var(--color-text-on-primary);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .cv-list-item.active .cv-list-icon {
-  color: white;
+  color: var(--color-text-on-primary);
 }
 
 .cv-list-icon {
@@ -493,12 +493,12 @@
 .cv-empty-state {
   text-align: center;
   padding: 40px 20px;
-  color: #999;
+  color: var(--color-text-muted);
   font-size: 14px;
   font-style: italic;
-  background: #F9FAFB;
+  background: var(--color-bg);
   border-radius: 12px;
-  border: 2px dashed #E5E7EB;
+  border: 2px dashed var(--color-border);
 }
 
 /* Footer */
@@ -509,8 +509,8 @@
 }
 
 .cv-back-btn {
-  background: #10B981;
-  color: white;
+  background: var(--color-success);
+  color: var(--color-text-on-primary);
   border: none;
   padding: 10px 30px;
   border-radius: 6px;
@@ -586,7 +586,7 @@
 .cv-section-details {
   background-color: #fafafa;
   padding: 14px 16px 16px;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--color-border);
   animation: fadeIn 0.3s ease;
 }
 
@@ -662,9 +662,9 @@
   align-items: center;
   justify-content: space-between;
   gap: 15px;
-  background: #f8f9fa;
+  background: var(--color-bg);
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   border: 1px solid #eee;
   transition: all 0.2s ease;
   margin-bottom: 8px;
@@ -672,7 +672,7 @@
 
 .cv-file-item:hover {
   border-color: #0FA958;
-  background: white;
+  background: var(--color-surface);
 }
 
 .cv-file-name {
@@ -713,18 +713,18 @@
 }
 
 .cv-action-icon.view {
-  color: #1a1a1a;
+  color: var(--color-text);
   background: #eee;
 }
 
 .cv-action-icon.view:hover {
-  background: #ddd;
+  background: var(--color-border);
   transform: scale(1.1);
 }
 
 .cv-action-icon.download {
-  color: #198754;
-  background: #e8f5e9;
+  color: var(--color-primary);
+  background: var(--color-success-bg);
 }
 
 .cv-action-icon.download:hover {
@@ -738,14 +738,14 @@
 }
 
 .challenge-block {
-  background: #fff;
+  background: var(--color-surface);
   padding: 12px;
   border: 1px solid #e0e0e0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .cv-detail-empty {
   font-size: 13px;
-  color: #999;
+  color: var(--color-text-muted);
   font-style: italic;
 }

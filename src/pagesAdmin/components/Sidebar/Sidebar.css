@@ -1,76 +1,66 @@
 /* ================================
-   SIDEBAR MAIN CONTAINER
+   ADMIN SIDEBAR — Donezo Style
    ================================ */
 .admin-sidebar {
-  width: 280px;
-  background: #ffffff;
+  width: var(--sidebar-width);
+  background: var(--color-bg-sidebar);
   height: 100vh;
-  padding: 20px 15px;
-  border-right: 1px solid #eaeaea;
+  padding: var(--spacing-md) var(--spacing-sm);
+  border-right: 1px solid var(--color-border);
   display: flex;
   flex-direction: column;
-
-  /* FIXED — REQUIRED */
   position: fixed;
   top: 0;
   left: 0;
-
-  transition: width 0.3s ease;
+  transition: width var(--transition-slow);
   z-index: 1000;
 }
 
-
-/* COLLAPSED STATE */
 .admin-sidebar.collapsed {
-  width: 85px;
+  width: var(--sidebar-collapsed);
 }
 
-/* Rotate arrow when collapsed */
 .admin-sidebar.collapsed .collapse-btn i {
   transform: rotate(180deg);
 }
 
-
-/* ================================
-   COLLAPSE BUTTON
-   ================================ */
+/* ── Collapse Button ── */
 .admin-sidebar .collapse-btn {
   position: absolute;
-  top: 20px;
+  top: var(--spacing-md);
   right: -15px;
-  /* Float on the border */
   width: 40px;
   height: 40px;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 1px solid #e5e5e5;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: var(--transition-fast);
   z-index: 1500;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-sidebar .collapse-btn i {
-  color: #555;
+  color: var(--color-text-secondary);
   font-size: 14px;
-  /* Adjust icon size */
   padding: 0;
 }
 
+.admin-sidebar .collapse-btn:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
 
-/* ================================
-   LOGO & TITLE
-   ================================ */
+/* ── Logo & Title ── */
 .admin-sidebar .sidebar-header {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   flex-wrap: nowrap;
-  /* Prevent wrapping to next line */
-  gap: 12px;
+  gap: var(--spacing-sm);
   width: 100%;
   min-height: 40px;
 }
@@ -82,9 +72,9 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  background: #000;
+  background: var(--color-primary);
   border: none;
 }
 
@@ -95,116 +85,105 @@
 }
 
 .admin-sidebar .sidebar-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #333;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
   white-space: nowrap;
-  /* Prevent text wrapping */
   flex-shrink: 0;
-  /* Prevent title from shrinking */
   min-width: 0;
-  /* Allow proper flex behavior */
   margin: 0;
-  /* Remove default h3 margins */
-  line-height: 1.2;
-  /* Prevent extra vertical space */
+  line-height: var(--line-height-tight);
 }
 
-
-/* ================================
-   MENU ITEMS
-   ================================ */
-/* ================================
-   MENU ITEMS
-   ================================ */
+/* ── Menu Items (Donezo active bar) ── */
 .admin-sidebar .sidebar-menu {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  /* Increased gap slightly */
-  margin-top: 20px;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-md);
 }
 
 .admin-sidebar .menu-item {
   display: flex;
   align-items: center;
   padding: 12px 18px;
-  /* Adjusted padding */
-  border-radius: 8px;
-  /* Less rounded corners */
-  color: #555;
-  /* Darker grey text */
-  font-size: 15px;
-  gap: 15px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  gap: var(--spacing-sm);
   text-decoration: none;
-  transition: 0.2s ease;
-  font-weight: 500;
+  transition: var(--transition-fast);
+  font-weight: var(--font-weight-medium);
+  position: relative;
 }
 
 .admin-sidebar .menu-item i {
   font-size: 20px;
-  /* Larger icons */
-  color: #6b7280;
+  color: var(--color-text-secondary);
 }
 
-/* Hover Effect */
 .admin-sidebar .menu-item:hover {
-  background: #f3f4f6;
-  color: #111827;
+  background: var(--color-navbar-hover-bg);
+  color: var(--color-navbar-hover-text);
 }
 
 .admin-sidebar .menu-item:hover i {
-  color: #111827;
+  color: var(--color-navbar-hover-text);
 }
 
-/* Active Page Style */
 .admin-sidebar .menu-item.active {
-  background: #108a5d;
-  /* Green from image */
-  color: white;
-  font-weight: 600;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.admin-sidebar .menu-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px;
+  background: var(--color-primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
 .admin-sidebar .menu-item.active i {
-  color: white;
+  color: var(--color-primary);
 }
 
 .admin-sidebar .menu-divider {
-  margin: 20px 0;
-  border-top: 1px solid #e5e7eb;
+  margin: var(--spacing-md) 0;
+  border-top: 1px solid var(--color-border);
 }
 
 .admin-sidebar .menu-spacer {
   flex-grow: 1;
 }
 
-
-/* ================================
-   PROFILE (BOTTOM)
-   ================================ */
+/* ── Profile (Bottom) ── */
 .admin-sidebar .sidebar-profile {
   margin-top: auto;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 15px;
-  border-radius: 12px;
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  /* Added border */
-  /* box-shadow: 0 1px 6px rgba(0, 0, 0, 0.08); Removed shadow to match flat look */
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
   cursor: pointer;
-  transition: 0.2s;
+  transition: var(--transition-fast);
 }
 
 .admin-sidebar .sidebar-profile:hover {
-  background: #f9fafb;
+  background: var(--color-navbar-hover-bg);
 }
 
 .admin-sidebar .profile-img {
   width: 42px;
   height: 42px;
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   object-fit: cover;
 }
 
@@ -212,38 +191,30 @@
   flex: 1;
 }
 
-/* Text inside Profile */
 .admin-sidebar .welcome-text {
-  font-size: 12px;
-  color: #6b7280;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
   margin: 0;
 }
 
 .admin-sidebar .profile-name {
-  font-size: 15px;
-  font-weight: 700;
-  color: #111827;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
   margin: 0;
 }
 
 .admin-sidebar .profile-arrow {
-  font-size: 14px;
-  color: #9ca3af;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
 }
 
-/* ================================
-   ANIMATION
-   ================================ */
+/* ── Animation ── */
 .admin-sidebar .spin-icon {
   animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }

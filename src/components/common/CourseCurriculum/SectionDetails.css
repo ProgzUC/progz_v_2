@@ -6,17 +6,17 @@
 
 .cv-media-image {
   display: block;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   overflow: hidden;
-  background: #f9fafb;
+  background: var(--color-bg);
   text-decoration: none;
-  color: #374151;
+  color: var(--color-text);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .cv-media-image:hover {
-  border-color: #10b981;
+  border-color: var(--color-success);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
 }
 
@@ -25,7 +25,7 @@
   height: 110px;
   object-fit: cover;
   display: block;
-  background: #111827;
+  background: var(--color-text);
 }
 
 .cv-media-image span {
@@ -53,10 +53,10 @@
   width: 100%;
   max-width: 560px;
   aspect-ratio: 16 / 9;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  background: #111827;
-  border: 1px solid #e5e7eb;
+  background: var(--color-text);
+  border: 1px solid var(--color-border);
 }
 
 .cv-video-frame iframe {
@@ -72,9 +72,9 @@
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid #e5e7eb;
-  background: #fff;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
   color: #059669;
   text-decoration: none;
   font-size: 13px;
@@ -85,7 +85,7 @@
 .cv-video-link-card i {
   font-size: 22px;
   flex-shrink: 0;
-  color: #10b981;
+  color: var(--color-success);
 }
 
 .cv-video-link-card:hover {

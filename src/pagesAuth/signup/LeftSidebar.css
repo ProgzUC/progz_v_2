@@ -4,8 +4,8 @@
     left: 20px;
     bottom: 20px;
     width: 330px;
-    background-color: #1987544D;
-    border-radius: 20px;
+    background-color: var(--color-primary)4D;
+    border-radius: var(--radius-lg);
     padding: 30px 20px;
     display: flex;
     flex-direction: column;
@@ -19,14 +19,14 @@
     font-weight: 700;
     margin-bottom: 50px;
     /* Increased from 5px to push steps down */
-    font-family: sans-serif;
+    font-family: var(--font-family-base), sans-serif;
 }
 
 .sidebar-subtitle {
     color: #555;
     font-size: 16px;
     margin-bottom: 40px;
-    font-family: sans-serif;
+    font-family: var(--font-family-base), sans-serif;
 }
 
 .steps-list {
@@ -61,14 +61,14 @@
 
 /* Completed Step */
 .step-item.completed .step-indicator {
-    background-color: #198754;
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
 }
 
 /* Active Step - show step number, no white dot */
 .step-item.active .step-indicator {
-    background-color: #198754;
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-text-on-primary);
     border: none;
 }
 
@@ -80,7 +80,7 @@
 }
 
 .step-text {
-    font-family: sans-serif;
+    font-family: var(--font-family-base), sans-serif;
     font-size: 16px;
     color: #333;
     font-weight: 500;
@@ -124,14 +124,14 @@
         width: 4px !important;
         height: 155px !important;
         /* Bridges the 150px gap + 5px overlap */
-        background-color: #94A3B8 !important;
+        background-color: var(--color-text-muted) !important;
         z-index: -1 !important;
     }
 
     /* Green animated fill */
     .step-item.completed:not(:last-child) .step-indicator::after {
         background-color: #ccc;
-        background-image: linear-gradient(#198754, #198754);
+        background-image: linear-gradient(var(--color-primary), var(--color-primary));
         background-repeat: no-repeat;
         background-position: top;
         background-size: 100% 0%;

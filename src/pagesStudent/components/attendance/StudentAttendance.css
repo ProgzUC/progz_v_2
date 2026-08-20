@@ -17,7 +17,7 @@
 }
 
 .attendance-summary-section h2 i {
-    color: #198754;
+    color: var(--color-primary);
 }
 
 .summary-cards {
@@ -53,7 +53,7 @@
 .progress-text h3 {
     font-size: 42px;
     font-weight: 600;
-    color: #198754;
+    color: var(--color-primary);
     margin: 0;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .stat-card {
-    background: #fff;
+    background: var(--color-surface);
     border-radius: 12px;
     padding: 20px;
     display: flex;
@@ -102,7 +102,7 @@
 
 .stat-icon.present {
     background: #d1f2eb;
-    color: #198754;
+    color: var(--color-primary);
 }
 
 .stat-icon.late {
@@ -130,7 +130,7 @@
 
 /* Attendance History Section */
 .attendance-history-section {
-    background: #fff;
+    background: var(--color-surface);
     border-radius: 12px;
     padding: 30px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
@@ -172,7 +172,7 @@
 }
 
 .attendance-table thead tr {
-    background: #f8f9fa;
+    background: var(--color-bg);
 }
 
 .attendance-table th {
@@ -192,7 +192,7 @@
 }
 
 .attendance-table tbody tr:hover {
-    background: #f8f9fa;
+    background: var(--color-bg);
 }
 
 .attendance-table td {
@@ -220,7 +220,7 @@
 /* Status Badges */
 .status-badge {
     padding: 6px 12px;
-    border-radius: 20px;
+    border-radius: var(--radius-lg);
     font-size: 12px;
     font-weight: 500;
     display: inline-flex;
@@ -230,7 +230,7 @@
 
 .status-badge.present {
     background: #d1f2eb;
-    color: #198754;
+    color: var(--color-primary);
 }
 
 .status-badge.late {
