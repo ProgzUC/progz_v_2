@@ -22,23 +22,35 @@ export async function getMe() {
 /**
  * Login API
  * payload: { email, password }
- * Stores only access token + minimal user info in session/local storage.
- * Refresh tokens and full profile data are not persisted on the client.
+ * Uses login response user first. /auth/me is optional (backend may not expose it).
  */
 export async function login(payload, rememberMe = false) {
     const res = await axiosInstance.post("/auth/login", payload);
     const data = res.data || {};
 
-    const meData = await getMe();
+    let user = data.user || null;
+
+    // Optional profile refresh — do not fail login if /auth/me is missing (404)
+    try {
+        const meData = await getMe();
+        if (meData?.user) user = meData.user;
+    } catch {
+        // Keep login response user when /auth/me is unavailable
+    }
+
+    if (!user) {
+        throw new Error(data.msg || "Login succeeded but user data is missing");
+    }
 
     saveAuthSession({
-        user: meData.user,
+        user,
         rememberMe,
     });
 
     return {
         ...data,
-        ...meData,
+        user,
+        role: user.role || data.role,
     };
 }
 

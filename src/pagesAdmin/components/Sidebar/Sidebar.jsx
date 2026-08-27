@@ -51,7 +51,6 @@ const Sidebar = () => {
     }
   };
 
-  // Apply collapsed class to layout wrapper
   useEffect(() => {
     const layout = document.querySelector(".layout");
     if (!layout) return;
@@ -68,18 +67,20 @@ const Sidebar = () => {
       className={`admin-sidebar ${collapsed ? "collapsed" : ""}`}
       data-collapsed={collapsed}
     >
-      {/* Collapse Button */}
-      <button className="collapse-btn" onClick={() => setCollapsed(!collapsed)}>
+      <button className="collapse-btn" type="button" onClick={() => setCollapsed(!collapsed)}>
         <i className={`bi ${collapsed ? "bi-chevron-right" : "bi-chevron-left"}`}></i>
       </button>
 
-      {/* Logo */}
       <div className="sidebar-header">
         <div className="sidebar-logo-text"><img src="/admin/logo.png" alt="Logo" /></div>
-        {!collapsed && <h3 className="sidebar-title">Portal</h3>}
+        {!collapsed && (
+          <div className="sidebar-brand">
+            <h3 className="sidebar-title">Portal</h3>
+            <p className="sidebar-subtitle">Super Admin</p>
+          </div>
+        )}
       </div>
 
-      {/* Menu */}
       <nav className="sidebar-menu">
         <NavLink
           to="/admin/overview"
@@ -88,7 +89,7 @@ const Sidebar = () => {
           }
         >
           <i className="bi bi-grid"></i>
-          {!collapsed && <span>Overview</span>}
+          {!collapsed && <span>Dashboard</span>}
         </NavLink>
 
         <NavLink
@@ -100,16 +101,6 @@ const Sidebar = () => {
           <i className="bi bi-inbox"></i>
           {!collapsed && <span>Courses</span>}
         </NavLink>
-
-        {/* <NavLink
-          to="/admin/enroll"
-          className={({ isActive }) =>
-            isActive ? "menu-item active" : "menu-item"
-          }
-        >
-          <i className="bi bi-calendar4"></i>
-          {!collapsed && <span>Enroll Student</span>}
-        </NavLink> */}
 
         <NavLink
           to="/admin/instructors"
@@ -165,26 +156,24 @@ const Sidebar = () => {
 
         <div className="menu-divider"></div>
 
-        <div
+        <button
+          type="button"
           className="menu-item"
           onClick={handleSync}
-          style={{ cursor: syncLoading ? "wait" : "pointer" }}
+          disabled={syncLoading}
         >
           <i className={`bi ${syncLoading ? "bi-arrow-repeat spin-icon" : "bi-arrow-repeat"}`}></i>
           {!collapsed && <span>{syncLoading ? "Syncing..." : "Sync from Zen"}</span>}
-        </div>
+        </button>
 
-        <div
-          className="menu-item"
+        <button
+          type="button"
+          className="menu-item logout-item"
           onClick={handleLogout}
-          style={{ cursor: "pointer", display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-            <i className="bi bi-box-arrow-right"></i>
-            {!collapsed && <span>Logout</span>}
-          </div>
-          {!collapsed && <span className="brand-badge" style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '12px' }}>Admin</span>}
-        </div>
+          <i className="bi bi-box-arrow-right"></i>
+          {!collapsed && <span>Logout</span>}
+        </button>
       </nav>
     </div>
   );
