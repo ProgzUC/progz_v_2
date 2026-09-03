@@ -21,6 +21,14 @@
       "destination": "/.well-known/assetlinks.json"
     },
     {
+      "source": "/api/:path*",
+      "destination": "https://progz-backend.onrender.com/api/:path*"
+    },
+    {
+      "source": "/auth/:path*",
+      "destination": "https://progz-backend.onrender.com/auth/:path*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

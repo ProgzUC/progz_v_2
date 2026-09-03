@@ -1,19 +1,22 @@
 import axios from 'axios';
 import { clearAuthSession } from '../utils/authStorage';
 
+/**
+ * Resolve API base URL.
+ * - Dev: Vite proxy or localhost backend
+ * - Prod: VITE_API_BASE_URL, else same-origin `/api` (Vercel rewrite → Render)
+ * Never return empty — empty baseURL posts to the SPA host and causes 405.
+ */
 const resolveApiBaseUrl = () => {
-  if (import.meta.env.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL;
-  }
+  const configured = (import.meta.env.VITE_API_BASE_URL || '').trim().replace(/\/$/, '');
+  if (configured) return configured;
 
   if (import.meta.env.DEV) {
     return 'http://localhost:5002/api';
   }
 
-  console.error(
-    'VITE_API_BASE_URL is not set. Configure it in your production environment before building.'
-  );
-  return '';
+  // Production same-origin path (proxied by vercel.json to the backend)
+  return '/api';
 };
 
 const API_BASE_URL = resolveApiBaseUrl();
@@ -37,6 +40,11 @@ const processQueue = (error) => {
     }
   });
   failedQueue = [];
+};
+
+const refreshUrl = () => {
+  const base = API_BASE_URL.replace(/\/$/, '');
+  return `${base}/auth/refresh`;
 };
 
 axiosInstance.interceptors.response.use(
@@ -64,7 +72,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         await axios.post(
-          `${API_BASE_URL}/auth/refresh`,
+          refreshUrl(),
           {},
           { withCredentials: true }
         );
