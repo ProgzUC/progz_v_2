@@ -23,8 +23,8 @@ import AttendanceReport from "./components/reports/AttendanceReport.jsx";
 import OperationalReports from "./components/reports/OperationalReports.jsx";
 import MonitoringDashboard from "./components/Monitoring/MonitoringDashboard.jsx";
 
-// AUTH COMPONENTS
-import SignIn from "./components/Sign/SignIn.jsx";
+// AUTH COMPONENTS (legacy — routes commented; real auth is pagesAuth/login)
+// import SignIn from "./components/Sign/SignIn.jsx";
 import UserEnrollment from "./components/Sign/UserEnrollment.jsx";
 import UserDetailView from "./components/ApproveUser/UserDetailView.jsx";
 
