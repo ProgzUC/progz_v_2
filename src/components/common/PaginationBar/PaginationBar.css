@@ -8,3 +8,20 @@
   font-size: 14px;
   user-select: none;
 }
+
+.pagination button:focus-visible,
+.batches-pagination button:focus-visible,
+.page-nav:focus-visible,
+.page-num:focus-visible,
+.page-arrow:focus-visible,
+.page-btn:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.pagination button:disabled,
+.batches-pagination button:disabled,
+.page-nav:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

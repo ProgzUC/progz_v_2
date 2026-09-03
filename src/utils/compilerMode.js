@@ -1,12 +1,20 @@
-const COMPILER_URLS = {
-  html: "https://uccompiler.urbancode.in/#/html",
-  css: "https://uccompiler.urbancode.in/#/css",
-  js: "https://uccompiler.urbancode.in/#/js",
+const COMPILER_BASE_URL = import.meta.env.VITE_COMPILER_BASE_URL;
+
+const buildCompilerUrl = (mode) => {
+  if (!COMPILER_BASE_URL) {
+    if (import.meta.env.DEV) {
+      console.warn("VITE_COMPILER_BASE_URL is not set.");
+    }
+    return null;
+  }
+
+  const normalizedBase = COMPILER_BASE_URL.replace(/\/$/, "");
+  return `${normalizedBase}/#/${mode}`;
 };
 
 export function getCompilerSrc(mode) {
   const key = String(mode || "html").toLowerCase();
-  return COMPILER_URLS[key] || COMPILER_URLS.html;
+  return buildCompilerUrl(key) || buildCompilerUrl("html") || "";
 }
 
 export function getLessonCompilerMode(section = {}) {

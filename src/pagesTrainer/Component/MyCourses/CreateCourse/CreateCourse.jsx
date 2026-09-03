@@ -44,6 +44,7 @@ const buildCourseState = (data) => ({
     title: mod.title,
     sections: (mod.sections || []).map(sec => ({
       title: sec.sectionName || sec.title,
+      lessonType: sec.lessonType || "Theory",
       expanded: false,
       savedMaterialFiles: sec.learningMaterialFile || [],
       savedChallengeFiles: sec.codeChallengeFile || [],
@@ -329,6 +330,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
 
               return {
                 sectionName: sec.title,
+                lessonType: sec.lessonType,
                 learningMaterialNotes: sec.notes,
                 learningMaterialFile: finalMaterials,
                 codeChallengeInstructions: sec.challengeInstructions,
@@ -544,6 +546,17 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
 
                                       {sIndex === activeSectionIndex && (
                                         <div className="section-details">
+                                          {/* Lesson Type */}
+                                          <label>Lesson Type</label>
+                                          <select 
+                                            value={section.lessonType || "Theory"} 
+                                            onChange={(e) => updateSectionField(mIndex, sIndex, "lessonType", e.target.value)}
+                                            style={{ width: "100%", padding: "10px", marginBottom: "15px", borderRadius: "4px", border: "1px solid #ccc" }}
+                                          >
+                                            <option value="Theory">Theory</option>
+                                            <option value="Coding Practice">Coding Practice</option>
+                                          </select>
+
                                           {/* Materials Upload */}
                                           <label>Learning Material Files</label>
                                           {/* Saved Files */}

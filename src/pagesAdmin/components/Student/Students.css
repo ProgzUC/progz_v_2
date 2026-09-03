@@ -257,3 +257,35 @@
   cursor: pointer;
   font-size: 14px;
 }
+
+@media (max-width: 768px) {
+  .admin-students-page {
+    padding: 16px;
+  }
+
+  .admin-students-page .students-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .admin-students-page .students-header-right {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-students-page .students-search,
+  .admin-students-page .students-add-btn {
+    width: 100%;
+  }
+
+  .admin-students-page .students-table {
+    min-width: 720px;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-students-page .students-card {
+    padding: 16px;
+  }
+}

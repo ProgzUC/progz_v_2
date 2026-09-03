@@ -51,6 +51,7 @@ const EditCourse = () => {
           title: mod.title,
           sections: mod.sections.map(sec => ({
             title: sec.sectionName,
+            lessonType: sec.lessonType || "Theory",
             expanded: false,
             // Existing files (saved)
             savedMaterialFiles: sec.learningMaterialFile || [],
@@ -286,6 +287,7 @@ const EditCourse = () => {
 
               return {
                 sectionName: sec.title,
+                lessonType: sec.lessonType,
                 learningMaterialNotes: sec.notes,
                 learningMaterialFile: finalMaterials, // ARRAY of objects
                 codeChallengeInstructions: sec.challengeInstructions,

@@ -168,15 +168,17 @@ const Courses = () => {
         ) : (
           <>
             {/* TABLE */}
-            <div className="table-responsive">
-              <table className="course-table">
+            <p className="admin-table-scroll-hint">Swipe horizontally to view all columns.</p>
+            <div className="table-responsive admin-table-wrap" tabIndex={0} aria-label="Courses table">
+              <table className="course-table admin-data-table">
+                <caption className="sr-only">All courses</caption>
                 <thead>
                   <tr>
-                    <th>S.No</th>
-                    <th>Courses</th>
-                    <th>Instructors</th>
-                    <th>Enrolled</th>
-                    <th>Actions</th>
+                    <th scope="col">S.No</th>
+                    <th scope="col">Courses</th>
+                    <th scope="col">Instructors</th>
+                    <th scope="col">Enrolled</th>
+                    <th scope="col">Actions</th>
                   </tr>
                 </thead>
 
@@ -228,10 +230,38 @@ const Courses = () => {
 
                         <td className="actions-cell">
                           <div className="actions-row">
-                            <i className="bi bi-eye" onClick={() => viewHandler(course)}></i>
-                            <i className="bi bi-pencil" onClick={() => editHandler(course)}></i>
-                            <i className="bi bi-people" onClick={() => usersHandler(course)}></i>
-                            <i className="bi bi-trash" onClick={() => deleteHandler(course)}></i>
+                            <button
+                              type="button"
+                              className="admin-action-btn"
+                              aria-label={`View ${course.courseName}`}
+                              onClick={() => viewHandler(course)}
+                            >
+                              <i className="bi bi-eye" aria-hidden="true" />
+                            </button>
+                            <button
+                              type="button"
+                              className="admin-action-btn"
+                              aria-label={`Edit ${course.courseName}`}
+                              onClick={() => editHandler(course)}
+                            >
+                              <i className="bi bi-pencil" aria-hidden="true" />
+                            </button>
+                            <button
+                              type="button"
+                              className="admin-action-btn"
+                              aria-label={`Manage instructors for ${course.courseName}`}
+                              onClick={() => usersHandler(course)}
+                            >
+                              <i className="bi bi-people" aria-hidden="true" />
+                            </button>
+                            <button
+                              type="button"
+                              className="admin-action-btn admin-action-btn--danger"
+                              aria-label={`Delete ${course.courseName}`}
+                              onClick={() => deleteHandler(course)}
+                            >
+                              <i className="bi bi-trash" aria-hidden="true" />
+                            </button>
                           </div>
                         </td>
                       </tr>

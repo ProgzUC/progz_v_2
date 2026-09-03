@@ -18,6 +18,12 @@ export const deleteUser = (id) =>
 export const triggerManualSync = () =>
     axiosInstance.post("/sync/manual").then((res) => res.data);
 
+export const fetchSyncLogs = (params) =>
+    axiosInstance.get("/sync/logs", { params }).then((res) => res.data);
+
+export const fetchSyncStatus = () =>
+    axiosInstance.get("/sync/status").then((res) => res.data);
+
 export const registerUser = (payload) =>
     axiosInstance.post("/auth/user/register", payload).then((res) => res.data);
 

@@ -7,6 +7,7 @@ import Loader from "../../../components/common/Loader/Loader";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
 import { BiCodeAlt } from "react-icons/bi";
 import { getLessonCompilerMode } from "../../../utils/compilerMode";
+import { isHtmlEmpty } from "../../../components/common/RichTextEditor/richTextUtils";
 
 const THUMB_SKIP_WORDS = new Set([
     "complete", "course", "courses", "the", "a", "an", "and",
@@ -98,8 +99,20 @@ function LessonRow({ title, isLocked, onOpen, section }) {
     const handlePractice = (e) => {
         e.stopPropagation();
         if (isLocked) return;
-        navigate(`/student-dashboard/compiler?mode=${mode}`);
+        window.open("https://uccompiler.urbancode.in/", "_blank");
     };
+
+    // Determine if it's a coding lesson
+    const challengeHtml = section?.codeChallengeInstructions || section?.challengeInstructions || "";
+    const challengeFiles = [
+        ...(section?.codeChallengeFile || []),
+        ...(section?.codeChallengeFiles || []),
+        ...(section?.challengeFiles || []),
+    ];
+    // Use lessonType if available, otherwise fallback to old logic
+    const isCodingLesson = section?.lessonType 
+        ? section.lessonType === "Coding Practice" 
+        : (!isHtmlEmpty(challengeHtml) || challengeFiles.length > 0);
 
     return (
         <div className="lesson-row">
@@ -107,16 +120,18 @@ function LessonRow({ title, isLocked, onOpen, section }) {
             <div className="lesson-title">{title}</div>
 
             <div className="lesson-action">
-                <button
-                    type="button"
-                    className="practice-btn"
-                    onClick={handlePractice}
-                    disabled={isLocked}
-                    title={isLocked ? "Trainer has not released this lesson yet" : "Practice in compiler"}
-                >
-                    <BiCodeAlt className="practice-icon" />
-                    Practice
-                </button>
+                {isCodingLesson && (
+                    <button
+                        type="button"
+                        className="practice-btn"
+                        onClick={handlePractice}
+                        disabled={isLocked}
+                        title={isLocked ? "Trainer has not released this lesson yet" : "Practice in compiler"}
+                    >
+                        <BiCodeAlt className="practice-icon" />
+                        Practice
+                    </button>
+                )}
 
                 {isLocked ? (
                     <i className="bi bi-lock-fill lock-icon"></i>

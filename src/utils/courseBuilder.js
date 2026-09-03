@@ -5,6 +5,7 @@ export const createId = () =>
 export const createEmptySection = (overrides = {}) => ({
   id: createId(),
   title: "",
+  lessonType: "Theory",
   expanded: false,
   materialFiles: [],
   notes: "",

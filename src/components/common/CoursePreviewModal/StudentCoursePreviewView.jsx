@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { BiBook } from "react-icons/bi";
+import { BiBook, BiCodeAlt } from "react-icons/bi";
 import Introduction from "../../../pagesStudent/components/Introduction/Introduction";
 import ImageWithFallback from "../ImageWithFallback/ImageWithFallback";
 import "../../../pagesStudent/components/mycourses/CourseCard.css";
@@ -57,6 +57,7 @@ export const normalizeSectionForStudent = (sec) => {
   return {
     sectionName: sec.sectionName || sec.title || "Lesson",
     title: sec.sectionName || sec.title || "Lesson",
+    lessonType: sec.lessonType,
     learningMaterialNotes: sec.learningMaterialNotes || sec.notes || "",
     learningMaterialFile: materials,
     codeChallengeInstructions: sec.codeChallengeInstructions || sec.challengeInstructions || "",
@@ -157,6 +158,20 @@ function PreviewCurriculum({ modules, onOpenLesson }) {
                         <div className="lesson-number">{sIdx + 1}</div>
                         <div className="lesson-title">{sectionTitle}</div>
                         <div className="lesson-action">
+                          {section.lessonType === "Coding Practice" && (
+                            <button
+                              type="button"
+                              className="practice-btn"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                window.open("https://uccompiler.urbancode.in/", "_blank");
+                              }}
+                              style={{ marginRight: '10px' }}
+                            >
+                              <BiCodeAlt className="practice-icon" />
+                              Practice
+                            </button>
+                          )}
                           <button
                             type="button"
                             className="open-btn"

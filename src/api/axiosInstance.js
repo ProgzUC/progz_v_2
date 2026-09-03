@@ -1,11 +1,22 @@
 import axios from 'axios';
 import { clearAuthSession } from '../utils/authStorage';
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  (import.meta.env.DEV
-    ? "http://localhost:5002/api"
-    : "https://progz-backend.onrender.com/api");
+const resolveApiBaseUrl = () => {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+
+  if (import.meta.env.DEV) {
+    return 'http://localhost:5002/api';
+  }
+
+  console.error(
+    'VITE_API_BASE_URL is not set. Configure it in your production environment before building.'
+  );
+  return '';
+};
+
+const API_BASE_URL = resolveApiBaseUrl();
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,

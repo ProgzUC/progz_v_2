@@ -11,7 +11,8 @@ import Loader from "../../../components/common/Loader/Loader";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import CreateBatchModal from "../EnrollStudent/CreateBatchModal";
 import AddStudentToBatchModal from "./AddStudentToBatchModal";
-import EditBatchModal from "./EditBatchModal"; // Import the add student modal
+import EditBatchModal from "./EditBatchModal";
+import AccessibleModal from "../../../components/common/AccessibleModal/AccessibleModal";
 
 const Batches = () => {
     // 1. Fetch Dynamic Data
@@ -125,7 +126,9 @@ const Batches = () => {
                 <h1>Batches Management</h1>
                 <button
                     className="create-batch-btn"
+                    type="button"
                     onClick={() => setShowCreateModal(true)}
+                    aria-label="Create new batch"
                     style={{
                         background: '#10a358',
                         color: 'white',
@@ -155,9 +158,11 @@ const Batches = () => {
 
                 <div className="filter-controls-container">
                     <div className="search-bar-container">
-                        <FaSearch className="search-icon" />
+                        <FaSearch className="search-icon" aria-hidden="true" />
+                        <label htmlFor="batches-search" className="sr-only">Search batches</label>
                         <input
-                            type="text"
+                            id="batches-search"
+                            type="search"
                             className="search-input"
                             placeholder="Search by batch or course..."
                             value={searchTerm}
@@ -165,18 +170,22 @@ const Batches = () => {
                                 setSearchTerm(e.target.value);
                                 setCurrentPage(1);
                             }}
+                            aria-label="Search batches by name or course"
                         />
                     </div>
 
                     <div className="filter-controls">
-                        <MdFilterList className="filter-icon" />
+                        <MdFilterList className="filter-icon" aria-hidden="true" />
+                        <label htmlFor="batch-status-filter" className="sr-only">Filter by status</label>
                         <select
+                            id="batch-status-filter"
                             className="filter-select"
                             value={filterStatus}
                             onChange={(e) => {
                                 setFilterStatus(e.target.value);
                                 setCurrentPage(1);
                             }}
+                            aria-label="Filter batches by status"
                         >
                             <option value="All">All Status</option>
                             <option value="active">Active</option>
@@ -188,19 +197,21 @@ const Batches = () => {
             </div>
 
             <div className="batches-table-container">
-                <h2 className="table-title">Batches List</h2>
-                <div className="table-responsive">
-                    <table className="batches-table">
+                <h2 className="table-title" id="batches-table-heading">Batches List</h2>
+                <p className="admin-table-scroll-hint">Swipe horizontally to view all columns.</p>
+                <div className="table-responsive admin-table-wrap" tabIndex={0} aria-labelledby="batches-table-heading">
+                    <table className="batches-table admin-data-table">
+                        <caption className="sr-only">Course batches</caption>
                         <thead>
                             <tr>
-                                <th className="s-no">S.No</th>
-                                <th>Batch Name</th>
-                                <th>Course</th>
-                                <th>Instructors</th>
-                                <th>Start Date</th>
-                                <th style={{ textAlign: "center" }}>Students</th>
-                                <th style={{ textAlign: "center" }}>Status</th>
-                                <th style={{ textAlign: "center" }}>Actions</th>
+                                <th className="s-no" scope="col">S.No</th>
+                                <th scope="col">Batch Name</th>
+                                <th scope="col">Course</th>
+                                <th scope="col">Instructors</th>
+                                <th scope="col">Start Date</th>
+                                <th scope="col" style={{ textAlign: "center" }}>Students</th>
+                                <th scope="col" style={{ textAlign: "center" }}>Status</th>
+                                <th scope="col" style={{ textAlign: "center" }}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -246,32 +257,36 @@ const Batches = () => {
                                         <td style={{ textAlign: "center" }}>
                                             <div style={{ display: 'flex', gap: '2px', justifyContent: 'center' }}>
                                                 <button
+                                                    type="button"
                                                     onClick={() => handleAddStudent(batch)}
-                                                    title="Add Student"
-                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#10b981' }}
+                                                    aria-label={`Add student to ${batch.name}`}
+                                                    className="admin-action-btn admin-action-btn--primary"
                                                 >
-                                                    <FaUserPlus />
+                                                    <FaUserPlus aria-hidden="true" />
                                                 </button>
                                                 <button
+                                                    type="button"
                                                     onClick={() => handleEditBatch(batch)}
-                                                    title="Edit Batch"
-                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#3b82f6' }}
+                                                    aria-label={`Edit ${batch.name}`}
+                                                    className="admin-action-btn"
                                                 >
-                                                    <FaEdit />
+                                                    <FaEdit aria-hidden="true" />
                                                 </button>
                                                 <button
+                                                    type="button"
                                                     onClick={() => handleViewMore(batch)}
-                                                    title="View Details"
-                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6b7280' }}
+                                                    aria-label={`View ${batch.name}`}
+                                                    className="admin-action-btn"
                                                 >
-                                                    <FaEye />
+                                                    <FaEye aria-hidden="true" />
                                                 </button>
                                                 <button
+                                                    type="button"
                                                     onClick={() => handleDelete(batch)}
-                                                    title="Delete"
-                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444' }}
+                                                    aria-label={`Delete ${batch.name}`}
+                                                    className="admin-action-btn admin-action-btn--danger"
                                                 >
-                                                    <FaTrash />
+                                                    <FaTrash aria-hidden="true" />
                                                 </button>
                                             </div>
                                         </td>
@@ -300,9 +315,7 @@ const Batches = () => {
 
             {/* View More Modal */}
             {showModal && selectedBatch && (
-                <div className="modal-overlay" onClick={closeModal}>
-                    <div className="modal-box" onClick={(e) => e.stopPropagation()} style={{ minWidth: '400px' }}>
-                        <h3>Batch Details</h3>
+                <AccessibleModal isOpen={showModal} onClose={closeModal} title="Batch Details">
                         <p><strong>Batch:</strong> {selectedBatch.name}</p>
                         <p><strong>Course:</strong> {getCourseName(selectedBatch)}</p>
                         <p><strong>Status:</strong> {selectedBatch.status}</p>
@@ -314,7 +327,6 @@ const Batches = () => {
                             {selectedBatch.students && selectedBatch.students.length > 0 ? (
                                 <ul style={{ maxHeight: '150px', overflowY: 'auto' }}>
                                     {selectedBatch.students.map((s, i) => (
-                                        // Handle if students are populated objects or just IDs
                                         <li key={i}>{typeof s === 'object' ? (s.name || s.email) : s}</li>
                                     ))}
                                 </ul>
@@ -322,9 +334,8 @@ const Batches = () => {
                                 <p style={{ color: '#999', fontSize: '13px', fontStyle: 'italic' }}>No students enrolled.</p>
                             )}
                         </div>
-                        <button className="close-btn" onClick={closeModal}>X</button>
-                    </div>
-                </div>
+                        <button type="button" className="close-btn" onClick={closeModal}>Close</button>
+                </AccessibleModal>
             )}
 
             {/* Create Batch Modal */}

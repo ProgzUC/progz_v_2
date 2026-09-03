@@ -77,12 +77,17 @@ const Students = () => {
         <h2>Student Management</h2>
 
         <div className="students-header-right">
+          <label htmlFor="students-search" className="sr-only">
+            Search students
+          </label>
           <input
-            type="text"
+            id="students-search"
+            type="search"
             className="students-search"
             placeholder="Search student"
             value={search}
             onChange={handleSearchChange}
+            aria-label="Search students by name, email, or phone"
           />
 
           <button className="students-add-btn" onClick={() => navigate("/admin/add-student")}>
@@ -95,8 +100,10 @@ const Students = () => {
       <div className="students-card">
         <h3 className="title">Students</h3>
 
-        <div style={{ overflowX: "auto" }}>
-          <table className="students-table">
+        <p className="admin-table-scroll-hint">Swipe horizontally to view all columns.</p>
+        <div className="admin-table-wrap" tabIndex={0} aria-label="Students table">
+          <table className="students-table admin-data-table">
+            <caption className="sr-only">Registered students</caption>
             <colgroup>
               <col style={{ width: "60px" }} />
               <col style={{ width: "200px" }} />
@@ -107,12 +114,12 @@ const Students = () => {
             </colgroup>
             <thead>
               <tr>
-                <th className="s-no">S.No</th>
-                <th>Student</th>
-                <th>E-mail</th>
-                <th>Mobile No</th>
-                <th>Qualification</th>
-                <th style={{ width: "120px" }}>Actions</th>
+                <th className="s-no" scope="col">S.No</th>
+                <th scope="col">Student</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">Mobile No</th>
+                <th scope="col">Qualification</th>
+                <th scope="col" style={{ width: "120px" }}>Actions</th>
               </tr>
             </thead>
 
@@ -135,15 +142,30 @@ const Students = () => {
                   </td>
 
                   <td className="actions">
-                    <FaTrash className="icon delete" onClick={() => handleDelete(s)} />
-                    <FaEdit
-                      className="icon edit"
+                    <button
+                      type="button"
+                      className="admin-action-btn admin-action-btn--danger"
+                      aria-label={`Delete ${s.name}`}
+                      onClick={() => handleDelete(s)}
+                    >
+                      <FaTrash aria-hidden="true" />
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-action-btn"
+                      aria-label={`Edit ${s.name}`}
                       onClick={() => navigate("/admin/student-preview", { state: { student: s, initialEditMode: true } })}
-                    />
-                    <FaEye
-                      className="icon view"
+                    >
+                      <FaEdit aria-hidden="true" />
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-action-btn"
+                      aria-label={`View ${s.name}`}
                       onClick={() => navigate("/admin/student-preview", { state: { student: s, initialEditMode: false } })}
-                    />
+                    >
+                      <FaEye aria-hidden="true" />
+                    </button>
                   </td>
                 </tr>
               ))}

@@ -3,6 +3,8 @@ import "./AttendanceReport.css";
 import { useBatchAttendanceReport } from "../../../hooks/useClassSession";
 import { useBatches } from "../../../hooks/useBatches";
 import Loader from "../../../components/common/Loader/Loader";
+import { downloadAttendanceCSV } from "../../../api/reportApi";
+import { Link } from "react-router-dom";
 
 export default function AttendanceReport() {
     const [selectedBatchId, setSelectedBatchId] = useState("");
@@ -16,13 +18,28 @@ export default function AttendanceReport() {
         setSelectedBatchId(e.target.value);
     };
 
+    const handleExport = async () => {
+        if (!selectedBatchId) return;
+        try {
+            await downloadAttendanceCSV(selectedBatchId);
+        } catch (error) {
+            console.error("Export failed", error);
+            alert("Failed to export attendance logs.");
+        }
+    };
+
     return (
         <div className="attendance-report-container">
             <div className="report-header">
-                <h2>
-                    <i className="bi bi-graph-up"></i>
-                    Attendance Reports
-                </h2>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <h2>
+                        <i className="bi bi-graph-up"></i>
+                        Attendance Reports
+                    </h2>
+                    <Link to="/admin/reports" style={{ fontSize: '14px', color: 'var(--admin-primary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        <i className="bi bi-arrow-left"></i> Back to Operational Analytics
+                    </Link>
+                </div>
 
                 <div className="batch-selector">
                     <label htmlFor="batch-select">Select Batch:</label>
@@ -117,11 +134,10 @@ export default function AttendanceReport() {
                     <div className="student-reports-section">
                         <div className="section-header">
                             <h3>Student-wise Attendance</h3>
-                            {/* Future: Export button */}
-                            {/* <button className="export-btn">
-                <i className="bi bi-download"></i>
-                Export CSV
-              </button> */}
+                            <button className="export-btn" onClick={handleExport}>
+                                <i className="bi bi-download"></i>
+                                Export CSV
+                            </button>
                         </div>
 
                         {data?.studentReports?.length === 0 ? (

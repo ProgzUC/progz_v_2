@@ -11,22 +11,16 @@ const StudentPreview = ({ student, onCancel }) => {
 
     const studentFromState = location.state?.student;
 
-    const mockData = {
-        name: "Alexa Rawles",
-        email: "alexarawles@gmail.com",
-        mobile: "+123456789",
-        qualification: "Not specified",
-        role: "Student",
-        password: "password123",
+    // Map qualification to education if needed
+    const mapToFormData = (data) => {
+        if (!data) return {};
+        return {
+            ...data,
+            qualification: data.education || data.qualification || "",
+        };
     };
 
-    // Map qualification to education if needed
-    const mapToFormData = (data) => ({
-        ...data,
-        qualification: data.education || data.qualification || "",
-    });
-
-    const initialData = mapToFormData(student || studentFromState || mockData);
+    const initialData = mapToFormData(student || studentFromState || {});
     const initialEditMode = location.state?.initialEditMode || false;
     const [isEditing, setIsEditing] = useState(initialEditMode);
     const [formData, setFormData] = useState(initialData);

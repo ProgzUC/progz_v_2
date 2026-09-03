@@ -147,14 +147,17 @@ const SignIn = () => {
           <>
             <p className="welcome">WELCOME BACK 👋</p>
             <h2 className="auth-title">Login</h2>
-            {error && <p className="auth-error">{error}</p>}
+            <div className="admin-live-region" role="alert" aria-live="polite">
+              {error && <p className="auth-error">{error}</p>}
+            </div>
 
             <form onSubmit={handleLogin} className="auth-form" noValidate>
               <div className={`auth-input-group ${fieldErrors.email ? "has-error" : ""}`}>
-                <label>Email</label>
+                <label htmlFor="login-email">Email</label>
                 <div className="input-wrapper">
-                  <FiMail className="input-icon" />
+                  <FiMail className="input-icon" aria-hidden="true" />
                   <input
+                    id="login-email"
                     type="email"
                     placeholder="Enter your email address"
                     value={email}
@@ -163,16 +166,23 @@ const SignIn = () => {
                       if (fieldErrors.email) setFieldErrors((prev) => ({ ...prev, email: "" }));
                     }}
                     autoComplete="username"
+                    aria-invalid={fieldErrors.email ? "true" : "false"}
+                    aria-describedby={fieldErrors.email ? "login-email-error" : undefined}
                   />
                 </div>
-                {fieldErrors.email && <span className="field-error">{fieldErrors.email}</span>}
+                {fieldErrors.email && (
+                  <span className="field-error" id="login-email-error">
+                    {fieldErrors.email}
+                  </span>
+                )}
               </div>
 
               <div className={`auth-input-group ${fieldErrors.password ? "has-error" : ""}`}>
-                <label>Password</label>
+                <label htmlFor="login-password">Password</label>
                 <div className="input-wrapper">
-                  <FiLock className="input-icon" />
+                  <FiLock className="input-icon" aria-hidden="true" />
                   <input
+                    id="login-password"
                     type={showPass ? "text" : "password"}
                     placeholder="Enter your Password"
                     value={password}
@@ -181,12 +191,24 @@ const SignIn = () => {
                       if (fieldErrors.password) setFieldErrors((prev) => ({ ...prev, password: "" }));
                     }}
                     autoComplete="current-password"
+                    aria-invalid={fieldErrors.password ? "true" : "false"}
+                    aria-describedby={fieldErrors.password ? "login-password-error" : undefined}
                   />
-                  <div className="eye-icon" onClick={() => setShowPass(!showPass)}>
-                    {showPass ? <FiEye /> : <FiEyeOff />}
-                  </div>
+                  <button
+                    type="button"
+                    className="eye-icon"
+                    onClick={() => setShowPass(!showPass)}
+                    aria-label={showPass ? "Hide password" : "Show password"}
+                    aria-pressed={showPass}
+                  >
+                    {showPass ? <FiEye aria-hidden="true" /> : <FiEyeOff aria-hidden="true" />}
+                  </button>
                 </div>
-                {fieldErrors.password && <span className="field-error">{fieldErrors.password}</span>}
+                {fieldErrors.password && (
+                  <span className="field-error" id="login-password-error">
+                    {fieldErrors.password}
+                  </span>
+                )}
               </div>
 
               <div className="options-row">
@@ -197,9 +219,9 @@ const SignIn = () => {
                     onChange={(e) => setRememberMe(e.target.checked)}
                   /> Remember me
                 </label>
-                <span onClick={() => setView("forgot")} className="forgot" style={{ cursor: 'pointer' }}>
+                <button type="button" onClick={() => setView("forgot")} className="forgot forgot-btn">
                   Forgot Password?
-                </span>
+                </button>
               </div>
 
               <button className="login-btn" type="submit" disabled={loading}>
@@ -225,17 +247,22 @@ const SignIn = () => {
         {/* VIEW: FORGOT PASSWORD */}
         {view === "forgot" && (
           <>
-            <p className="welcome" onClick={() => setView("login")} style={{ cursor: "pointer" }}>← Back to Login</p>
+            <button type="button" className="welcome back-link" onClick={() => setView("login")}>
+              ← Back to Login
+            </button>
             <h2 className="auth-title">Forgot Password 🔒</h2>
             <p className="auth-subtitle">Enter your email and we'll send you a link to reset your password.</p>
-            {error && <p className="auth-error">{error}</p>}
+            <div className="admin-live-region" role="alert" aria-live="polite">
+              {error && <p className="auth-error">{error}</p>}
+            </div>
 
             <form onSubmit={handleForgotSubmit} className="auth-form" noValidate>
               <div className={`auth-input-group ${fieldErrors.forgotEmail ? "has-error" : ""}`}>
-                <label>Enter your Email</label>
+                <label htmlFor="forgot-email">Enter your Email</label>
                 <div className="input-wrapper">
-                  <FiMail className="input-icon" />
+                  <FiMail className="input-icon" aria-hidden="true" />
                   <input
+                    id="forgot-email"
                     type="email"
                     placeholder="e.g. jane@example.com"
                     value={forgotEmail}
@@ -244,9 +271,15 @@ const SignIn = () => {
                       setForgotEmail(e.target.value);
                       if (fieldErrors.forgotEmail) setFieldErrors((prev) => ({ ...prev, forgotEmail: "" }));
                     }}
+                    aria-invalid={fieldErrors.forgotEmail ? "true" : "false"}
+                    aria-describedby={fieldErrors.forgotEmail ? "forgot-email-error" : undefined}
                   />
                 </div>
-                {fieldErrors.forgotEmail && <span className="field-error">{fieldErrors.forgotEmail}</span>}
+                {fieldErrors.forgotEmail && (
+                  <span className="field-error" id="forgot-email-error">
+                    {fieldErrors.forgotEmail}
+                  </span>
+                )}
               </div>
               <button className="login-btn" type="submit" disabled={loading}>
                 {loading ? "Sending..." : "Send Reset Link"}

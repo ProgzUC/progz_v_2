@@ -1,7 +1,8 @@
 import { ThemeProvider } from "./context/ThemeContext.jsx";
-import Sidebar from "./components/Sidebar/Sidebar.jsx";
+import AdminLayout from "./components/AdminLayout/AdminLayout.jsx";
 import { Routes, Route, Navigate } from "react-router-dom";
 import "./AdminApp.css";
+import "../styles/admin-a11y.css";
 import Overview from "./components/Overview/Overview.jsx";
 import Courses from "./components/Courses/Courses.jsx";
 import Students from "./components/Student/Students.jsx";
@@ -9,7 +10,6 @@ import Instructors from "./components/Instructor/Instructors.jsx";
 import EnrollStudents from "./components/EnrollStudent/EnrollStudents.jsx";
 import SyncFromZen from "./components/SyncFormZen/SyncFromZen.jsx";
 import ApproveUser from "./components/ApproveUser/ApproveUser.jsx";
-import CourseBuilder from "./components/CourseBuilder/CourseBuilder.jsx";
 import CreateCourse from "./components/CreateCourse/CreateCourse.jsx";
 import StudentPreview from "./components/Student/StudentPreview.jsx";
 import InstructorPreview from "./components/Instructor/InstructorPreview.jsx";
@@ -20,6 +20,8 @@ import Batches from "./components/Batches/Batches.jsx";
 import ViewBatch from "./components/Batches/ViewBatch.jsx";
 import RecycleBin from "./components/RecycleBin/RecycleBin.jsx";
 import AttendanceReport from "./components/reports/AttendanceReport.jsx";
+import OperationalReports from "./components/reports/OperationalReports.jsx";
+import MonitoringDashboard from "./components/Monitoring/MonitoringDashboard.jsx";
 
 // AUTH COMPONENTS
 import SignIn from "./components/Sign/SignIn.jsx";
@@ -45,10 +47,7 @@ export default function AdminApp() {
         <Route
           path="/*"
           element={
-            <div className="layout">
-              <Sidebar />
-              <div className="content">
-                <div className="admin-page-body">
+            <AdminLayout>
                 <Routes>
                   <Route path="/" element={<Navigate to="overview" replace />} />
 
@@ -67,7 +66,6 @@ export default function AdminApp() {
                   <Route path="approve-users" element={<ApproveUser />} />
                   <Route path="user-detail-view" element={<UserDetailView />} />
                   <Route path="sync" element={<SyncFromZen />} />
-                  <Route path="course-builder" element={<CourseBuilder />} />
                   <Route path="create-course" element={<CreateCourse />} />
                   <Route path="add-instructor" element={<UserEnrollment subtitle="Add Instructor" />} />
                   <Route path="add-student" element={<UserEnrollment subtitle="Add Student" />} />
@@ -76,11 +74,12 @@ export default function AdminApp() {
                   <Route path="batches/:id" element={<ViewBatch />} />
                   <Route path="instructor-preview" element={<InstructorPreview />} />
                   <Route path="recycle-bin" element={<RecycleBin />} />
+                  <Route path="monitoring" element={<MonitoringDashboard />} />
+                  <Route path="reports" element={<OperationalReports />} />
+                  <Route path="reports/operational" element={<OperationalReports />} />
                   <Route path="reports/attendance" element={<AttendanceReport />} />
                 </Routes>
-                </div>
-              </div>
-            </div>
+            </AdminLayout>
           }
         />
 

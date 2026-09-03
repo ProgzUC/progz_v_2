@@ -203,3 +203,26 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.admin-sidebar .menu-item:focus-visible,
+.admin-sidebar .collapse-btn:focus-visible {
+  outline: 2px solid var(--color-text-on-primary);
+  outline-offset: 2px;
+}
+
+@media (max-width: 768px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+    transition: transform var(--transition-slow);
+    box-shadow: none;
+  }
+
+  .admin-sidebar.mobile-open {
+    transform: translateX(0);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .admin-sidebar .collapse-btn {
+    display: none;
+  }
+}

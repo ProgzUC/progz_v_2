@@ -9,6 +9,8 @@ import TrainerApp from "./pagesTrainer/TrainerApp"
 import StudentApp from "./pagesStudent/StudentApp"
 import AdminApp from "./pagesAdmin/AdminApp"
 import PrivacyPolicy from "./pagesAuth/Privacy"
+import AuthBootstrap from "./components/auth/AuthBootstrap"
+import GuestOnlyRoute from "./components/auth/GuestOnlyRoute"
 import { getAuthData } from "./utils/authStorage"
 
 
@@ -32,10 +34,14 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 
   if (!isAuthenticated || !user) return <Navigate to="/login" replace />;
 
-  const normalizedAllowed = allowedRoles.map((r) => String(r).toLowerCase());
+  const normalizedAllowed = allowedRoles.map((r) => {
+    const role = String(r).toLowerCase();
+    return role === "instructor" ? "trainer" : role;
+  });
   const userRole = String(user.role || "").toLowerCase();
+  const normalizedUserRole = userRole === "instructor" ? "trainer" : userRole;
 
-  if (!normalizedAllowed.includes(userRole))
+  if (!normalizedAllowed.includes(normalizedUserRole))
     return <Navigate to="/unauthorized" replace />;
 
   return children;
@@ -45,12 +51,13 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
+        <AuthBootstrap>
         <Routes>
 
           {/* Login Routes */}
-          <Route path="/" element={<SignIn />} />
-          <Route path="/login" element={<SignIn />} />
-          <Route path="/signup" element={<StudentSignup />} />
+          <Route path="/" element={<GuestOnlyRoute><SignIn /></GuestOnlyRoute>} />
+          <Route path="/login" element={<GuestOnlyRoute><SignIn /></GuestOnlyRoute>} />
+          <Route path="/signup" element={<GuestOnlyRoute><StudentSignup /></GuestOnlyRoute>} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 
@@ -73,7 +80,7 @@ const App = () => {
           <Route
             path="/trainer-dashboard"
             element={
-              <ProtectedRoute allowedRoles={["trainer"]}>
+              <ProtectedRoute allowedRoles={["trainer", "instructor"]}>
                 <TrainerApp />
               </ProtectedRoute>
             }
@@ -91,6 +98,7 @@ const App = () => {
           {/* End of Protected Routes */}
 
         </Routes>
+        </AuthBootstrap>
       </BrowserRouter>
     </>
   )

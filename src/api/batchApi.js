@@ -42,6 +42,21 @@ export const enrollStudent = async (data) => {
     return response.data;
 };
 
+export const bulkEnrollStudents = async (data) => {
+    const { batchId, studentIds = [], pendingStudentIds = [], emails = [] } = data;
+
+    if (!batchId) {
+        throw new Error("Batch ID is missing for bulk enrollment.");
+    }
+
+    const response = await axiosInstance.post(`/batches/${batchId}/bulk-enroll`, {
+        studentIds,
+        pendingStudentIds,
+        emails
+    });
+    return response.data;
+};
+
 export const removeStudent = async (batchId, studentId) => {
     const response = await axiosInstance.post(`/batches/${batchId}/remove-student`, { studentId });
     return response.data;

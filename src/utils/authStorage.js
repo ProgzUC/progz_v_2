@@ -2,12 +2,18 @@ const USER_KEY = "user";
 const TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 
+const normalizeRole = (role) => {
+  const value = String(role || "").toLowerCase();
+  if (value === "instructor") return "trainer";
+  return value;
+};
+
 const sanitizeUser = (user) => {
   if (!user || typeof user !== "object") return null;
 
   const safe = {
     _id: user._id || user.id || null,
-    role: user.role || null,
+    role: normalizeRole(user.role) || null,
     name: user.name || null,
   };
 
