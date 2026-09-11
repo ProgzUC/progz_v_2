@@ -11,6 +11,7 @@ const NAV_ITEMS = [
   { to: "/admin/instructors", icon: "bi-person-video3", label: "Instructors" },
   { to: "/admin/students", icon: "bi-mortarboard", label: "Students" },
   { to: "/admin/batches", icon: "bi-layers", label: "Batches" },
+  { to: "/admin/enroll", icon: "bi-person-plus", label: "Enroll Students" },
   { to: "/admin/approve-users", icon: "bi-check-circle", label: "Approve Users" },
   { to: "/admin/recycle-bin", icon: "bi-trash", label: "Recycle Bin" },
   { to: "/admin/reports", icon: "bi-bar-chart-line", label: "Reports & Analytics" },

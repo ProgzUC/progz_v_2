@@ -5,17 +5,28 @@ import {
   Droppable,
   Draggable
 } from "@hello-pangea/dnd";
-import "../CreateCourse/CreateCourse.css"; // Reuse styling
-import { uploadToCloudinary } from "../../../utils/cloudinary";
+import "../CreateCourse/CreateCourse.css";
 import { useCourse, useUpdateCourse, useRollbackCourse } from "../../../hooks/useCourses";
 import { confirmDelete } from "../../../utils/confirmDelete";
 import { promptInput } from "../../../utils/promptInput";
 import { showSuccess, showError } from "../../../utils/toast";
+import { getErrorMessage } from "../../../utils/apiError";
 import Loader from "../../../components/common/Loader/Loader";
 import FileDropZone from "../../../components/common/FileDropZone/FileDropZone";
 import { COURSE_FILE_ACCEPT } from "../../../utils/fileDrop";
 import VersionHistory from "./VersionHistory";
 import RichTextEditor from "../../../components/common/RichTextEditor/RichTextEditor";
+import {
+  createEmptyModule,
+  createEmptySection,
+  hydrateCourseState,
+  buildCoursePayload,
+} from "../../../features/course-builder";
+import {
+  getYouTubeId,
+  isValidVideoUrl,
+  normalizeVideoUrlForStorage,
+} from "../../../utils/videoUrl";
 
 const EditCourse = () => {
   const navigate = useNavigate();
@@ -30,41 +41,9 @@ const EditCourse = () => {
   const [, setLightbox] = useState({ isOpen: false, type: "", src: "" });
   const [hoveredVideo, setHoveredVideo] = useState(null);
 
-  // Helper to extract YouTube ID
-  const getYouTubeId = (url) => {
-    if (!url) return null;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-  };
-
   useEffect(() => {
     if (fetchedCourse) {
-      setCourse({
-        courseName: fetchedCourse.courseName || "",
-        courseId: fetchedCourse.courseId || "",
-        courseDescription: fetchedCourse.courseDescription || "",
-        courseDuration: fetchedCourse.courseDuration || "",
-        instructor: fetchedCourse.instructor?.[0]?.firstName || "", // Simple display for now
-        thumbnail: fetchedCourse.thumbnail || null,
-        modules: (fetchedCourse.modules || []).map(mod => ({
-          title: mod.title,
-          sections: mod.sections.map(sec => ({
-            title: sec.sectionName,
-            lessonType: sec.lessonType || "Theory",
-            expanded: false,
-            // Existing files (saved)
-            savedMaterialFiles: sec.learningMaterialFile || [],
-            savedChallengeFiles: sec.codeChallengeFile || [],
-            // New uploads
-            materialFiles: [],
-            challengeFiles: [],
-            notes: sec.learningMaterialNotes || "",
-            challengeInstructions: sec.codeChallengeInstructions || "",
-            videos: sec.videoReferences || []
-          }))
-        }))
-      });
+      setCourse(hydrateCourseState(fetchedCourse));
     }
   }, [fetchedCourse]);
 
@@ -73,7 +52,7 @@ const EditCourse = () => {
   };
 
   if (isFetching) return <Loader />;
-  if (isError) return <div className="error-state">Error: {error?.message}</div>;
+  if (isError) return <div className="error-state">Error: {getErrorMessage(error)}</div>;
   if (!course) return null;
 
   // ===============
@@ -113,10 +92,7 @@ const EditCourse = () => {
   const addModule = () => {
     setCourse((prev) => ({
       ...prev,
-      modules: [
-        ...prev.modules,
-        { title: "", sections: [] },
-      ],
+      modules: [...prev.modules, createEmptyModule({ sections: [] })],
     }));
   };
 
@@ -147,15 +123,7 @@ const EditCourse = () => {
 
   const addSection = (mIndex) => {
     const updated = [...course.modules];
-    updated[mIndex].sections.push({
-      title: "",
-      expanded: false,
-      materialFile: null,
-      notes: "",
-      challengeFile: null,
-      challengeInstructions: "",
-      videos: [],
-    });
+    updated[mIndex].sections.push(createEmptySection());
     setCourse({ ...course, modules: updated });
   };
 
@@ -201,17 +169,18 @@ const EditCourse = () => {
   const addVideo = async (mIndex, sIndex) => {
     const link = await promptInput({
       title: "Add Video",
-      inputLabel: "YouTube video link",
-      placeholder: "https://www.youtube.com/watch?v=...",
+      placeholder: "Paste YouTube or Google Drive URL",
       confirmText: "Add Video",
       validate: (value) =>
-        getYouTubeId(value) ? undefined : "Please enter a valid YouTube URL",
+        isValidVideoUrl(value)
+          ? undefined
+          : "Please enter a valid YouTube or Google Drive URL",
     });
     if (!link) return;
 
     updateSectionField(mIndex, sIndex, "videos", [
       ...course.modules[mIndex].sections[sIndex].videos,
-      link,
+      normalizeVideoUrlForStorage(link),
     ]);
   };
 
@@ -228,7 +197,7 @@ const EditCourse = () => {
         setShowHistory(false);
       },
       onError: (err) => {
-        showError(err.message || "Rollback failed");
+        showError(getErrorMessage(err, "Rollback failed"));
         setLoading(false);
       }
     });
@@ -237,85 +206,7 @@ const EditCourse = () => {
   const handleSave = async () => {
     setLoading(true);
     try {
-      // 1. Thumbnail (single)
-      let thumbnailData = course.thumbnail;
-      if (course.thumbnail instanceof File) {
-        thumbnailData = await uploadToCloudinary(
-          course.thumbnail,
-          "courses/thumbnails"
-        );
-        // Normalize structure if needed, or just pass { url, publicId }
-        thumbnailData = { url: thumbnailData.url, publicId: thumbnailData.publicId };
-      }
-
-      // 2. Modules & Sections
-      const processedModules = await Promise.all(
-        course.modules.map(async (mod) => {
-          const processedSections = await Promise.all(
-            mod.sections.map(async (sec) => {
-              // Upload NEW learning materials
-              const newMaterialUploads = await Promise.all(
-                (sec.materialFiles || []).map((f) =>
-                  uploadToCloudinary(f, "courses/materials")
-                )
-              );
-              // Normalize new uploads to match schema { url, publicId, ... }
-              const formattedNewMaterials = newMaterialUploads.map(f => ({
-                url: f.url,
-                publicId: f.publicId,
-                fileType: f.fileType,
-                originalName: f.originalName
-              }));
-
-              // Combine SAVED + NEW
-              const finalMaterials = [...(sec.savedMaterialFiles || []), ...formattedNewMaterials];
-
-              // Upload NEW challenge files
-              const newChallengeUploads = await Promise.all(
-                (sec.challengeFiles || []).map((f) =>
-                  uploadToCloudinary(f, "courses/challenges")
-                )
-              );
-              const formattedNewChallenges = newChallengeUploads.map(f => ({
-                url: f.url,
-                publicId: f.publicId,
-                fileType: f.fileType,
-                originalName: f.originalName
-              }));
-
-              const finalChallenges = [...(sec.savedChallengeFiles || []), ...formattedNewChallenges];
-
-              return {
-                sectionName: sec.title,
-                lessonType: sec.lessonType,
-                learningMaterialNotes: sec.notes,
-                learningMaterialFile: finalMaterials, // ARRAY of objects
-                codeChallengeInstructions: sec.challengeInstructions,
-                codeChallengeFile: finalChallenges,   // ARRAY of objects
-                videoReferences: sec.videos,
-              };
-            })
-          );
-
-          return {
-            title: mod.title,
-            sections: processedSections,
-          };
-        })
-      );
-
-      const payload = {
-        courseName: course.courseName, // state uses courseName
-        courseId: course.courseId,
-        courseDescription: course.courseDescription,
-        courseDuration: Number(course.courseDuration),
-        thumbnail: thumbnailData, // Object or null
-        // Instructor update is tricky if we only have a string. 
-        // For now, we might leave instructor as is, or not send it if not changed properly.
-        // If we want to support updating instructor, we need the ID, not just the name. 
-        // Skipping instructor update in payload to prevent breaking it, unless we implement full picker.
-        modules: processedModules,
-      };
+      const payload = await buildCoursePayload(course);
 
       updateCourseMutation({ id, data: payload }, {
         onSuccess: () => {
@@ -323,14 +214,12 @@ const EditCourse = () => {
           navigate("/admin/courses");
         },
         onError: (err) => {
-          showError(err.message || "Update failed");
+          showError(getErrorMessage(err, "Update failed"));
+          setLoading(false);
         }
       });
-
     } catch (err) {
-      console.error(err);
-      showError(err.message || "Upload failed");
-    } finally {
+      showError(getErrorMessage(err, "Upload failed"));
       setLoading(false);
     }
   };

@@ -99,7 +99,7 @@ function LessonRow({ title, isLocked, onOpen, section }) {
     const handlePractice = (e) => {
         e.stopPropagation();
         if (isLocked) return;
-        window.open("https://uccompiler.urbancode.in/", "_blank");
+        window.open(import.meta.env.VITE_COMPILER_BASE_URL || "/", "_blank");
     };
 
     // Determine if it's a coding lesson

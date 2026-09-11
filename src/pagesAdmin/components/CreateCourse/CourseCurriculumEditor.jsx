@@ -7,7 +7,12 @@ import { COURSE_FILE_ACCEPT } from "../../../utils/fileDrop";
 import { confirmDelete } from "../../../utils/confirmDelete";
 import { promptInput } from "../../../utils/promptInput";
 import { showSuccess } from "../../../utils/toast";
-import { createEmptyModule, createEmptySection } from "../../../utils/courseBuilder";
+import { createEmptyModule, createEmptySection } from "../../../features/course-builder";
+import {
+  getYouTubeId,
+  isValidVideoUrl,
+  normalizeVideoUrlForStorage,
+} from "../../../utils/videoUrl";
 
 const CourseCurriculumEditor = ({ course, setCourse, errors, setErrors, openLightbox }) => {
   const [activeModuleIndex, setActiveModuleIndex] = useState(0);
@@ -21,13 +26,6 @@ const CourseCurriculumEditor = ({ course, setCourse, errors, setErrors, openLigh
   useEffect(() => {
     setActiveSectionIndex(-1);
   }, [activeModuleIndex]);
-
-  const getYouTubeId = (url) => {
-    if (!url) return null;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-  };
 
   const goToModule = (index) => {
     setActiveModuleIndex((prev) => (prev === index ? -1 : index));
@@ -140,16 +138,17 @@ const CourseCurriculumEditor = ({ course, setCourse, errors, setErrors, openLigh
   const addVideo = async (mIndex, sIndex) => {
     const link = await promptInput({
       title: "Add Video",
-      inputLabel: "YouTube video link",
-      placeholder: "https://www.youtube.com/watch?v=...",
+      placeholder: "Paste YouTube or Google Drive URL",
       confirmText: "Add Video",
       validate: (value) =>
-        getYouTubeId(value) ? undefined : "Please enter a valid YouTube URL",
+        isValidVideoUrl(value)
+          ? undefined
+          : "Please enter a valid YouTube or Google Drive URL",
     });
     if (!link) return;
 
     const updated = [...course.modules];
-    updated[mIndex].sections[sIndex].videos.push(link);
+    updated[mIndex].sections[sIndex].videos.push(normalizeVideoUrlForStorage(link));
     setCourse({ ...course, modules: updated });
   };
 

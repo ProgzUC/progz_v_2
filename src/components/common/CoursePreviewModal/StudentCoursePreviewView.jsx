@@ -164,7 +164,7 @@ function PreviewCurriculum({ modules, onOpenLesson }) {
                               className="practice-btn"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                window.open("https://uccompiler.urbancode.in/", "_blank");
+                                window.open(import.meta.env.VITE_COMPILER_BASE_URL || "/", "_blank");
                               }}
                               style={{ marginRight: '10px' }}
                             >

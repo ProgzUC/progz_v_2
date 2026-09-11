@@ -1,38 +1,63 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CreateCourse.css";
-import "../../../components/common/ModuleNavigator/ModuleNavigator.css";
-import { uploadToCloudinary } from "../../../utils/cloudinary";
-import { createCourse } from "../../../api/courseApi";
-import { confirmDelete } from "../../../utils/confirmDelete";
-import { promptInput } from "../../../utils/promptInput";
+import { useCreateCourse } from "../../../hooks/useCourses";
 import { showSuccess, showError, showWarning } from "../../../utils/toast";
+import { getErrorMessage } from "../../../utils/apiError";
 import Loader from "../../../components/common/Loader/Loader";
 import CourseCurriculumEditor from "./CourseCurriculumEditor";
-import ModuleNavigator from "../../../components/common/ModuleNavigator/ModuleNavigator";
 import CoursePreviewModal from "../../../components/common/CoursePreviewModal/CoursePreviewModal";
-import RichTextEditor from "../../../components/common/RichTextEditor/RichTextEditor";
-import { isHtmlEmpty } from "../../../components/common/RichTextEditor/richTextUtils";
-import { COURSE_FILE_ACCEPT } from "../../../utils/fileDrop";
-import {
-  createEmptyModule,
-  createEmptySection,
-} from "../../../utils/courseBuilder";
 import CourseTitleModal from "../../../components/common/CourseBuilder/CourseTitleModal";
 import CourseBuilderShell from "../../../components/common/CourseBuilder/CourseBuilderShell";
 import CourseInformationPanel from "../../../components/common/CourseBuilder/CourseInformationPanel";
 import "../../../components/common/CourseBuilder/CourseBuilder.css";
+import {
+  emptyCourseState,
+  validateCourseInformation,
+  buildCoursePayload,
+} from "../../../features/course-builder";
 
 const CreateCourse = () => {
   const navigate = useNavigate();
+  const { mutateAsync: createCourseMutation } = useCreateCourse();
+
   const [loading, setLoading] = useState(false);
   const [builderStarted, setBuilderStarted] = useState(false);
   const [activeStep, setActiveStep] = useState("information");
   const [showPreview, setShowPreview] = useState(false);
   const [errors, setErrors] = useState({});
   const [lightbox, setLightbox] = useState({ isOpen: false, type: "", src: "" });
+  const [course, setCourse] = useState(() => emptyCourseState());
 
-  const validateInformation = () => {
+  const validateForm = () => {
+    const { valid, errors: nextErrors } = validateCourseInformation(course);
+    setErrors((prev) => ({ ...prev, ...nextErrors }));
+    return valid;
+  };
+
+  const handleTitleContinue = (title) => {
+    setCourse((prev) => ({ ...prev, courseName: title }));
+    setBuilderStarted(true);
+    setActiveStep("information");
+  };
+
+  const handleStepChange = (step) => {
+    if (step === "curriculum" && !validateForm()) {
+      showWarning("Please fill all required fields correctly.");
+      return;
+    }
+    setActiveStep(step);
+  };
+
+  const updateField = (field, value) => {
+    setCourse((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: null }));
+  };
+
+  const openLightbox = (type, src) => setLightbox({ isOpen: true, type, src });
+  const closeLightbox = () => setLightbox({ isOpen: false, type: "", src: "" });
+
+  const handlePreview = () => {
     if (!validateForm()) {
       showWarning("Please fill all required fields correctly.");
       return;
@@ -45,75 +70,17 @@ const CreateCourse = () => {
       showWarning("Please fill all required fields correctly.");
       return;
     }
+
     setLoading(true);
     try {
-      // 1. Thumbnail (single)
-      let thumbnailData = null;
-      if (course.thumbnail instanceof File) {
-        thumbnailData = await uploadToCloudinary(
-          course.thumbnail,
-          "courses/thumbnails"
-        );
-      }
-
-      // 2. Modules & Sections
-      const processedModules = await Promise.all(
-        course.modules.map(async (mod) => {
-          const processedSections = await Promise.all(
-            mod.sections.map(async (sec) => {
-              // Upload multiple learning materials
-              const materialUploads = await Promise.all(
-                (sec.materialFiles || []).map((f) =>
-                  uploadToCloudinary(f, "courses/materials")
-                )
-              );
-
-              // Upload multiple challenge files
-              const challengeUploads = await Promise.all(
-                (sec.challengeFiles || []).map((f) =>
-                  uploadToCloudinary(f, "courses/challenges")
-                )
-              );
-
-              return {
-                sectionName: sec.title,
-                lessonType: sec.lessonType,
-                learningMaterialNotes: sec.notes,
-                learningMaterialFile: materialUploads, // ARRAY
-                codeChallengeInstructions: sec.challengeInstructions,
-                codeChallengeFile: challengeUploads,   // ARRAY
-                videoReferences: sec.videos,
-              };
-            })
-          );
-
-          return {
-            title: mod.title,
-            sections: processedSections,
-          };
-        })
-      );
-
-      const payload = {
-        courseName: course.courseName,
-        courseId: course.courseId,
-        courseDescription: course.courseDescription,
-        courseDuration: Number(course.courseDuration),
-        thumbnail: thumbnailData
-          ? { url: thumbnailData.url, publicId: thumbnailData.publicId }
-          : null,
-        modules: processedModules,
-      };
-
-      await createCourse(payload);
-
+      const payload = await buildCoursePayload(course);
+      await createCourseMutation(payload);
       showSuccess("Course created successfully!");
       setShowPreview(false);
       navigate("/admin/courses");
     } catch (err) {
-      console.error(err);
-      showError(err.message || "Upload failed");
-      } finally {
+      showError(getErrorMessage(err, "Upload failed"));
+    } finally {
       setLoading(false);
     }
   };
@@ -179,12 +146,12 @@ const CreateCourse = () => {
           )}
 
           {activeStep === "curriculum" && (
-            <CourseCurriculumEditor 
-              course={course} 
-              setCourse={setCourse} 
-              errors={errors} 
-              setErrors={setErrors} 
-              openLightbox={openLightbox} 
+            <CourseCurriculumEditor
+              course={course}
+              setCourse={setCourse}
+              errors={errors}
+              setErrors={setErrors}
+              openLightbox={openLightbox}
             />
           )}
         </CourseBuilderShell>
@@ -199,7 +166,6 @@ const CreateCourse = () => {
         />
       )}
 
-      {/* LIGHTBOX MODAL */}
       {lightbox.isOpen && (
         <div className="lightbox-overlay" onClick={closeLightbox}>
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>

@@ -3,7 +3,8 @@ import Swal from "sweetalert2";
 import { useCreateBatch } from "../../../hooks/useBatches";
 import { useCourse } from "../../../hooks/useCourses";
 import { useAllUsers } from "../../../hooks/useAdminUsers";
-import "./EnrollStudents.css"; // Reuse existing styles
+import "../Modal.css";
+import "./EnrollStudents.css";
 
 const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
     const { mutate: createBatchMutation } = useCreateBatch();

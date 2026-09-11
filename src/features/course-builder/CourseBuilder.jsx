@@ -1,39 +1,41 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./CreateCourse.css";
+import "./CourseBuilder.css";
 import { BiX, BiTrash, BiChevronDown, BiGridVertical, BiPlus } from "react-icons/bi";
-import { useCreateCourse, useUpdateCourse, useCourse } from "../../../../hooks/useCourses";
-import { confirmDelete } from "../../../../utils/confirmDelete";
-import { promptInput } from "../../../../utils/promptInput";
-import { showSuccess, showError, showWarning } from "../../../../utils/toast";
-import { getErrorMessage } from "../../../../utils/apiError";
-import Loader from "../../../../components/common/Loader/Loader";
-import SortableList from "../../../../components/common/Sortable/SortableList";
-import SortableItem from "../../../../components/common/Sortable/SortableItem";
-import FileDropZone from "../../../../components/common/FileDropZone/FileDropZone";
-import CoursePreviewModal from "../../../../components/common/CoursePreviewModal/CoursePreviewModal";
-import RichTextEditor from "../../../../components/common/RichTextEditor/RichTextEditor";
-import { COURSE_FILE_ACCEPT } from "../../../../utils/fileDrop";
+import { useCreateCourse, useUpdateCourse, useCourse } from "../../hooks/useCourses";
+import { confirmDelete } from "../../utils/confirmDelete";
+import { promptInput } from "../../utils/promptInput";
+import { showSuccess, showError, showWarning } from "../../utils/toast";
+import { getErrorMessage } from "../../utils/apiError";
+import Loader from "../../components/common/Loader/Loader";
+import SortableList from "../../components/common/Sortable/SortableList";
+import SortableItem from "../../components/common/Sortable/SortableItem";
+import FileDropZone from "../../components/common/FileDropZone/FileDropZone";
+import CoursePreviewModal from "../../components/common/CoursePreviewModal/CoursePreviewModal";
+import RichTextEditor from "../../components/common/RichTextEditor/RichTextEditor";
+import { COURSE_FILE_ACCEPT } from "../../utils/fileDrop";
 import {
   createEmptyModule,
   createEmptySection,
+} from "../../utils/courseBuilder";
+import {
   emptyCourseState,
   hydrateCourseState,
   validateCourseInformation,
-  buildCoursePayload,
-} from "../../../../features/course-builder";
+} from "./courseState";
+import { buildCoursePayload } from "./coursePayload";
 import {
   getYouTubeId,
   getGoogleDriveFileId,
   toGoogleDrivePreviewUrl,
   normalizeVideoUrlForStorage,
   isValidVideoUrl,
-} from "../../../../utils/videoUrl";
-import CourseTitleModal from "../../../../components/common/CourseBuilder/CourseTitleModal";
-import CourseBuilderShell from "../../../../components/common/CourseBuilder/CourseBuilderShell";
-import CourseInformationPanel from "../../../../components/common/CourseBuilder/CourseInformationPanel";
-import "../../../../components/common/CourseBuilder/CourseBuilder.css";
+} from "../../utils/videoUrl";
+import CourseTitleModal from "../../components/common/CourseBuilder/CourseTitleModal";
+import CourseBuilderShell from "../../components/common/CourseBuilder/CourseBuilderShell";
+import CourseInformationPanel from "../../components/common/CourseBuilder/CourseInformationPanel";
+import "../../components/common/CourseBuilder/CourseBuilder.css";
 
-const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
+const CourseBuilder = ({ onBack, onSave, initialData, isEditMode = false, courseIdToEdit }) => {
   const [loading, setLoading] = useState(false);
   const [builderStarted, setBuilderStarted] = useState(isEditMode);
   const [activeStep, setActiveStep] = useState("information");
@@ -54,7 +56,7 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   const { mutate: createCourseMutation } = useCreateCourse();
   const { mutate: updateCourseMutation } = useUpdateCourse();
 
-  const editCourseId = isEditMode ? (initialData?._id || initialData?.courseId) : null;
+  const editCourseId = courseIdToEdit || (isEditMode ? (initialData?._id || initialData?.courseId) : null);
   const { data: fullCourse, isLoading: isFetchingCourse } = useCourse(editCourseId);
 
   const [course, setCourse] = useState(() => emptyCourseState());
@@ -820,4 +822,4 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
   );
 };
 
-export default CreateCourse;
+export default CourseBuilder;

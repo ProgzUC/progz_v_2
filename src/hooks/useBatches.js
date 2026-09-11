@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchBatches, createBatch, enrollStudent, deleteBatch, updateBatch, getBatch, fetchTrainerBatches } from "../api/batchApi";
+import { fetchBatches, createBatch, enrollStudent, bulkEnrollStudents, deleteBatch, updateBatch, getBatch, fetchTrainerBatches } from "../api/batchApi";
 import { fetchBatchDetails, toggleSectionCompletion } from "../api/trainerApi";
 import Swal from "sweetalert2";
 
@@ -34,6 +34,19 @@ export const useEnrollStudent = () => {
         mutationFn: enrollStudent,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+            queryClient.invalidateQueries({ queryKey: ["batches"] });
+            queryClient.invalidateQueries({ queryKey: ["courses"] });
+        },
+    });
+};
+
+export const useBulkEnrollStudents = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: bulkEnrollStudents,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+            queryClient.invalidateQueries({ queryKey: ["pendingUsers"] });
             queryClient.invalidateQueries({ queryKey: ["batches"] });
             queryClient.invalidateQueries({ queryKey: ["courses"] });
         },

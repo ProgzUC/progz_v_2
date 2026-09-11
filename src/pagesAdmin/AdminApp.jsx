@@ -10,7 +10,7 @@ import Instructors from "./components/Instructor/Instructors.jsx";
 import EnrollStudents from "./components/EnrollStudent/EnrollStudents.jsx";
 import SyncFromZen from "./components/SyncFormZen/SyncFromZen.jsx";
 import ApproveUser from "./components/ApproveUser/ApproveUser.jsx";
-import CreateCourse from "./components/CreateCourse/CreateCourse.jsx";
+import { CourseBuilder as CreateCourse } from "../features/course-builder";
 import StudentPreview from "./components/Student/StudentPreview.jsx";
 import InstructorPreview from "./components/Instructor/InstructorPreview.jsx";
 import CourseView from "./components/CourseIcon/CourseView.jsx";
@@ -66,7 +66,10 @@ export default function AdminApp() {
                   <Route path="approve-users" element={<ApproveUser />} />
                   <Route path="user-detail-view" element={<UserDetailView />} />
                   <Route path="sync" element={<SyncFromZen />} />
-                  <Route path="create-course" element={<CreateCourse />} />
+                  <Route 
+                    path="create-course" 
+                    element={<CreateCourse onBack={() => window.history.back()} onSave={() => window.location.href = '/admin/courses'} />} 
+                  />
                   <Route path="add-instructor" element={<UserEnrollment subtitle="Add Instructor" />} />
                   <Route path="add-student" element={<UserEnrollment subtitle="Add Student" />} />
                   <Route path="student-preview" element={<StudentPreview />} />
