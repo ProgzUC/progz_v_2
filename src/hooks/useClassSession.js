@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
     startClass,
+    joinClass,
     markAttendance,
     endClass,
     getClassSessions,
@@ -16,8 +17,22 @@ export const useStartClass = () => {
     return useMutation({
         mutationFn: (batchId) => startClass(batchId),
         onSuccess: () => {
-            // Invalidate sessions queries to refresh the list
             queryClient.invalidateQueries({ queryKey: ["classSessions"] });
+        },
+    });
+};
+
+/**
+ * Join class — records join time and auto-marks attendance
+ */
+export const useJoinClass = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (batchId) => joinClass(batchId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["classSessions"] });
+            queryClient.invalidateQueries({ queryKey: ["studentAttendance"] });
         },
     });
 };
@@ -31,7 +46,6 @@ export const useMarkAttendance = () => {
     return useMutation({
         mutationFn: ({ sessionId, attendance }) => markAttendance(sessionId, attendance),
         onSuccess: (data, variables) => {
-            // Update the specific session in cache
             queryClient.invalidateQueries({ queryKey: ["classSessions"] });
             queryClient.invalidateQueries({ queryKey: ["classSession", variables.sessionId] });
         },

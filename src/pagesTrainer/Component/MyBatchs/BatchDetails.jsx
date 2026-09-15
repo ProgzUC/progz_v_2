@@ -2,9 +2,11 @@ import React, { useMemo, useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import './BatchDetails.css';
 import { useTrainerBatchDetails, useToggleSectionCompletion } from '../../../hooks/useBatches';
+import { useJoinClass } from '../../../hooks/useClassSession';
 import Loader from '../../../components/common/Loader/Loader';
 import TrainerAttendancePanel from '../../components/attendance/TrainerAttendancePanel';
 import AttendanceHistory from '../../components/attendance/AttendanceHistory';
+import Swal from 'sweetalert2';
 
 const BatchDetails = ({ batch: initialBatch, onBack }) => {
     const [activeTab, setActiveTab] = useState('students');
@@ -12,6 +14,7 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
     const batchId = initialBatch?._id || initialBatch?.id || initialBatch?.batchId;
     const { data: batchDetails, isLoading, isError, error } = useTrainerBatchDetails(batchId);
     const { mutate: toggleSection, isPending: isToggling, variables: togglingVariables } = useToggleSectionCompletion();
+    const joinClassMutation = useJoinClass();
 
     if (!batchId) {
         return (
@@ -65,6 +68,7 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
             toggleSection={toggleSection}
             isToggling={isToggling}
             togglingVariables={togglingVariables}
+            joinClassMutation={joinClassMutation}
         />
     );
 };
@@ -78,6 +82,7 @@ const BatchDetailsContent = ({
     toggleSection,
     isToggling,
     togglingVariables,
+    joinClassMutation,
 }) => {
     const students = batch.students || [];
     const assignedModules = batch.trainerAssignment?.assignedModules || [];
@@ -148,6 +153,25 @@ const BatchDetailsContent = ({
 
     const moduleCount = curricula.reduce((acc, c) => acc + (c.modules?.length || 0), 0);
 
+    const handleJoinClass = async (e) => {
+        e.preventDefault();
+        if (!batchId || joinClassMutation.isPending) return;
+
+        try {
+            const result = await joinClassMutation.mutateAsync(batchId);
+            if (result?.meetLink) {
+                window.open(result.meetLink, "_blank", "noopener,noreferrer");
+            }
+            setActiveTab("attendance");
+        } catch (err) {
+            Swal.fire({
+                icon: "error",
+                title: "Could not join class",
+                text: err.response?.data?.message || err.message || "Failed to join class",
+            });
+        }
+    };
+
     return (
         <div className="batch-details-container">
             <header className="details-header">
@@ -159,17 +183,17 @@ const BatchDetailsContent = ({
                     <h1 className="header-title">{batch.batchName}</h1>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                         {batch.meetLink && (
-                            <a
-                                href={batch.meetLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                            <button
+                                type="button"
                                 className="join-class-btn"
+                                onClick={handleJoinClass}
+                                disabled={joinClassMutation.isPending}
                             >
                                 <span className="btn-icon-wrapper">
                                     <i className="bi bi-camera-video-fill"></i>
                                 </span>
-                                Join Class
-                            </a>
+                                {joinClassMutation.isPending ? "Joining..." : "Join Class"}
+                            </button>
                         )}
                         <span className={`status-badge ${batch.status?.toLowerCase() || 'active'}`}>{batch.status || 'Active'}</span>
                     </div>

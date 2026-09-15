@@ -4,6 +4,10 @@ import axiosInstance from './axiosInstance';
 export const startClass = (batchId) =>
     axiosInstance.post("/class-session/start", { batchId }).then(res => res.data);
 
+// Join class (records join time; trainer auto-starts; student auto-attendance)
+export const joinClass = (batchId) =>
+    axiosInstance.post("/class-session/join", { batchId }).then(res => res.data);
+
 // Mark attendance for students in a session
 export const markAttendance = (sessionId, attendance) =>
     axiosInstance.patch(`/class-session/${sessionId}/attendance`, { attendance }).then(res => res.data);

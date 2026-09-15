@@ -3,11 +3,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "./CourseCard.css";
 import Introduction from "../Introduction/Introduction";
 import { useStudentCourses, useCourseProgress } from "../../../hooks/useStudentCourses";
+import { useJoinClass } from "../../../hooks/useClassSession";
 import Loader from "../../../components/common/Loader/Loader";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
 import { BiCodeAlt } from "react-icons/bi";
 import { getLessonCompilerMode } from "../../../utils/compilerMode";
 import { isHtmlEmpty } from "../../../components/common/RichTextEditor/richTextUtils";
+import Swal from "sweetalert2";
 
 const THUMB_SKIP_WORDS = new Set([
     "complete", "course", "courses", "the", "a", "an", "and",
@@ -56,11 +58,43 @@ function LargeCourseCard({ course }) {
     const completed = course.completedLessons || 0;
     const total = course.totalLessons || 0;
     const meetLink = course.meetLink || course.batchInfo?.meetLink || null;
+    const batchId = course.batchId || course.batchInfo?._id || course.batchInfo?.id || null;
     const timing = course.classTiming || course.batchInfo?.classTiming;
     const timingLabel =
         timing?.startTime && timing?.endTime
             ? `${timing.startTime} – ${timing.endTime}`
             : null;
+    const joinClassMutation = useJoinClass();
+
+    const handleJoinClass = async (e) => {
+        e.preventDefault();
+        if (!batchId || joinClassMutation.isPending) return;
+
+        try {
+            const result = await joinClassMutation.mutateAsync(batchId);
+            const link = result?.meetLink || meetLink;
+            if (link) {
+                window.open(link, "_blank", "noopener,noreferrer");
+            }
+            if (result?.status) {
+                Swal.fire({
+                    icon: "success",
+                    title: `Marked ${result.status}`,
+                    text: result.joinedAt
+                        ? `Joined at ${new Date(result.joinedAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}`
+                        : "Attendance recorded",
+                    timer: 2000,
+                    showConfirmButton: false,
+                });
+            }
+        } catch (err) {
+            Swal.fire({
+                icon: "error",
+                title: "Could not join class",
+                text: err.response?.data?.message || err.message || "Failed to join class",
+            });
+        }
+    };
 
     return (
         <div className="large-card">
@@ -77,7 +111,17 @@ function LargeCourseCard({ course }) {
                         <p className="large-title">{course.courseName}</p>
                         <span className="large-batch-pill">{course.batchName || "Full Stack"}</span>
                     </div>
-                    {meetLink ? (
+                    {meetLink && batchId ? (
+                        <button
+                            type="button"
+                            className="student-join-class-btn"
+                            onClick={handleJoinClass}
+                            disabled={joinClassMutation.isPending}
+                        >
+                            <i className="bi bi-camera-video-fill" aria-hidden="true"></i>
+                            {joinClassMutation.isPending ? "Joining..." : "Join Class"}
+                        </button>
+                    ) : meetLink ? (
                         <a
                             href={meetLink}
                             target="_blank"
@@ -321,6 +365,7 @@ export default function MyCourses() {
             meetLink: courseDetails?.batch?.meetLink || selectedCourse.meetLink || null,
             classTiming: courseDetails?.batch?.classTiming || selectedCourse.classTiming || null,
             daysOfWeek: courseDetails?.batch?.daysOfWeek || selectedCourse.daysOfWeek || [],
+            batchId: courseDetails?.batch?._id || selectedCourse.batchId || null,
             batchInfo: courseDetails?.batch || null,
         };
     })() : null;

@@ -130,6 +130,7 @@ export default function StudentAttendance() {
                                     <th>Date</th>
                                     <th>Batch</th>
                                     <th>Trainer</th>
+                                    <th>Joined</th>
                                     <th>Duration</th>
                                     <th>Status</th>
                                 </tr>
@@ -155,6 +156,14 @@ export default function StudentAttendance() {
                                             </td>
                                             <td>{session.batchName}</td>
                                             <td>{session.trainerName}</td>
+                                            <td>
+                                                {session.joinedAt
+                                                    ? new Date(session.joinedAt).toLocaleTimeString("en-IN", {
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                    })
+                                                    : "—"}
+                                            </td>
                                             <td>{session.duration || "N/A"}</td>
                                             <td>
                                                 <span className={`status-badge ${session.status.toLowerCase()}`}>

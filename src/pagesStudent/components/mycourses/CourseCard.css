@@ -578,6 +578,15 @@
     font-weight: 700;
     line-height: 1;
     transition: background 0.2s, transform 0.15s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.student-mycourses-page .student-join-class-btn:disabled {
+    opacity: 0.7;
+    cursor: wait;
+    transform: none;
 }
 
 .student-mycourses-page .student-join-class-btn:hover {

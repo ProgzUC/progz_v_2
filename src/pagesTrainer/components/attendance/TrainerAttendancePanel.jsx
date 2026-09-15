@@ -9,6 +9,7 @@ const mapSessionAttendance = (session) =>
         studentId: a.student._id,
         studentName: a.student.name,
         status: a.status,
+        joinedAt: a.joinedAt || null,
     }));
 
 export default function TrainerAttendancePanel({ batch }) {
@@ -338,7 +339,14 @@ export default function TrainerAttendancePanel({ batch }) {
                             <div className="student-avatar">{student.studentName.charAt(0).toUpperCase()}</div>
                             <div className="student-details">
                                 <span className="student-name">{student.studentName}</span>
-                                <span className="student-number">Student #{index + 1}</span>
+                                <span className="student-number">
+                                    {student.joinedAt
+                                        ? `Joined ${new Date(student.joinedAt).toLocaleTimeString("en-IN", {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })}`
+                                        : `Student #${index + 1}`}
+                                </span>
                             </div>
                         </div>
 
