@@ -28,6 +28,11 @@ const StudentPreview = ({ student, onCancel }) => {
 
     const { mutate: updateUser } = useUpdateUser();
 
+    const isInstructorRole = (role) => {
+        const r = String(role || "").toLowerCase();
+        return r === "trainer" || r === "instructor";
+    };
+
     const handleCancel = () => {
         if (isEditing) {
             setIsEditing(false);
@@ -83,8 +88,20 @@ const StudentPreview = ({ student, onCancel }) => {
             { id: formData._id || formData.id, data: payload },
             {
                 onSuccess: () => {
-                    Swal.fire("Success", "Student details updated successfully", "success");
-                    setIsEditing(false);
+                    const becameInstructor = isInstructorRole(payload.role);
+                    Swal.fire(
+                        "Success",
+                        becameInstructor
+                            ? "User updated and role changed to Instructor"
+                            : "Student details updated successfully",
+                        "success"
+                    ).then(() => {
+                        if (becameInstructor) {
+                            navigate("/admin/instructors");
+                        } else {
+                            setIsEditing(false);
+                        }
+                    });
                 },
                 onError: (err) => {
                     Swal.fire("Error", err.response?.data?.msg || "Failed to update student", "error");
@@ -278,11 +295,33 @@ const StudentPreview = ({ student, onCancel }) => {
                 {/* Role */}
                 <h3 className="ep-section-title">Role</h3>
                 <div className="ep-role-group">
-                    <div className={`ep-role-option disabled`}>
+                    <div
+                        className={`ep-role-option ${isInstructorRole(formData.role) ? 'active' : ''} ${!isEditing ? 'disabled' : ''}`}
+                        onClick={() => isEditing && setFormData({ ...formData, role: 'trainer' })}
+                        role="button"
+                        tabIndex={isEditing ? 0 : -1}
+                        onKeyDown={(e) => {
+                            if (isEditing && (e.key === 'Enter' || e.key === ' ')) {
+                                e.preventDefault();
+                                setFormData({ ...formData, role: 'trainer' });
+                            }
+                        }}
+                    >
                         <div className="ep-radio-custom"></div>
                         <span>Instructor</span>
                     </div>
-                    <div className={`ep-role-option active`}>
+                    <div
+                        className={`ep-role-option ${String(formData.role || '').toLowerCase() === 'student' ? 'active' : ''} ${!isEditing ? 'disabled' : ''}`}
+                        onClick={() => isEditing && setFormData({ ...formData, role: 'student' })}
+                        role="button"
+                        tabIndex={isEditing ? 0 : -1}
+                        onKeyDown={(e) => {
+                            if (isEditing && (e.key === 'Enter' || e.key === ' ')) {
+                                e.preventDefault();
+                                setFormData({ ...formData, role: 'student' });
+                            }
+                        }}
+                    >
                         <div className="ep-radio-custom"></div>
                         <span>Student</span>
                     </div>

@@ -22,7 +22,7 @@ const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
             Swal.fire("Error", "Please select a student", "error");
             return;
         }
-        if (!batch.course) {
+        if (!batch.course && !(Array.isArray(batch.courses) && batch.courses.length)) {
             Swal.fire("Error", "Batch does not have a valid course linked", "error");
             return;
         }

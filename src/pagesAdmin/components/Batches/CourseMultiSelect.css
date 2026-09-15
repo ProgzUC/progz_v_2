@@ -1,0 +1,106 @@
+.course-multi-select {
+  position: relative;
+  width: 100%;
+}
+
+.course-multi-select-trigger {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border-strong, #d1d5db);
+  border-radius: var(--radius-sm, 8px);
+  background: var(--color-surface, #fff);
+  color: var(--color-text, #1a1a1a);
+  font-size: 0.9375rem;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.course-multi-select-trigger:hover,
+.course-multi-select-trigger.open,
+.course-multi-select-trigger:focus-visible {
+  border-color: var(--color-primary, #2a7d38);
+  box-shadow: 0 0 0 3px rgba(42, 125, 56, 0.2);
+}
+
+.course-multi-select-text {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.course-multi-select-text.placeholder {
+  color: #9ca3af;
+}
+
+.course-multi-select-chevron {
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.course-multi-select-chevron.open {
+  transform: rotate(180deg);
+}
+
+.course-multi-select-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 60;
+  max-height: 240px;
+  overflow-y: auto;
+  background: var(--color-surface, #fff);
+  border: 1px solid var(--color-border, #e5e7eb);
+  border-radius: var(--radius-sm, 8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  padding: 6px 0;
+}
+
+.course-multi-select-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  font-size: 0.875rem;
+  color: var(--color-text, #1a1a1a);
+  cursor: pointer;
+  user-select: none;
+}
+
+.course-multi-select-option:hover {
+  background: #f3f4f6;
+}
+
+.course-multi-select-option.all {
+  font-weight: 600;
+  border-bottom: 1px solid var(--color-border, #e5e7eb);
+  margin-bottom: 4px;
+  padding-bottom: 10px;
+}
+
+.course-multi-select-option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--color-primary-bright, #10a358);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.course-multi-select-empty {
+  padding: 12px;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  text-align: center;
+}

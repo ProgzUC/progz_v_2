@@ -2,9 +2,40 @@
  * Shared batch form helpers for create/edit modals.
  */
 
+export const getBatchCourseIds = (batch) => {
+  if (!batch) return [];
+  if (Array.isArray(batch.courses) && batch.courses.length) {
+    return batch.courses.map((c) => String(c?._id || c)).filter(Boolean);
+  }
+  const single = batch.course?._id || batch.course;
+  return single ? [String(single)] : [];
+};
+
+export const getBatchCourseNames = (batch) => {
+  if (!batch) return [];
+  if (Array.isArray(batch.courses) && batch.courses.length) {
+    const names = batch.courses
+      .map((c) => (typeof c === "object" ? c.courseName : null))
+      .filter(Boolean);
+    if (names.length) return names;
+  }
+  if (batch.course?.courseName) return [batch.course.courseName];
+  return [];
+};
+
+export const formatBatchCourseNames = (batch) => {
+  const names = getBatchCourseNames(batch);
+  return names.length ? names.join(", ") : "—";
+};
+
+export const batchHasCourse = (batch, courseId) => {
+  if (!courseId) return true;
+  return getBatchCourseIds(batch).includes(String(courseId));
+};
+
 export const emptyBatchForm = () => ({
   name: "",
-  courseId: "",
+  courseIds: [],
   daysOfWeek: [],
   classTiming: { startTime: "", endTime: "", timezone: "Asia/Kolkata" },
   meetLink: "",
@@ -16,7 +47,7 @@ export const emptyBatchForm = () => ({
 
 export const hydrateBatchForm = (batch) => ({
   name: batch?.name || "",
-  courseId: batch?.course?._id || batch?.course || "",
+  courseIds: getBatchCourseIds(batch),
   daysOfWeek: batch?.daysOfWeek || [],
   classTiming: {
     startTime: batch?.classTiming?.startTime || "",
@@ -46,9 +77,11 @@ export const emptyTrainerRow = () => ({
 });
 
 export const toBatchApiPayload = (batchData, { includeStatus = false } = {}) => {
+  const courseIds = batchData.courseIds || [];
   const payload = {
     name: batchData.name,
-    course: batchData.courseId,
+    course: courseIds[0],
+    courses: courseIds,
     daysOfWeek: batchData.daysOfWeek,
     classTiming: batchData.classTiming,
     meetLink: batchData.meetLink,

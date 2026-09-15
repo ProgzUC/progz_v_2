@@ -27,6 +27,11 @@ const InstructorPreview = ({ instructor, onCancel }) => {
 
     const { mutate: updateUser } = useUpdateUser();
 
+    const isInstructorRole = (role) => {
+        const r = String(role || "").toLowerCase();
+        return r === "trainer" || r === "instructor";
+    };
+
     const handleCancel = () => {
         if (isEditing) {
             setIsEditing(false);
@@ -81,8 +86,20 @@ const InstructorPreview = ({ instructor, onCancel }) => {
             { id: formData._id || formData.id, data: payload },
             {
                 onSuccess: () => {
-                    Swal.fire("Success", "Instructor details updated successfully", "success");
-                    setIsEditing(false);
+                    const becameStudent = String(payload.role || "").toLowerCase() === "student";
+                    Swal.fire(
+                        "Success",
+                        becameStudent
+                            ? "User updated and role changed to Student"
+                            : "Instructor details updated successfully",
+                        "success"
+                    ).then(() => {
+                        if (becameStudent) {
+                            navigate("/admin/students");
+                        } else {
+                            setIsEditing(false);
+                        }
+                    });
                 },
                 onError: (err) => {
                     Swal.fire("Error", err.response?.data?.msg || "Failed to update instructor", "error");
@@ -276,11 +293,33 @@ const InstructorPreview = ({ instructor, onCancel }) => {
                 {/* Role */}
                 <h3 className="ip-section-title">Role</h3>
                 <div className="ip-role-group">
-                    <div className={`ip-role-option active`}>
+                    <div
+                        className={`ip-role-option ${isInstructorRole(formData.role) ? 'active' : ''} ${!isEditing ? 'disabled' : ''}`}
+                        onClick={() => isEditing && setFormData({ ...formData, role: 'trainer' })}
+                        role="button"
+                        tabIndex={isEditing ? 0 : -1}
+                        onKeyDown={(e) => {
+                            if (isEditing && (e.key === 'Enter' || e.key === ' ')) {
+                                e.preventDefault();
+                                setFormData({ ...formData, role: 'trainer' });
+                            }
+                        }}
+                    >
                         <div className="ip-radio-custom"></div>
                         <span>Instructor</span>
                     </div>
-                    <div className={`ip-role-option disabled`}>
+                    <div
+                        className={`ip-role-option ${String(formData.role || '').toLowerCase() === 'student' ? 'active' : ''} ${!isEditing ? 'disabled' : ''}`}
+                        onClick={() => isEditing && setFormData({ ...formData, role: 'student' })}
+                        role="button"
+                        tabIndex={isEditing ? 0 : -1}
+                        onKeyDown={(e) => {
+                            if (isEditing && (e.key === 'Enter' || e.key === ' ')) {
+                                e.preventDefault();
+                                setFormData({ ...formData, role: 'student' });
+                            }
+                        }}
+                    >
                         <div className="ip-radio-custom"></div>
                         <span>Student</span>
                     </div>

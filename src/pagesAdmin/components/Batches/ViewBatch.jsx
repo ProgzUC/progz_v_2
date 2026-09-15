@@ -4,6 +4,7 @@ import { useBatch } from "../../../hooks/useBatches";
 import { useCourse } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import { FaArrowLeft, FaUsers, FaChalkboardTeacher, FaBook, FaCalendar, FaClock, FaVideo, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { formatBatchCourseNames } from "../../../features/batches/batchFormState";
 import "./ViewBatch.css";
 
 const ViewBatch = () => {
@@ -99,7 +100,7 @@ const ViewBatch = () => {
                     <div className="info-grid">
                         <div className="info-item">
                             <span className="info-label">Course:</span>
-                            <span className="info-value">{batch.course?.courseName || "—"}</span>
+                            <span className="info-value">{formatBatchCourseNames(batch)}</span>
                         </div>
                         <div className="info-item">
                             <span className="info-label"><FaCalendar /> Start Date:</span>

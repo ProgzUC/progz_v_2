@@ -25,6 +25,13 @@ export async function getMe() {
  * Uses login response user first. /auth/me is optional (backend may not expose it).
  */
 export async function login(payload, rememberMe = false) {
+    clearAuthSession();
+    try {
+        await axiosInstance.post("/auth/logout");
+    } catch {
+        // ignore stale-session cleanup failures
+    }
+
     const res = await axiosInstance.post("/auth/login", payload);
     const data = res.data || {};
 

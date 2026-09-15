@@ -3,41 +3,28 @@ import Swal from "sweetalert2";
 import { useUpdateBatch } from "../../../hooks/useBatches";
 import { useCourse } from "../../../hooks/useCourses";
 import { useAllUsers } from "../../../hooks/useAdminUsers";
+import { getErrorMessage } from "../../../utils/apiError";
+import {
+    hydrateBatchForm,
+    emptyTrainerRow,
+    toBatchApiPayload,
+    isTrainerRole,
+} from "../../../features/batches/batchFormState";
+import CourseMultiSelect from "./CourseMultiSelect";
 import "../Modal.css";
 import "../EnrollStudent/EnrollStudents.css";
-
-const buildBatchData = (batch) => ({
-    name: batch?.name || "",
-    courseId: batch?.course?._id || batch?.course || "",
-    daysOfWeek: batch?.daysOfWeek || [],
-    classTiming: {
-        startTime: batch?.classTiming?.startTime || "",
-        endTime: batch?.classTiming?.endTime || "",
-        timezone: batch?.classTiming?.timezone || "Asia/Kolkata"
-    },
-    meetLink: batch?.meetLink || "",
-    startDate: batch?.startDate ? batch.startDate.split('T')[0] : "",
-    endDate: batch?.endDate ? batch.endDate.split('T')[0] : "",
-    status: batch?.status || "active",
-    trainers: batch?.trainers?.map(t => ({
-        trainer: t.trainer?._id || t.trainer || "",
-        assignedModules: t.assignedModules || [],
-        fromDate: t.fromDate ? t.fromDate.split('T')[0] : "",
-        toDate: t.toDate ? t.toDate.split('T')[0] : "",
-        isCurrent: t.isCurrent !== undefined ? t.isCurrent : true
-    })) || []
-});
 
 const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
     const { mutate: updateBatchMutation } = useUpdateBatch();
     const { data: users } = useAllUsers();
 
     const usersArray = Array.isArray(users) ? users : [];
-    const instructorsList = usersArray.filter(u => (u.role || "").toLowerCase() === "trainer" || (u.role || "").toLowerCase() === "instructor");
+    const instructorsList = usersArray.filter(isTrainerRole);
 
-    const [batchData, setBatchData] = useState(() => buildBatchData(batch));
+    const [batchData, setBatchData] = useState(() => hydrateBatchForm(batch));
 
-    const { data: selectedCourse } = useCourse(batchData.courseId);
+    const primaryCourseId = batchData.courseIds[0] || "";
+    const { data: selectedCourse } = useCourse(primaryCourseId);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -51,6 +38,37 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
         }
     };
 
+    const handleCourseToggle = (courseId) => {
+        setBatchData(prev => {
+            const id = String(courseId);
+            const exists = prev.courseIds.includes(id);
+            const courseIds = exists
+                ? prev.courseIds.filter((c) => c !== id)
+                : [...prev.courseIds, id];
+            // Clear module assignments if primary course changes
+            const primaryChanged = (courseIds[0] || "") !== (prev.courseIds[0] || "");
+            return {
+                ...prev,
+                courseIds,
+                trainers: primaryChanged
+                    ? prev.trainers.map((t) => ({ ...t, assignedModules: [] }))
+                    : prev.trainers,
+            };
+        });
+    };
+
+    const allCoursesSelected =
+        coursesList.length > 0 &&
+        coursesList.every((c) => batchData.courseIds.includes(String(c._id)));
+
+    const handleToggleAllCourses = () => {
+        setBatchData(prev => ({
+            ...prev,
+            courseIds: allCoursesSelected ? [] : coursesList.map((c) => String(c._id)),
+            trainers: prev.trainers.map((t) => ({ ...t, assignedModules: [] })),
+        }));
+    };
+
     const handleDayToggle = (day) => {
         setBatchData(prev => {
             const newDays = prev.daysOfWeek.includes(day)
@@ -60,19 +78,19 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
         });
     };
 
+    const allDaysSelected = weekDays.every(day => batchData.daysOfWeek.includes(day));
+
+    const handleToggleAllDays = () => {
+        setBatchData(prev => ({
+            ...prev,
+            daysOfWeek: allDaysSelected ? [] : [...weekDays]
+        }));
+    };
+
     const addTrainerRow = () => {
         setBatchData(prev => ({
             ...prev,
-            trainers: [
-                ...prev.trainers,
-                {
-                    trainer: "",
-                    assignedModules: [],
-                    fromDate: "",
-                    toDate: "",
-                    isCurrent: true
-                }
-            ]
+            trainers: [...prev.trainers, emptyTrainerRow()]
         }));
     };
 
@@ -121,8 +139,8 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
             Swal.fire("Error", "Batch Name is required", "error");
             return;
         }
-        if (!batchData.courseId) {
-            Swal.fire("Error", "Please select a course", "error");
+        if (!batchData.courseIds.length) {
+            Swal.fire("Error", "Please select at least one course", "error");
             return;
         }
         if (!batchData.startDate || !batchData.endDate) {
@@ -161,25 +179,7 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
             }
         }
 
-        const payload = {
-            name: batchData.name,
-            course: batchData.courseId,
-            daysOfWeek: batchData.daysOfWeek,
-            classTiming: batchData.classTiming,
-            meetLink: batchData.meetLink,
-            startDate: batchData.startDate || null,
-            endDate: batchData.endDate || null,
-            status: batchData.status,
-            trainers: batchData.trainers
-                .filter(t => t.trainer)
-                .map(t => ({
-                    trainer: t.trainer,
-                    assignedModules: t.assignedModules,
-                    fromDate: t.fromDate || null,
-                    toDate: t.toDate || null,
-                    isCurrent: t.isCurrent
-                }))
-        };
+        const payload = toBatchApiPayload(batchData, { includeStatus: true });
 
         updateBatchMutation({ batchId: batch._id || batch.id, batchData: payload }, {
             onSuccess: () => {
@@ -187,7 +187,7 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
                 onClose();
             },
             onError: (err) => {
-                Swal.fire("Error", err.response?.data?.message || "Failed to update batch", "error");
+                Swal.fire("Error", getErrorMessage(err, "Failed to update batch"), "error");
             }
         });
     };
@@ -197,31 +197,25 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
             <div className="modal-content" style={{ maxWidth: "800px", maxHeight: "90vh", overflowY: "auto" }}>
                 <h3 className="modal-title">Edit Batch</h3>
 
-                <div className="input-grid-2">
-                    <div className="modal-field">
-                        <label className="modal-label">Batch Name</label>
-                        <input
-                            name="name"
-                            className="modal-input"
-                            value={batchData.name}
-                            onChange={handleChange}
-                            placeholder="e.g. FSD-Morning-01"
-                        />
-                    </div>
-                    <div className="modal-field">
-                        <label className="modal-label">Course</label>
-                        <select
-                            name="courseId"
-                            className="modal-input"
-                            value={batchData.courseId}
-                            onChange={handleChange}
-                        >
-                            <option value="">Select Course</option>
-                            {coursesList.map(c => (
-                                <option key={c._id} value={c._id}>{c.courseName}</option>
-                            ))}
-                        </select>
-                    </div>
+                <div className="modal-field">
+                    <label className="modal-label">Batch Name</label>
+                    <input
+                        name="name"
+                        className="modal-input"
+                        value={batchData.name}
+                        onChange={handleChange}
+                        placeholder="e.g. FSD-Morning-01"
+                    />
+                </div>
+
+                <div className="modal-field">
+                    <label className="modal-label">Courses</label>
+                    <CourseMultiSelect
+                        coursesList={coursesList}
+                        selectedIds={batchData.courseIds}
+                        onToggle={handleCourseToggle}
+                        onToggleAll={handleToggleAllCourses}
+                    />
                 </div>
 
                 <div className="input-grid-2">
@@ -297,6 +291,14 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
                 <div className="modal-field">
                     <label className="modal-label">Days</label>
                     <div className="days-checkbox-group">
+                        <label className="day-checkbox">
+                            <input
+                                type="checkbox"
+                                checked={allDaysSelected}
+                                onChange={handleToggleAllDays}
+                            />
+                            (all)
+                        </label>
                         {weekDays.map(day => (
                             <label key={day} className="day-checkbox">
                                 <input
@@ -366,7 +368,14 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
 
                             {selectedCourse && selectedCourse.modules && (
                                 <div className="modal-field">
-                                    <label className="modal-label">Assigned Modules</label>
+                                    <label className="modal-label">
+                                        Assigned Modules
+                                        {batchData.courseIds.length > 1 && selectedCourse.courseName && (
+                                            <span style={{ fontWeight: 400, color: "#6b7280", marginLeft: 8 }}>
+                                                (from {selectedCourse.courseName})
+                                            </span>
+                                        )}
+                                    </label>
                                     <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                                         {selectedCourse.modules.map((mod, modIdx) => {
                                             const isAssignedToOther = isModuleAssignedToOther(index, modIdx);
@@ -402,7 +411,7 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
                                     </div>
                                 </div>
                             )}
-                            {(!batchData.courseId) && <p style={{ fontSize: "12px", color: "#888" }}>Select a course to see modules</p>}
+                            {(!batchData.courseIds.length) && <p style={{ fontSize: "12px", color: "#888" }}>Select a course to see modules</p>}
                         </div>
                     ))}
                     {batchData.trainers.length === 0 && (

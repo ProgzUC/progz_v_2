@@ -94,7 +94,10 @@ axiosInstance.interceptors.response.use(
     const data = error.response?.data;
     const base = data?.message || data?.msg || error.response?.statusText || error.message;
     const detail = data?.error && data.error !== base ? ` (${data.error})` : "";
-    return Promise.reject(new Error(base + detail));
+    const apiError = new Error(base + detail);
+    apiError.response = error.response;
+    apiError.status = error.response?.status;
+    return Promise.reject(apiError);
   }
 );
 

@@ -13,6 +13,7 @@ import CreateBatchModal from "../EnrollStudent/CreateBatchModal";
 import AddStudentToBatchModal from "./AddStudentToBatchModal";
 import EditBatchModal from "./EditBatchModal";
 import AccessibleModal from "../../../components/common/AccessibleModal/AccessibleModal";
+import { formatBatchCourseNames, getBatchCourseNames } from "../../../features/batches/batchFormState";
 
 const Batches = () => {
     // 1. Fetch Dynamic Data
@@ -43,7 +44,7 @@ const Batches = () => {
     const filteredBatches = batches.filter(batch => {
         const matchesStatus = filterStatus === "All" || (batch.status || "").toLowerCase() === filterStatus.toLowerCase();
         const matchesSearch = (batch.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-            (batch.course?.courseName || "").toLowerCase().includes(searchTerm.toLowerCase());
+            getBatchCourseNames(batch).join(" ").toLowerCase().includes(searchTerm.toLowerCase());
         return matchesStatus && matchesSearch;
     });
 
@@ -105,9 +106,7 @@ const Batches = () => {
         }
     };
 
-    const getCourseName = (batch) => {
-        return batch.course?.courseName || "—";
-    };
+    const getCourseName = (batch) => formatBatchCourseNames(batch);
 
     const getInstructors = (batch) => {
         if (!batch.trainers || batch.trainers.length === 0) return "—";

@@ -178,6 +178,15 @@
     padding: 10px 0 4px;
 }
 
+.course-checkbox-group {
+    max-height: 180px;
+    overflow-y: auto;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border, #e5e7eb);
+    border-radius: var(--radius-sm, 8px);
+    background: var(--color-bg-muted, #f9fafb);
+}
+
 .day-checkbox {
     display: inline-flex;
     align-items: center;

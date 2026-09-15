@@ -3,7 +3,7 @@ const TOKEN_KEY = "accessToken";
 const REFRESH_TOKEN_KEY = "refreshToken";
 
 const normalizeRole = (role) => {
-  const value = String(role || "").toLowerCase();
+  const value = String(role || "").trim().toLowerCase();
   if (value === "instructor") return "trainer";
   return value;
 };

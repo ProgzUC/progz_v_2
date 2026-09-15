@@ -507,8 +507,10 @@ const EnrollStudents = () => {
                       {batchesList
                         .filter((b) => {
                           if (!section.courseId) return true;
-                          const batchCourseId = b.course?._id || b.course;
-                          return batchCourseId === section.courseId;
+                          const ids = Array.isArray(b.courses) && b.courses.length
+                            ? b.courses.map((c) => String(c?._id || c))
+                            : [String(b.course?._id || b.course)].filter(Boolean);
+                          return ids.includes(String(section.courseId));
                         })
                         .map((b) => (
                           <option key={b._id} value={b._id}>

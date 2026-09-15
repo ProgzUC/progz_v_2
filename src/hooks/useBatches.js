@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchBatches, createBatch, enrollStudent, bulkEnrollStudents, deleteBatch, updateBatch, getBatch, fetchTrainerBatches } from "../api/batchApi";
 import { fetchBatchDetails, toggleSectionCompletion } from "../api/trainerApi";
 import Swal from "sweetalert2";
+import { getErrorMessage } from "../utils/apiError";
 
 export const useBatches = () =>
     useQuery({
@@ -63,7 +64,7 @@ export const useDeleteBatch = () => {
             Swal.fire("Deleted!", "Batch has been deleted.", "success");
         },
         onError: (err) => {
-            Swal.fire("Error", err.response?.data?.message || "Failed to delete batch", "error");
+            Swal.fire("Error", getErrorMessage(err, "Failed to delete batch"), "error");
         }
     });
 };
