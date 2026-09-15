@@ -55,6 +55,12 @@ function LargeCourseCard({ course }) {
     const progress = course.progressPercentage || 0;
     const completed = course.completedLessons || 0;
     const total = course.totalLessons || 0;
+    const meetLink = course.meetLink || course.batchInfo?.meetLink || null;
+    const timing = course.classTiming || course.batchInfo?.classTiming;
+    const timingLabel =
+        timing?.startTime && timing?.endTime
+            ? `${timing.startTime} – ${timing.endTime}`
+            : null;
 
     return (
         <div className="large-card">
@@ -66,8 +72,33 @@ function LargeCourseCard({ course }) {
             </div>
 
             <div className="large-content">
-                <p className="large-title">{course.courseName}</p>
-                <span className="large-batch-pill">{course.batchName || "Full Stack"}</span>
+                <div className="large-title-row">
+                    <div className="large-title-block">
+                        <p className="large-title">{course.courseName}</p>
+                        <span className="large-batch-pill">{course.batchName || "Full Stack"}</span>
+                    </div>
+                    {meetLink ? (
+                        <a
+                            href={meetLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="student-join-class-btn"
+                        >
+                            <i className="bi bi-camera-video-fill" aria-hidden="true"></i>
+                            Join Class
+                        </a>
+                    ) : null}
+                </div>
+
+                {timingLabel ? (
+                    <p className="large-class-meta">
+                        <i className="bi bi-clock" aria-hidden="true"></i>
+                        Class: {timingLabel}
+                        {Array.isArray(course.daysOfWeek) && course.daysOfWeek.length > 0
+                            ? ` · ${course.daysOfWeek.join(", ")}`
+                            : ""}
+                    </p>
+                ) : null}
 
                 <div className="large-progress-section">
                     <div className="progress-info-row">
@@ -287,6 +318,10 @@ export default function MyCourses() {
             modules,
             enrolledAt: courseDetails?.enrollmentDate || selectedCourse.enrolledAt,
             lessonProgress,
+            meetLink: courseDetails?.batch?.meetLink || selectedCourse.meetLink || null,
+            classTiming: courseDetails?.batch?.classTiming || selectedCourse.classTiming || null,
+            daysOfWeek: courseDetails?.batch?.daysOfWeek || selectedCourse.daysOfWeek || [],
+            batchInfo: courseDetails?.batch || null,
         };
     })() : null;
 

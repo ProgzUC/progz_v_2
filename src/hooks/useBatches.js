@@ -113,6 +113,8 @@ export const useToggleSectionCompletion = () => {
       queryClient.invalidateQueries({
         queryKey: ["trainerBatch", variables.batchId],
       });
+      queryClient.invalidateQueries({ queryKey: ["studentCourses"] });
+      queryClient.invalidateQueries({ queryKey: ["courseProgress"] });
     },
   });
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FaArrowLeft } from 'react-icons/fa';
 import './BatchDetails.css';
 import { useTrainerBatchDetails, useToggleSectionCompletion } from '../../../hooks/useBatches';
@@ -9,8 +9,6 @@ import AttendanceHistory from '../../components/attendance/AttendanceHistory';
 const BatchDetails = ({ batch: initialBatch, onBack }) => {
     const [activeTab, setActiveTab] = useState('students');
 
-    // Determine the ID to fetch. initialBatch might be the full object or just have an ID.
-    // Different endpoints return different field names: _id, id, or batchId
     const batchId = initialBatch?._id || initialBatch?.id || initialBatch?.batchId;
     const { data: batchDetails, isLoading, isError, error } = useTrainerBatchDetails(batchId);
     const { mutate: toggleSection, isPending: isToggling, variables: togglingVariables } = useToggleSectionCompletion();
@@ -57,55 +55,98 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
         );
     }
 
-    // Handle response structure from getTrainerBatchDetails controller
-    // Response is flat: { batchId, batchName, curriculum, students, ... }
-    const batch = batchDetails;
+    return (
+        <BatchDetailsContent
+            batch={batchDetails}
+            batchId={batchId}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            onBack={onBack}
+            toggleSection={toggleSection}
+            isToggling={isToggling}
+            togglingVariables={togglingVariables}
+        />
+    );
+};
 
-    // Controller returns 'students' and 'curriculum' (modules) at root level
+const BatchDetailsContent = ({
+    batch,
+    batchId,
+    activeTab,
+    setActiveTab,
+    onBack,
+    toggleSection,
+    isToggling,
+    togglingVariables,
+}) => {
     const students = batch.students || [];
-    const modules = batch.curriculum || [];
-
-    // Get trainer's assigned modules
     const assignedModules = batch.trainerAssignment?.assignedModules || [];
+    const primaryCourseId = String(batch.primaryCourseId || "");
 
-    // Controller doesn't return 'course' object, but 'courseName'
-    // So we don't need 'const course = ...' anymore for modules
+    const curricula = useMemo(() => {
+        if (Array.isArray(batch.curricula) && batch.curricula.length) {
+            return batch.curricula;
+        }
+        return [{
+            courseId: batch.primaryCourseId,
+            courseName: batch.courseName,
+            modules: batch.curriculum || [],
+        }];
+    }, [batch]);
 
-    // Flatten sections for the right column view and map progress
-    // FILTER: Only show sections from modules assigned to this trainer
-    const allSections = [];
-    modules.forEach((mod, modIdx) => {
-        // Only include modules assigned to this trainer
-        if (!assignedModules.includes(modIdx)) return;
+    const allSections = useMemo(() => {
+        const rows = [];
+        curricula.forEach((course) => {
+            const courseId = String(course.courseId || "");
+            const isPrimary = courseId && courseId === primaryCourseId;
+            const modules = course.modules || [];
 
-        (mod.sections || []).forEach((sec, secIdx) => {
-            // Find progress
-            const progress = batch.sectionProgress?.find(
-                p => p.moduleIndex === modIdx && p.sectionIndex === secIdx
-            );
+            modules.forEach((mod, modIdx) => {
+                if (isPrimary && assignedModules.length > 0 && !assignedModules.includes(modIdx)) {
+                    return;
+                }
 
-            allSections.push({
-                moduleIndex: modIdx,
-                sectionIndex: secIdx,
-                uniqueId: `m${modIdx}-s${secIdx}`,
-                title: sec.sectionName || sec.title,
-                moduleTitle: mod.title,
-                completed: progress?.isCompleted || false,
-                date: progress?.completionTime ? new Date(progress.completionTime).toLocaleDateString() : null,
-                instructor: progress?.completedBy || null
+                (mod.sections || []).forEach((sec, secIdx) => {
+                    const progress = (batch.sectionProgress || []).find((p) => {
+                        if (Number(p.moduleIndex) !== modIdx || Number(p.sectionIndex) !== secIdx) {
+                            return false;
+                        }
+                        const entryCourseId = p.courseId ? String(p.courseId) : null;
+                        if (entryCourseId) return entryCourseId === courseId;
+                        return isPrimary;
+                    });
+
+                    rows.push({
+                        courseId,
+                        courseName: course.courseName || "Course",
+                        moduleIndex: modIdx,
+                        sectionIndex: secIdx,
+                        uniqueId: `${courseId}-m${modIdx}-s${secIdx}`,
+                        title: sec.sectionName || sec.title,
+                        moduleTitle: mod.title || mod.moduleName || `Module ${modIdx + 1}`,
+                        completed: !!progress?.isCompleted,
+                        date: progress?.completionTime
+                            ? new Date(progress.completionTime).toLocaleDateString()
+                            : null,
+                    });
+                });
             });
         });
-    });
+        return rows;
+    }, [curricula, assignedModules, batch.sectionProgress, primaryCourseId]);
 
-    // Calculate progress
     const totalSections = allSections.length;
-    const completedSections = allSections.filter(s => s.completed).length;
-    const progressPercentage = totalSections > 0 ? Math.round((completedSections / totalSections) * 100) : 0;
+    const completedSections = allSections.filter((s) => s.completed).length;
+    const progressPercentage = totalSections > 0
+        ? Math.round((completedSections / totalSections) * 100)
+        : 0;
 
     const formatDate = (dateStr) => {
         if (!dateStr) return 'N/A';
         return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
     };
+
+    const moduleCount = curricula.reduce((acc, c) => acc + (c.modules?.length || 0), 0);
 
     return (
         <div className="batch-details-container">
@@ -118,10 +159,10 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                     <h1 className="header-title">{batch.batchName}</h1>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                         {batch.meetLink && (
-                            <a 
-                                href={batch.meetLink} 
-                                target="_blank" 
-                                rel="noopener noreferrer" 
+                            <a
+                                href={batch.meetLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 className="join-class-btn"
                             >
                                 <span className="btn-icon-wrapper">
@@ -135,7 +176,6 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                 </div>
             </header>
 
-            {/* Tab Navigation */}
             <div className="batch-tabs">
                 <button
                     className={`batch-tab ${activeTab === 'students' ? 'active' : ''}`}
@@ -177,8 +217,8 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                     <div className="stat-info">
                         <span className="stat-label">Schedule</span>
                         <div className="stat-value">
-                            {batch.daysOfWeek && batch.daysOfWeek.length > 0 
-                                ? batch.daysOfWeek.map(d => d.substring(0, 3)).join(', ') 
+                            {batch.daysOfWeek && batch.daysOfWeek.length > 0
+                                ? batch.daysOfWeek.map(d => d.substring(0, 3)).join(', ')
                                 : 'No schedule set'}
                         </div>
                     </div>
@@ -194,7 +234,6 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                 </div>
             </div>
 
-            {/* Tab Content */}
             {activeTab === 'students' && (
                 <section className="students-section">
                     <div className="section-header">
@@ -245,7 +284,24 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                     <div className="curriculum-col">
                         <div className="column-header">
                             <h2 className="section-title">Curriculum</h2>
-                            <span className="badge-outline">{modules.length} Modules Total</span>
+                            <span className="badge-outline">{moduleCount} Modules · {curricula.length} Courses</span>
+                        </div>
+                        <div className="curriculum-course-list">
+                            {curricula.map((course) => (
+                                <div key={String(course.courseId)} className="curriculum-course-card">
+                                    <h3 className="curriculum-course-name">{course.courseName}</h3>
+                                    <ul>
+                                        {(course.modules || []).map((mod, idx) => (
+                                            <li key={`${course.courseId}-mod-${idx}`}>
+                                                {mod.title || mod.moduleName || `Module ${idx + 1}`}
+                                                <span className="mod-sec-count">
+                                                    {(mod.sections || []).length} sections
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
@@ -256,13 +312,16 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                                     <div className="check-icon-bg">
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                     </div>
-                                    <h2 className="section-title">Sections</h2>
+                                    <h2 className="section-title">Lock / Unlock Sections</h2>
                                 </div>
                                 <div className="header-right">
                                     <span className="percent-text">{progressPercentage}%</span>
-                                    <span className="completed-label">Completed</span>
+                                    <span className="completed-label">Unlocked</span>
                                 </div>
                             </div>
+                            <p className="sections-help-text">
+                                Tap the circle to unlock a section for students. Tap again to lock it.
+                            </p>
                             <div className="progress-bar-container">
                                 <div className="progress-bar" style={{ width: `${progressPercentage}%` }}></div>
                             </div>
@@ -270,50 +329,63 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
                             <div className="section-items-list">
                                 {allSections.length > 0 ? (
                                     allSections.map((item) => {
-                                        const isThisSectionToggling = isToggling && togglingVariables?.moduleIndex === item.moduleIndex && togglingVariables?.sectionIndex === item.sectionIndex;
+                                        const isThisSectionToggling =
+                                            isToggling &&
+                                            String(togglingVariables?.courseId || "") === String(item.courseId || "") &&
+                                            togglingVariables?.moduleIndex === item.moduleIndex &&
+                                            togglingVariables?.sectionIndex === item.sectionIndex;
                                         return (
-                                        <div key={item.uniqueId} className={`section-item ${item.completed ? 'completed' : ''} ${isThisSectionToggling ? 'section-item-toggling' : ''}`}>
                                             <div
-                                                className="item-radio"
-                                                onClick={(e) => {
-                                                    if (isThisSectionToggling) return;
-                                                    e.stopPropagation();
-                                                    toggleSection({
-                                                        batchId,
-                                                        moduleIndex: item.moduleIndex,
-                                                        sectionIndex: item.sectionIndex
-                                                    }, {
-                                                        onError: (error) => {
-                                                            alert(`Failed to toggle: ${error?.response?.data?.message || error?.message || 'Unknown error'}`);
-                                                        }
-                                                    });
-                                                }}
-                                                style={{ cursor: isThisSectionToggling ? 'wait' : 'pointer' }}
+                                                key={item.uniqueId}
+                                                className={`section-item ${item.completed ? 'completed' : ''} ${isThisSectionToggling ? 'section-item-toggling' : ''}`}
                                             >
-                                                {isThisSectionToggling ? (
-                                                    <div className="item-radio-loader" aria-hidden="true"></div>
-                                                ) : item.completed ? (
-                                                    <div className="radio-check active">
-                                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                                    </div>
-                                                ) : (
-                                                    <div className="radio-check"></div>
-                                                )}
-                                            </div>
-                                            <div className="item-content">
-                                                <span style={{ fontSize: '10px', color: '#999', textTransform: 'uppercase' }}>{item.moduleTitle}</span>
-                                                <h3 className="item-title">{item.title}</h3>
-                                                {item.completed && (
+                                                <div
+                                                    className="item-radio"
+                                                    onClick={(e) => {
+                                                        if (isThisSectionToggling) return;
+                                                        e.stopPropagation();
+                                                        toggleSection({
+                                                            batchId,
+                                                            courseId: item.courseId,
+                                                            moduleIndex: item.moduleIndex,
+                                                            sectionIndex: item.sectionIndex,
+                                                        }, {
+                                                            onError: (err) => {
+                                                                alert(`Failed to toggle: ${err?.response?.data?.message || err?.message || 'Unknown error'}`);
+                                                            }
+                                                        });
+                                                    }}
+                                                    style={{ cursor: isThisSectionToggling ? 'wait' : 'pointer' }}
+                                                    title={item.completed ? "Click to lock section" : "Click to unlock section"}
+                                                >
+                                                    {isThisSectionToggling ? (
+                                                        <div className="item-radio-loader" aria-hidden="true"></div>
+                                                    ) : item.completed ? (
+                                                        <div className="radio-check active">
+                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="radio-check"></div>
+                                                    )}
+                                                </div>
+                                                <div className="item-content">
+                                                    <span style={{ fontSize: '10px', color: '#999', textTransform: 'uppercase' }}>
+                                                        {item.courseName} · {item.moduleTitle}
+                                                    </span>
+                                                    <h3 className="item-title">{item.title}</h3>
                                                     <div className="completed-info">
-                                                        <p className="completed-date">Completed on {item.date}</p>
+                                                        <p className="completed-date">
+                                                            {item.completed
+                                                                ? `Unlocked${item.date ? ` on ${item.date}` : ""}`
+                                                                : "Locked for students"}
+                                                        </p>
                                                     </div>
-                                                )}
+                                                </div>
                                             </div>
-                                        </div>
                                         );
                                     })
                                 ) : (
-                                    <p className="empty-message">No sections found in your assigned modules.</p>
+                                    <p className="empty-message">No sections found. Assign modules or add courses to this batch.</p>
                                 )}
                             </div>
                         </div>
@@ -323,7 +395,7 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
 
             {activeTab === 'attendance' && (
                 <div className="attendance-tab-content">
-                    <TrainerAttendancePanel batch={batchDetails} />
+                    <TrainerAttendancePanel batch={batch} />
                     <AttendanceHistory batchId={batchId} />
                 </div>
             )}
@@ -332,4 +404,3 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
 };
 
 export default BatchDetails;
-
