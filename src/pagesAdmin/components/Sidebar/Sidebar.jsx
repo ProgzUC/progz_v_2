@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { triggerManualSync } from "../../../api/userApi";
+import { runManualSyncAndWait } from "../../../api/userApi";
 import { logout } from "../../../api/authApi";
 import Swal from "sweetalert2";
 import "./Sidebar.css";
@@ -44,7 +44,19 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
     if (syncLoading) return;
     setSyncLoading(true);
     try {
-      await triggerManualSync();
+      const result = await runManualSyncAndWait();
+      if (result?.status === "failure") {
+        const detail =
+          Array.isArray(result.errorsList) && result.errorsList.length
+            ? result.errorsList[0]
+            : "Sync finished with errors.";
+        Swal.fire({
+          title: "Sync Failed",
+          text: detail,
+          icon: "error",
+        });
+        return;
+      }
       Swal.fire({
         title: "Sync Completed",
         text: "Data synced successfully from Zen.",

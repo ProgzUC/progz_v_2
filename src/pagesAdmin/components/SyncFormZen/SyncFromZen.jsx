@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { triggerManualSync, fetchSyncStatus, fetchSyncLogs } from "../../../api/userApi";
+import { runManualSyncAndWait, fetchSyncStatus, fetchSyncLogs } from "../../../api/userApi";
 import Swal from "sweetalert2";
 import "./SyncFromZen.css";
 
@@ -37,8 +37,8 @@ const SyncFromZen = () => {
     setLoading(true);
 
     Swal.fire({
-      title: "Triggering Sync",
-      text: "Connecting to Zen CRM API and downloading records...",
+      title: "Sync in progress",
+      text: "Sync started in the background. Waiting for Zen CRM to finish...",
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
@@ -46,11 +46,14 @@ const SyncFromZen = () => {
     });
 
     try {
-      const result = await triggerManualSync();
+      const result = await runManualSyncAndWait();
+      const ok = result?.status === "success";
       Swal.fire({
-        title: "Sync Completed",
-        text: `Successfully completed. Status: ${result.status}`,
-        icon: result.status === "success" ? "success" : "warning",
+        title: ok ? "Sync Completed" : "Sync Failed",
+        text: ok
+          ? `Instructors: ${result.instructorsSynced || 0}, Students: ${result.studentsSynced || 0}`
+          : (result?.errorsList?.[0] || "Sync finished with errors."),
+        icon: ok ? "success" : "error",
         confirmButtonText: "Okay"
       });
       loadSyncDashboard();
@@ -103,7 +106,11 @@ const SyncFromZen = () => {
                 <div className="metric-info">
                   <span className="label">Latest Sync Status</span>
                   <strong className={`value ${syncStatus.status}`}>
-                    {syncStatus.status === "success" ? "Success" : "Failed"}
+                    {syncStatus.status === "success"
+                      ? "Success"
+                      : syncStatus.status === "in_progress"
+                        ? "In progress"
+                        : "Failed"}
                   </strong>
                   <span className="subtext">{formatTime(syncStatus.endTime || syncStatus.startTime)}</span>
                 </div>

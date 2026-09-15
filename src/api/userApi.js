@@ -24,6 +24,47 @@ export const fetchSyncLogs = (params) =>
 export const fetchSyncStatus = () =>
     axiosInstance.get("/sync/status").then((res) => res.data);
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** Poll until the target (or latest) sync leaves in_progress (or timeout). */
+export const waitForSyncCompletion = async ({
+    logId,
+    intervalMs = 2000,
+    timeoutMs = 5 * 60 * 1000,
+} = {}) => {
+    const started = Date.now();
+    while (Date.now() - started < timeoutMs) {
+        const status = await fetchSyncStatus();
+        const matchesLog =
+            !logId ||
+            (status?._id && String(status._id) === String(logId));
+
+        if (matchesLog && status?.status && status.status !== "in_progress") {
+            return status;
+        }
+        await sleep(intervalMs);
+    }
+    throw new Error(
+        "Sync is still running. Check the Sync page or Monitoring shortly."
+    );
+};
+
+/** Start sync (background) and wait for completion via status polling. */
+export const runManualSyncAndWait = async () => {
+    try {
+        const start = await triggerManualSync();
+        // Legacy servers that still finish sync before responding
+        if (start?.status === "success" || start?.status === "failure") {
+            return start.log || start;
+        }
+        return waitForSyncCompletion({ logId: start?.logId });
+    } catch (err) {
+        // 409 = already in progress — poll that run
+        if (err.status !== 409) throw err;
+        return waitForSyncCompletion();
+    }
+};
+
 export const registerUser = (payload) =>
     axiosInstance.post("/auth/user/register", payload).then((res) => res.data);
 
