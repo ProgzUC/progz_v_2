@@ -6,35 +6,46 @@
 }
 
 .my-batchs-hero {
-    min-height: 320px;
+    min-height: 220px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     background: linear-gradient(180deg, var(--color-primary-light) 0%, var(--trainer-page-bg) 100%);
-    padding: var(--page-top-offset) var(--trainer-spacing-lg) var(--trainer-spacing-lg);
+    padding: var(--page-top-offset) var(--trainer-spacing-lg) var(--trainer-spacing-md);
+}
+
+.my-batchs-kicker {
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--trainer-primary);
 }
 
 .my-batchs-title {
-    font-size: 48px;
-    font-weight: 600;
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 700;
     color: var(--trainer-text);
-    margin-bottom: var(--trainer-spacing-sm);
-    line-height: 1.1;
+    margin: 0 0 10px;
+    line-height: 1.15;
 }
 
 .my-batchs-subtitle {
+    margin: 0;
+    max-width: 520px;
     font-size: 16px;
     color: var(--trainer-text-muted);
     font-weight: 500;
+    line-height: 1.5;
 }
 
 .batches-content {
     max-width: 1280px;
-    margin-top: -100px !important;
-    margin: 0px auto;
-    padding: var(--trainer-spacing-lg);
+    margin: 0 auto;
+    padding: var(--trainer-spacing-md) var(--trainer-spacing-lg) var(--trainer-spacing-xl);
 }
 
 .main-section-title {
@@ -57,21 +68,10 @@
     margin-bottom: var(--trainer-spacing-lg);
 }
 
-@media (max-width: 1024px) {
-    .my-batchs-title {
-        font-size: 36px;
-    }
-}
-
 @media (max-width: 768px) {
     .my-batchs-hero {
-        min-height: 240px;
-        padding-top: 80px;
-    }
-
-    .my-batchs-title {
-        font-size: 32px;
-        margin-top: 40px;
+        min-height: 180px;
+        padding-top: 88px;
     }
 
     .main-section-title {
@@ -85,10 +85,6 @@
 }
 
 @media (max-width: 480px) {
-    .my-batchs-title {
-        font-size: 28px;
-    }
-
     .batches-content {
         padding: var(--trainer-spacing-md);
     }

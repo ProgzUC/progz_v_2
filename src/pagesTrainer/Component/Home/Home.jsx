@@ -6,8 +6,8 @@ const Home = ({ trainer, stats, onNavigateToCreateCourse, onNavigateToMyCourses 
             <div className='hero-overlay'></div>
             <div className="container">
                 <div className="hero-box">
-                    <h1>Welcome back,<br />{trainer?.name} 👋</h1>
-                    <p>Continue your learning journey and master new skills with our expert-led courses.</p>
+                    <h1>Welcome back,<br />{trainer?.name}</h1>
+                    <p>Manage your batches, unlock lessons for students, and keep classes running smoothly.</p>
 
                     <div className="hero-btns">
                         <button type="button" className="btn-primary" onClick={onNavigateToCreateCourse}>

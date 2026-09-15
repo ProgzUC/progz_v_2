@@ -33,6 +33,7 @@
     background: var(--trainer-primary);
     color: var(--color-text-on-primary);
     border: none;
+    min-height: 44px;
     padding: 12px 24px;
     border-radius: var(--radius-full);
     font-weight: var(--font-weight-semibold);
@@ -55,6 +56,7 @@
     background: var(--color-surface);
     color: var(--trainer-primary);
     border: 1.5px solid var(--trainer-primary);
+    min-height: 44px;
     padding: 12px 24px;
     border-radius: var(--radius-full);
     font-weight: var(--font-weight-semibold);

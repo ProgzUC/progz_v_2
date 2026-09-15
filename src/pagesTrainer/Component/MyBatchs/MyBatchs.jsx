@@ -6,8 +6,9 @@ const MyBatchs = ({ onViewDetails }) => {
     return (
         <div className="my-batchs-container">
             <div className="my-batchs-hero">
-                <h3 className="my-batchs-title">View all your assigned batches in one place.</h3>
-                <p className="my-batchs-subtitle">Everything You Need to Run Your Classes Smoothly</p>
+                <p className="my-batchs-kicker">Trainer workspace</p>
+                <h1 className="my-batchs-title">My Batches</h1>
+                <p className="my-batchs-subtitle">Open a batch to manage students, unlock sections, or take attendance.</p>
             </div>
 
             <div className="batches-content">

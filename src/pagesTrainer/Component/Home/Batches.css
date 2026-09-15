@@ -162,19 +162,26 @@
 }
 
 .trainer-home-batches .batches-arrow-btn {
-    background: none;
+    background: var(--trainer-primary-light);
     border: none;
     color: var(--trainer-primary);
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
-    padding: 0.25rem;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     line-height: 1;
     transition: var(--trainer-transition);
 }
 
 .trainer-home-batches .batches-arrow-btn:hover {
-    color: var(--trainer-primary-hover);
+    color: var(--color-text-on-primary);
+    background: var(--trainer-primary);
     transform: translateX(2px);
 }
 
@@ -283,9 +290,10 @@
 }
 
 .trainer-home-batches .batches-join-btn {
-    padding: 8px 16px;
-    border-radius: var(--trainer-radius-sm);
-    font-size: 12px;
+    min-height: 40px;
+    padding: 10px 16px;
+    border-radius: var(--trainer-radius-md);
+    font-size: 13px;
     font-weight: 600;
     border: none;
     cursor: pointer;

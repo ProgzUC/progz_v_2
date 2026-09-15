@@ -156,25 +156,8 @@
   margin-top: auto;
   padding-top: var(--trainer-spacing-lg);
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-}
-
-.trainer-active-batches-page .batch-card__link {
-  border: none;
-  background: none;
-  padding: 0;
-  cursor: pointer;
-  color: var(--trainer-primary);
-  font-weight: 700;
-  font-size: 13px;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  transition: var(--trainer-transition);
-}
-
-.trainer-active-batches-page .batch-card__link:hover {
-  color: var(--trainer-primary-hover);
 }
 
 .trainer-active-batches-page .batch-card__btn {
@@ -183,10 +166,12 @@
   background: var(--trainer-primary);
   color: var(--color-surface);
   font-weight: 700;
-  font-size: 12px;
-  padding: 8px 20px;
-  border-radius: var(--trainer-radius-sm);
+  font-size: 14px;
+  min-height: 44px;
+  padding: 12px 22px;
+  border-radius: var(--trainer-radius-md);
   transition: var(--trainer-transition);
+  width: 100%;
 }
 
 .trainer-active-batches-page .batch-card__btn:hover {

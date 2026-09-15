@@ -14,9 +14,6 @@
     box-sizing: border-box;
 }
 
-    .trainer-home .hero-box p{
-        color: #000 !important;
-    }
 .trainer-home .container {
     position: relative;
     z-index: 2;

@@ -225,7 +225,8 @@
     background: var(--trainer-primary-light);
     color: var(--trainer-primary);
     border: 1px solid var(--trainer-primary);
-    padding: 10px 24px;
+    min-height: 44px;
+    padding: 12px 24px;
     font-size: 14px;
     font-weight: 600;
     border-radius: var(--trainer-radius-md);
@@ -309,13 +310,15 @@
     background: var(--color-surface);
     border: 1px solid var(--trainer-border);
     color: var(--trainer-text-muted);
-    padding: 6px 14px;
+    min-height: 40px;
+    padding: 10px 16px;
     border-radius: 999px;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
     transition: var(--trainer-transition);
 }

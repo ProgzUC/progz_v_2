@@ -74,30 +74,13 @@ const ActiveBatches = ({ onViewDetails = () => { } }) => {
         </div>
 
         <div className="batch-card__actions">
-          {isActive ? (
-            <>
-              <button
-                className="batch-card__link"
-                onClick={() => onViewDetails(batch)}
-              >
-                View details
-              </button>
-              <button
-                className="batch-card__btn"
-                onClick={() => onViewDetails(batch)}
-              >
-                Join now <span className="batch-card__arrow">→</span>
-              </button>
-            </>
-          ) : (
-            <button
-              className="batch-card__btn"
-              style={{ marginLeft: 'auto' }}
-              onClick={() => onViewDetails(batch)}
-            >
-              View details
-            </button>
-          )}
+          <button
+            type="button"
+            className="batch-card__btn"
+            onClick={() => onViewDetails(batch)}
+          >
+            {isActive ? "Open batch" : "View details"}
+          </button>
         </div>
       </article>
     );
@@ -108,9 +91,24 @@ const ActiveBatches = ({ onViewDetails = () => { } }) => {
       <h2 className="batches-title">Active Batches</h2>
 
       <div className="batches-grid">
-        {activeBatches.map((b, idx) => (
-          <BatchCard key={b._id || b.id || idx} batch={b} />
-        ))}
+        {activeBatches.length > 0 ? (
+          activeBatches.map((b, idx) => (
+            <BatchCard key={b._id || b.id || idx} batch={b} />
+          ))
+        ) : (
+          <div className="batches-empty-state" aria-live="polite">
+            <div className="batches-empty-state-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+            </div>
+            <h3 className="batches-empty-state-title">No active batches</h3>
+            <p className="batches-empty-state-text">When a batch is assigned to you, it will show up here.</p>
+          </div>
+        )}
       </div>
 
       <h2 className="batches-title batches-title--spaced">Completed Batches</h2>
