@@ -78,6 +78,183 @@
     box-shadow: var(--trainer-shadow-lg);
 }
 
+.todays-class-card .start-class-btn {
+    width: 100%;
+    margin: var(--trainer-spacing-md) 0;
+}
+
+/* Pre-class dashboard */
+.attendance-dashboard-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--trainer-spacing-lg);
+    align-items: stretch;
+    width: 100%;
+}
+
+.todays-class-card,
+.quick-actions-card {
+    background: var(--trainer-card-bg);
+    border-radius: var(--trainer-radius-lg);
+    padding: var(--trainer-spacing-lg);
+    border: 1px solid var(--trainer-border);
+    box-shadow: var(--trainer-shadow-sm);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.todays-class-card__header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 4px;
+}
+
+.todays-class-card__icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--trainer-primary-light);
+    color: var(--trainer-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.todays-class-card__title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--trainer-text);
+}
+
+.todays-class-card__meta {
+    margin: 4px 0 0;
+    font-size: 13px;
+    color: var(--trainer-text-muted);
+}
+
+.todays-class-card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--trainer-spacing-md);
+    padding-top: var(--trainer-spacing-md);
+    margin-top: auto;
+    border-top: 1px solid var(--trainer-divider);
+}
+
+.todays-class-meta-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+    min-width: 160px;
+}
+
+.todays-class-meta-item > i {
+    color: var(--trainer-primary);
+    font-size: 16px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.todays-class-meta-item > div {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.todays-class-meta-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--trainer-text-muted);
+}
+
+.todays-class-meta-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--trainer-text);
+    word-break: break-word;
+}
+
+.quick-actions-card__title {
+    margin: 0 0 var(--trainer-spacing-md);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--trainer-text);
+}
+
+.quick-action-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    margin: 0 0 10px;
+    background: var(--trainer-page-bg, #f8fafc);
+    border: 1px solid var(--trainer-border);
+    border-radius: var(--trainer-radius-md);
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    transition: var(--trainer-transition);
+}
+
+.quick-action-row:last-child {
+    margin-bottom: 0;
+}
+
+.quick-action-row:hover {
+    border-color: var(--trainer-primary);
+    background: var(--trainer-primary-light);
+}
+
+.quick-action-row__icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: var(--trainer-card-bg);
+    border: 1px solid var(--trainer-border);
+    color: var(--trainer-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.quick-action-row__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.quick-action-row__text strong {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--trainer-text);
+}
+
+.quick-action-row__text span {
+    font-size: 12px;
+    color: var(--trainer-text-muted);
+}
+
+.quick-action-row__chevron {
+    color: var(--trainer-text-muted);
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
 /* Session Header */
 .session-header {
     background: linear-gradient(135deg, var(--trainer-primary) 0%, var(--color-success) 100%);
@@ -414,6 +591,12 @@
 }
 
 /* Responsive Design */
+@media (max-width: 900px) {
+    .attendance-dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 768px) {
     .attendance-summary-cards {
         grid-template-columns: 1fr;
@@ -423,6 +606,10 @@
         flex-direction: column;
         gap: 16px;
         text-align: center;
+    }
+
+    .todays-class-card__footer {
+        flex-direction: column;
     }
 
     .student-attendance-row {

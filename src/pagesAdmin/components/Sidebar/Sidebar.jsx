@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { runManualSyncAndWait } from "../../../api/userApi";
 import { logout } from "../../../api/authApi";
@@ -19,7 +19,6 @@ const NAV_ITEMS = [
 ];
 
 const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
-  const [collapsed, setCollapsed] = useState(false);
   const [syncLoading, setSyncLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -76,46 +75,20 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
     }
   };
 
-  useEffect(() => {
-    const layout = document.querySelector(".layout");
-    if (!layout) return;
-
-    if (collapsed) {
-      layout.classList.add("sidebar-collapsed");
-    } else {
-      layout.classList.remove("sidebar-collapsed");
-    }
-  }, [collapsed]);
-
   const handleNavClick = () => {
     if (mobileOpen) onMobileClose?.();
   };
 
   return (
-    <aside
-      className={`admin-sidebar ${collapsed ? "collapsed" : ""} ${mobileOpen ? "mobile-open" : ""}`}
-      data-collapsed={collapsed}
-    >
-      <button
-        className="collapse-btn"
-        type="button"
-        onClick={() => setCollapsed(!collapsed)}
-        aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        aria-expanded={!collapsed}
-      >
-        <i className={`bi ${collapsed ? "bi-chevron-right" : "bi-chevron-left"}`} aria-hidden="true" />
-      </button>
-
+    <aside className={`admin-sidebar ${mobileOpen ? "mobile-open" : ""}`}>
       <div className="sidebar-header">
         <div className="sidebar-logo-text">
           <img src="/admin/logo.png" alt="ProgZ admin logo" />
         </div>
-        {!collapsed && (
-          <div className="sidebar-brand">
-            <h3 className="sidebar-title">Portal</h3>
-            <p className="sidebar-subtitle">Super Admin</p>
-          </div>
-        )}
+        <div className="sidebar-brand">
+          <h3 className="sidebar-title">Portal</h3>
+          <p className="sidebar-subtitle">Super Admin</p>
+        </div>
       </div>
 
       <nav
@@ -130,12 +103,11 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
             end={item.to === "/admin/overview"}
             className={({ isActive }) => (isActive ? "menu-item active" : "menu-item")}
             onClick={handleNavClick}
-            title={collapsed ? item.label : undefined}
           >
             {({ isActive }) => (
               <>
                 <i className={`bi ${item.icon}`} aria-hidden="true" />
-                {!collapsed ? <span>{item.label}</span> : <span className="sr-only">{item.label}</span>}
+                <span>{item.label}</span>
                 {isActive ? <span className="sr-only"> (current page)</span> : null}
               </>
             )}
@@ -157,16 +129,12 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
             className={`bi ${syncLoading ? "bi-arrow-repeat spin-icon" : "bi-arrow-repeat"}`}
             aria-hidden="true"
           />
-          {!collapsed ? (
-            <span>{syncLoading ? "Syncing..." : "Sync from Zen"}</span>
-          ) : (
-            <span className="sr-only">{syncLoading ? "Syncing from Zen" : "Sync from Zen"}</span>
-          )}
+          <span>{syncLoading ? "Syncing..." : "Sync from Zen"}</span>
         </button>
 
         <button type="button" className="menu-item logout-item" onClick={handleLogout}>
           <i className="bi bi-box-arrow-right" aria-hidden="true" />
-          {!collapsed ? <span>Logout</span> : <span className="sr-only">Logout</span>}
+          <span>Logout</span>
         </button>
       </nav>
     </aside>

@@ -35,33 +35,55 @@ export default function AttendanceHistory({ batchId }) {
         return new Date(timeStr).toLocaleTimeString("en-IN", {
             hour: "2-digit",
             minute: "2-digit",
-            hour12: true
+            hour12: true,
         });
+    };
+
+    const formatDisplayDate = (dateValue) => {
+        if (!dateValue) return "—";
+        return new Date(dateValue).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+        });
+    };
+
+    const rangeLabel = () => {
+        if (dateFilter.startDate && dateFilter.endDate) {
+            return `${formatDisplayDate(dateFilter.startDate)} → ${formatDisplayDate(dateFilter.endDate)}`;
+        }
+        if (dateFilter.startDate) return `From ${formatDisplayDate(dateFilter.startDate)}`;
+        if (dateFilter.endDate) return `Until ${formatDisplayDate(dateFilter.endDate)}`;
+        return "All dates";
     };
 
     return (
         <div className="attendance-history-container">
             <div className="history-header">
                 <h2>
-                    <i className="bi bi-clock-history me-2"></i>
+                    <i className="bi bi-calendar2-check"></i>
                     Attendance History
                 </h2>
 
                 <div className="date-filters">
+                    <div className="date-range-chip" title={rangeLabel()}>
+                        <i className="bi bi-calendar3"></i>
+                        <span>{rangeLabel()}</span>
+                    </div>
                     <input
                         type="date"
                         value={dateFilter.startDate}
                         onChange={(e) => handleFilterChange("startDate", e.target.value)}
-                        placeholder="Start Date"
+                        aria-label="Start date"
                     />
                     <input
                         type="date"
                         value={dateFilter.endDate}
                         onChange={(e) => handleFilterChange("endDate", e.target.value)}
-                        placeholder="End Date"
+                        aria-label="End date"
                     />
                     {(dateFilter.startDate || dateFilter.endDate) && (
-                        <button className="clear-filters-btn" onClick={clearFilters}>
+                        <button type="button" className="clear-filters-btn" onClick={clearFilters}>
                             <i className="bi bi-x-circle"></i>
                             Clear
                         </button>
@@ -81,7 +103,7 @@ export default function AttendanceHistory({ batchId }) {
                         <table className="attendance-history-table">
                             <thead>
                                 <tr>
-                                    <th>Date Session</th>
+                                    <th>Date & Session</th>
                                     <th>Timing</th>
                                     <th>Trainer</th>
                                     <th>Duration</th>
@@ -90,31 +112,34 @@ export default function AttendanceHistory({ batchId }) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {sessions.map((session) => {
+                                {sessions.map((session, index) => {
                                     const isActive = !session.endTime;
                                     const sessionDate = new Date(session.date);
-                                    
+                                    const sessionNumber = sessions.length - index;
+                                    const present = session.attendanceSummary?.present ?? 0;
+                                    const absent = session.attendanceSummary?.absent ?? 0;
+                                    const late = session.attendanceSummary?.late ?? 0;
+
                                     return (
                                         <tr key={session._id}>
                                             <td className="date-col">
-                                                {sessionDate.toLocaleDateString("en-IN", {
-                                                    day: "2-digit",
+                                                {sessionDate.toLocaleDateString("en-US", {
                                                     month: "short",
+                                                    day: "numeric",
                                                     year: "numeric",
                                                 })}
-                                                <span className="date-sub">
-                                                    {sessionDate.toLocaleDateString("en-IN", { weekday: "long" })}
-                                                </span>
+                                                <span className="date-sub">Session {sessionNumber}</span>
                                             </td>
                                             <td>
                                                 <div className="timing-info">
                                                     <span>{formatTime(session.startTime)}</span>
                                                     {session.endTime && (
                                                         <>
-                                                            <span className="timing-dash text-muted">—</span>
+                                                            <span className="timing-dash">-</span>
                                                             <span>{formatTime(session.endTime)}</span>
                                                         </>
                                                     )}
+                                                    {!session.endTime && <span className="timing-dash">…</span>}
                                                 </div>
                                             </td>
                                             <td>
@@ -128,7 +153,7 @@ export default function AttendanceHistory({ batchId }) {
                                             <td>
                                                 <div className="duration-info">
                                                     {isActive ? (
-                                                        <span className="text-primary fw-600">In Progress</span>
+                                                        <span className="duration-live">In Progress</span>
                                                     ) : (
                                                         <span>{session.duration || "N/A"}</span>
                                                     )}
@@ -136,29 +161,30 @@ export default function AttendanceHistory({ batchId }) {
                                             </td>
                                             <td>
                                                 <div className="attendance-summary-cell">
-                                                    <div className="summary-pill p" title="Present">
-                                                        <span className="summary-dot"></span>
-                                                        <span>{session.attendanceSummary.present} P</span>
-                                                    </div>
-                                                    <div className="summary-pill l" title="Late">
-                                                        <span className="summary-dot"></span>
-                                                        <span>{session.attendanceSummary.late} L</span>
-                                                    </div>
-                                                    <div className="summary-pill a" title="Absent">
-                                                        <span className="summary-dot"></span>
-                                                        <span>{session.attendanceSummary.absent} A</span>
-                                                    </div>
+                                                    <span className="summary-badge present" title="Present">
+                                                        <i className="bi bi-check-lg"></i>
+                                                        {present} Present
+                                                    </span>
+                                                    {late > 0 && (
+                                                        <span className="summary-badge late" title="Late">
+                                                            <i className="bi bi-clock"></i>
+                                                            {late} Late
+                                                        </span>
+                                                    )}
+                                                    <span className="summary-badge absent" title="Absent">
+                                                        {absent} Absent
+                                                    </span>
                                                 </div>
                                             </td>
                                             <td>
                                                 {isActive ? (
                                                     <span className="status-badge live">
-                                                        <span className="status-indicator"></span>
-                                                        Live Class
+                                                        <i className="bi bi-broadcast"></i>
+                                                        Live
                                                     </span>
                                                 ) : (
                                                     <span className="status-badge completed">
-                                                        <span className="status-indicator"></span>
+                                                        <i className="bi bi-check-lg"></i>
                                                         Completed
                                                     </span>
                                                 )}

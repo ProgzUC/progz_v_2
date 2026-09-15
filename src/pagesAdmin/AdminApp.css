@@ -26,18 +26,8 @@
   flex: 1;
 }
 
-.layout.sidebar-collapsed .content {
-  margin-left: var(--sidebar-collapsed);
-  width: calc(100% - var(--sidebar-collapsed));
-}
-
 @media (max-width: 768px) {
   .content {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .layout.sidebar-collapsed .content {
     margin-left: 0;
     width: 100%;
   }

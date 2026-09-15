@@ -12,7 +12,22 @@ const mapSessionAttendance = (session) =>
         joinedAt: a.joinedAt || null,
     }));
 
-export default function TrainerAttendancePanel({ batch }) {
+const formatDaysLabel = (days) => {
+    if (!days?.length) return "No schedule set";
+    const short = days.map((d) => String(d).substring(0, 3));
+    if (days.length === 7) return `${short[0]} - ${short[6]}`;
+    return short.join(", ");
+};
+
+const formatTimingLabel = (batch) => {
+    if (batch?.timing) return batch.timing;
+    if (batch?.classTiming?.startTime || batch?.classTiming?.endTime) {
+        return `${batch.classTiming.startTime || ""} - ${batch.classTiming.endTime || ""}`.trim();
+    }
+    return "Not scheduled";
+};
+
+export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSchedule }) {
     const [sessionOverride, setSessionOverride] = useState(null);
     const [attendanceOverride, setAttendanceOverride] = useState(null);
     const [notesOverride, setNotesOverride] = useState(null);
@@ -25,7 +40,6 @@ export default function TrainerAttendancePanel({ batch }) {
     const markAttendanceMutation = useMarkAttendance();
     const endClassMutation = useEndClass();
 
-    // Fetch existing sessions to check for active session
     const { data: sessionsData } = useClassSessions(batchIdToUse);
 
     const serverActiveSession = useMemo(
@@ -37,21 +51,19 @@ export default function TrainerAttendancePanel({ batch }) {
     const attendance = attendanceOverride ?? mapSessionAttendance(activeSession);
     const notes = notesOverride ?? (activeSession?.notes || "");
 
-    // Live timer for active session
     useEffect(() => {
         if (!activeSession || activeSession.endTime) return;
 
         const interval = setInterval(() => {
             const start = new Date(activeSession.startTime);
             const now = new Date();
-            const diff = Math.floor((now - start) / 1000); // seconds
+            const diff = Math.floor((now - start) / 1000);
             setElapsedTime(diff);
         }, 1000);
 
         return () => clearInterval(interval);
     }, [activeSession]);
 
-    // Format elapsed time
     const formatTime = (seconds) => {
         const hrs = Math.floor(seconds / 3600);
         const mins = Math.floor((seconds % 3600) / 60);
@@ -59,24 +71,20 @@ export default function TrainerAttendancePanel({ batch }) {
         return `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
     };
 
-    // Handle start class
     const handleStartClass = async () => {
-        // Validate batch data - API returns batchId, not _id
-        const batchIdToUse = batch?._id || batch?.batchId;
+        const id = batch?._id || batch?.batchId;
 
-        if (!batch || !batchIdToUse) {
+        if (!batch || !id) {
             Swal.fire({
                 icon: "error",
                 title: "Error",
                 text: "Batch information is not available. Please refresh the page.",
             });
-            console.error("Batch data:", batch);
             return;
         }
 
         try {
-            console.log("Starting class for batch ID:", batchIdToUse);
-            const session = await startClassMutation.mutateAsync(batchIdToUse);
+            const session = await startClassMutation.mutateAsync(id);
             setSessionOverride(session);
             setAttendanceOverride(mapSessionAttendance(session));
             setNotesOverride(session.notes || "");
@@ -89,7 +97,6 @@ export default function TrainerAttendancePanel({ batch }) {
                 showConfirmButton: false,
             });
         } catch (error) {
-            console.error("Start class error:", error);
             Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -98,22 +105,18 @@ export default function TrainerAttendancePanel({ batch }) {
         }
     };
 
-    // Handle attendance toggle
     const handleAttendanceChange = async (studentId, newStatus) => {
-        // Update local state optimistically
         setAttendanceOverride((prev) => {
             const base = prev ?? mapSessionAttendance(activeSession);
             return base.map((a) => (a.studentId === studentId ? { ...a, status: newStatus } : a));
         });
 
-        // Send to backend
         try {
             await markAttendanceMutation.mutateAsync({
                 sessionId: activeSession._id,
                 attendance: [{ studentId, status: newStatus }],
             });
-        } catch (error) {
-            console.error("Failed to mark attendance:", error);
+        } catch {
             Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -122,7 +125,6 @@ export default function TrainerAttendancePanel({ batch }) {
         }
     };
 
-    // Mark all present
     const handleMarkAllPresent = async () => {
         const allPresent = attendance.map((a) => ({
             studentId: a.studentId,
@@ -155,14 +157,13 @@ export default function TrainerAttendancePanel({ batch }) {
         }
     };
 
-    // Handle end class
     const handleEndClass = async () => {
         const result = await Swal.fire({
             title: "End Class?",
             text: "Are you sure you want to end this class session?",
             icon: "question",
             showCancelButton: true,
-            confirmButtonColor: "#198754",
+            confirmButtonColor: "#064E3B",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, End Class",
         });
@@ -187,6 +188,7 @@ export default function TrainerAttendancePanel({ batch }) {
             <p><strong>Duration:</strong> ${endedSession.duration}</p>
             <p><strong>Present:</strong> ${presentCount} | <strong>Late:</strong> ${lateCount} | <strong>Absent:</strong> ${absentCount}</p>
           `,
+                    confirmButtonColor: "#064E3B",
                 });
             } catch (error) {
                 Swal.fire({
@@ -198,49 +200,94 @@ export default function TrainerAttendancePanel({ batch }) {
         }
     };
 
-    // Filter students by search
     const filteredAttendance = attendance.filter((a) =>
         a.studentName.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // Loading states
+    const studentCount = batch.students?.length || 0;
+    const timingLabel = formatTimingLabel(batch);
+    const daysLabel = formatDaysLabel(batch.daysOfWeek);
+
     if (startClassMutation.isPending) {
         return <Loader message="Starting class session..." />;
     }
 
-    // Pre-class state
     if (!activeSession) {
         return (
             <div className="attendance-panel-container">
-                <div className="pre-class-state">
-                    <div className="batch-info-card">
-                        <h2>{batch.name}</h2>
-                        <div className="batch-details">
-                            <p>
-                                <i className="bi bi-people-fill"></i>
-                                <strong>Students:</strong> {batch.students?.length || 0}
-                            </p>
-                            <p>
-                                <i className="bi bi-clock-fill"></i>
-                                <strong>Scheduled Time:</strong> {batch.classTiming?.startTime} - {batch.classTiming?.endTime}
-                            </p>
-                            <p>
-                                <i className="bi bi-calendar-fill"></i>
-                                <strong>Days:</strong> {batch.daysOfWeek?.join(", ") || "N/A"}
-                            </p>
+                <div className="attendance-dashboard-grid">
+                    <div className="todays-class-card">
+                        <div className="todays-class-card__header">
+                            <div className="todays-class-card__icon">
+                                <i className="bi bi-easel2"></i>
+                            </div>
+                            <div>
+                                <h3 className="todays-class-card__title">Today&apos;s Class</h3>
+                                <p className="todays-class-card__meta">
+                                    {studentCount} Student{studentCount === 1 ? "" : "s"} Enrolled
+                                </p>
+                            </div>
+                        </div>
+
+                        <button type="button" className="start-class-btn" onClick={handleStartClass}>
+                            <i className="bi bi-play-fill"></i>
+                            Start Class
+                        </button>
+
+                        <div className="todays-class-card__footer">
+                            <div className="todays-class-meta-item">
+                                <i className="bi bi-clock"></i>
+                                <div>
+                                    <span className="todays-class-meta-label">Time</span>
+                                    <span className="todays-class-meta-value">{timingLabel}</span>
+                                </div>
+                            </div>
+                            <div className="todays-class-meta-item">
+                                <i className="bi bi-calendar3"></i>
+                                <div>
+                                    <span className="todays-class-meta-label">Days</span>
+                                    <span className="todays-class-meta-value">{daysLabel}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <button className="start-class-btn" onClick={handleStartClass}>
-                        <i className="bi bi-play-circle-fill"></i>
-                        Start Class
-                    </button>
+                    <div className="quick-actions-card">
+                        <h3 className="quick-actions-card__title">Quick Actions</h3>
+                        <button
+                            type="button"
+                            className="quick-action-row"
+                            onClick={onViewStudents}
+                        >
+                            <span className="quick-action-row__icon">
+                                <i className="bi bi-people"></i>
+                            </span>
+                            <span className="quick-action-row__text">
+                                <strong>View Students</strong>
+                                <span>See enrolled students</span>
+                            </span>
+                            <i className="bi bi-chevron-right quick-action-row__chevron"></i>
+                        </button>
+                        <button
+                            type="button"
+                            className="quick-action-row"
+                            onClick={onViewSchedule}
+                        >
+                            <span className="quick-action-row__icon">
+                                <i className="bi bi-calendar2-week"></i>
+                            </span>
+                            <span className="quick-action-row__text">
+                                <strong>View Schedule</strong>
+                                <span>Check full timetable</span>
+                            </span>
+                            <i className="bi bi-chevron-right quick-action-row__chevron"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         );
     }
 
-    // Active or ended class state
     const isEnded = !!activeSession.endTime;
     const presentCount = attendance.filter((a) => a.status === "Present").length;
     const lateCount = attendance.filter((a) => a.status === "Late").length;
@@ -248,17 +295,16 @@ export default function TrainerAttendancePanel({ batch }) {
 
     return (
         <div className="attendance-panel-container">
-            {/* Session Header */}
             <div className="session-header">
                 <div className="session-info">
                     <h3>
                         {isEnded ? (
                             <>
-                                <i className="bi bi-check-circle-fill text-success"></i> Class Session Completed
+                                <i className="bi bi-check-circle-fill"></i> Class Session Completed
                             </>
                         ) : (
                             <>
-                                <i className="bi bi-broadcast text-danger"></i> Live Class Session
+                                <i className="bi bi-broadcast"></i> Live Class Session
                             </>
                         )}
                     </h3>
@@ -278,7 +324,6 @@ export default function TrainerAttendancePanel({ batch }) {
                 </div>
             </div>
 
-            {/* Attendance Summary */}
             <div className="attendance-summary-cards">
                 <div className="summary-card present">
                     <div className="card-icon">
@@ -311,7 +356,6 @@ export default function TrainerAttendancePanel({ batch }) {
                 </div>
             </div>
 
-            {/* Attendance Controls (only if class is active) */}
             {!isEnded && (
                 <div className="attendance-controls">
                     <div className="search-box">
@@ -324,14 +368,13 @@ export default function TrainerAttendancePanel({ batch }) {
                         />
                     </div>
 
-                    <button className="mark-all-present-btn" onClick={handleMarkAllPresent}>
+                    <button type="button" className="mark-all-present-btn" onClick={handleMarkAllPresent}>
                         <i className="bi bi-check-all"></i>
                         Mark All Present
                     </button>
                 </div>
             )}
 
-            {/* Student Attendance List */}
             <div className="student-attendance-list">
                 {filteredAttendance.map((student, index) => (
                     <div key={student.studentId} className="student-attendance-row">
@@ -352,6 +395,7 @@ export default function TrainerAttendancePanel({ batch }) {
 
                         <div className="attendance-toggles">
                             <button
+                                type="button"
                                 className={`attendance-btn present ${student.status === "Present" ? "active" : ""}`}
                                 onClick={() => !isEnded && handleAttendanceChange(student.studentId, "Present")}
                                 disabled={isEnded}
@@ -361,6 +405,7 @@ export default function TrainerAttendancePanel({ batch }) {
                             </button>
 
                             <button
+                                type="button"
                                 className={`attendance-btn late ${student.status === "Late" ? "active" : ""}`}
                                 onClick={() => !isEnded && handleAttendanceChange(student.studentId, "Late")}
                                 disabled={isEnded}
@@ -370,6 +415,7 @@ export default function TrainerAttendancePanel({ batch }) {
                             </button>
 
                             <button
+                                type="button"
                                 className={`attendance-btn absent ${student.status === "Absent" ? "active" : ""}`}
                                 onClick={() => !isEnded && handleAttendanceChange(student.studentId, "Absent")}
                                 disabled={isEnded}
@@ -382,7 +428,6 @@ export default function TrainerAttendancePanel({ batch }) {
                 ))}
             </div>
 
-            {/* Class Notes */}
             <div className="class-notes-section">
                 <label htmlFor="class-notes">
                     <i className="bi bi-journal-text"></i>
@@ -398,9 +443,9 @@ export default function TrainerAttendancePanel({ batch }) {
                 />
             </div>
 
-            {/* End Class Button */}
             {!isEnded && (
                 <button
+                    type="button"
                     className="end-class-btn"
                     onClick={handleEndClass}
                     disabled={endClassMutation.isPending}

@@ -459,7 +459,25 @@ const BatchDetailsContent = ({
 
             {activeTab === 'attendance' && (
                 <div className="attendance-tab-content">
-                    <TrainerAttendancePanel batch={batch} />
+                    <TrainerAttendancePanel
+                        batch={batch}
+                        onViewStudents={() => setActiveTab('students')}
+                        onViewSchedule={() => {
+                            const schedule = batch.daysOfWeek?.length
+                                ? batch.daysOfWeek.map((d) => d.substring(0, 3)).join(', ')
+                                : 'No schedule set';
+                            const timing = batch.timing
+                                || (batch.classTiming?.startTime || batch.classTiming?.endTime
+                                    ? `${batch.classTiming?.startTime || ''} - ${batch.classTiming?.endTime || ''}`.trim()
+                                    : 'Not scheduled');
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Class Schedule',
+                                html: `<p><strong>Days:</strong> ${schedule}</p><p><strong>Time:</strong> ${timing}</p>`,
+                                confirmButtonColor: '#064E3B',
+                            });
+                        }}
+                    />
                     <AttendanceHistory batchId={batchId} />
                 </div>
             )}
