@@ -300,23 +300,8 @@
 }
 
 /* ACTION ICONS */
-.admin-courses-page .actions-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 18px;
-}
-
-.admin-courses-page .actions-row i {
-  font-size: 18px;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.admin-courses-page .actions-row i:hover {
-  color: #0FA958;
-  transform: scale(1.1);
+.admin-courses-page .actions-cell {
+  text-align: center;
 }
 
 /* PAGINATION */
@@ -431,12 +416,10 @@
     font-size: 10px;
   }
 
-  .actions-row {
-    gap: 12px;
-  }
-
-  .actions-row i {
-    font-size: 16px;
+  .admin-courses-page .admin-action-btn {
+    width: 34px;
+    min-width: 34px;
+    height: 32px;
   }
 
   .pagination {

@@ -11,23 +11,38 @@
 
 .content {
   flex: 1;
-  margin-left: var(--sidebar-width);
-  transition: margin-left var(--transition-slow);
-  width: calc(100% - var(--sidebar-width));
+  margin-left: var(--sidebar-collapsed);
+  transition: margin-left var(--transition-slow), width var(--transition-slow);
+  width: calc(100% - var(--sidebar-collapsed));
   overflow-x: hidden;
   overflow-y: auto;
   min-height: 100vh;
   background: var(--admin-bg);
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 
 .admin-page-body {
   flex: 1;
 }
 
+.layout.sidebar-collapsed .content {
+  margin-left: var(--sidebar-collapsed);
+  width: calc(100% - var(--sidebar-collapsed));
+}
+
+/* Hover expand: push dashboard to the right so nothing is covered */
+.layout.sidebar-hover-expanded .content {
+  margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
+}
+
 @media (max-width: 768px) {
-  .content {
+  .content,
+  .layout.sidebar-collapsed .content,
+  .layout.sidebar-hover-expanded .content {
     margin-left: 0;
     width: 100%;
   }

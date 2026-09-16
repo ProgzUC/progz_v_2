@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { LuEye, LuCheck, LuX } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePendingUsers, useApproveUser, useRejectUser } from "../../../hooks/useAdminUsers";
@@ -248,11 +249,22 @@ const ApproveUser = () => {
             </div>
           )}
 
-          <div className="table-responsive">
-            <table className="user-table">
+          <p className="admin-table-scroll-hint">Swipe horizontally to view all columns.</p>
+          <div className="table-responsive admin-table-wrap" tabIndex={0} aria-label="Pending registrations table">
+            <table className="user-table admin-data-table">
+              <caption className="sr-only">Pending {activeTab} registrations</caption>
+              <colgroup>
+                <col className="col-select" />
+                <col className="col-sno" />
+                <col className="col-name" />
+                <col className="col-source" />
+                {activeTab === "student" && <col className="col-course" />}
+                <col className="col-date" />
+                <col className="col-actions" />
+              </colgroup>
               <thead>
                 <tr>
-                  <th className="select-col">
+                  <th className="select-col" scope="col">
                     <input
                       type="checkbox"
                       checked={allPageSelected}
@@ -264,18 +276,22 @@ const ApproveUser = () => {
                       aria-label="Select all on this page"
                     />
                   </th>
-                  <th className="s-no">S.No</th>
-                  <th>Name</th>
-                  <th>Source</th>
-                  {activeTab === "student" && <th>Zen Course</th>}
-                  <th>Requested Date</th>
-                  <th></th>
+                  <th className="s-no" scope="col">S.No</th>
+                  <th className="col-name" scope="col">Name</th>
+                  <th className="col-source" scope="col">Source</th>
+                  {activeTab === "student" && (
+                    <th className="col-course" scope="col">Zen Course</th>
+                  )}
+                  <th className="col-date" scope="col">Requested Date</th>
+                  <th className="col-actions" scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {paginatedData.length === 0 ? (
                   <tr>
-                    <td colSpan={activeTab === "student" ? "7" : "6"} style={{ textAlign: "center" }}>No pending {activeTab}s found</td>
+                    <td colSpan={activeTab === "student" ? "7" : "6"} className="empty-row">
+                      No pending {activeTab}s found
+                    </td>
                   </tr>
                 ) : (
                   paginatedData.map((user, index) => {
@@ -294,47 +310,45 @@ const ApproveUser = () => {
                         />
                       </td>
                       <td className="s-no">{(activePage - 1) * itemsPerPage + index + 1}</td>
-                      <td className="user-name">{user.name}</td>
-                      <td>{user.source || "-"}</td>
-                      {activeTab === "student" && <td>{user.zenCourseName || "-"}</td>}
-                      <td className="user-date">
+                      <td className="col-name user-name">{user.name}</td>
+                      <td className="col-source">{user.source || "-"}</td>
+                      {activeTab === "student" && (
+                        <td className="col-course">{user.zenCourseName || "-"}</td>
+                      )}
+                      <td className="col-date user-date">
                         {new Date(user.date || user.createdAt).toLocaleDateString("en-US", {
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric'
                         })}
                       </td>
-                      <td className="action-icons">
-                        <button
-                          className="icon-btn view-btn"
-                          onClick={() => handleView(user)}
-                          title="View details"
-                        >
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                            <polyline points="15 3 21 3 21 9"></polyline>
-                            <line x1="10" y1="14" x2="21" y2="3"></line>
-                          </svg>
-                        </button>
-                        <button
-                          className="icon-btn approve-btn"
-                          onClick={() => handleApprove(user)}
-                          title="Approve"
-                        >
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                          </svg>
-                        </button>
-                        <button
-                          className="icon-btn reject-btn"
-                          onClick={() => handleReject(user)}
-                          title="Reject"
-                        >
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                          </svg>
-                        </button>
+                      <td className="col-actions action-icons">
+                        <div className="admin-action-group">
+                          <button
+                            type="button"
+                            className="admin-action-btn"
+                            onClick={() => handleView(user)}
+                            aria-label={`View details for ${user.name || "user"}`}
+                          >
+                            <LuEye aria-hidden="true" />
+                          </button>
+                          <button
+                            type="button"
+                            className="admin-action-btn"
+                            onClick={() => handleApprove(user)}
+                            aria-label={`Approve ${user.name || "user"}`}
+                          >
+                            <LuCheck aria-hidden="true" />
+                          </button>
+                          <button
+                            type="button"
+                            className="admin-action-btn admin-action-btn--danger"
+                            onClick={() => handleReject(user)}
+                            aria-label={`Reject ${user.name || "user"}`}
+                          >
+                            <LuX aria-hidden="true" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                     );

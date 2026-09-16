@@ -383,17 +383,19 @@ const EnrollStudents = () => {
   if (usersLoading || pendingLoading || coursesLoading || batchesLoading) return <Loader />;
 
   return (
-    <div className="admin-enroll-students-page p-4">
-      <div className="enroll-dashboard-header d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+    <div className="admin-enroll-students-page">
+      <div className="enroll-dashboard-header">
         <div>
           <h2>Student Course Enrollment</h2>
-          <p className="text-secondary mb-0">
+          <p className="text-secondary">
             Enroll individuals, multi-select active/Zen CRM pending students, or import emails via CSV
           </p>
         </div>
-        <div className="enroll-tab-menu glass-card">
+        <div className="enroll-tab-menu" role="tablist" aria-label="Enrollment mode">
           <button
             type="button"
+            role="tab"
+            aria-selected={activeTab === "single"}
             onClick={() => setActiveTab("single")}
             className={activeTab === "single" ? "active" : ""}
           >
@@ -401,6 +403,8 @@ const EnrollStudents = () => {
           </button>
           <button
             type="button"
+            role="tab"
+            aria-selected={activeTab === "bulk"}
             onClick={() => setActiveTab("bulk")}
             className={activeTab === "bulk" ? "active" : ""}
           >
@@ -408,6 +412,8 @@ const EnrollStudents = () => {
           </button>
           <button
             type="button"
+            role="tab"
+            aria-selected={activeTab === "csv"}
             onClick={() => setActiveTab("csv")}
             className={activeTab === "csv" ? "active" : ""}
           >
@@ -427,13 +433,16 @@ const EnrollStudents = () => {
         </div>
       )}
 
-      <div className="enroll-container glass-card p-4">
+      <div className="enroll-container glass-card">
         {activeTab === "single" && (
           <div className="tab-pane-content">
-            <h3 className="pane-title mb-3">Individual Student Enrollment</h3>
-            <div className="section-block mb-3">
-              <label className="section-label">Select Student Profile</label>
+            <h3 className="pane-title">Individual Student Enrollment</h3>
+            <div className="section-block">
+              <label className="section-label" htmlFor="enroll-student-select">
+                Select Student Profile
+              </label>
               <select
+                id="enroll-student-select"
                 className="input-select"
                 value={selectedStudent}
                 onChange={(e) => setSelectedStudent(e.target.value)}
@@ -448,8 +457,8 @@ const EnrollStudents = () => {
             </div>
 
             {courseSections.map((section, idx) => (
-              <div key={section.id} className="section-block border-top border-secondary pt-3 mb-3">
-                <div className="title-row d-flex justify-content-between align-items-center mb-2">
+              <div key={section.id} className="section-block">
+                <div className="title-row">
                   <h4 className="section-title">Course Session – {idx + 1}</h4>
                   <div className="title-buttons">
                     {idx === 0 && (
@@ -464,40 +473,47 @@ const EnrollStudents = () => {
                         onClick={() => deleteCourse(section.id)}
                         title="Delete Course Section"
                       >
-                        🗑️
+                        Remove
                       </button>
                     )}
                   </div>
                 </div>
 
-                <div className="grid-select-group mb-2">
-                  <select
-                    className="input-select"
-                    value={section.courseId}
-                    onChange={(e) => updateSection(section.id, "courseId", e.target.value)}
-                  >
-                    <option value="">Select course</option>
-                    {coursesList.map((c) => (
-                      <option key={c._id} value={c._id}>
-                        {c.courseName}
-                      </option>
-                    ))}
-                  </select>
+                <div className="grid-select-group">
+                  <div className="field-group">
+                    <label className="section-label">Course</label>
+                    <select
+                      className="input-select"
+                      value={section.courseId}
+                      onChange={(e) => updateSection(section.id, "courseId", e.target.value)}
+                    >
+                      <option value="">Select course</option>
+                      {coursesList.map((c) => (
+                        <option key={c._id} value={c._id}>
+                          {c.courseName}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-                  <select
-                    className="input-select"
-                    value={section.instructorId}
-                    onChange={(e) => updateSection(section.id, "instructorId", e.target.value)}
-                  >
-                    <option value="">Select instructor</option>
-                    {instructorsList.map((ins) => (
-                      <option key={ins._id} value={ins._id}>
-                        {ins.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="field-group">
+                    <label className="section-label">Instructor</label>
+                    <select
+                      className="input-select"
+                      value={section.instructorId}
+                      onChange={(e) => updateSection(section.id, "instructorId", e.target.value)}
+                    >
+                      <option value="">Select instructor</option>
+                      {instructorsList.map((ins) => (
+                        <option key={ins._id} value={ins._id}>
+                          {ins.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
                   <div className="batch-select-box">
+                    <label className="section-label">Batch</label>
                     <select
                       className="input-select"
                       value={section.batchId}
@@ -520,7 +536,7 @@ const EnrollStudents = () => {
                     </select>
                     <a
                       href="#"
-                      className="create-batch-link text-emerald"
+                      className="create-batch-link"
                       onClick={(e) => {
                         e.preventDefault();
                         setIsModalOpen(true);
@@ -533,10 +549,10 @@ const EnrollStudents = () => {
               </div>
             ))}
 
-            <div className="text-center mt-4">
+            <div className="enroll-actions">
               <button
                 type="button"
-                className="btn btn-emerald enroll-btn px-5"
+                className="btn btn-emerald enroll-btn"
                 onClick={handleEnroll}
                 disabled={isSingleEnrolling}
               >
@@ -548,11 +564,14 @@ const EnrollStudents = () => {
 
         {activeTab === "bulk" && (
           <div className="tab-pane-content">
-            <h3 className="pane-title mb-3">Bulk Multi-Select Enrollment</h3>
+            <h3 className="pane-title">Bulk Multi-Select Enrollment</h3>
 
-            <div className="section-block mb-4">
-              <label className="section-label">Select Target Batch</label>
+            <div className="section-block">
+              <label className="section-label" htmlFor="bulk-batch-select">
+                Select Target Batch
+              </label>
               <select
+                id="bulk-batch-select"
                 className="input-select"
                 value={bulkBatchId}
                 onChange={(e) => {
@@ -573,7 +592,7 @@ const EnrollStudents = () => {
               </select>
             </div>
 
-            <div className="list-filters-row d-flex gap-3 mb-3 flex-wrap">
+            <div className="list-filters-row">
               <input
                 type="text"
                 placeholder="Search by name, email, or Zen course..."
@@ -590,7 +609,7 @@ const EnrollStudents = () => {
                 <option value="active">Active Accounts Only</option>
                 <option value="pending">Pending CRM Synced Leads</option>
               </select>
-              <label className="hide-enrolled-toggle glass-input mb-0">
+              <label className="hide-enrolled-toggle">
                 <input
                   type="checkbox"
                   checked={hideAlreadyEnrolled}
@@ -658,7 +677,7 @@ const EnrollStudents = () => {
               )}
             </div>
 
-            <div className="selection-summary mt-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div className="selection-summary">
               <span className="text-secondary">
                 Selected: <strong>{selectedActiveIds.size}</strong> active,{" "}
                 <strong>{selectedPendingIds.size}</strong> pending leads
@@ -677,11 +696,14 @@ const EnrollStudents = () => {
 
         {activeTab === "csv" && (
           <div className="tab-pane-content">
-            <h3 className="pane-title mb-3">Bulk Enrollment via CSV File</h3>
+            <h3 className="pane-title">Bulk Enrollment via CSV File</h3>
 
-            <div className="section-block mb-4">
-              <label className="section-label">Select Target Batch</label>
+            <div className="section-block">
+              <label className="section-label" htmlFor="csv-batch-select">
+                Select Target Batch
+              </label>
               <select
+                id="csv-batch-select"
                 className="input-select"
                 value={csvBatchId}
                 onChange={(e) => {
@@ -702,10 +724,10 @@ const EnrollStudents = () => {
               </select>
             </div>
 
-            <div className="csv-upload-dropzone mb-4">
-              <i className="bi bi-file-earmark-spreadsheet text-emerald"></i>
+            <div className="csv-upload-dropzone">
+              <i className="bi bi-file-earmark-spreadsheet"></i>
               <h4>Upload CSV Student Registry</h4>
-              <p className="text-secondary mb-1">
+              <p className="text-secondary">
                 Include an <code>email</code> column (recommended). Matching active users and Zen CRM
                 pending leads are enrolled; unknown emails are skipped.
               </p>
@@ -731,14 +753,14 @@ const EnrollStudents = () => {
               />
 
               {csvFileName && (
-                <div className="mt-3 file-loaded-badge">
+                <div className="file-loaded-badge">
                   <i className="bi bi-check-circle-fill"></i> Loaded: <strong>{csvFileName}</strong>
                 </div>
               )}
             </div>
 
             {parsedEmails.length > 0 && (
-              <div className="parsed-emails-preview mb-4">
+              <div className="parsed-emails-preview" style={{ marginTop: "20px" }}>
                 <h5>Emails Parsed for Import ({parsedEmails.length}):</h5>
                 <div className="email-chips-container">
                   {parsedEmails.map((email) => (
@@ -748,8 +770,8 @@ const EnrollStudents = () => {
                   ))}
                 </div>
 
-                <div className="text-end mt-3">
-                  <button type="button" onClick={handleCSVEnroll} className="btn btn-emerald px-4">
+                <div className="enroll-actions">
+                  <button type="button" onClick={handleCSVEnroll} className="btn btn-emerald">
                     Import & Enroll Students
                   </button>
                 </div>

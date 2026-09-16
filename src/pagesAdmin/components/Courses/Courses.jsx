@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { useCourses, useDeleteCourse } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
+import { LuEye, LuPencil, LuUsers, LuTrash2 } from "react-icons/lu";
 
 const Courses = () => {
   const navigate = useNavigate();
@@ -229,14 +230,14 @@ const Courses = () => {
                         </td>
 
                         <td className="actions-cell">
-                          <div className="actions-row">
+                          <div className="admin-action-group">
                             <button
                               type="button"
                               className="admin-action-btn"
                               aria-label={`View ${course.courseName}`}
                               onClick={() => viewHandler(course)}
                             >
-                              <i className="bi bi-eye" aria-hidden="true" />
+                              <LuEye aria-hidden="true" />
                             </button>
                             <button
                               type="button"
@@ -244,7 +245,7 @@ const Courses = () => {
                               aria-label={`Edit ${course.courseName}`}
                               onClick={() => editHandler(course)}
                             >
-                              <i className="bi bi-pencil" aria-hidden="true" />
+                              <LuPencil aria-hidden="true" />
                             </button>
                             <button
                               type="button"
@@ -252,7 +253,7 @@ const Courses = () => {
                               aria-label={`Manage instructors for ${course.courseName}`}
                               onClick={() => usersHandler(course)}
                             >
-                              <i className="bi bi-people" aria-hidden="true" />
+                              <LuUsers aria-hidden="true" />
                             </button>
                             <button
                               type="button"
@@ -260,7 +261,7 @@ const Courses = () => {
                               aria-label={`Delete ${course.courseName}`}
                               onClick={() => deleteHandler(course)}
                             >
-                              <i className="bi bi-trash" aria-hidden="true" />
+                              <LuTrash2 aria-hidden="true" />
                             </button>
                           </div>
                         </td>

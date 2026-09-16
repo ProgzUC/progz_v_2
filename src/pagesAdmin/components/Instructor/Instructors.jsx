@@ -3,7 +3,7 @@ import "./Instructors.css";
 import Loader from "../../../components/common/Loader/Loader";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import { useAllUsers, useDeleteUser } from "../../../hooks/useAdminUsers";
-import { FaTrash, FaEdit, FaEye } from "react-icons/fa";
+import { LuEye, LuPencil, LuTrash2 } from "react-icons/lu";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
@@ -120,15 +120,32 @@ const { mutate: deleteUser } = useDeleteUser();
                 </td>
 
                 <td className="actions">
-                  <FaTrash className="icon delete" onClick={() => handleDelete(item)} />
-                  <FaEdit
-                    className="icon edit"
-                    onClick={() => navigate("/admin/instructor-preview", { state: { instructor: item, initialEditMode: true } })}
-                  />
-                  <FaEye
-                    className="icon view"
-                    onClick={() => navigate("/admin/instructor-preview", { state: { instructor: item, initialEditMode: false } })}
-                  />
+                  <div className="admin-action-group">
+                    <button
+                      type="button"
+                      className="admin-action-btn"
+                      aria-label={`View ${item.name}`}
+                      onClick={() => navigate("/admin/instructor-preview", { state: { instructor: item, initialEditMode: false } })}
+                    >
+                      <LuEye aria-hidden="true" />
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-action-btn"
+                      aria-label={`Edit ${item.name}`}
+                      onClick={() => navigate("/admin/instructor-preview", { state: { instructor: item, initialEditMode: true } })}
+                    >
+                      <LuPencil aria-hidden="true" />
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-action-btn admin-action-btn--danger"
+                      aria-label={`Delete ${item.name}`}
+                      onClick={() => handleDelete(item)}
+                    >
+                      <LuTrash2 aria-hidden="true" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

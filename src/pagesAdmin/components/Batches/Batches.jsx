@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Batches.css";
 import "../Modal.css";
-import { FaTrash, FaEye, FaEdit, FaUserPlus, FaPlus, FaSearch } from "react-icons/fa";
+import { FaPlus, FaSearch } from "react-icons/fa";
+import { LuUserPlus, LuEye, LuPencil, LuTrash2 } from "react-icons/lu";
 import { MdFilterList } from "react-icons/md";
 import Swal from "sweetalert2";
 import { useBatches, useDeleteBatch } from "../../../hooks/useBatches";
@@ -254,22 +255,14 @@ const Batches = () => {
                                             </span>
                                         </td>
                                         <td style={{ textAlign: "center" }}>
-                                            <div style={{ display: 'flex', gap: '2px', justifyContent: 'center' }}>
+                                            <div className="admin-action-group">
                                                 <button
                                                     type="button"
                                                     onClick={() => handleAddStudent(batch)}
                                                     aria-label={`Add student to ${batch.name}`}
-                                                    className="admin-action-btn admin-action-btn--primary"
-                                                >
-                                                    <FaUserPlus aria-hidden="true" />
-                                                </button>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => handleEditBatch(batch)}
-                                                    aria-label={`Edit ${batch.name}`}
                                                     className="admin-action-btn"
                                                 >
-                                                    <FaEdit aria-hidden="true" />
+                                                    <LuUserPlus aria-hidden="true" />
                                                 </button>
                                                 <button
                                                     type="button"
@@ -277,7 +270,15 @@ const Batches = () => {
                                                     aria-label={`View ${batch.name}`}
                                                     className="admin-action-btn"
                                                 >
-                                                    <FaEye aria-hidden="true" />
+                                                    <LuEye aria-hidden="true" />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleEditBatch(batch)}
+                                                    aria-label={`Edit ${batch.name}`}
+                                                    className="admin-action-btn"
+                                                >
+                                                    <LuPencil aria-hidden="true" />
                                                 </button>
                                                 <button
                                                     type="button"
@@ -285,7 +286,7 @@ const Batches = () => {
                                                     aria-label={`Delete ${batch.name}`}
                                                     className="admin-action-btn admin-action-btn--danger"
                                                 >
-                                                    <FaTrash aria-hidden="true" />
+                                                    <LuTrash2 aria-hidden="true" />
                                                 </button>
                                             </div>
                                         </td>

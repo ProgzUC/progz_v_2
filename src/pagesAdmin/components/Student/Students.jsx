@@ -3,7 +3,7 @@ import "./Students.css";
 import Loader from "../../../components/common/Loader/Loader";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import { useAllUsers, useDeleteUser } from "../../../hooks/useAdminUsers";
-import { FaTrash, FaEdit, FaEye } from "react-icons/fa";
+import { LuEye, LuPencil, LuTrash2 } from "react-icons/lu";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
@@ -142,30 +142,32 @@ const Students = () => {
                   </td>
 
                   <td className="actions">
-                    <button
-                      type="button"
-                      className="admin-action-btn admin-action-btn--danger"
-                      aria-label={`Delete ${s.name}`}
-                      onClick={() => handleDelete(s)}
-                    >
-                      <FaTrash aria-hidden="true" />
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-action-btn"
-                      aria-label={`Edit ${s.name}`}
-                      onClick={() => navigate("/admin/student-preview", { state: { student: s, initialEditMode: true } })}
-                    >
-                      <FaEdit aria-hidden="true" />
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-action-btn"
-                      aria-label={`View ${s.name}`}
-                      onClick={() => navigate("/admin/student-preview", { state: { student: s, initialEditMode: false } })}
-                    >
-                      <FaEye aria-hidden="true" />
-                    </button>
+                    <div className="admin-action-group">
+                      <button
+                        type="button"
+                        className="admin-action-btn"
+                        aria-label={`View ${s.name}`}
+                        onClick={() => navigate("/admin/student-preview", { state: { student: s, initialEditMode: false } })}
+                      >
+                        <LuEye aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        className="admin-action-btn"
+                        aria-label={`Edit ${s.name}`}
+                        onClick={() => navigate("/admin/student-preview", { state: { student: s, initialEditMode: true } })}
+                      >
+                        <LuPencil aria-hidden="true" />
+                      </button>
+                      <button
+                        type="button"
+                        className="admin-action-btn admin-action-btn--danger"
+                        aria-label={`Delete ${s.name}`}
+                        onClick={() => handleDelete(s)}
+                      >
+                        <LuTrash2 aria-hidden="true" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

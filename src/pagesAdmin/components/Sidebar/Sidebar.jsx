@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { runManualSyncAndWait } from "../../../api/userApi";
 import { logout } from "../../../api/authApi";
@@ -18,9 +18,15 @@ const NAV_ITEMS = [
   { to: "/admin/monitoring", icon: "bi-activity", label: "Monitoring" },
 ];
 
+const canHoverExpand = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
 const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
+  const [hoverOpen, setHoverOpen] = useState(false);
   const [syncLoading, setSyncLoading] = useState(false);
   const navigate = useNavigate();
+  const expanded = hoverOpen || mobileOpen;
 
   const handleLogout = () => {
     Swal.fire({
@@ -75,20 +81,48 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
     }
   };
 
+  useEffect(() => {
+    const layout = document.querySelector(".layout");
+    if (!layout) return undefined;
+
+    layout.classList.add("sidebar-collapsed");
+    layout.classList.toggle("sidebar-hover-expanded", hoverOpen && !mobileOpen);
+
+    return () => {
+      layout.classList.remove("sidebar-collapsed");
+      layout.classList.remove("sidebar-hover-expanded");
+    };
+  }, [hoverOpen, mobileOpen]);
+
   const handleNavClick = () => {
     if (mobileOpen) onMobileClose?.();
   };
 
+  const handleMouseEnter = () => {
+    if (mobileOpen) return;
+    if (canHoverExpand()) setHoverOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setHoverOpen(false);
+  };
+
   return (
-    <aside className={`admin-sidebar ${mobileOpen ? "mobile-open" : ""}`}>
+    <aside
+      className={`admin-sidebar collapsed ${hoverOpen ? "hover-open" : ""} ${mobileOpen ? "mobile-open" : ""}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <div className="sidebar-header">
         <div className="sidebar-logo-text">
           <img src="/admin/logo.png" alt="ProgZ admin logo" />
         </div>
-        <div className="sidebar-brand">
-          <h3 className="sidebar-title">Portal</h3>
-          <p className="sidebar-subtitle">Super Admin</p>
-        </div>
+        {expanded && (
+          <div className="sidebar-brand">
+            <h3 className="sidebar-title">Portal</h3>
+            <p className="sidebar-subtitle">Super Admin</p>
+          </div>
+        )}
       </div>
 
       <nav
@@ -103,11 +137,12 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
             end={item.to === "/admin/overview"}
             className={({ isActive }) => (isActive ? "menu-item active" : "menu-item")}
             onClick={handleNavClick}
+            title={!expanded ? item.label : undefined}
           >
             {({ isActive }) => (
               <>
                 <i className={`bi ${item.icon}`} aria-hidden="true" />
-                <span>{item.label}</span>
+                {expanded ? <span>{item.label}</span> : <span className="sr-only">{item.label}</span>}
                 {isActive ? <span className="sr-only"> (current page)</span> : null}
               </>
             )}
@@ -124,17 +159,27 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
           onClick={handleSync}
           disabled={syncLoading}
           aria-busy={syncLoading}
+          title={!expanded ? (syncLoading ? "Syncing from Zen" : "Sync from Zen") : undefined}
         >
           <i
             className={`bi ${syncLoading ? "bi-arrow-repeat spin-icon" : "bi-arrow-repeat"}`}
             aria-hidden="true"
           />
-          <span>{syncLoading ? "Syncing..." : "Sync from Zen"}</span>
+          {expanded ? (
+            <span>{syncLoading ? "Syncing..." : "Sync from Zen"}</span>
+          ) : (
+            <span className="sr-only">{syncLoading ? "Syncing from Zen" : "Sync from Zen"}</span>
+          )}
         </button>
 
-        <button type="button" className="menu-item logout-item" onClick={handleLogout}>
+        <button
+          type="button"
+          className="menu-item logout-item"
+          onClick={handleLogout}
+          title={!expanded ? "Logout" : undefined}
+        >
           <i className="bi bi-box-arrow-right" aria-hidden="true" />
-          <span>Logout</span>
+          {expanded ? <span>Logout</span> : <span className="sr-only">Logout</span>}
         </button>
       </nav>
     </aside>

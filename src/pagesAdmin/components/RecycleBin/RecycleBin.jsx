@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
+import { LuRotateCcw, LuTrash2 } from "react-icons/lu";
 import Swal from "sweetalert2";
 import { fetchBinItems, restoreBinItem, permanentlyDeleteBinItem } from "../../../api/userApi";
 import Loader from "../../../components/common/Loader/Loader";
@@ -152,20 +153,24 @@ const RecycleBin = () => {
                                                 }
                                             </td>
                                             <td className="action-icons">
-                                                <button
-                                                    className="icon-btn restore-btn"
-                                                    title="Restore"
-                                                    onClick={() => handleRestore(item._id || item.id)}
-                                                >
-                                                    <i className="bi bi-arrow-counterclockwise"></i>
-                                                </button>
-                                                <button
-                                                    className="icon-btn delete-btn"
-                                                    title="Delete Forever"
-                                                    onClick={() => handleDeleteForever(item._id || item.id)}
-                                                >
-                                                    <i className="bi bi-trash"></i>
-                                                </button>
+                                                <div className="admin-action-group">
+                                                    <button
+                                                        type="button"
+                                                        className="admin-action-btn"
+                                                        aria-label={`Restore ${item.itemRefName || item.data?.name || "item"}`}
+                                                        onClick={() => handleRestore(item._id || item.id)}
+                                                    >
+                                                        <LuRotateCcw aria-hidden="true" />
+                                                    </button>
+                                                    <button
+                                                        type="button"
+                                                        className="admin-action-btn admin-action-btn--danger"
+                                                        aria-label={`Delete ${item.itemRefName || item.data?.name || "item"} forever`}
+                                                        onClick={() => handleDeleteForever(item._id || item.id)}
+                                                    >
+                                                        <LuTrash2 aria-hidden="true" />
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     ))

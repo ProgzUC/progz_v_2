@@ -23,12 +23,19 @@ import Swal from "sweetalert2";
 import { motion, AnimatePresence } from "framer-motion";
 import "./MonitoringDashboard.css";
 
-const COLORS = ["#10B981", "#3B82F6", "#F59E0B", "#EF4444"];
+const COLORS = ["#10B981", "#0284C7", "#D97706", "#DC2626"];
 const PIE_COLORS = {
   "2xx": "#10B981",
-  "3xx": "#3B82F6",
-  "4xx": "#F59E0B",
-  "5xx": "#EF4444"
+  "3xx": "#0284C7",
+  "4xx": "#D97706",
+  "5xx": "#DC2626"
+};
+const CHART_TOOLTIP_STYLE = {
+  backgroundColor: "#FFFFFF",
+  borderColor: "#E5E7EB",
+  color: "#111827",
+  borderRadius: 12,
+  boxShadow: "0 6px 20px rgba(6, 78, 59, 0.08)"
 };
 
 export default function MonitoringDashboard() {
@@ -164,8 +171,8 @@ export default function MonitoringDashboard() {
       text: "Are you sure you want to permanently delete this error log entry?",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
+      confirmButtonColor: "#DC2626",
+      cancelButtonColor: "#064E3B",
       confirmButtonText: "Yes, delete!"
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -300,8 +307,8 @@ export default function MonitoringDashboard() {
                   </div>
 
                   <div className="monitor-card glass">
-                    <div className="card-icon danger-icon">
-                      <i className={`bi bi-database ${metrics?.dbReadyState === 1 ? "text-emerald" : "text-danger"}`}></i>
+                    <div className={`card-icon ${metrics?.dbReadyState === 1 ? "success-icon" : "danger-icon"}`}>
+                      <i className="bi bi-database"></i>
                     </div>
                     <div className="card-data">
                       <h3>Database Status</h3>
@@ -314,67 +321,83 @@ export default function MonitoringDashboard() {
                 </div>
 
                 {/* Resource Gauges & Charts */}
-                <div className="monitor-grid-2-3 mt-4">
+                <div className="monitor-grid-2-3">
                   {/* Gauge Widget */}
                   <div className="monitor-card glass resource-usage">
                     <h3>Host Resource Usage</h3>
-                    
-                    <div className="gauge-item mt-3">
-                      <div className="gauge-label">
-                        <span>CPU Usage</span>
-                        <span>{metrics?.cpuUsagePercent}%</span>
-                      </div>
-                      <div className="progress-bar-bg">
-                        <div className="progress-bar-fill" style={{ width: `${Math.min(metrics?.cpuUsagePercent || 0, 100)}%`, backgroundColor: (metrics?.cpuUsagePercent > 70 ? "#EF4444" : "#10B981") }}></div>
-                      </div>
-                    </div>
-
-                    <div className="gauge-item mt-4">
-                      <div className="gauge-label">
-                        <span>Heap Memory Used</span>
-                        <span>{metrics?.memory.heapUsedMB} MB / {metrics?.memory.heapTotalMB} MB</span>
-                      </div>
-                      <div className="progress-bar-bg">
-                        <div className="progress-bar-fill info-fill" style={{ width: `${Math.min(((metrics?.memory.heapUsedMB || 0) / (metrics?.memory.heapTotalMB || 1)) * 100, 100)}%` }}></div>
-                      </div>
-                    </div>
-
-                    {/* Status Code Pie Chart */}
-                    <div className="pie-container mt-4">
-                      <h4>Status Code Share</h4>
-                      {getPieData().length > 0 ? (
-                        <div className="pie-layout">
-                          <div className="pie-graphic">
-                            <ResponsiveContainer width="100%" height={140}>
-                              <PieChart>
-                                <Pie
-                                  data={getPieData()}
-                                  cx="50%"
-                                  cy="50%"
-                                  innerRadius={40}
-                                  outerRadius={60}
-                                  paddingAngle={3}
-                                  dataKey="value"
-                                >
-                                  {getPieData().map((entry, index) => (
-                                    <Cell key={`cell-${index}`} fill={PIE_COLORS[entry.name] || COLORS[index % COLORS.length]} />
-                                  ))}
-                                </Pie>
-                              </PieChart>
-                            </ResponsiveContainer>
+                    <div className="resource-body">
+                      <div className="resource-gauges">
+                        <div className="gauge-item">
+                          <div className="gauge-label">
+                            <span>CPU Usage</span>
+                            <span>{metrics?.cpuUsagePercent}%</span>
                           </div>
-                          <div className="pie-legend">
-                            {getPieData().map((entry, idx) => (
-                              <div key={idx} className="legend-row">
-                                <span className="legend-dot" style={{ backgroundColor: PIE_COLORS[entry.name] }}></span>
-                                <span className="legend-label">{entry.name}: {entry.value}</span>
-                              </div>
-                            ))}
+                          <div className="progress-bar-bg">
+                            <div
+                              className="progress-bar-fill"
+                              style={{
+                                width: `${Math.min(metrics?.cpuUsagePercent || 0, 100)}%`,
+                                backgroundColor: metrics?.cpuUsagePercent > 70 ? "#DC2626" : "#10B981"
+                              }}
+                            ></div>
                           </div>
                         </div>
-                      ) : (
-                        <p className="no-data-text">No requests logged yet</p>
-                      )}
+
+                        <div className="gauge-item">
+                          <div className="gauge-label">
+                            <span>Heap Memory Used</span>
+                            <span>{metrics?.memory?.heapUsedMB ?? 0} MB / {metrics?.memory?.heapTotalMB ?? 0} MB</span>
+                          </div>
+                          <div className="progress-bar-bg">
+                            <div
+                              className="progress-bar-fill info-fill"
+                              style={{
+                                width: `${Math.min(((metrics?.memory?.heapUsedMB || 0) / (metrics?.memory?.heapTotalMB || 1)) * 100, 100)}%`
+                              }}
+                            ></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="pie-container">
+                        <h4>Status Code Share</h4>
+                        {getPieData().length > 0 ? (
+                          <div className="pie-layout">
+                            <div className="pie-graphic">
+                              <ResponsiveContainer width="100%" height={140}>
+                                <PieChart>
+                                  <Pie
+                                    data={getPieData()}
+                                    cx="50%"
+                                    cy="50%"
+                                    innerRadius={40}
+                                    outerRadius={60}
+                                    paddingAngle={3}
+                                    dataKey="value"
+                                  >
+                                    {getPieData().map((entry, index) => (
+                                      <Cell key={`cell-${index}`} fill={PIE_COLORS[entry.name] || COLORS[index % COLORS.length]} />
+                                    ))}
+                                  </Pie>
+                                </PieChart>
+                              </ResponsiveContainer>
+                            </div>
+                            <div className="pie-legend">
+                              {getPieData().map((entry, idx) => (
+                                <div key={idx} className="legend-row">
+                                  <span className="legend-dot" style={{ backgroundColor: PIE_COLORS[entry.name] }}></span>
+                                  <span className="legend-label">{entry.name}: {entry.value}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="no-data-text">
+                            <i className="bi bi-pie-chart"></i>
+                            No requests logged yet
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
 
@@ -400,32 +423,35 @@ export default function MonitoringDashboard() {
                           <AreaChart data={historical} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                             <defs>
                               <linearGradient id="colorReqs" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#10B981" stopOpacity={0.2}/>
+                                <stop offset="5%" stopColor="#10B981" stopOpacity={0.28}/>
                                 <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
                               </linearGradient>
                               <linearGradient id="colorLatency" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.2}/>
-                                <stop offset="95%" stopColor="#F59E0B" stopOpacity={0}/>
+                                <stop offset="5%" stopColor="#D97706" stopOpacity={0.22}/>
+                                <stop offset="95%" stopColor="#D97706" stopOpacity={0}/>
                               </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#2D3748" opacity={0.2} />
-                            <XAxis dataKey="timestamp" tickFormatter={formatHistoricalDate} stroke="#718096" fontSize={11} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                            <XAxis dataKey="timestamp" tickFormatter={formatHistoricalDate} stroke="#6B7280" fontSize={11} />
                             <YAxis yAxisId="left" stroke="#10B981" fontSize={11} label={{ value: "Requests", angle: -90, position: "insideLeft", fill: "#10B981", fontSize: 11 }} />
-                            <YAxis yAxisId="right" orientation="right" stroke="#F59E0B" fontSize={11} label={{ value: "Latency (ms)", angle: 90, position: "insideRight", fill: "#F59E0B", fontSize: 11 }} />
-                            <Tooltip contentStyle={{ backgroundColor: "#1A202C", borderColor: "#4A5568", color: "#FFF" }} />
+                            <YAxis yAxisId="right" orientation="right" stroke="#D97706" fontSize={11} label={{ value: "Latency (ms)", angle: 90, position: "insideRight", fill: "#D97706", fontSize: 11 }} />
+                            <Tooltip contentStyle={CHART_TOOLTIP_STYLE} />
                             <Area yAxisId="left" type="monotone" dataKey="requestCount" name="Throughput" stroke="#10B981" fillOpacity={1} fill="url(#colorReqs)" strokeWidth={2} />
-                            <Area yAxisId="right" type="monotone" dataKey="averageLatency" name="Avg Latency" stroke="#F59E0B" fillOpacity={1} fill="url(#colorLatency)" strokeWidth={2} />
+                            <Area yAxisId="right" type="monotone" dataKey="averageLatency" name="Avg Latency" stroke="#D97706" fillOpacity={1} fill="url(#colorLatency)" strokeWidth={2} />
                           </AreaChart>
                         </ResponsiveContainer>
                       ) : (
-                        <p className="no-data-text">No historical logs available yet</p>
+                        <p className="no-data-text">
+                          <i className="bi bi-graph-up"></i>
+                          No historical logs available yet
+                        </p>
                       )}
                     </div>
                   </div>
                 </div>
 
                 {/* Recent API Requests Stream */}
-                <div className="monitor-card glass mt-4">
+                <div className="monitor-card glass live-requests">
                   <h3>Live API Requests (Last {metrics?.recentRequests?.length || 0})</h3>
                   <div className="table-responsive">
                     <table className="monitor-table">
@@ -478,7 +504,7 @@ export default function MonitoringDashboard() {
             className="tab-content"
           >
             {/* Filters Bar */}
-            <div className="filter-card glass mb-4">
+            <div className="filter-card glass">
               <div className="filter-grid">
                 <div className="filter-input-group">
                   <label>Search Keyword</label>
@@ -643,8 +669,8 @@ export default function MonitoringDashboard() {
             className="tab-content"
           >
             {/* Filters Bar */}
-            <div className="filter-card glass mb-4">
-              <div className="filter-grid-3">
+            <div className="filter-card glass">
+              <div className="error-filter-bar">
                 <div className="filter-input-group">
                   <label>Search Keyword</label>
                   <input
@@ -667,25 +693,23 @@ export default function MonitoringDashboard() {
                     <option value="true">Resolved</option>
                   </select>
                 </div>
-                <div className="filter-input-group align-self-end text-end pt-4">
-                  <span className="total-badge text-lg">{errorTotal} Exception Logs</span>
-                </div>
+                <span className="total-badge error-count-badge">{errorTotal} Exception Logs</span>
               </div>
             </div>
 
             {/* Errors List */}
-            <div className="monitor-card glass">
+            <div className="monitor-card glass errors-card">
               <div className="table-responsive">
-                <table className="monitor-table">
+                <table className="monitor-table errors-table">
                   <thead>
                     <tr>
-                      <th style={{ width: "30px" }}></th>
-                      <th>Time</th>
-                      <th>Method & Endpoint</th>
-                      <th>Error Message</th>
-                      <th>IP Address</th>
-                      <th>Status</th>
-                      <th>Actions</th>
+                      <th className="col-expand"></th>
+                      <th className="col-time">Time</th>
+                      <th className="col-endpoint">Method & Endpoint</th>
+                      <th className="col-message">Error Message</th>
+                      <th className="col-ip">IP Address</th>
+                      <th className="col-status">Status</th>
+                      <th className="col-actions">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -699,7 +723,7 @@ export default function MonitoringDashboard() {
                       errorLogs.map((log) => (
                         <React.Fragment key={log._id}>
                           <tr>
-                            <td>
+                            <td className="col-expand">
                               <button
                                 onClick={() => setExpandedErrorId(expandedErrorId === log._id ? null : log._id)}
                                 className="btn-expand"
@@ -708,23 +732,28 @@ export default function MonitoringDashboard() {
                                 <i className={`bi ${expandedErrorId === log._id ? "bi-chevron-down" : "bi-chevron-right"}`}></i>
                               </button>
                             </td>
-                            <td>{new Date(log.timestamp).toLocaleString()}</td>
-                            <td>
+                            <td className="col-time">
+                              <div className="time-col">
+                                <span className="time-date">{new Date(log.timestamp).toLocaleDateString()}</span>
+                                <span className="time-clock">{new Date(log.timestamp).toLocaleTimeString()}</span>
+                              </div>
+                            </td>
+                            <td className="col-endpoint">
                               <div className="endpoint-col">
                                 <span className={`method-badge ${log.method?.toLowerCase() || "process"}`}>
                                   {log.method || "PROCESS"}
                                 </span>
-                                <span className="monospace text-xs truncate">{log.url || "INTERNAL"}</span>
+                                <span className="endpoint-url monospace">{log.url || "INTERNAL"}</span>
                               </div>
                             </td>
-                            <td className="error-message truncate-2-lines">{log.message}</td>
-                            <td>{log.ipAddress || "System"}</td>
-                            <td>
+                            <td className="col-message error-message">{log.message}</td>
+                            <td className="col-ip">{log.ipAddress || "System"}</td>
+                            <td className="col-status">
                               <span className={`resolved-status ${log.resolved ? "resolved" : "unresolved"}`}>
                                 {log.resolved ? "Resolved" : "Unresolved"}
                               </span>
                             </td>
-                            <td>
+                            <td className="col-actions">
                               <div className="action-buttons-group">
                                 <button
                                   onClick={() => handleResolveError(log._id, log.resolved)}
