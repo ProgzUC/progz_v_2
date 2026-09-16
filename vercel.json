@@ -22,11 +22,11 @@
     },
     {
       "source": "/api/:path*",
-      "destination": "https://progz-backend.onrender.com/api/:path*"
+      "destination": "https://api.progz.urbancode.in/api/:path*"
     },
     {
       "source": "/auth/:path*",
-      "destination": "https://progz-backend.onrender.com/auth/:path*"
+      "destination": "https://api.progz.urbancode.in/auth/:path*"
     },
     {
       "source": "/(.*)",
