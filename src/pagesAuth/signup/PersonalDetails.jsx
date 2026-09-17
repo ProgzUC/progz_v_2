@@ -70,8 +70,8 @@ const PersonalDetails = ({ onNext, onCancel, initialValues = {} }) => {
                     isValid = false;
                 }
 
-                if (field.id === 'password' && value.length < 6) {
-                    newErrors[field.id] = "Password must be at least 6 characters";
+                if (field.id === 'password' && value.length < 8) {
+                    newErrors[field.id] = "Password must be at least 8 characters";
                     isValid = false;
                 }
 
