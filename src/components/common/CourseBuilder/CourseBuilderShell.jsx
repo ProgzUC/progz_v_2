@@ -8,6 +8,7 @@ export default function CourseBuilderShell({
   courseName,
   children,
   footer,
+  headerActions,
 }) {
   const stepMeta = getStepMeta(activeStep);
 
@@ -45,6 +46,7 @@ export default function CourseBuilderShell({
               <h2>{stepMeta.label}</h2>
               {stepMeta.subtitle && <p>{stepMeta.subtitle}</p>}
             </div>
+            {headerActions ? <div className="step-header-actions">{headerActions}</div> : null}
           </header>
 
           <div className="step-content">

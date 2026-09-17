@@ -61,11 +61,17 @@ function toPlainText(html) {
     .trim();
 }
 
-function formatDuration(value) {
-  if (value === null || value === undefined || value === "") return null;
-  const num = Number(value);
-  if (!Number.isNaN(num) && num > 0) return `${num}h`;
-  return String(value);
+function formatDuration(hours, months) {
+  const parts = [];
+  const monthsNum = Number(months);
+  if (!Number.isNaN(monthsNum) && monthsNum > 0) {
+    parts.push(`${monthsNum} month${monthsNum === 1 ? "" : "s"}`);
+  }
+  const hoursNum = Number(hours);
+  if (!Number.isNaN(hoursNum) && hoursNum > 0) {
+    parts.push(`${hoursNum}h`);
+  }
+  return parts.length ? parts.join(" · ") : null;
 }
 
 function getCourseLogo(name) {
@@ -106,7 +112,10 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
   const thumbnailUrl = course?.thumbnail?.url || null;
   const courseName = course?.courseName || course?.title || "Untitled Course";
   const category = course?.category || course?.zenCourseType || "";
-  const durationLabel = formatDuration(course?.courseDuration || course?.duration);
+  const durationLabel = formatDuration(
+    course?.courseDuration || course?.duration,
+    course?.courseDurationMonths || course?.durationMonths
+  );
   const updatedLabel = formatDate(course?.updatedAt || course?.updatedOn);
   const enrolledCount =
     course?.enrolledCount ??

@@ -10,6 +10,7 @@ export const emptyCourseState = () => ({
   courseId: "",
   courseDescription: "",
   courseDuration: "",
+  courseDurationMonths: "",
   instructor: "",
   thumbnail: null,
   modules: [createEmptyModule()],
@@ -32,6 +33,12 @@ export const hydrateCourseState = (data = {}) => {
     courseId: data.courseId || data.id || "",
     courseDescription: data.courseDescription || data.description || "",
     courseDuration: data.courseDuration || data.duration || "",
+    courseDurationMonths:
+      data.courseDurationMonths != null && data.courseDurationMonths !== ""
+        ? String(data.courseDurationMonths)
+        : data.durationMonths != null && data.durationMonths !== ""
+          ? String(data.durationMonths)
+          : "",
     instructor: instructorDisplay,
     thumbnail: data.thumbnail || null,
     modules: withStableIds(
@@ -67,6 +74,12 @@ export const validateCourseInformation = (course) => {
   }
   if (!course?.courseDuration) {
     errors.courseDuration = "Duration is required";
+  }
+  if (course?.courseDurationMonths !== "" && course?.courseDurationMonths != null) {
+    const months = Number(course.courseDurationMonths);
+    if (!Number.isFinite(months) || months < 1) {
+      errors.courseDurationMonths = "Enter a valid duration in months";
+    }
   }
   if (!course?.thumbnail) {
     errors.thumbnail = "Thumbnail is required";

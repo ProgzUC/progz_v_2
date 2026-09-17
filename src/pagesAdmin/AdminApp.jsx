@@ -1,6 +1,6 @@
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import AdminLayout from "./components/AdminLayout/AdminLayout.jsx";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import "./AdminApp.css";
 import "../styles/admin-a11y.css";
 import Overview from "./components/Overview/Overview.jsx";
@@ -28,6 +28,15 @@ import MonitoringDashboard from "./components/Monitoring/MonitoringDashboard.jsx
 import UserEnrollment from "./components/Sign/UserEnrollment.jsx";
 import UserDetailView from "./components/ApproveUser/UserDetailView.jsx";
 
+function AdminCreateCourse() {
+  const navigate = useNavigate();
+  return (
+    <CreateCourse
+      onBack={() => navigate("/admin/courses")}
+      onSave={() => navigate("/admin/courses")}
+    />
+  );
+}
 
 export default function AdminApp() {
   return (
@@ -66,10 +75,7 @@ export default function AdminApp() {
                   <Route path="approve-users" element={<ApproveUser />} />
                   <Route path="user-detail-view" element={<UserDetailView />} />
                   <Route path="sync" element={<SyncFromZen />} />
-                  <Route 
-                    path="create-course" 
-                    element={<CreateCourse onBack={() => window.history.back()} onSave={() => window.location.href = '/admin/courses'} />} 
-                  />
+                  <Route path="create-course" element={<AdminCreateCourse />} />
                   <Route path="add-instructor" element={<UserEnrollment subtitle="Add Instructor" />} />
                   <Route path="add-student" element={<UserEnrollment subtitle="Add Student" />} />
                   <Route path="student-preview" element={<StudentPreview />} />

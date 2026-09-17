@@ -84,7 +84,18 @@ function PreviewLargeCard({ course, lessonsCount }) {
       <div className="large-content">
         <p className="large-title">{course?.courseName || "Untitled Course"}</p>
         <p className="large-batch-info">
-          {course?.courseDuration ? `${course.courseDuration} hrs` : "Self-paced"}
+          {(() => {
+            const parts = [];
+            const monthsNum = Number(course?.courseDurationMonths);
+            if (!Number.isNaN(monthsNum) && monthsNum > 0) {
+              parts.push(`${monthsNum} month${monthsNum === 1 ? "" : "s"}`);
+            }
+            const hoursNum = Number(course?.courseDuration);
+            if (!Number.isNaN(hoursNum) && hoursNum > 0) {
+              parts.push(`${hoursNum} hrs`);
+            }
+            return parts.length ? parts.join(" · ") : "Self-paced";
+          })()}
           {" · "}
           {course?.modules?.length || 0} modules
         </p>

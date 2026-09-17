@@ -1,3 +1,5 @@
+import { isHtmlEmpty } from "../components/common/RichTextEditor/richTextUtils";
+
 export const createId = () =>
   globalThis.crypto?.randomUUID?.() ??
   `id-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
@@ -14,6 +16,15 @@ export const createEmptySection = (overrides = {}) => ({
   videos: [],
   ...overrides,
 });
+
+/** True when a section has task instructions or task files (new or saved). */
+export const sectionHasTask = (section) => {
+  if (!section) return false;
+  if (!isHtmlEmpty(section.challengeInstructions)) return true;
+  if ((section.challengeFiles || []).length > 0) return true;
+  if ((section.savedChallengeFiles || []).length > 0) return true;
+  return false;
+};
 
 export const createEmptyModule = (overrides = {}) => ({
   id: createId(),

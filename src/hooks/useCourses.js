@@ -72,9 +72,11 @@ export const useRollbackCourse = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ courseId, versionId }) => rollbackCourse(courseId, versionId),
-        onSuccess: (data, variables) => {
-            queryClient.invalidateQueries(["courses", variables.courseId]);
-            queryClient.invalidateQueries(["courseVersions", variables.courseId]);
+        onSuccess: (_data, variables) => {
+            queryClient.invalidateQueries({ queryKey: ["courses"] });
+            queryClient.invalidateQueries({ queryKey: ["courses", variables.courseId] });
+            queryClient.invalidateQueries({ queryKey: ["courseVersions", variables.courseId] });
+            queryClient.invalidateQueries({ queryKey: ["trainerCourses"] });
         },
     });
 };

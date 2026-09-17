@@ -61,11 +61,19 @@ export const buildCoursePayload = async (course) => {
     }))
   );
 
+  const monthsRaw = course.courseDurationMonths;
+  const monthsNumber = Number(monthsRaw);
+  const courseDurationMonths =
+    monthsRaw === "" || monthsRaw == null || !Number.isFinite(monthsNumber)
+      ? undefined
+      : monthsNumber;
+
   return {
     courseName: course.courseName,
     courseId: course.courseId,
     courseDescription: course.courseDescription,
     courseDuration: Number(course.courseDuration),
+    ...(courseDurationMonths !== undefined ? { courseDurationMonths } : {}),
     thumbnail,
     modules,
   };

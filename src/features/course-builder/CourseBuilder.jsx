@@ -35,7 +35,7 @@ import CourseBuilderShell from "../../components/common/CourseBuilder/CourseBuil
 import CourseInformationPanel from "../../components/common/CourseBuilder/CourseInformationPanel";
 import "../../components/common/CourseBuilder/CourseBuilder.css";
 
-const CourseBuilder = ({ onBack, onSave, initialData, isEditMode = false, courseIdToEdit }) => {
+const CourseBuilder = ({ onBack, onSave, initialData, isEditMode = false, courseIdToEdit, extraHeader }) => {
   const [loading, setLoading] = useState(false);
   const [builderStarted, setBuilderStarted] = useState(isEditMode);
   const [activeStep, setActiveStep] = useState("information");
@@ -257,7 +257,7 @@ const CourseBuilder = ({ onBack, onSave, initialData, isEditMode = false, course
         onSuccess: (data) => {
           showSuccess(isEditMode ? "Course updated successfully!" : "Course created successfully!");
           setShowPreview(false);
-          onSave(data);
+          if (typeof onSave === "function") onSave(data);
           setLoading(false);
         },
         onError: (err) => {
@@ -727,6 +727,7 @@ const CourseBuilder = ({ onBack, onSave, initialData, isEditMode = false, course
           activeStep={activeStep}
           onStepChange={handleStepChange}
           courseName={course.courseName}
+          headerActions={extraHeader}
           footer={
             <div className="step-footer">
               <button type="button" className="cancel-btn" onClick={onBack} disabled={loading}>

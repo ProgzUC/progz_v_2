@@ -31,11 +31,26 @@ export default function CourseInformationPanel({
           <label>Duration (Hours)</label>
           <input
             type="number"
+            min="1"
             value={course.courseDuration}
             onChange={(e) => updateField("courseDuration", e.target.value)}
             placeholder="e.g. 40"
           />
           {errors.courseDuration && <span className="error-text">{errors.courseDuration}</span>}
+        </div>
+
+        <div>
+          <label>Duration (Months)</label>
+          <input
+            type="number"
+            min="1"
+            value={course.courseDurationMonths}
+            onChange={(e) => updateField("courseDurationMonths", e.target.value)}
+            placeholder="e.g. 3"
+          />
+          {errors.courseDurationMonths && (
+            <span className="error-text">{errors.courseDurationMonths}</span>
+          )}
         </div>
       </div>
 

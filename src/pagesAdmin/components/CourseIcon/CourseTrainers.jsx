@@ -55,12 +55,13 @@ const CourseTrainers = () => {
       instructor: instructorIds,
       // Ensure we don't accidentally send derived/populated fields that backend might reject if it expects clean DTO
       // But usually Mongoose handles extra fields or we might need to be specific.
-      // EditCourse sends: courseName, courseId, courseDescription, courseDuration, thumbnail, modules.
+      // EditCourse sends: courseName, courseId, courseDescription, courseDuration, courseDurationMonths, thumbnail, modules.
       // Let's stick to the EditCourse payload structure to be safe.
       courseName: course.courseName,
       courseId: course.courseId,
       courseDescription: course.courseDescription,
       courseDuration: course.courseDuration,
+      courseDurationMonths: course.courseDurationMonths,
       thumbnail: course.thumbnail,
       modules: course.modules // Send back existing modules as is
     };
