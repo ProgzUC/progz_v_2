@@ -5,7 +5,7 @@ export const fetchBatches = async () => {
         const response = await axiosInstance.get("/batches");
         return response.data;
     } catch (error) {
-        if (error.response && error.response.status === 404) {
+        if (error.status === 404 || error.response?.status === 404) {
             console.warn("Batches endpoint returned 404, returning empty list.");
             return [];
         }
@@ -81,7 +81,7 @@ export const fetchTrainerBatches = async () => {
             completedBatches: response.data.completedBatches || []
         };
     } catch (error) {
-        if (error.response && error.response.status === 404) {
+        if (error.status === 404 || error.response?.status === 404) {
             console.warn("Trainer summary endpoint returned 404, returning empty list.");
             return { activeBatches: [], completedBatches: [] };
         }

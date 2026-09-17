@@ -1,8 +1,5 @@
 import axiosInstance from './axiosInstance';
 
-export const fetchAdminDashboard = () =>
-    axiosInstance.get("/admin/dashboard").then(res => res.data);
-
 export const fetchAdminStats = () =>
     axiosInstance.get("/admin/stats").then(res => res.data);
 

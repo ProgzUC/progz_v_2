@@ -75,7 +75,7 @@
 .admin-approve-user-page .user-table col.col-name { width: auto; }
 .admin-approve-user-page .user-table col.col-source { width: 120px; }
 .admin-approve-user-page .user-table col.col-course { width: 170px; }
-.admin-approve-user-page .user-table col.col-date { width: 150px; }
+.admin-approve-user-page .user-table col.col-date { width: 200px; }
 .admin-approve-user-page .user-table col.col-actions { width: 150px; }
 
 .admin-approve-user-page .user-table thead th {

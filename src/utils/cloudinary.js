@@ -11,9 +11,8 @@ export const uploadToCloudinary = async (file, folder = "courses") => {
   formData.append("file", file);
   formData.append("folder", folder);
 
-  const response = await axiosInstance.post("/uploads", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  // Do not set Content-Type manually — axios/browser must add multipart boundary
+  const response = await axiosInstance.post("/uploads", formData);
 
   return response.data;
 };

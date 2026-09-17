@@ -59,8 +59,8 @@ const ResetPassword = () => {
         const next = {};
         if (!resetData.newPassword) {
             next.newPassword = "Password is required";
-        } else if (resetData.newPassword.length < 6) {
-            next.newPassword = "Password must be at least 6 characters";
+        } else if (resetData.newPassword.length < 8) {
+            next.newPassword = "Password must be at least 8 characters";
         }
         if (!resetData.confirmPassword) {
             next.confirmPassword = "Please confirm your password";

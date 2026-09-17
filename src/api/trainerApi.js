@@ -7,7 +7,7 @@ export const fetchBatchDetails = batchId =>
     axiosInstance.get(`/trainer/trainer-batch-details/${batchId}`).then(res => res.data);
 
 export const toggleSectionCompletion = payload =>
-    axiosInstance.post("/trainer/trainer-section-complete", payload);
+    axiosInstance.post("/trainer/trainer-section-complete", payload).then(res => res.data);
 
 export const fetchTrainerProfile = () =>
     axiosInstance.get("/trainer/trainer-profile").then(res => res.data);

@@ -6,11 +6,11 @@ import {
 } from '../utils/authStorage';
 
 /**
- * Signup API
- * payload: { name, email, password, ... }
+ * Signup API — creates a pending registration (admin approval required).
+ * payload: { name, email, password, role, ... }
  */
 export async function signup(payload) {
-    const res = await axiosInstance.post('/auth/signup', payload);
+    const res = await axiosInstance.post('/users/register', payload);
     return res.data;
 }
 

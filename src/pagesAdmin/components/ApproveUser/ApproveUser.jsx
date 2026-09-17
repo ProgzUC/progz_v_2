@@ -282,7 +282,7 @@ const ApproveUser = () => {
                   {activeTab === "student" && (
                     <th className="col-course" scope="col">Zen Course</th>
                   )}
-                  <th className="col-date" scope="col">Requested Date</th>
+                  <th className="col-date" scope="col">Requested Date & Time</th>
                   <th className="col-actions" scope="col">Actions</th>
                 </tr>
               </thead>
@@ -316,10 +316,13 @@ const ApproveUser = () => {
                         <td className="col-course">{user.zenCourseName || "-"}</td>
                       )}
                       <td className="col-date user-date">
-                        {new Date(user.date || user.createdAt).toLocaleDateString("en-US", {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric'
+                        {new Date(user.date || user.createdAt).toLocaleString("en-US", {
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "2-digit",
+                          hour12: true,
                         })}
                       </td>
                       <td className="col-actions action-icons">

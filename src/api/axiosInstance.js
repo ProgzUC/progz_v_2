@@ -28,6 +28,17 @@ const axiosInstance = axios.create({
   timeout: 60000,
 });
 
+// Let the browser set multipart boundary for FormData (default JSON Content-Type breaks uploads)
+axiosInstance.interceptors.request.use((config) => {
+  if (typeof FormData !== 'undefined' && config.data instanceof FormData) {
+    if (config.headers) {
+      delete config.headers['Content-Type'];
+      delete config.headers['content-type'];
+    }
+  }
+  return config;
+});
+
 let isRefreshing = false;
 let failedQueue = [];
 

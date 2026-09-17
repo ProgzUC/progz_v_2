@@ -171,8 +171,8 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
             return;
         }
 
-        if (newPwdInput.length < 6) {
-            setError("New password must be at least 6 characters long.");
+        if (newPwdInput.length < 8) {
+            setError("New password must be at least 8 characters long.");
             return;
         }
 
