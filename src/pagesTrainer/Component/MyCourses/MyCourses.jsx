@@ -20,11 +20,11 @@ import { showSuccess, showError } from '../../../utils/toast';
 import Loader from '../../../components/common/Loader/Loader';
 
 const COURSE_ACCENT_COLORS = [
-    { bg: 'linear-gradient(135deg, #f97316, #ea580c)', btn: '#ea580c' }, // Orange (HTML)
-    { bg: 'linear-gradient(135deg, #3b82f6, #2563eb)', btn: '#2563eb' }, // Blue (CSS)
-    { bg: 'linear-gradient(135deg, #8b5cf6, #7c3aed)', btn: '#7c3aed' }, // Purple (Bootstrap)
-    { bg: 'linear-gradient(135deg, #eab308, #ca8a04)', btn: '#ca8a04' }, // Yellow/Gold (JS)
-    { bg: 'linear-gradient(135deg, #10b981, #059669)', btn: '#059669' }, // Emerald
+    { bg: 'linear-gradient(135deg, #059669, #047857)', btn: '#059669' },
+    { bg: 'linear-gradient(135deg, #047857, #064E3B)', btn: '#047857' },
+    { bg: 'linear-gradient(135deg, #5B7C99, #475569)', btn: '#5B7C99' },
+    { bg: 'linear-gradient(135deg, #6B7280, #4B5563)', btn: '#6B7280' },
+    { bg: 'linear-gradient(135deg, #10b981, #059669)', btn: '#059669' },
 ];
 
 const getCourseLogo = (name, initial) => {

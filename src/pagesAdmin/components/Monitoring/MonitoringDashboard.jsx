@@ -23,11 +23,11 @@ import Swal from "sweetalert2";
 import { motion, AnimatePresence } from "framer-motion";
 import "./MonitoringDashboard.css";
 
-const COLORS = ["#10B981", "#0284C7", "#D97706", "#DC2626"];
+const COLORS = ["#059669", "#047857", "#6B7280", "#9CA3AF"];
 const PIE_COLORS = {
-  "2xx": "#10B981",
-  "3xx": "#0284C7",
-  "4xx": "#D97706",
+  "2xx": "#059669",
+  "3xx": "#6B7280",
+  "4xx": "#9CA3AF",
   "5xx": "#DC2626"
 };
 const CHART_TOOLTIP_STYLE = {

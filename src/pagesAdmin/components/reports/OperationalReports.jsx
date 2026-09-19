@@ -15,7 +15,7 @@ import {
     BarChart, Bar, PieChart, Pie, Cell, CartesianGrid 
 } from 'recharts';
 
-const COLORS = ['#10B981', '#3B82F6', '#F59E0B', '#EF4444', '#8B5CF6'];
+const COLORS = ['#059669', '#047857', '#6B7280', '#9CA3AF', '#10B981'];
 
 export default function OperationalReports() {
     const [activeTab, setActiveTab] = useState('executive');
@@ -286,7 +286,7 @@ function EnrollmentTab() {
                             <XAxis dataKey="month" />
                             <YAxis />
                             <Tooltip />
-                            <Bar dataKey="value" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+                            <Bar dataKey="value" fill="#059669" radius={[4, 4, 0, 0]} />
                         </BarChart>
                     </ResponsiveContainer>
                 </div>

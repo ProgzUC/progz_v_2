@@ -294,11 +294,11 @@
 }
 
 .admin-courses-page .instructor-avatar.tone-green { background: #059669; }
-.admin-courses-page .instructor-avatar.tone-blue { background: #2563EB; }
-.admin-courses-page .instructor-avatar.tone-orange { background: #EA580C; }
-.admin-courses-page .instructor-avatar.tone-purple { background: #7C3AED; }
-.admin-courses-page .instructor-avatar.tone-teal { background: #0D9488; }
-.admin-courses-page .instructor-avatar.tone-rose { background: #E11D48; }
+.admin-courses-page .instructor-avatar.tone-blue { background: #5B7C99; }
+.admin-courses-page .instructor-avatar.tone-orange { background: #A67C52; }
+.admin-courses-page .instructor-avatar.tone-purple { background: #6B7280; }
+.admin-courses-page .instructor-avatar.tone-teal { background: #5F8F86; }
+.admin-courses-page .instructor-avatar.tone-rose { background: #8B6B6B; }
 
 .admin-courses-page .instructor-name {
   font-size: 13px;

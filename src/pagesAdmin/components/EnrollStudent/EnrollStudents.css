@@ -89,8 +89,8 @@
   gap: 12px;
   padding: 14px 18px;
   margin-bottom: 16px;
-  background: #FFF7ED;
-  border: 1px solid #FED7AA;
+  background: #F3F4F6;
+  border: 1px solid var(--color-border);
   border-radius: 12px;
   color: var(--color-text);
   font-size: 14px;
@@ -98,7 +98,7 @@
 }
 
 .admin-enroll-students-page .zen-crm-banner i {
-  color: #EA580C;
+  color: #6B7280;
   font-size: 1.2rem;
   margin-top: 2px;
   flex-shrink: 0;
@@ -529,11 +529,11 @@
 }
 
 .admin-enroll-students-page .person-avatar.tone-green { background: #059669; }
-.admin-enroll-students-page .person-avatar.tone-blue { background: #2563EB; }
-.admin-enroll-students-page .person-avatar.tone-orange { background: #EA580C; }
-.admin-enroll-students-page .person-avatar.tone-purple { background: #7C3AED; }
-.admin-enroll-students-page .person-avatar.tone-teal { background: #0D9488; }
-.admin-enroll-students-page .person-avatar.tone-rose { background: #E11D48; }
+.admin-enroll-students-page .person-avatar.tone-blue { background: #5B7C99; }
+.admin-enroll-students-page .person-avatar.tone-orange { background: #A67C52; }
+.admin-enroll-students-page .person-avatar.tone-purple { background: #6B7280; }
+.admin-enroll-students-page .person-avatar.tone-teal { background: #5F8F86; }
+.admin-enroll-students-page .person-avatar.tone-rose { background: #8B6B6B; }
 
 .admin-enroll-students-page .student-info {
   display: flex;
@@ -556,7 +556,7 @@
 
 .admin-enroll-students-page .zen-course-hint {
   font-size: 11px !important;
-  color: #EA580C !important;
+  color: #6B7280 !important;
 }
 
 .admin-enroll-students-page .status-pill {
@@ -574,8 +574,8 @@
 }
 
 .admin-enroll-students-page .status-pill.pending {
-  background: #FFF7ED;
-  color: #EA580C;
+  background: #F3F4F6;
+  color: #6B7280;
 }
 
 .admin-enroll-students-page .empty-bulk {

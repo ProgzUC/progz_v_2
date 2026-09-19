@@ -294,11 +294,11 @@
 }
 
 .admin-batches-page .instructor-avatar.tone-green { background: #059669; }
-.admin-batches-page .instructor-avatar.tone-blue { background: #2563EB; }
-.admin-batches-page .instructor-avatar.tone-orange { background: #EA580C; }
-.admin-batches-page .instructor-avatar.tone-purple { background: #7C3AED; }
-.admin-batches-page .instructor-avatar.tone-teal { background: #0D9488; }
-.admin-batches-page .instructor-avatar.tone-rose { background: #E11D48; }
+.admin-batches-page .instructor-avatar.tone-blue { background: #5B7C99; }
+.admin-batches-page .instructor-avatar.tone-orange { background: #A67C52; }
+.admin-batches-page .instructor-avatar.tone-purple { background: #6B7280; }
+.admin-batches-page .instructor-avatar.tone-teal { background: #5F8F86; }
+.admin-batches-page .instructor-avatar.tone-rose { background: #8B6B6B; }
 
 .admin-batches-page .instructor-name {
   font-size: 13px;
@@ -362,12 +362,12 @@
 }
 
 .admin-batches-page .status-upcoming {
-  background: #FFF7ED;
-  color: #EA580C;
+  background: #F3F4F6;
+  color: #6B7280;
 }
 
 .admin-batches-page .status-upcoming .dot {
-  background: #EA580C;
+  background: #9CA3AF;
 }
 
 .admin-batches-page .actions-cell {

@@ -12,13 +12,13 @@ const ImageWithFallback = ({ src, alt, className, fallbackText }) => {
         if (!text) return ['#008952', '#004d40'];
 
         const colors = [
-            ['#6366f1', '#4f46e5'], // Indigo
-            ['#8b5cf6', '#7c3aed'], // Violet
-            ['#ec4899', '#db2777'], // Pink
-            ['#f59e0b', '#d97706'], // Amber
-            ['#10b981', '#059669'], // Emerald
-            ['#3b82f6', '#2563eb'], // Blue
-            ['#008952', '#004d40'], // Teal (default)
+            ['#059669', '#047857'], // Green
+            ['#047857', '#064E3B'], // Deep green
+            ['#5B7C99', '#475569'], // Slate blue
+            ['#6B7280', '#4B5563'], // Grey
+            ['#5F8F86', '#0F766E'], // Soft teal
+            ['#A67C52', '#78716C'], // Taupe
+            ['#008952', '#004d40'], // Brand teal
         ];
 
         const charCode = text.charCodeAt(0) || 0;

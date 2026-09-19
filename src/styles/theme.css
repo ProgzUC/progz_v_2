@@ -47,12 +47,12 @@
   /* ── Status ── */
   --color-success: #10B981;
   --color-success-bg: #D1FAE5;
-  --color-warning: #D97706;
-  --color-warning-bg: #FEF3C7;
+  --color-warning: #B45309;
+  --color-warning-bg: #FFFBEB;
   --color-error: #DC2626;
   --color-error-bg: #FEE2E2;
-  --color-info: #0284C7;
-  --color-info-bg: #E0F2FE;
+  --color-info: #047857;
+  --color-info-bg: #ECFDF5;
   --color-pending: #F87171;
   --color-pending-bg: #FEE2E2;
 

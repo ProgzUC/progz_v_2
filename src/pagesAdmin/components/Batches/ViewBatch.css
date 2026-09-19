@@ -31,7 +31,7 @@
 }
 
 .view-batch-page .back-btn:hover {
-    background: #0d8a4a !important;
+    background: #047857 !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 4px 12px rgba(16, 163, 88, 0.2) !important;
 }
@@ -127,7 +127,7 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #059669;
     color: var(--color-text-on-primary);
     display: flex;
     align-items: center;
@@ -333,7 +333,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: #5B7C99;
     color: var(--color-text-on-primary);
     display: flex;
     align-items: center;
@@ -388,7 +388,7 @@
 
 .view-batch-page .status-completed {
     background: var(--color-primary-soft);
-    color: #1e40af;
+    color: #6B7280;
 }
 
 .view-batch-page .status-completed .dot {

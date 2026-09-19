@@ -31,7 +31,7 @@
   border: none !important;
   font-size: 30px;
   cursor: pointer;
-  color: #008F4C;
+  color: #047857;
   padding: 0;
   margin: 0;
   line-height: 1;
@@ -102,7 +102,7 @@
 
 .searchable-select-input:focus {
   outline: none;
-  border-color: #0FA958;
+  border-color: #059669;
   box-shadow: 0 0 0 3px rgba(15, 169, 88, 0.1);
 }
 
@@ -249,7 +249,7 @@
   height: 36px;
   background: var(--color-surface);
   /* Explicit white */
-  color: #008F4C;
+  color: #047857;
   border: 1px solid #e0e0e0;
   border-radius: var(--radius-sm);
   font-size: 13px;
@@ -263,7 +263,7 @@
 .add-btn:hover {
   background: var(--color-surface);
   /* removes black hover */
-  border-color: #008F4C;
+  border-color: #047857;
 }
 
 /* Instructor list */
@@ -342,7 +342,7 @@
   height: 36px;
   background: var(--color-surface);
   /* Explicit white */
-  color: #008F4C;
+  color: #047857;
   border: 1px solid #e0e0e0;
   border-radius: var(--radius-sm);
   font-size: 13px;
@@ -355,7 +355,7 @@
 
 .done-btn:hover {
   background: var(--color-surface);
-  border-color: #008F4C;
+  border-color: #047857;
 }
 
 /* Mobile & Tablet Adjustments */

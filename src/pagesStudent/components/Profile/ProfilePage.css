@@ -286,23 +286,23 @@
 }
 
 .sp-detail-icon.tone-purple {
-    background: #ede9fe;
-    color: #6d28d9;
+    background: #F3F4F6;
+    color: #6B7280;
 }
 
 .sp-detail-icon.tone-blue {
-    background: #dbeafe;
-    color: #1d4ed8;
+    background: #ECFDF5;
+    color: #059669;
 }
 
 .sp-detail-icon.tone-orange {
-    background: #ffedd5;
-    color: #c2410c;
+    background: #F3F4F6;
+    color: #6B7280;
 }
 
 .sp-detail-icon.tone-teal {
-    background: #ccfbf1;
-    color: #0f766e;
+    background: #ECFDF5;
+    color: #047857;
 }
 
 .sp-detail-icon.tone-pink {
@@ -487,8 +487,8 @@
 }
 
 .stat-progress .stat-icon-wrapper {
-    background-color: rgba(139, 92, 246, 0.12);
-    color: #8b5cf6;
+    background-color: rgba(5, 150, 105, 0.12);
+    color: #059669;
 }
 
 .stat-data {

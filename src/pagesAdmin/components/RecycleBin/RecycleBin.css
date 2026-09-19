@@ -275,13 +275,13 @@
 }
 
 .admin-recycle-bin-page .type-badge.type-course {
-  background: #EFF6FF;
-  color: #2563EB;
+  background: #F3F4F6;
+  color: #4B5563;
 }
 
 .admin-recycle-bin-page .type-badge.type-batch {
-  background: #FFF7ED;
-  color: #EA580C;
+  background: #F3F4F6;
+  color: #6B7280;
 }
 
 .admin-recycle-bin-page .person-chip {
@@ -304,11 +304,11 @@
 }
 
 .admin-recycle-bin-page .person-avatar.tone-green { background: #059669; }
-.admin-recycle-bin-page .person-avatar.tone-blue { background: #2563EB; }
-.admin-recycle-bin-page .person-avatar.tone-orange { background: #EA580C; }
-.admin-recycle-bin-page .person-avatar.tone-purple { background: #7C3AED; }
-.admin-recycle-bin-page .person-avatar.tone-teal { background: #0D9488; }
-.admin-recycle-bin-page .person-avatar.tone-rose { background: #E11D48; }
+.admin-recycle-bin-page .person-avatar.tone-blue { background: #5B7C99; }
+.admin-recycle-bin-page .person-avatar.tone-orange { background: #A67C52; }
+.admin-recycle-bin-page .person-avatar.tone-purple { background: #6B7280; }
+.admin-recycle-bin-page .person-avatar.tone-teal { background: #5F8F86; }
+.admin-recycle-bin-page .person-avatar.tone-rose { background: #8B6B6B; }
 
 .admin-recycle-bin-page .person-name {
   font-size: 14px;

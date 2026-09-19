@@ -21,7 +21,7 @@
 }
 
 .add-btn {
-  background: #2aa96b;
+  background: #059669;
   color: var(--color-text-on-primary);
   padding: 8px 16px;
   border: none;
@@ -30,7 +30,7 @@
 }
 
 .add-btn:hover {
-  background: #238c59;
+  background: #047857;
 }
 
 /* Table */
@@ -83,7 +83,7 @@ th {
 }
 
 .icon.edit {
-  color: #4889f1;
+  color: #059669;
 }
 
 .icon.view {
@@ -107,6 +107,6 @@ th {
 }
 
 .pagination .active {
-  background: #2aa96b;
+  background: #059669;
   color: var(--color-text-on-primary);
 }

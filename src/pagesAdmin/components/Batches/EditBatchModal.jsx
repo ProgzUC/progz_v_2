@@ -317,7 +317,7 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
                         <h4 style={{ margin: 0 }}>Trainers & Modules</h4>
                         <button
                             onClick={addTrainerRow}
-                            style={{ background: "#e0f2fe", color: "#0284c7", border: "none", padding: "6px 12px", borderRadius: "6px", cursor: "pointer", fontSize: "13px", fontWeight: "600" }}
+                            style={{ background: "#ECFDF5", color: "#059669", border: "none", padding: "6px 12px", borderRadius: "6px", cursor: "pointer", fontSize: "13px", fontWeight: "600" }}
                         >
                             + Add Trainer
                         </button>

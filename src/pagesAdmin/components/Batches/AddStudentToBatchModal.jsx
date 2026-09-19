@@ -78,7 +78,7 @@ const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
                             <Link
                                 to={`/admin/enroll?tab=bulk&batchId=${batchId}`}
                                 onClick={onClose}
-                                style={{ color: "#0FA958", fontWeight: 600 }}
+                                style={{ color: "#059669", fontWeight: 600 }}
                             >
                                 Open bulk enrollment
                             </Link>
@@ -86,7 +86,7 @@ const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
                             <Link
                                 to={`/admin/enroll?tab=csv&batchId=${batchId}`}
                                 onClick={onClose}
-                                style={{ color: "#0FA958", fontWeight: 600 }}
+                                style={{ color: "#059669", fontWeight: 600 }}
                             >
                                 CSV import
                             </Link>

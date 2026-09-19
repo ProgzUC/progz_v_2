@@ -156,7 +156,7 @@
 }
 
 .modal-input:focus {
-    border-color: var(--color-primary, #2a7d38);
+    border-color: var(--color-primary, #047857);
     box-shadow: 0 0 0 3px rgba(42, 125, 56, 0.2);
 }
 
@@ -200,12 +200,12 @@
 .day-checkbox input[type="checkbox"] {
     width: 16px;
     height: 16px;
-    accent-color: var(--color-primary-bright, #10a358);
+    accent-color: var(--color-primary-bright, #059669);
     cursor: pointer;
 }
 
 .create-btn {
-    background: var(--color-primary-bright, #10a358);
+    background: var(--color-primary-bright, #059669);
     color: var(--color-text-on-primary, #fff);
     border: none;
     padding: 10px 18px;
