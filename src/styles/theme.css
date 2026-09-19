@@ -182,6 +182,107 @@
   --admin-card-bg: var(--color-surface);
   --admin-bg: var(--color-bg);
   --admin-border: var(--color-border);
+
+  /* ── Course cards (trainer My Courses) ── */
+  --mc-page-bg: var(--color-bg);
+  --mc-stat-bg: var(--color-surface);
+  --mc-stat-border: var(--color-border);
+  --mc-stat-value: var(--color-text);
+  --mc-stat-label: var(--color-text-secondary);
+  --mc-card-bg: var(--color-surface);
+  --mc-card-border: var(--color-border);
+  --mc-card-title: var(--color-text);
+  --mc-card-subtitle: var(--color-text-secondary);
+  --mc-card-meta: var(--color-text-muted);
+  --mc-card-meta-strong: var(--color-text);
+  --mc-menu-bg: var(--color-surface);
+  --mc-menu-border: var(--color-border);
+  --mc-menu-text: var(--color-text);
+  --mc-dots: var(--color-text-secondary);
+  --mc-avatar-border: var(--color-surface);
+  --mc-avatar-fill: var(--color-bg-muted);
+  --mc-create-border: var(--color-border-strong);
+  --mc-create-hover-bg: var(--color-bg-muted);
+}
+
+/* ── Dark theme (application-wide) ── */
+[data-theme="dark"],
+html.dark-mode {
+  color-scheme: dark;
+
+  --color-primary: #34D399;
+  --color-primary-hover: #6EE7B7;
+  --color-primary-active: #10B981;
+  --color-primary-soft: rgba(16, 185, 129, 0.18);
+  --color-primary-light: rgba(16, 185, 129, 0.12);
+  --color-primary-muted: #6EE7B7;
+  --color-primary-bright: #10B981;
+  --color-primary-gradient: linear-gradient(135deg, #064E3B 0%, #10B981 100%);
+
+  --color-bg: #0B0D14;
+  --color-bg-muted: #141824;
+  --color-bg-sidebar: #12141D;
+  --color-surface: #12141D;
+  --color-card-bg: #141824;
+  --color-surface-dark: #0B0D14;
+
+  --color-text: #F9FAFB;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+  --color-text-on-primary: #06281C;
+
+  --color-border: #1F2433;
+  --color-border-strong: #2A2F3F;
+  --color-border-hover: #334155;
+  --color-focus-ring: rgba(16, 185, 129, 0.35);
+
+  --color-navbar-bg: #12141D;
+  --color-navbar-border: #1F2433;
+  --color-navbar-text: #F9FAFB;
+  --color-navbar-text-muted: #94A3B8;
+  --color-navbar-hover-bg: rgba(16, 185, 129, 0.12);
+  --color-navbar-hover-text: #34D399;
+  --color-footer-bg: #0B0D14;
+  --color-footer-bg-mid: #12141D;
+  --color-footer-bar: #07080C;
+
+  --color-success: #34D399;
+  --color-success-bg: rgba(16, 185, 129, 0.15);
+  --color-warning: #FBBF24;
+  --color-warning-bg: rgba(251, 191, 36, 0.12);
+  --color-error: #F87171;
+  --color-error-bg: rgba(248, 113, 113, 0.12);
+  --color-info: #34D399;
+  --color-info-bg: rgba(16, 185, 129, 0.12);
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-navbar: 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-btn: 0 4px 14px rgba(16, 185, 129, 0.25);
+
+  --mc-page-bg: #0B0D14;
+  --mc-stat-bg: #141824;
+  --mc-stat-border: #1F2433;
+  --mc-stat-value: #F9FAFB;
+  --mc-stat-label: #9CA3AF;
+  --mc-card-bg: #12141D;
+  --mc-card-border: #1F2433;
+  --mc-card-title: #F9FAFB;
+  --mc-card-subtitle: #94A3B8;
+  --mc-card-meta: #64748B;
+  --mc-card-meta-strong: #CBD5E1;
+  --mc-menu-bg: #1A1D29;
+  --mc-menu-border: #2A2F3F;
+  --mc-menu-text: #E5E7EB;
+  --mc-dots: #9CA3AF;
+  --mc-avatar-border: #12141D;
+  --mc-avatar-fill: #2A2F3F;
+  --mc-create-border: #334155;
+  --mc-create-hover-bg: #151821;
 }
 
 /* ── Base Reset ── */

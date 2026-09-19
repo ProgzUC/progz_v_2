@@ -701,6 +701,15 @@ export default function MonitoringDashboard() {
             <div className="monitor-card glass errors-card">
               <div className="table-responsive">
                 <table className="monitor-table errors-table">
+                  <colgroup>
+                    <col className="col-expand" />
+                    <col className="col-time" />
+                    <col className="col-endpoint" />
+                    <col className="col-message" />
+                    <col className="col-ip" />
+                    <col className="col-status" />
+                    <col className="col-actions" />
+                  </colgroup>
                   <thead>
                     <tr>
                       <th className="col-expand"></th>
@@ -771,37 +780,34 @@ export default function MonitoringDashboard() {
                               </div>
                             </td>
                           </tr>
-                          
-                          {/* Expanded Row showing Stack Trace */}
-                          <AnimatePresence>
-                            {expandedErrorId === log._id && (
-                              <tr className="expanded-row-bg">
-                                <td colSpan="7">
-                                  <motion.div
-                                    initial={{ height: 0, opacity: 0 }}
-                                    animate={{ height: "auto", opacity: 1 }}
-                                    exit={{ height: 0, opacity: 0 }}
-                                    className="stack-trace-container"
-                                  >
-                                    <div className="stack-metadata">
-                                      {log.userId && (
-                                        <span>
-                                          <strong>Actor:</strong> {log.userId.name} ({log.userId.email}) - {log.userRole}
-                                        </span>
-                                      )}
-                                      {log.resolved && log.resolvedBy && (
-                                        <span>
-                                          <strong>Resolved By:</strong> {log.resolvedBy.name} ({log.resolvedBy.email}) at {new Date(log.resolvedAt).toLocaleString()}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <h4>Stack Trace:</h4>
-                                    <pre className="monospace">{log.stack || "No stack trace available."}</pre>
-                                  </motion.div>
-                                </td>
-                              </tr>
-                            )}
-                          </AnimatePresence>
+
+                          {expandedErrorId === log._id && (
+                            <tr className="expanded-row-bg">
+                              <td colSpan="7">
+                                <motion.div
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  transition={{ duration: 0.2 }}
+                                  className="stack-trace-container"
+                                >
+                                  <div className="stack-metadata">
+                                    {log.userId && (
+                                      <span>
+                                        <strong>Actor:</strong> {log.userId.name} ({log.userId.email}) - {log.userRole}
+                                      </span>
+                                    )}
+                                    {log.resolved && log.resolvedBy && (
+                                      <span>
+                                        <strong>Resolved By:</strong> {log.resolvedBy.name} ({log.resolvedBy.email}) at {new Date(log.resolvedAt).toLocaleString()}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <h4>Stack Trace:</h4>
+                                  <pre className="monospace">{log.stack || "No stack trace available."}</pre>
+                                </motion.div>
+                              </td>
+                            </tr>
+                          )}
                         </React.Fragment>
                       ))
                     ) : (

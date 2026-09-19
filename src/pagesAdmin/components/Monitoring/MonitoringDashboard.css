@@ -386,16 +386,14 @@ select.glass-input {
 }
 
 .error-filter-bar {
-  display: flex;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: minmax(220px, 1.4fr) minmax(180px, 280px) auto;
+  align-items: end;
   gap: 16px;
-  flex-wrap: wrap;
 }
 
 .error-filter-bar .filter-input-group {
-  flex: 1 1 240px;
   min-width: 0;
-  max-width: 420px;
 }
 
 .error-filter-bar .filter-input-group .glass-input,
@@ -408,13 +406,13 @@ select.glass-input {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: auto;
   flex: 0 0 auto;
   width: auto;
   height: 38px;
   white-space: nowrap;
   font-size: var(--font-size-sm);
   padding: 0 14px;
+  margin-bottom: 0;
 }
 
 .errors-card {
@@ -433,47 +431,69 @@ select.glass-input {
 .monitor-table.errors-table {
   table-layout: fixed;
   min-width: 980px;
+  width: 100%;
 }
 
 .monitor-table.errors-table th {
   white-space: nowrap;
+  text-align: left;
+  vertical-align: middle;
 }
 
 .monitor-table.errors-table th,
 .monitor-table.errors-table td {
   padding: 12px 14px;
+  text-align: left;
+  vertical-align: middle;
+  overflow: hidden;
 }
 
+.monitor-table.errors-table col.col-expand,
 .monitor-table.errors-table .col-expand {
   width: 44px;
+}
+
+.monitor-table.errors-table th.col-expand,
+.monitor-table.errors-table td.col-expand {
   padding-left: 12px;
   padding-right: 4px;
   text-align: center;
 }
 
+.monitor-table.errors-table col.col-time,
 .monitor-table.errors-table .col-time {
-  width: 124px;
+  width: 118px;
 }
 
+.monitor-table.errors-table col.col-endpoint,
 .monitor-table.errors-table .col-endpoint {
-  width: 22%;
+  width: 24%;
 }
 
+.monitor-table.errors-table col.col-message,
+.monitor-table.errors-table .col-message {
+  width: auto;
+}
+
+.monitor-table.errors-table col.col-ip,
 .monitor-table.errors-table .col-ip {
-  width: 112px;
+  width: 120px;
 }
 
+.monitor-table.errors-table col.col-status,
 .monitor-table.errors-table .col-status {
-  width: 124px;
+  width: 118px;
 }
 
+.monitor-table.errors-table col.col-actions,
 .monitor-table.errors-table .col-actions {
-  width: 152px;
+  width: 148px;
 }
 
 .monitor-table.errors-table .time-col {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: 2px;
   line-height: 1.25;
 }
@@ -492,10 +512,12 @@ select.glass-input {
 
 .monitor-table.errors-table .endpoint-col {
   min-width: 0;
+  align-items: center;
 }
 
 .monitor-table.errors-table .method-badge {
   flex-shrink: 0;
+  line-height: 1.2;
 }
 
 .monitor-table.errors-table .endpoint-url {
@@ -505,6 +527,7 @@ select.glass-input {
   white-space: nowrap;
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
+  line-height: 1.2;
 }
 
 .monitor-table.errors-table .error-message {
@@ -521,10 +544,25 @@ select.glass-input {
 .monitor-table.errors-table .col-status,
 .monitor-table.errors-table .col-actions {
   white-space: nowrap;
+  text-align: left;
+}
+
+.monitor-table.errors-table .col-ip {
+  font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+  font-size: var(--font-size-xs);
+}
+
+.monitor-table.errors-table .col-status .resolved-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .monitor-table.errors-table .action-buttons-group {
+  display: inline-flex;
   flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .table-responsive {
@@ -1075,12 +1113,13 @@ select.glass-input {
     overflow-x: auto;
   }
 
-  .error-filter-bar .filter-input-group {
-    max-width: none;
-    flex: 1 1 100%;
+  .error-filter-bar {
+    grid-template-columns: 1fr;
   }
 
   .error-count-badge {
-    margin-left: 0;
+    justify-self: start;
+    height: auto;
+    padding: 8px 14px;
   }
 }

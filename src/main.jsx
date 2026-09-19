@@ -7,12 +7,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
 import App from './App.jsx';
 import QueryProvider from './providers/QueryProvider.jsx';
+import { ThemeProvider } from './context/ThemeContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <QueryProvider >
-      <App />
-      <ToastContainer newestOnTop closeOnClick pauseOnHover theme="colored" />
+    <QueryProvider>
+      <ThemeProvider>
+        <App />
+        <ToastContainer newestOnTop closeOnClick pauseOnHover theme="colored" />
+      </ThemeProvider>
     </QueryProvider>
   </StrictMode>,
 )

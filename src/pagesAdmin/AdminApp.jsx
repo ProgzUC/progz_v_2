@@ -1,4 +1,3 @@
-import { ThemeProvider } from "./context/ThemeContext.jsx";
 import AdminLayout from "./components/AdminLayout/AdminLayout.jsx";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import "./AdminApp.css";
@@ -22,6 +21,7 @@ import RecycleBin from "./components/RecycleBin/RecycleBin.jsx";
 import AttendanceReport from "./components/reports/AttendanceReport.jsx";
 import OperationalReports from "./components/reports/OperationalReports.jsx";
 import MonitoringDashboard from "./components/Monitoring/MonitoringDashboard.jsx";
+import Settings from "./components/Settings/Settings.jsx";
 
 // AUTH COMPONENTS (legacy — routes commented; real auth is pagesAuth/login)
 // import SignIn from "./components/Sign/SignIn.jsx";
@@ -40,8 +40,6 @@ function AdminCreateCourse() {
 
 export default function AdminApp() {
   return (
-    <ThemeProvider>
-
       <Routes>
         {/* <Route path="/" element={<Navigate to="/overview" replace />} /> */}
         {/* AUTH ROUTES */}
@@ -84,6 +82,7 @@ export default function AdminApp() {
                   <Route path="instructor-preview" element={<InstructorPreview />} />
                   <Route path="recycle-bin" element={<RecycleBin />} />
                   <Route path="monitoring" element={<MonitoringDashboard />} />
+                  <Route path="settings" element={<Settings />} />
                   <Route path="reports" element={<OperationalReports />} />
                   <Route path="reports/operational" element={<OperationalReports />} />
                   <Route path="reports/attendance" element={<AttendanceReport />} />
@@ -93,7 +92,5 @@ export default function AdminApp() {
         />
 
       </Routes>
-
-    </ThemeProvider>
   );
 }

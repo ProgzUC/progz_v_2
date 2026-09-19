@@ -6,7 +6,6 @@ const Navbar = ({ activeTab, setActiveTab }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
-    // Handle scroll effect
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(window.scrollY > 20);
@@ -29,13 +28,10 @@ const Navbar = ({ activeTab, setActiveTab }) => {
     return (
         <nav className={`trainer-navbar ${scrolled ? 'scrolled' : ''}`}>
             <div className="trainer-nav-container">
-
-                {/* 1. BRAND LOGO */}
                 <div className="trainer-brand" onClick={() => handleTabClick('home')}>
                     <img src="/logo.png" alt="ProgZ" className="brand-logo" />
                 </div>
 
-                {/* 2. MOBILE TOGGLE */}
                 <button
                     className={`trainer-menu-toggle ${isMenuOpen ? 'active' : ''}`}
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -46,7 +42,6 @@ const Navbar = ({ activeTab, setActiveTab }) => {
                     <span className="bar"></span>
                 </button>
 
-                {/* 3. NAVIGATION LINKS */}
                 <div className={`trainer-nav-menu ${isMenuOpen ? 'active' : ''}`}>
                     <div className="nav-items">
                         <button
@@ -82,7 +77,6 @@ const Navbar = ({ activeTab, setActiveTab }) => {
                         </button>
                     </div>
 
-                    {/* 4. LOGOUT BUTTON (Inside menu for mobile, Flexed on desktop) */}
                     <div className="nav-actions">
                         <span className="brand-badge">Trainer</span>
                         <button className="trainer-logout-btn" onClick={handleLogout}>
@@ -92,7 +86,6 @@ const Navbar = ({ activeTab, setActiveTab }) => {
                     </div>
                 </div>
 
-                {/* Mobile Overlay */}
                 {isMenuOpen && (
                     <div
                         className="trainer-nav-overlay"

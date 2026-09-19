@@ -16,6 +16,7 @@ const NAV_ITEMS = [
   { to: "/admin/recycle-bin", icon: "bi-trash", label: "Recycle Bin" },
   { to: "/admin/reports", icon: "bi-bar-chart-line", label: "Reports & Analytics" },
   { to: "/admin/monitoring", icon: "bi-activity", label: "Monitoring" },
+  { to: "/admin/settings", icon: "bi-gear", label: "Settings" },
 ];
 
 const canHoverExpand = () =>

@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import SkipLink from "../../../components/common/SkipLink/SkipLink";
+import { AdminThemeProvider, useAdminTheme } from "../../context/AdminThemeContext";
+import "../../styles/admin-theme.css";
 import "./AdminLayout.css";
 
-const AdminLayout = ({ children }) => {
+const AdminLayoutShell = ({ children }) => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const { mode, accent } = useAdminTheme();
 
   useEffect(() => {
     document.body.classList.toggle("admin-no-scroll", mobileNavOpen);
@@ -24,7 +27,7 @@ const AdminLayout = ({ children }) => {
   return (
     <>
       <SkipLink targetId="admin-main-content" label="Skip to admin content" />
-      <div className="layout">
+      <div className="layout" data-admin-mode={mode} data-admin-accent={accent}>
         <Sidebar mobileOpen={mobileNavOpen} onMobileClose={() => setMobileNavOpen(false)} />
 
         {mobileNavOpen ? (
@@ -61,5 +64,11 @@ const AdminLayout = ({ children }) => {
     </>
   );
 };
+
+const AdminLayout = ({ children }) => (
+  <AdminThemeProvider>
+    <AdminLayoutShell>{children}</AdminLayoutShell>
+  </AdminThemeProvider>
+);
 
 export default AdminLayout;

@@ -1,0 +1,230 @@
+/* Admin-scoped theme: applies only under .layout */
+
+/* ── Accent: Emerald (default / brand) ── */
+.layout[data-admin-accent="emerald"] {
+  --color-primary: #064E3B;
+  --color-primary-hover: #053D2E;
+  --color-primary-active: #042F23;
+  --color-primary-soft: #D1FAE5;
+  --color-primary-light: #ECFDF5;
+  --color-primary-muted: #6EE7B7;
+  --color-primary-bright: #10B981;
+  --color-primary-gradient: linear-gradient(135deg, #064E3B 0%, #10B981 100%);
+  --color-focus-ring: rgba(6, 78, 59, 0.22);
+  --color-surface-dark: #053D2E;
+  --shadow-btn: 0 4px 14px rgba(16, 185, 129, 0.25);
+}
+
+/* ── Accent: Ocean ── */
+.layout[data-admin-accent="ocean"] {
+  --color-primary: #0C4A6E;
+  --color-primary-hover: #0A3D5C;
+  --color-primary-active: #082F47;
+  --color-primary-soft: #E0F2FE;
+  --color-primary-light: #F0F9FF;
+  --color-primary-muted: #7DD3FC;
+  --color-primary-bright: #0EA5E9;
+  --color-primary-gradient: linear-gradient(135deg, #0C4A6E 0%, #0EA5E9 100%);
+  --color-focus-ring: rgba(14, 165, 233, 0.28);
+  --color-surface-dark: #0A3D5C;
+  --color-info: #0284C7;
+  --color-info-bg: #E0F2FE;
+  --shadow-btn: 0 4px 14px rgba(14, 165, 233, 0.28);
+}
+
+/* ── Accent: Violet ── */
+.layout[data-admin-accent="violet"] {
+  --color-primary: #4C1D95;
+  --color-primary-hover: #3B1674;
+  --color-primary-active: #2E115C;
+  --color-primary-soft: #EDE9FE;
+  --color-primary-light: #F5F3FF;
+  --color-primary-muted: #C4B5FD;
+  --color-primary-bright: #8B5CF6;
+  --color-primary-gradient: linear-gradient(135deg, #4C1D95 0%, #8B5CF6 100%);
+  --color-focus-ring: rgba(139, 92, 246, 0.28);
+  --color-surface-dark: #3B1674;
+  --shadow-btn: 0 4px 14px rgba(139, 92, 246, 0.28);
+}
+
+/* ── Accent: Sunset ── */
+.layout[data-admin-accent="sunset"] {
+  --color-primary: #9A3412;
+  --color-primary-hover: #7C2D12;
+  --color-primary-active: #6B2410;
+  --color-primary-soft: #FFEDD5;
+  --color-primary-light: #FFF7ED;
+  --color-primary-muted: #FDBA74;
+  --color-primary-bright: #F97316;
+  --color-primary-gradient: linear-gradient(135deg, #9A3412 0%, #F97316 100%);
+  --color-focus-ring: rgba(249, 115, 22, 0.28);
+  --color-surface-dark: #7C2D12;
+  --shadow-btn: 0 4px 14px rgba(249, 115, 22, 0.28);
+}
+
+/* ── Accent: Rose ── */
+.layout[data-admin-accent="rose"] {
+  --color-primary: #9F1239;
+  --color-primary-hover: #881337;
+  --color-primary-active: #6F0F2C;
+  --color-primary-soft: #FFE4E6;
+  --color-primary-light: #FFF1F2;
+  --color-primary-muted: #FDA4AF;
+  --color-primary-bright: #F43F5E;
+  --color-primary-gradient: linear-gradient(135deg, #9F1239 0%, #F43F5E 100%);
+  --color-focus-ring: rgba(244, 63, 94, 0.28);
+  --color-surface-dark: #881337;
+  --shadow-btn: 0 4px 14px rgba(244, 63, 94, 0.28);
+}
+
+/* ── Accent: Slate ── */
+.layout[data-admin-accent="slate"] {
+  --color-primary: #1E293B;
+  --color-primary-hover: #0F172A;
+  --color-primary-active: #020617;
+  --color-primary-soft: #E2E8F0;
+  --color-primary-light: #F8FAFC;
+  --color-primary-muted: #94A3B8;
+  --color-primary-bright: #64748B;
+  --color-primary-gradient: linear-gradient(135deg, #1E293B 0%, #64748B 100%);
+  --color-focus-ring: rgba(100, 116, 139, 0.3);
+  --color-surface-dark: #0F172A;
+  --shadow-btn: 0 4px 14px rgba(30, 41, 59, 0.25);
+}
+
+/* ── Dark mode (admin only) ── */
+.layout[data-admin-mode="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #0B0D14;
+  --color-bg-muted: #141824;
+  --color-bg-sidebar: #12141D;
+  --color-surface: #12141D;
+  --color-card-bg: #141824;
+  --color-text: #F9FAFB;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+  --color-border: #1F2433;
+  --color-border-strong: #2A2F3F;
+  --color-border-hover: #334155;
+  --admin-bg: #0B0D14;
+
+  --color-navbar-bg: #12141D;
+  --color-navbar-border: #1F2433;
+  --color-navbar-text: #F9FAFB;
+  --color-navbar-text-muted: #94A3B8;
+
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45);
+  --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.layout[data-admin-mode="dark"][data-admin-accent="emerald"] {
+  --color-primary: #34D399;
+  --color-primary-hover: #6EE7B7;
+  --color-primary-active: #065F46;
+  --color-primary-soft: rgba(16, 185, 129, 0.18);
+  --color-primary-light: rgba(16, 185, 129, 0.12);
+  --color-primary-muted: #6EE7B7;
+  --color-primary-bright: #10B981;
+  --color-primary-gradient: linear-gradient(135deg, #064E3B 0%, #10B981 100%);
+  --color-text-on-primary: #06281C;
+  --color-focus-ring: rgba(16, 185, 129, 0.35);
+  --color-surface-dark: #0B0D14;
+  --color-navbar-hover-bg: rgba(16, 185, 129, 0.12);
+  --color-navbar-hover-text: #34D399;
+  --shadow-btn: 0 4px 14px rgba(16, 185, 129, 0.25);
+}
+
+.layout[data-admin-mode="dark"][data-admin-accent="ocean"] {
+  --color-primary: #38BDF8;
+  --color-primary-hover: #7DD3FC;
+  --color-primary-active: #0C4A6E;
+  --color-primary-soft: rgba(14, 165, 233, 0.2);
+  --color-primary-light: rgba(14, 165, 233, 0.12);
+  --color-primary-muted: #7DD3FC;
+  --color-primary-bright: #0EA5E9;
+  --color-primary-gradient: linear-gradient(135deg, #0C4A6E 0%, #0EA5E9 100%);
+  --color-text-on-primary: #082F47;
+  --color-focus-ring: rgba(14, 165, 233, 0.4);
+  --color-surface-dark: #0B0D14;
+  --color-navbar-hover-bg: rgba(14, 165, 233, 0.12);
+  --color-navbar-hover-text: #38BDF8;
+  --shadow-btn: 0 4px 14px rgba(14, 165, 233, 0.3);
+}
+
+.layout[data-admin-mode="dark"][data-admin-accent="violet"] {
+  --color-primary: #A78BFA;
+  --color-primary-hover: #C4B5FD;
+  --color-primary-active: #4C1D95;
+  --color-primary-soft: rgba(139, 92, 246, 0.2);
+  --color-primary-light: rgba(139, 92, 246, 0.12);
+  --color-primary-muted: #C4B5FD;
+  --color-primary-bright: #8B5CF6;
+  --color-primary-gradient: linear-gradient(135deg, #4C1D95 0%, #8B5CF6 100%);
+  --color-text-on-primary: #2E115C;
+  --color-focus-ring: rgba(139, 92, 246, 0.4);
+  --color-surface-dark: #0B0D14;
+  --color-navbar-hover-bg: rgba(139, 92, 246, 0.12);
+  --color-navbar-hover-text: #A78BFA;
+  --shadow-btn: 0 4px 14px rgba(139, 92, 246, 0.3);
+}
+
+.layout[data-admin-mode="dark"][data-admin-accent="sunset"] {
+  --color-primary: #FB923C;
+  --color-primary-hover: #FDBA74;
+  --color-primary-active: #9A3412;
+  --color-primary-soft: rgba(249, 115, 22, 0.2);
+  --color-primary-light: rgba(249, 115, 22, 0.12);
+  --color-primary-muted: #FDBA74;
+  --color-primary-bright: #F97316;
+  --color-primary-gradient: linear-gradient(135deg, #9A3412 0%, #F97316 100%);
+  --color-text-on-primary: #431407;
+  --color-focus-ring: rgba(249, 115, 22, 0.4);
+  --color-surface-dark: #0B0D14;
+  --color-navbar-hover-bg: rgba(249, 115, 22, 0.12);
+  --color-navbar-hover-text: #FB923C;
+  --shadow-btn: 0 4px 14px rgba(249, 115, 22, 0.3);
+}
+
+.layout[data-admin-mode="dark"][data-admin-accent="rose"] {
+  --color-primary: #FB7185;
+  --color-primary-hover: #FDA4AF;
+  --color-primary-active: #9F1239;
+  --color-primary-soft: rgba(244, 63, 94, 0.2);
+  --color-primary-light: rgba(244, 63, 94, 0.12);
+  --color-primary-muted: #FDA4AF;
+  --color-primary-bright: #F43F5E;
+  --color-primary-gradient: linear-gradient(135deg, #9F1239 0%, #F43F5E 100%);
+  --color-text-on-primary: #4C0519;
+  --color-focus-ring: rgba(244, 63, 94, 0.4);
+  --color-surface-dark: #0B0D14;
+  --color-navbar-hover-bg: rgba(244, 63, 94, 0.12);
+  --color-navbar-hover-text: #FB7185;
+  --shadow-btn: 0 4px 14px rgba(244, 63, 94, 0.3);
+}
+
+.layout[data-admin-mode="dark"][data-admin-accent="slate"] {
+  --color-primary: #CBD5E1;
+  --color-primary-hover: #E2E8F0;
+  --color-primary-active: #334155;
+  --color-primary-soft: rgba(148, 163, 184, 0.2);
+  --color-primary-light: rgba(148, 163, 184, 0.12);
+  --color-primary-muted: #94A3B8;
+  --color-primary-bright: #64748B;
+  --color-primary-gradient: linear-gradient(135deg, #1E293B 0%, #64748B 100%);
+  --color-text-on-primary: #0F172A;
+  --color-focus-ring: rgba(148, 163, 184, 0.4);
+  --color-surface-dark: #0B0D14;
+  --color-navbar-hover-bg: rgba(148, 163, 184, 0.12);
+  --color-navbar-hover-text: #CBD5E1;
+  --shadow-btn: 0 4px 14px rgba(100, 116, 139, 0.3);
+}
+
+/* Sidebar stays deep accent even when surface tokens shift */
+.layout[data-admin-mode="dark"] .admin-sidebar {
+  background: var(--color-primary-active);
+}

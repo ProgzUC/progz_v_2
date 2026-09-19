@@ -1,45 +1,56 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import './MyCourses.css';
 import { BsBook, BsPeople, BsLightningCharge } from 'react-icons/bs';
-import { 
-    BiPlus, 
-    BiDotsHorizontalRounded, 
-    BiPencil, 
-    BiTrash, 
-    BiCheckSquare, 
-    BiUser, 
-    BiLogoHtml5, 
-    BiLogoCss3, 
-    BiLogoBootstrap, 
-    BiLogoJavascript 
+import {
+    BiPlus,
+    BiDotsHorizontalRounded,
+    BiPencil,
+    BiTrash,
+    BiCheckSquare,
+    BiUser,
+    BiLogoHtml5,
+    BiLogoCss3,
+    BiLogoBootstrap,
+    BiLogoJavascript,
 } from 'react-icons/bi';
+import { FaReact, FaNodeJs, FaGithub } from 'react-icons/fa';
 import { useTrainerCourses } from '../../../hooks/useTrainerCourses';
 import { useDeleteCourse } from '../../../hooks/useCourses';
 import { confirmDelete } from '../../../utils/confirmDelete';
 import { showSuccess, showError } from '../../../utils/toast';
 import Loader from '../../../components/common/Loader/Loader';
 
-const COURSE_ACCENT_COLORS = [
-    { bg: 'linear-gradient(135deg, #059669, #047857)', btn: '#059669' },
-    { bg: 'linear-gradient(135deg, #047857, #064E3B)', btn: '#047857' },
-    { bg: 'linear-gradient(135deg, #5B7C99, #475569)', btn: '#5B7C99' },
-    { bg: 'linear-gradient(135deg, #6B7280, #4B5563)', btn: '#6B7280' },
-    { bg: 'linear-gradient(135deg, #10b981, #059669)', btn: '#059669' },
+/** Icon badge gradients; View Course button is always brand green via CSS */
+const ICON_ACCENTS = [
+    'linear-gradient(135deg, #10B981, #059669)',
+    'linear-gradient(135deg, #34D399, #047857)',
+    'linear-gradient(135deg, #6EE7B7, #059669)',
 ];
+
+const iconBgForCourse = (index = 0) => ICON_ACCENTS[index % ICON_ACCENTS.length];
 
 const getCourseLogo = (name, initial) => {
     const lower = (name || '').toLowerCase();
     if (lower.includes('html')) {
-        return <BiLogoHtml5 className="logo-icon-svg html-icon" />;
+        return <BiLogoHtml5 className="logo-icon-svg" aria-hidden="true" />;
     }
     if (lower.includes('css')) {
-        return <BiLogoCss3 className="logo-icon-svg css-icon" />;
+        return <BiLogoCss3 className="logo-icon-svg" aria-hidden="true" />;
     }
     if (lower.includes('bootstrap')) {
-        return <BiLogoBootstrap className="logo-icon-svg bootstrap-icon" />;
+        return <BiLogoBootstrap className="logo-icon-svg" aria-hidden="true" />;
     }
-    if (lower.includes('javascript') || lower.includes('js')) {
-        return <BiLogoJavascript className="logo-icon-svg js-icon" />;
+    if (lower.includes('javascript') || lower.includes('js') || lower.includes('es6')) {
+        return <BiLogoJavascript className="logo-icon-svg" aria-hidden="true" />;
+    }
+    if (lower.includes('react')) {
+        return <FaReact className="logo-icon-svg" aria-hidden="true" />;
+    }
+    if (lower.includes('node')) {
+        return <FaNodeJs className="logo-icon-svg" aria-hidden="true" />;
+    }
+    if (lower.includes('git')) {
+        return <FaGithub className="logo-icon-svg" aria-hidden="true" />;
     }
     return <span className="course-avatar-initial">{initial}</span>;
 };
@@ -50,7 +61,6 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
 
     const [openDropdownId, setOpenDropdownId] = useState(null);
 
-    // Close three-dot dropdown menu when clicking anywhere outside
     useEffect(() => {
         const handleClickOutside = () => setOpenDropdownId(null);
         window.addEventListener('click', handleClickOutside);
@@ -85,7 +95,6 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
 
     const coursesData = useMemo(() => courses || [], [courses]);
 
-    // Calculate aggregated summary stats
     const stats = useMemo(() => {
         const totalCourses = coursesData.length;
         const totalSections = coursesData.reduce((acc, c) => acc + (c.totalSections || 0), 0);
@@ -104,21 +113,17 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
     if (isError) {
         return (
             <div className="my-courses-container trainer-myCourses">
-                <p style={{ textAlign: 'center', padding: '40px', color: '#ef4444' }}>
-                    Error loading courses. Please try again later.
-                </p>
+                <p className="courses-error">Error loading courses. Please try again later.</p>
             </div>
         );
     }
 
     return (
         <div className="my-courses-container trainer-myCourses">
-
-            {/* TOP STATS CARDS (4 ROW CARDS) */}
             <div className="trainer-stats-row">
                 <div className="stat-card">
-                    <div className="stat-icon-box stat-purple">
-                        <BsBook />
+                    <div className="stat-icon-box stat-courses">
+                        <BsBook aria-hidden="true" />
                     </div>
                     <div className="stat-info">
                         <span className="stat-value">{stats.totalCourses}</span>
@@ -127,8 +132,8 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                 </div>
 
                 <div className="stat-card">
-                    <div className="stat-icon-box stat-cyan">
-                        <BiCheckSquare />
+                    <div className="stat-icon-box stat-sections">
+                        <BiCheckSquare aria-hidden="true" />
                     </div>
                     <div className="stat-info">
                         <span className="stat-value">{stats.totalSections}</span>
@@ -137,8 +142,8 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                 </div>
 
                 <div className="stat-card">
-                    <div className="stat-icon-box stat-amber">
-                        <BiUser />
+                    <div className="stat-icon-box stat-students">
+                        <BiUser aria-hidden="true" />
                     </div>
                     <div className="stat-info">
                         <span className="stat-value">{stats.totalStudents}</span>
@@ -147,8 +152,8 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                 </div>
 
                 <div className="stat-card">
-                    <div className="stat-icon-box stat-pink">
-                        <BsLightningCharge />
+                    <div className="stat-icon-box stat-published">
+                        <BsLightningCharge aria-hidden="true" />
                     </div>
                     <div className="stat-info">
                         <span className="stat-value">100%</span>
@@ -157,100 +162,105 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                 </div>
             </div>
 
-            {/* COURSES GRID */}
             <div className="trainer-courses-grid">
                 {coursesData.map((course, index) => {
-                    const colorScheme = COURSE_ACCENT_COLORS[index % COURSE_ACCENT_COLORS.length];
-                    const isDropdownOpen = openDropdownId === (course.courseId || course._id || course.id);
                     const courseId = course.courseId || course._id || course.id;
+                    const isDropdownOpen = openDropdownId === courseId;
                     const initial = (course.courseName || 'C').charAt(0).toUpperCase();
+                    const sections = course.totalSections || 0;
+                    const students = course.totalStudents || 0;
 
                     return (
-                        <div key={courseId} className="trainer-course-card">
-                            
-                            {/* CARD TOP HEADER: LOGO/ICON BADGE */}
+                        <article key={courseId} className="trainer-course-card">
                             <div className="trainer-card-header">
-                                <div className="course-avatar-box" style={{ background: colorScheme.bg }}>
+                                <div
+                                    className="course-avatar-box"
+                                    style={{ background: iconBgForCourse(index) }}
+                                >
                                     {course.thumbnail?.url ? (
-                                        <img src={course.thumbnail.url} alt={course.courseName} className="course-avatar-img" />
+                                        <img
+                                            src={course.thumbnail.url}
+                                            alt=""
+                                            className="course-avatar-img"
+                                        />
                                     ) : (
                                         getCourseLogo(course.courseName, initial)
                                     )}
                                 </div>
                             </div>
 
-                            {/* CARD MAIN CONTENT */}
                             <div className="trainer-card-body">
                                 <h3 className="trainer-course-title">{course.courseName}</h3>
-                                <p className="trainer-course-subtitle">
-                                    {course.category || course.description || 'Course Curriculum'}
-                                </p>
+                                <p className="trainer-course-subtitle">Course Curriculum</p>
 
                                 <div className="trainer-course-meta">
                                     <span className="meta-badge">
-                                        <BsBook /> {course.totalSections || 0} Sections
+                                        <BsBook aria-hidden="true" /> {sections} Sections
                                     </span>
                                     <span className="meta-badge">
-                                        <BsPeople /> {course.totalStudents || 0} Students
+                                        <BsPeople aria-hidden="true" /> {students} Students
                                     </span>
                                 </div>
                             </div>
 
-                            {/* CARD FOOTER: VIEW COURSE BUTTON & THREE DOTS BUTTON */}
                             <div className="trainer-card-footer">
                                 <button
+                                    type="button"
                                     className="trainer-view-course-btn"
-                                    style={{ backgroundColor: colorScheme.btn }}
                                     onClick={() => onManageCourse(course)}
                                 >
-                                    View Course &rarr;
+                                    View Course →
                                 </button>
 
-                                {/* THREE DOTS BUTTON (CLEARLY VISIBLE BY DEFAULT) */}
                                 <div className="dropdown-wrapper">
                                     <button
+                                        type="button"
                                         className="three-dots-action-btn"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             setOpenDropdownId(isDropdownOpen ? null : courseId);
                                         }}
                                         title="Course options"
-                                        aria-label="Options"
+                                        aria-label="Course options"
                                     >
-                                        <BiDotsHorizontalRounded />
+                                        <BiDotsHorizontalRounded aria-hidden="true" />
                                     </button>
 
-                                    {/* DROPDOWN POPUP MENU */}
                                     {isDropdownOpen && (
                                         <div className="three-dots-menu">
                                             <button
+                                                type="button"
                                                 className="menu-item edit-item"
                                                 onClick={(e) => handleEditCourse(e, course)}
                                             >
-                                                <BiPencil /> Edit
+                                                <BiPencil aria-hidden="true" /> Edit
                                             </button>
                                             <button
+                                                type="button"
                                                 className="menu-item delete-item"
                                                 onClick={(e) => handleDeleteCourse(e, course)}
                                             >
-                                                <BiTrash /> Delete
+                                                <BiTrash aria-hidden="true" /> Delete
                                             </button>
                                         </div>
                                     )}
                                 </div>
                             </div>
-                        </div>
+                        </article>
                     );
                 })}
 
-                {/* CREATE NEW COURSE CARD */}
-                <div className="create-new-course-card" onClick={onCreateNew}>
+                <button
+                    type="button"
+                    className="create-new-course-card"
+                    onClick={onCreateNew}
+                >
                     <div className="plus-icon-circle">
-                        <BiPlus />
+                        <BiPlus aria-hidden="true" />
                     </div>
                     <p className="create-card-title">Create New Course</p>
                     <p className="create-card-subtitle">Start a new curriculum</p>
-                </div>
+                </button>
             </div>
         </div>
     );
