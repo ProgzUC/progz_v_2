@@ -432,20 +432,31 @@ select.glass-input {
   table-layout: fixed;
   min-width: 980px;
   width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 .monitor-table.errors-table th {
   white-space: nowrap;
   text-align: left;
   vertical-align: middle;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-muted);
 }
 
-.monitor-table.errors-table th,
-.monitor-table.errors-table td {
-  padding: 12px 14px;
+.monitor-table.errors-table tbody tr.err-row > td {
+  padding: 0 14px;
+  height: 56px;
   text-align: left;
   vertical-align: middle;
+  border-bottom: 1px solid var(--color-border);
   overflow: hidden;
+  background: transparent;
+}
+
+.monitor-table.errors-table tbody tr.err-row:hover > td {
+  background: var(--color-primary-light);
 }
 
 .monitor-table.errors-table col.col-expand,
@@ -455,19 +466,19 @@ select.glass-input {
 
 .monitor-table.errors-table th.col-expand,
 .monitor-table.errors-table td.col-expand {
-  padding-left: 12px;
+  padding-left: 10px;
   padding-right: 4px;
   text-align: center;
 }
 
 .monitor-table.errors-table col.col-time,
 .monitor-table.errors-table .col-time {
-  width: 118px;
+  width: 170px;
 }
 
 .monitor-table.errors-table col.col-endpoint,
 .monitor-table.errors-table .col-endpoint {
-  width: 24%;
+  width: 26%;
 }
 
 .monitor-table.errors-table col.col-message,
@@ -477,92 +488,112 @@ select.glass-input {
 
 .monitor-table.errors-table col.col-ip,
 .monitor-table.errors-table .col-ip {
-  width: 120px;
+  width: 100px;
 }
 
 .monitor-table.errors-table col.col-status,
 .monitor-table.errors-table .col-status {
-  width: 118px;
+  width: 120px;
 }
 
 .monitor-table.errors-table col.col-actions,
 .monitor-table.errors-table .col-actions {
-  width: 148px;
+  width: 160px;
 }
 
-.monitor-table.errors-table .time-col {
+/* One shared horizontal center line for every cell */
+.monitor-table.errors-table .err-cell {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2px;
-  line-height: 1.25;
-}
-
-.monitor-table.errors-table .time-date {
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-  white-space: nowrap;
-}
-
-.monitor-table.errors-table .time-clock {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
-  white-space: nowrap;
-}
-
-.monitor-table.errors-table .endpoint-col {
-  min-width: 0;
+  flex-direction: row;
+  flex-wrap: nowrap;
   align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  height: 56px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+
+.monitor-table.errors-table .err-cell--center {
+  justify-content: center;
+}
+
+.monitor-table.errors-table .time-inline {
+  display: block;
+  white-space: nowrap;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.25;
 }
 
 .monitor-table.errors-table .method-badge {
   flex-shrink: 0;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .monitor-table.errors-table .endpoint-url {
+  flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
-.monitor-table.errors-table .error-message {
-  max-width: none;
-  line-height: 1.4;
-  word-break: break-word;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+.monitor-table.errors-table .error-message-text {
+  display: block;
+  width: 100%;
+  min-width: 0;
   overflow: hidden;
-}
-
-.monitor-table.errors-table .col-ip,
-.monitor-table.errors-table .col-status,
-.monitor-table.errors-table .col-actions {
+  text-overflow: ellipsis;
   white-space: nowrap;
-  text-align: left;
+  line-height: 1.25;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  border: none;
+  margin: 0;
+  padding: 0;
 }
 
-.monitor-table.errors-table .col-ip {
+.monitor-table.errors-table .ip-text {
+  white-space: nowrap;
   font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
   font-size: var(--font-size-xs);
+  color: var(--color-text);
+  line-height: 1.25;
 }
 
-.monitor-table.errors-table .col-status .resolved-status {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.monitor-table.errors-table .method-badge.get {
+  background: #0d9488;
 }
 
-.monitor-table.errors-table .action-buttons-group {
-  display: inline-flex;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: center;
+.monitor-table.errors-table .method-badge.post {
+  background: #047857;
+}
+
+.monitor-table.errors-table .method-badge.put {
+  background: #d97706;
+}
+
+.monitor-table.errors-table .method-badge.delete {
+  background: #dc2626;
+}
+
+.monitor-table.errors-table .resolved-status {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.monitor-table.errors-table .btn-action-resolve,
+.monitor-table.errors-table .btn-action-delete {
+  flex-shrink: 0;
 }
 
 .table-responsive {

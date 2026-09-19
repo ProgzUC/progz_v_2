@@ -731,39 +731,55 @@ export default function MonitoringDashboard() {
                     ) : errorLogs.length > 0 ? (
                       errorLogs.map((log) => (
                         <React.Fragment key={log._id}>
-                          <tr>
+                          <tr className="err-row">
                             <td className="col-expand">
-                              <button
-                                onClick={() => setExpandedErrorId(expandedErrorId === log._id ? null : log._id)}
-                                className="btn-expand"
-                                aria-label="Expand error stack trace"
-                              >
-                                <i className={`bi ${expandedErrorId === log._id ? "bi-chevron-down" : "bi-chevron-right"}`}></i>
-                              </button>
+                              <div className="err-cell err-cell--center">
+                                <button
+                                  onClick={() => setExpandedErrorId(expandedErrorId === log._id ? null : log._id)}
+                                  className="btn-expand"
+                                  aria-label="Expand error stack trace"
+                                >
+                                  <i className={`bi ${expandedErrorId === log._id ? "bi-chevron-down" : "bi-chevron-right"}`}></i>
+                                </button>
+                              </div>
                             </td>
                             <td className="col-time">
-                              <div className="time-col">
-                                <span className="time-date">{new Date(log.timestamp).toLocaleDateString()}</span>
-                                <span className="time-clock">{new Date(log.timestamp).toLocaleTimeString()}</span>
+                              <div className="err-cell">
+                                <span className="time-inline">
+                                  {new Date(log.timestamp).toLocaleDateString()}{" "}
+                                  {new Date(log.timestamp).toLocaleTimeString()}
+                                </span>
                               </div>
                             </td>
                             <td className="col-endpoint">
-                              <div className="endpoint-col">
+                              <div className="err-cell">
                                 <span className={`method-badge ${log.method?.toLowerCase() || "process"}`}>
                                   {log.method || "PROCESS"}
                                 </span>
-                                <span className="endpoint-url monospace">{log.url || "INTERNAL"}</span>
+                                <span className="endpoint-url monospace" title={log.url || "INTERNAL"}>
+                                  {log.url || "INTERNAL"}
+                                </span>
                               </div>
                             </td>
-                            <td className="col-message error-message">{log.message}</td>
-                            <td className="col-ip">{log.ipAddress || "System"}</td>
+                            <td className="col-message">
+                              <div className="err-cell" title={log.message}>
+                                <span className="error-message-text">{log.message}</span>
+                              </div>
+                            </td>
+                            <td className="col-ip">
+                              <div className="err-cell">
+                                <span className="ip-text">{log.ipAddress || "System"}</span>
+                              </div>
+                            </td>
                             <td className="col-status">
-                              <span className={`resolved-status ${log.resolved ? "resolved" : "unresolved"}`}>
-                                {log.resolved ? "Resolved" : "Unresolved"}
-                              </span>
+                              <div className="err-cell">
+                                <span className={`resolved-status ${log.resolved ? "resolved" : "unresolved"}`}>
+                                  {log.resolved ? "Resolved" : "Unresolved"}
+                                </span>
+                              </div>
                             </td>
                             <td className="col-actions">
-                              <div className="action-buttons-group">
+                              <div className="err-cell">
                                 <button
                                   onClick={() => handleResolveError(log._id, log.resolved)}
                                   className={`btn-action-resolve ${log.resolved ? "btn-unresolve" : "btn-resolve"}`}

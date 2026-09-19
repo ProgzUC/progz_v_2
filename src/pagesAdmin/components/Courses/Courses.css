@@ -266,51 +266,6 @@
   font-weight: 600;
 }
 
-.admin-courses-page .instructor-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 14px;
-  align-items: center;
-}
-
-.admin-courses-page .instructor-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.admin-courses-page .instructor-avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 700;
-  color: #fff;
-  flex-shrink: 0;
-  letter-spacing: 0.02em;
-}
-
-.admin-courses-page .instructor-avatar.tone-green { background: #059669; }
-.admin-courses-page .instructor-avatar.tone-blue { background: #5B7C99; }
-.admin-courses-page .instructor-avatar.tone-orange { background: #A67C52; }
-.admin-courses-page .instructor-avatar.tone-purple { background: #6B7280; }
-.admin-courses-page .instructor-avatar.tone-teal { background: #5F8F86; }
-.admin-courses-page .instructor-avatar.tone-rose { background: #8B6B6B; }
-
-.admin-courses-page .instructor-name {
-  font-size: 13px;
-  color: var(--color-text-secondary);
-  font-weight: 500;
-}
-
-.admin-courses-page .no-instructors {
-  font-size: 12px;
-  color: var(--color-text-muted);
-}
-
 .admin-courses-page .enrolled-badge {
   display: inline-flex;
   align-items: center;

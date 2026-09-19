@@ -340,7 +340,22 @@ const ApproveUser = () => {
                             {(currentPage - 1) * rowsPerPage + index + 1}
                           </td>
                           <td>
-                            <div className="person-chip">
+                            <div
+                              className="person-chip person-chip--selectable"
+                              onDoubleClick={() => {
+                                if (!isBulkProcessing) toggleSelect(userId);
+                              }}
+                              title="Double-click name to select"
+                              role="button"
+                              tabIndex={0}
+                              onKeyDown={(e) => {
+                                if (isBulkProcessing) return;
+                                if (e.key === "Enter" || e.key === " ") {
+                                  e.preventDefault();
+                                  toggleSelect(userId);
+                                }
+                              }}
+                            >
                               <span
                                 className={`person-avatar tone-${toneForName(name)}`}
                                 aria-hidden="true"

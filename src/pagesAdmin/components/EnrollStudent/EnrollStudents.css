@@ -490,7 +490,6 @@
   gap: 12px;
   padding: 14px 16px;
   border-bottom: 1px solid #F3F4F6;
-  cursor: pointer;
   transition: background 0.15s;
 }
 
@@ -541,6 +540,23 @@
   flex-grow: 1;
   min-width: 0;
   gap: 2px;
+}
+
+.admin-enroll-students-page .student-info--selectable {
+  cursor: pointer;
+  user-select: none;
+  border-radius: 6px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+}
+
+.admin-enroll-students-page .student-info--selectable:hover strong {
+  color: #059669;
+}
+
+.admin-enroll-students-page .student-info--selectable:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
 }
 
 .admin-enroll-students-page .student-info strong {

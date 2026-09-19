@@ -693,14 +693,13 @@ const EnrollStudents = () => {
                     <div
                       key={`${s.isPending ? "p" : "a"}-${s._id}`}
                       className={`student-select-row ${isChecked ? "selected" : ""}`}
-                      onClick={() =>
-                        s.isPending ? togglePendingSelect(s._id) : toggleActiveSelect(s._id)
-                      }
                     >
                       <input
                         type="checkbox"
                         checked={isChecked}
-                        onChange={() => {}}
+                        onChange={() =>
+                          s.isPending ? togglePendingSelect(s._id) : toggleActiveSelect(s._id)
+                        }
                         className="student-checkbox"
                         aria-label={`Select ${name}`}
                       />
@@ -710,7 +709,21 @@ const EnrollStudents = () => {
                       >
                         {getInitials(name)}
                       </span>
-                      <div className="student-info">
+                      <div
+                        className="student-info student-info--selectable"
+                        onDoubleClick={() =>
+                          s.isPending ? togglePendingSelect(s._id) : toggleActiveSelect(s._id)
+                        }
+                        title="Double-click name to select"
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            s.isPending ? togglePendingSelect(s._id) : toggleActiveSelect(s._id);
+                          }
+                        }}
+                      >
                         <strong>{name}</strong>
                         <span>{s.email}</span>
                         {s.zenCourseName && (

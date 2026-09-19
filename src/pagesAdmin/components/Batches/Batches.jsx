@@ -8,28 +8,12 @@ import { useBatches, useDeleteBatch } from "../../../hooks/useBatches";
 import { useCourses } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
+import PersonStack from "../../../components/common/PersonStack/PersonStack";
 import CreateBatchModal from "../EnrollStudent/CreateBatchModal";
 import AddStudentToBatchModal from "./AddStudentToBatchModal";
 import EditBatchModal from "./EditBatchModal";
 import AccessibleModal from "../../../components/common/AccessibleModal/AccessibleModal";
 import { formatBatchCourseNames, getBatchCourseNames } from "../../../features/batches/batchFormState";
-
-const AVATAR_TONES = ["green", "blue", "orange", "purple", "teal", "rose"];
-
-const getInitials = (name = "") => {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  if (!parts.length) return "?";
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
-};
-
-const toneForName = (name = "") => {
-  let hash = 0;
-  for (let i = 0; i < name.length; i += 1) {
-    hash = (hash + name.charCodeAt(i) * (i + 1)) % AVATAR_TONES.length;
-  }
-  return AVATAR_TONES[hash];
-};
 
 const Batches = () => {
   const { data: batchesData, isLoading, isError, error } = useBatches();
@@ -241,23 +225,7 @@ const Batches = () => {
                           <td className="col-batch">{batch.name}</td>
                           <td>{getCourseName(batch) || "—"}</td>
                           <td>
-                            <div className="instructor-list">
-                              {trainers.length > 0 ? (
-                                trainers.map((name) => (
-                                  <div key={name} className="instructor-chip">
-                                    <span
-                                      className={`instructor-avatar tone-${toneForName(name)}`}
-                                      aria-hidden="true"
-                                    >
-                                      {getInitials(name)}
-                                    </span>
-                                    <span className="instructor-name">{name}</span>
-                                  </div>
-                                ))
-                              ) : (
-                                <span className="no-instructors">No instructors</span>
-                              )}
-                            </div>
+                            <PersonStack names={trainers} />
                           </td>
                           <td>
                             {batch.startDate

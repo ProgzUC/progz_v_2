@@ -5,24 +5,8 @@ import Swal from "sweetalert2";
 import { useCourses, useDeleteCourse } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
+import PersonStack from "../../../components/common/PersonStack/PersonStack";
 import { LuEye, LuPencil, LuUserPlus, LuTrash2 } from "react-icons/lu";
-
-const AVATAR_TONES = ["green", "blue", "orange", "purple", "teal", "rose"];
-
-const getInitials = (name = "") => {
-  const parts = name.trim().split(/\s+/).filter(Boolean);
-  if (!parts.length) return "?";
-  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
-};
-
-const toneForName = (name = "") => {
-  let hash = 0;
-  for (let i = 0; i < name.length; i += 1) {
-    hash = (hash + name.charCodeAt(i) * (i + 1)) % AVATAR_TONES.length;
-  }
-  return AVATAR_TONES[hash];
-};
 
 const Courses = () => {
   const navigate = useNavigate();
@@ -223,29 +207,13 @@ const Courses = () => {
                           <td className="col-sno">{(page - 1) * rowsPerPage + index + 1}</td>
                           <td className="col-course">{course.courseName}</td>
                           <td>
-                            <div className="instructor-list">
-                              {course.instructor && course.instructor.length > 0 ? (
-                                course.instructor.map((inst) => {
-                                  const name =
-                                    inst.name ||
-                                    `${inst.firstName || ""} ${inst.lastName || ""}`.trim() ||
-                                    "Instructor";
-                                  return (
-                                    <div key={inst._id || name} className="instructor-chip">
-                                      <span
-                                        className={`instructor-avatar tone-${toneForName(name)}`}
-                                        aria-hidden="true"
-                                      >
-                                        {getInitials(name)}
-                                      </span>
-                                      <span className="instructor-name">{name}</span>
-                                    </div>
-                                  );
-                                })
-                              ) : (
-                                <span className="no-instructors">No instructors</span>
+                            <PersonStack
+                              names={(course.instructor || []).map((inst) =>
+                                inst.name ||
+                                `${inst.firstName || ""} ${inst.lastName || ""}`.trim() ||
+                                "Instructor"
                               )}
-                            </div>
+                            />
                           </td>
 
                           <td>
