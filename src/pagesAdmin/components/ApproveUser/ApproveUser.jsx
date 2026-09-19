@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { FaSearch } from "react-icons/fa";
+import React, { useState, useMemo, useEffect } from "react";
 import { LuEye, LuCheck, LuX } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
@@ -10,7 +9,24 @@ import PaginationBar from "../../../components/common/PaginationBar/PaginationBa
 import Swal from "sweetalert2";
 import "./ApproveUser.css";
 
+const AVATAR_TONES = ["green", "blue", "orange", "purple", "teal", "rose"];
+
 const getUserId = (user) => user._id || user.id;
+
+const getInitials = (name = "") => {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+};
+
+const toneForName = (name = "") => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i += 1) {
+    hash = (hash + name.charCodeAt(i) * (i + 1)) % AVATAR_TONES.length;
+  }
+  return AVATAR_TONES[hash];
+};
 
 const ApproveUser = () => {
   const navigate = useNavigate();
@@ -22,25 +38,32 @@ const ApproveUser = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedIds, setSelectedIds] = useState(() => new Set());
   const [isBulkProcessing, setIsBulkProcessing] = useState(false);
-  const itemsPerPage = 6;
+  const rowsPerPage = 7;
 
-  const filteredUsers = pendingUsers.filter(user => {
-    const role = (user.role || "").toLowerCase();
-    const matchesTab =
-      activeTab === "student"
-        ? role === "student"
-        : role === "trainer" || role === "instructor";
-    const matchesSearch = (user.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (user.source || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (user.zenCourseName || "").toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesTab && matchesSearch;
-  });
+  const filteredUsers = useMemo(() => {
+    return pendingUsers.filter((user) => {
+      const role = (user.role || "").toLowerCase();
+      const matchesTab =
+        activeTab === "student"
+          ? role === "student"
+          : role === "trainer" || role === "instructor";
+      const matchesSearch =
+        (user.name || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.source || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.zenCourseName || "").toLowerCase().includes(searchTerm.toLowerCase());
+      return matchesTab && matchesSearch;
+    });
+  }, [pendingUsers, activeTab, searchTerm]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredUsers.length / itemsPerPage));
-  const activePage = Math.min(currentPage, totalPages);
+  useEffect(() => {
+    setCurrentPage(1);
+    setSelectedIds(new Set());
+  }, [searchTerm, activeTab]);
+
+  const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
   const paginatedData = filteredUsers.slice(
-    (activePage - 1) * itemsPerPage,
-    activePage * itemsPerPage
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
   );
 
   const changePage = (page) => {
@@ -87,7 +110,7 @@ const ApproveUser = () => {
       text: `${ids.length} ${activeTab}(s) will be ${isApprove ? "approved" : "rejected"}.`,
       icon: isApprove ? "question" : "warning",
       showCancelButton: true,
-      confirmButtonColor: isApprove ? "#0FA958" : "#d33",
+      confirmButtonColor: isApprove ? "#059669" : "#d33",
       cancelButtonColor: "#6b7280",
       confirmButtonText: isApprove ? "Yes, approve all" : "Yes, reject all",
     });
@@ -129,248 +152,264 @@ const ApproveUser = () => {
   const { mutate: reject } = useRejectUser();
 
   const handleView = (user) => {
-    navigate('/admin/user-detail-view', { state: { user } });
+    navigate("/admin/user-detail-view", { state: { user } });
   };
 
   const handleApprove = (user) => {
     Swal.fire({
-      title: 'Approve User?',
+      title: "Approve User?",
       text: `Are you sure you want to approve ${user.name}?`,
-      icon: 'question',
+      icon: "question",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, approve!'
+      confirmButtonColor: "#059669",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, approve!",
     }).then((result) => {
       if (result.isConfirmed) {
         approve(user._id || user.id);
-        Swal.fire('Approved!', 'User has been approved.', 'success');
+        Swal.fire("Approved!", "User has been approved.", "success");
       }
     });
   };
 
   const handleReject = (user) => {
     Swal.fire({
-      title: 'Reject User?',
+      title: "Reject User?",
       text: `Are you sure you want to reject ${user.name}?`,
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, reject!'
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, reject!",
     }).then((result) => {
       if (result.isConfirmed) {
         reject(user._id || user.id);
-        Swal.fire('Rejected!', 'User has been rejected.', 'success');
+        Swal.fire("Rejected!", "User has been rejected.", "success");
       }
     });
   };
 
-  if (isLoading) return <Loader />;
-  if (isError) return <div>Error: {error.message}</div>;
+  const colSpan = activeTab === "student" ? 7 : 6;
 
   return (
     <div className="admin-approve-user-page">
-      <div className="approve-user-header-main">
-        <h1 className="page-title">Approve Users</h1>
-        <div className="search-bar-container">
-          <FaSearch className="search-icon" />
-          <input
-            type="text"
-            className="search-input"
-            placeholder={`Search ${activeTab}s...`}
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
-              setSelectedIds(new Set());
-            }}
-          />
-        </div>
-      </div>
+      <header className="page-hero">
+        <h1 className="page-title">Approve users</h1>
+        <p className="page-subtitle">
+          Review pending registrations and approve or reject students and trainers.
+        </p>
+      </header>
 
-      <div className="pending-registrations-card">
-        <h2 className="card-header">Pending Registrations</h2>
-        <div className="approve-user-card">
-          <div className="tab-container">
+      <div className="top-row">
+        <div className="search-actions">
+          <div className="search-box">
+            <i className="bi bi-search" aria-hidden="true"></i>
+            <input
+              type="text"
+              placeholder={`Search ${activeTab}s`}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              aria-label={`Search ${activeTab}s`}
+            />
+          </div>
+
+          <div className="tab-pills" role="tablist" aria-label="User type">
             <button
-              className={`tab-btn ${activeTab === "student" ? "active" : ""}`}
-              onClick={() => {
-                setActiveTab("student");
-                setCurrentPage(1);
-                setSelectedIds(new Set());
-              }}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "student"}
+              className={`tab-pill ${activeTab === "student" ? "active" : ""}`}
+              onClick={() => setActiveTab("student")}
             >
               Students
             </button>
             <button
-              className={`tab-btn ${activeTab === "trainer" ? "active" : ""}`}
-              onClick={() => {
-                setActiveTab("trainer");
-                setCurrentPage(1);
-                setSelectedIds(new Set());
-              }}
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "trainer"}
+              className={`tab-pill ${activeTab === "trainer" ? "active" : ""}`}
+              onClick={() => setActiveTab("trainer")}
             >
               Trainers
             </button>
           </div>
+        </div>
+      </div>
 
-          {selectedIds.size > 0 && (
-            <div className="bulk-actions-bar">
-              <span className="bulk-selection-count">
-                {selectedIds.size} selected
-              </span>
-              <div className="bulk-actions-buttons">
-                <button
-                  type="button"
-                  className="bulk-btn bulk-approve-btn"
-                  disabled={isBulkProcessing}
-                  onClick={() => runBulkAction("approve")}
-                >
-                  Approve Selected
-                </button>
-                <button
-                  type="button"
-                  className="bulk-btn bulk-reject-btn"
-                  disabled={isBulkProcessing}
-                  onClick={() => runBulkAction("reject")}
-                >
-                  Reject Selected
-                </button>
-                <button
-                  type="button"
-                  className="bulk-btn bulk-clear-btn"
-                  disabled={isBulkProcessing}
-                  onClick={clearSelection}
-                >
-                  Clear
-                </button>
+      <div className="content-card">
+        <div className="card-title-row">
+          <h2 className="card-title">Pending registrations</h2>
+          <span className="card-count">{filteredUsers.length} shown</span>
+        </div>
+
+        {isLoading ? (
+          <Loader />
+        ) : isError ? (
+          <div className="page-error">
+            Error loading users: {error?.message || "Something went wrong"}
+          </div>
+        ) : (
+          <>
+            {selectedIds.size > 0 && (
+              <div className="bulk-actions-bar">
+                <span className="bulk-selection-count">{selectedIds.size} selected</span>
+                <div className="bulk-actions-buttons">
+                  <button
+                    type="button"
+                    className="bulk-btn bulk-approve-btn"
+                    disabled={isBulkProcessing}
+                    onClick={() => runBulkAction("approve")}
+                  >
+                    Approve selected
+                  </button>
+                  <button
+                    type="button"
+                    className="bulk-btn bulk-reject-btn"
+                    disabled={isBulkProcessing}
+                    onClick={() => runBulkAction("reject")}
+                  >
+                    Reject selected
+                  </button>
+                  <button
+                    type="button"
+                    className="bulk-btn bulk-clear-btn"
+                    disabled={isBulkProcessing}
+                    onClick={clearSelection}
+                  >
+                    Clear
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          <p className="admin-table-scroll-hint">Swipe horizontally to view all columns.</p>
-          <div className="table-responsive admin-table-wrap" tabIndex={0} aria-label="Pending registrations table">
-            <table className="user-table admin-data-table">
-              <caption className="sr-only">Pending {activeTab} registrations</caption>
-              <colgroup>
-                <col className="col-select" />
-                <col className="col-sno" />
-                <col className="col-name" />
-                <col className="col-source" />
-                {activeTab === "student" && <col className="col-course" />}
-                <col className="col-date" />
-                <col className="col-actions" />
-              </colgroup>
-              <thead>
-                <tr>
-                  <th className="select-col" scope="col">
-                    <input
-                      type="checkbox"
-                      checked={allPageSelected}
-                      ref={(el) => {
-                        if (el) el.indeterminate = somePageSelected && !allPageSelected;
-                      }}
-                      onChange={toggleSelectAllPage}
-                      disabled={paginatedData.length === 0 || isBulkProcessing}
-                      aria-label="Select all on this page"
-                    />
-                  </th>
-                  <th className="s-no" scope="col">S.No</th>
-                  <th className="col-name" scope="col">Name</th>
-                  <th className="col-source" scope="col">Source</th>
-                  {activeTab === "student" && (
-                    <th className="col-course" scope="col">Zen Course</th>
-                  )}
-                  <th className="col-date" scope="col">Requested Date & Time</th>
-                  <th className="col-actions" scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedData.length === 0 ? (
+            <p className="admin-table-scroll-hint">Swipe horizontally to view all columns.</p>
+            <div
+              className="table-responsive admin-table-wrap"
+              tabIndex={0}
+              aria-label="Pending registrations table"
+            >
+              <table className="data-table admin-data-table">
+                <caption className="sr-only">Pending {activeTab} registrations</caption>
+                <thead>
                   <tr>
-                    <td colSpan={activeTab === "student" ? "7" : "6"} className="empty-row">
-                      No pending {activeTab}s found
-                    </td>
+                    <th className="select-col" scope="col">
+                      <input
+                        type="checkbox"
+                        checked={allPageSelected}
+                        ref={(el) => {
+                          if (el) el.indeterminate = somePageSelected && !allPageSelected;
+                        }}
+                        onChange={toggleSelectAllPage}
+                        disabled={paginatedData.length === 0 || isBulkProcessing}
+                        aria-label="Select all on this page"
+                      />
+                    </th>
+                    <th scope="col">S.No</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Source</th>
+                    {activeTab === "student" && <th scope="col">Zen Course</th>}
+                    <th scope="col">Requested</th>
+                    <th scope="col">Actions</th>
                   </tr>
-                ) : (
-                  paginatedData.map((user, index) => {
-                    const userId = getUserId(user);
-                    const isSelected = selectedIds.has(userId);
-
-                    return (
-                    <tr key={userId} className={isSelected ? "row-selected" : ""}>
-                      <td className="select-col">
-                        <input
-                          type="checkbox"
-                          checked={isSelected}
-                          onChange={() => toggleSelect(userId)}
-                          disabled={isBulkProcessing}
-                          aria-label={`Select ${user.name}`}
-                        />
-                      </td>
-                      <td className="s-no">{(activePage - 1) * itemsPerPage + index + 1}</td>
-                      <td className="col-name user-name">{user.name}</td>
-                      <td className="col-source">{user.source || "-"}</td>
-                      {activeTab === "student" && (
-                        <td className="col-course">{user.zenCourseName || "-"}</td>
-                      )}
-                      <td className="col-date user-date">
-                        {new Date(user.date || user.createdAt).toLocaleString("en-US", {
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                          hour: "numeric",
-                          minute: "2-digit",
-                          hour12: true,
-                        })}
-                      </td>
-                      <td className="col-actions action-icons">
-                        <div className="admin-action-group">
-                          <button
-                            type="button"
-                            className="admin-action-btn"
-                            onClick={() => handleView(user)}
-                            aria-label={`View details for ${user.name || "user"}`}
-                          >
-                            <LuEye aria-hidden="true" />
-                          </button>
-                          <button
-                            type="button"
-                            className="admin-action-btn"
-                            onClick={() => handleApprove(user)}
-                            aria-label={`Approve ${user.name || "user"}`}
-                          >
-                            <LuCheck aria-hidden="true" />
-                          </button>
-                          <button
-                            type="button"
-                            className="admin-action-btn admin-action-btn--danger"
-                            onClick={() => handleReject(user)}
-                            aria-label={`Reject ${user.name || "user"}`}
-                          >
-                            <LuX aria-hidden="true" />
-                          </button>
-                        </div>
+                </thead>
+                <tbody>
+                  {paginatedData.length === 0 ? (
+                    <tr>
+                      <td colSpan={colSpan} className="empty-row">
+                        No pending {activeTab}s found.
                       </td>
                     </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
+                  ) : (
+                    paginatedData.map((user, index) => {
+                      const userId = getUserId(user);
+                      const isSelected = selectedIds.has(userId);
+                      const name = user.name || "User";
 
-          {/* Pagination */}
-          {filteredUsers.length > itemsPerPage && (
-            <PaginationBar
-              currentPage={activePage}
-              totalPages={totalPages}
-              onPageChange={changePage}
-              className="pagination"
-            />
-          )}
-        </div>
+                      return (
+                        <tr key={userId} className={isSelected ? "row-selected" : ""}>
+                          <td className="select-col">
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onChange={() => toggleSelect(userId)}
+                              disabled={isBulkProcessing}
+                              aria-label={`Select ${name}`}
+                            />
+                          </td>
+                          <td className="col-sno">
+                            {(currentPage - 1) * rowsPerPage + index + 1}
+                          </td>
+                          <td>
+                            <div className="person-chip">
+                              <span
+                                className={`person-avatar tone-${toneForName(name)}`}
+                                aria-hidden="true"
+                              >
+                                {getInitials(name)}
+                              </span>
+                              <span className="person-name">{name}</span>
+                            </div>
+                          </td>
+                          <td>{user.source || "—"}</td>
+                          {activeTab === "student" && (
+                            <td>{user.zenCourseName || "—"}</td>
+                          )}
+                          <td className="col-date">
+                            {new Date(user.date || user.createdAt).toLocaleString("en-US", {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                              hour: "numeric",
+                              minute: "2-digit",
+                              hour12: true,
+                            })}
+                          </td>
+                          <td className="actions-cell">
+                            <div className="admin-action-group">
+                              <button
+                                type="button"
+                                className="admin-action-btn"
+                                onClick={() => handleView(user)}
+                                aria-label={`View details for ${name}`}
+                              >
+                                <LuEye aria-hidden="true" />
+                              </button>
+                              <button
+                                type="button"
+                                className="admin-action-btn admin-action-btn--success"
+                                onClick={() => handleApprove(user)}
+                                aria-label={`Approve ${name}`}
+                              >
+                                <LuCheck aria-hidden="true" />
+                              </button>
+                              <button
+                                type="button"
+                                className="admin-action-btn admin-action-btn--danger"
+                                onClick={() => handleReject(user)}
+                                aria-label={`Reject ${name}`}
+                              >
+                                <LuX aria-hidden="true" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            {filteredUsers.length > 0 && totalPages > 1 && (
+              <PaginationBar
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={changePage}
+                className="pagination"
+              />
+            )}
+          </>
+        )}
       </div>
     </div>
   );

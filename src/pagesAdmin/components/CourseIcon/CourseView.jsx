@@ -46,62 +46,77 @@ const CourseView = () => {
 
   return (
     <div className="course-view-page">
+      <div className="cv-shell">
+        <button type="button" className="cv-back-link" onClick={() => navigate(-1)}>
+          <BiChevronLeft aria-hidden="true" />
+          Back to courses
+        </button>
 
-      <div className="cv-header-container">
-        <div
-          className={`cv-header-bg${thumbnailUrl ? " has-thumbnail" : ""}`}
-          style={
-            thumbnailUrl
-              ? {
-                  backgroundImage: `linear-gradient(90deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 50%, rgba(16,185,129,0.55) 100%), url(${thumbnailUrl})`,
-                }
-              : undefined
-          }
-        >
-          <span className="cv-header-id">Course ID: {course.courseId}</span>
-        </div>
-
-        <div className="cv-header-content">
-          <div className="cv-icon-circle">
-            {thumbnailUrl ? (
-              <img src={thumbnailUrl} alt="" className="cv-icon-thumb" />
-            ) : (
-              <FaBook className="cv-book-icon" />
-            )}
+        <header className="cv-hero-card">
+          <div
+            className={`cv-hero-banner${thumbnailUrl ? " has-thumbnail" : ""}`}
+            style={
+              thumbnailUrl
+                ? {
+                    backgroundImage: `linear-gradient(90deg, rgba(15,61,46,0.72) 0%, rgba(5,150,105,0.45) 100%), url(${thumbnailUrl})`,
+                  }
+                : undefined
+            }
+          >
+            <span className="cv-header-id">Course ID: {course.courseId}</span>
           </div>
 
-          <div className="cv-title-block">
-            <h1>{course.courseName}</h1>
-            <div className="cv-meta-row">
-              <span className="cv-lessons">{lessonsCount} lessons</span>
+          <div className="cv-hero-main">
+            <div className="cv-hero-left">
+              <div className="cv-icon-circle">
+                {thumbnailUrl ? (
+                  <img src={thumbnailUrl} alt="" className="cv-icon-thumb" />
+                ) : (
+                  <FaBook className="cv-book-icon" />
+                )}
+              </div>
+
+              <div className="cv-title-block">
+                <h1>{course.courseName}</h1>
+                <div className="cv-meta-row">
+                  <span className="cv-lessons">{lessonsCount} lessons</span>
+                  <span className="cv-meta-dot" aria-hidden="true" />
+                  <span className="cv-lessons">
+                    {course.modules?.length || 0} modules
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="cv-header-actions">
+              <button type="button" className="cv-preview-btn" onClick={() => setShowPreview(true)}>
+                Preview
+              </button>
+              <button
+                type="button"
+                className="cv-edit-btn"
+                onClick={() => navigate(`/admin/edit-course/${id}`)}
+              >
+                Edit
+              </button>
             </div>
           </div>
+        </header>
 
-          <div className="cv-header-actions">
-            <button type="button" className="cv-preview-btn" onClick={() => setShowPreview(true)}>
-              Preview
-            </button>
-            <button className="cv-edit-btn" onClick={() => navigate(`/admin/edit-course/${id}`)}>
-              Edit
-            </button>
+        <section className="cv-panel">
+          <h2 className="cv-panel-title">Course description</h2>
+          <div className="cv-description-box">
+            {isHtmlEmpty(course.courseDescription) ? (
+              <span className="cv-detail-empty">No description available.</span>
+            ) : (
+              <RichTextContent html={course.courseDescription} />
+            )}
           </div>
-        </div>
-      </div>
+        </section>
 
-      <div className="cv-body-content">
-
-        <div className="cv-section-title">Course Description</div>
-        <div className="cv-description-box">
-          {isHtmlEmpty(course.courseDescription) ? (
-            "No description available."
-          ) : (
-            <RichTextContent html={course.courseDescription} />
-          )}
-        </div>
-
-        <div className="cv-curriculum">
+        <section className="cv-panel">
           <div className="cv-column-header">
-            <span>Curriculum</span>
+            <h2 className="cv-panel-title">Curriculum</h2>
             <button type="button" className="cv-preview-link" onClick={() => setShowPreview(true)}>
               Full preview
             </button>
@@ -146,7 +161,8 @@ const CourseView = () => {
                 <div className="cv-module-toggle-text">
                   <span className="cv-module-title">{activeModule.title}</span>
                   <span className="cv-module-meta">
-                    {activeModule.sections?.length || 0} section{(activeModule.sections?.length || 0) === 1 ? "" : "s"}
+                    {activeModule.sections?.length || 0} section
+                    {(activeModule.sections?.length || 0) === 1 ? "" : "s"}
                   </span>
                 </div>
               </div>
@@ -187,12 +203,7 @@ const CourseView = () => {
               </div>
             </div>
           )}
-        </div>
-
-        <div className="cv-footer">
-          <button className="cv-back-btn" onClick={() => navigate(-1)}>Back</button>
-        </div>
-
+        </section>
       </div>
 
       {showPreview && (
@@ -202,7 +213,6 @@ const CourseView = () => {
           onClose={() => setShowPreview(false)}
         />
       )}
-
     </div>
   );
 };

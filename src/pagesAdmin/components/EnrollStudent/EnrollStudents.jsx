@@ -14,6 +14,23 @@ import CreateBatchModal from "./CreateBatchModal";
 
 const VALID_TABS = new Set(["single", "bulk", "csv"]);
 
+const AVATAR_TONES = ["green", "blue", "orange", "purple", "teal", "rose"];
+
+const getInitials = (name = "") => {
+  const parts = String(name).trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+};
+
+const toneForName = (name = "") => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i += 1) {
+    hash = (hash + name.charCodeAt(i) * (i + 1)) % AVATAR_TONES.length;
+  }
+  return AVATAR_TONES[hash];
+};
+
 const EnrollStudents = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -49,7 +66,6 @@ const EnrollStudents = () => {
   const coursesList = coursesData || [];
   const batchesList = batchesData || [];
 
-  // Single Enrollment State
   const [selectedStudent, setSelectedStudent] = useState("");
   const [courseSections, setCourseSections] = useState([
     { id: createId(), courseId: "", instructorId: "", batchId: "" },
@@ -57,7 +73,6 @@ const EnrollStudents = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSingleEnrolling, setIsSingleEnrolling] = useState(false);
 
-  // Bulk Multi-Select State
   const [bulkBatchId, setBulkBatchId] = useState(batchParam);
   const [selectedActiveIds, setSelectedActiveIds] = useState(() => new Set());
   const [selectedPendingIds, setSelectedPendingIds] = useState(() => new Set());
@@ -65,7 +80,6 @@ const EnrollStudents = () => {
   const [bulkFilterStatus, setBulkFilterStatus] = useState("all");
   const [hideAlreadyEnrolled, setHideAlreadyEnrolled] = useState(true);
 
-  // CSV Import State
   const [csvBatchId, setCsvBatchId] = useState(batchParam);
   const [parsedEmails, setParsedEmails] = useState([]);
   const [csvFileName, setCsvFileName] = useState("");
@@ -180,7 +194,11 @@ const EnrollStudents = () => {
       setCourseSections([{ id: createId(), courseId: "", instructorId: "", batchId: "" }]);
       handleRefreshData();
     } catch (err) {
-      Swal.fire("Error", err.response?.data?.msg || err.response?.data?.message || "Enrollment failed", "error");
+      Swal.fire(
+        "Error",
+        err.response?.data?.msg || err.response?.data?.message || "Enrollment failed",
+        "error"
+      );
     } finally {
       setIsSingleEnrolling(false);
     }
@@ -203,7 +221,7 @@ const EnrollStudents = () => {
              <p class="text-secondary" style="font-size:0.85rem">Pending CRM leads are auto-approved on enroll.</p>`,
       icon: "question",
       showCancelButton: true,
-      confirmButtonColor: "#10b981",
+      confirmButtonColor: "#059669",
       confirmButtonText: "Yes, enroll",
     });
     if (!confirm.isConfirmed) return;
@@ -241,7 +259,10 @@ const EnrollStudents = () => {
     } catch (err) {
       Swal.fire(
         "Error",
-        err.response?.data?.msg || err.response?.data?.message || err.message || "Failed to process bulk enrollment",
+        err.response?.data?.msg ||
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to process bulk enrollment",
         "error"
       );
     }
@@ -291,7 +312,10 @@ const EnrollStudents = () => {
     } catch (err) {
       Swal.fire(
         "Error",
-        err.response?.data?.msg || err.response?.data?.message || err.message || "Failed to import CSV",
+        err.response?.data?.msg ||
+          err.response?.data?.message ||
+          err.message ||
+          "Failed to import CSV",
         "error"
       );
     }
@@ -380,66 +404,84 @@ const EnrollStudents = () => {
     setSelectedPendingIds(new Set());
   };
 
-  if (usersLoading || pendingLoading || coursesLoading || batchesLoading) return <Loader />;
+  const paneTitles = {
+    single: "Individual enrollment",
+    bulk: "Bulk multi-select",
+    csv: "CSV import",
+  };
+
+  if (usersLoading || pendingLoading || coursesLoading || batchesLoading) {
+    return (
+      <div className="admin-enroll-students-page">
+        <Loader />
+      </div>
+    );
+  }
 
   return (
     <div className="admin-enroll-students-page">
-      <div className="enroll-dashboard-header">
-        <div>
-          <h2>Student Course Enrollment</h2>
-          <p className="text-secondary">
-            Enroll individuals, multi-select active/Zen CRM pending students, or import emails via CSV
-          </p>
-        </div>
-        <div className="enroll-tab-menu" role="tablist" aria-label="Enrollment mode">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "single"}
-            onClick={() => setActiveTab("single")}
-            className={activeTab === "single" ? "active" : ""}
-          >
-            Single User
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "bulk"}
-            onClick={() => setActiveTab("bulk")}
-            className={activeTab === "bulk" ? "active" : ""}
-          >
-            Bulk Multi-Select
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === "csv"}
-            onClick={() => setActiveTab("csv")}
-            className={activeTab === "csv" ? "active" : ""}
-          >
-            CSV Import
-          </button>
+      <header className="page-hero">
+        <h1 className="page-title">Student course enrollment</h1>
+        <p className="page-subtitle">
+          Enroll individuals, multi-select students, or import emails via CSV.
+        </p>
+      </header>
+
+      <div className="top-row">
+        <div className="search-actions">
+          <div className="tab-pills" role="tablist" aria-label="Enrollment mode">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "single"}
+              className={`tab-pill ${activeTab === "single" ? "active" : ""}`}
+              onClick={() => setActiveTab("single")}
+            >
+              Single user
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "bulk"}
+              className={`tab-pill ${activeTab === "bulk" ? "active" : ""}`}
+              onClick={() => setActiveTab("bulk")}
+            >
+              Bulk select
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === "csv"}
+              className={`tab-pill ${activeTab === "csv" ? "active" : ""}`}
+              onClick={() => setActiveTab("csv")}
+            >
+              CSV import
+            </button>
+          </div>
         </div>
       </div>
 
       {pendingStudentsList.length > 0 && activeTab !== "single" && (
-        <div className="zen-crm-banner glass-card mb-3">
-          <i className="bi bi-cloud-download"></i>
+        <div className="zen-crm-banner">
+          <i className="bi bi-cloud-download" aria-hidden="true"></i>
           <div>
-            <strong>{pendingStudentsList.length} Zen CRM synced lead(s)</strong> awaiting enrollment.
-            Pending students are auto-approved when enrolled here.{" "}
+            <strong>{pendingStudentsList.length} Zen CRM synced lead(s)</strong> awaiting
+            enrollment. Pending students are auto-approved when enrolled here.{" "}
             <Link to="/admin/approve-users">Review in Approve Users</Link>
           </div>
         </div>
       )}
 
-      <div className="enroll-container glass-card">
+      <div className="content-card">
+        <div className="card-title-row">
+          <h2 className="card-title">{paneTitles[activeTab]}</h2>
+        </div>
+
         {activeTab === "single" && (
           <div className="tab-pane-content">
-            <h3 className="pane-title">Individual Student Enrollment</h3>
             <div className="section-block">
               <label className="section-label" htmlFor="enroll-student-select">
-                Select Student Profile
+                Select student profile
               </label>
               <select
                 id="enroll-student-select"
@@ -459,19 +501,19 @@ const EnrollStudents = () => {
             {courseSections.map((section, idx) => (
               <div key={section.id} className="section-block">
                 <div className="title-row">
-                  <h4 className="section-title">Course Session – {idx + 1}</h4>
+                  <h3 className="section-title">Course session – {idx + 1}</h3>
                   <div className="title-buttons">
                     {idx === 0 && (
-                      <button type="button" className="btn btn-sm btn-outline-emerald" onClick={addCourse}>
-                        + Add Another Course
+                      <button type="button" className="btn-outline" onClick={addCourse}>
+                        + Add another course
                       </button>
                     )}
                     {idx !== 0 && (
                       <button
                         type="button"
-                        className="btn btn-sm btn-outline-danger"
+                        className="btn-outline-danger"
                         onClick={() => deleteCourse(section.id)}
-                        title="Delete Course Section"
+                        title="Delete course section"
                       >
                         Remove
                       </button>
@@ -523,9 +565,10 @@ const EnrollStudents = () => {
                       {batchesList
                         .filter((b) => {
                           if (!section.courseId) return true;
-                          const ids = Array.isArray(b.courses) && b.courses.length
-                            ? b.courses.map((c) => String(c?._id || c))
-                            : [String(b.course?._id || b.course)].filter(Boolean);
+                          const ids =
+                            Array.isArray(b.courses) && b.courses.length
+                              ? b.courses.map((c) => String(c?._id || c))
+                              : [String(b.course?._id || b.course)].filter(Boolean);
                           return ids.includes(String(section.courseId));
                         })
                         .map((b) => (
@@ -534,16 +577,13 @@ const EnrollStudents = () => {
                           </option>
                         ))}
                     </select>
-                    <a
-                      href="#"
+                    <button
+                      type="button"
                       className="create-batch-link"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setIsModalOpen(true);
-                      }}
+                      onClick={() => setIsModalOpen(true)}
                     >
                       Create new batch
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -552,11 +592,11 @@ const EnrollStudents = () => {
             <div className="enroll-actions">
               <button
                 type="button"
-                className="btn btn-emerald enroll-btn"
+                className="create-btn"
                 onClick={handleEnroll}
                 disabled={isSingleEnrolling}
               >
-                {isSingleEnrolling ? "Enrolling..." : "Enroll Student"}
+                {isSingleEnrolling ? "Enrolling..." : "Enroll student"}
               </button>
             </div>
           </div>
@@ -564,11 +604,9 @@ const EnrollStudents = () => {
 
         {activeTab === "bulk" && (
           <div className="tab-pane-content">
-            <h3 className="pane-title">Bulk Multi-Select Enrollment</h3>
-
             <div className="section-block">
               <label className="section-label" htmlFor="bulk-batch-select">
-                Select Target Batch
+                Select target batch
               </label>
               <select
                 id="bulk-batch-select"
@@ -593,22 +631,29 @@ const EnrollStudents = () => {
             </div>
 
             <div className="list-filters-row">
-              <input
-                type="text"
-                placeholder="Search by name, email, or Zen course..."
-                value={bulkSearch}
-                onChange={(e) => setBulkSearch(e.target.value)}
-                className="glass-input flex-grow-1"
-              />
-              <select
-                value={bulkFilterStatus}
-                onChange={(e) => setBulkFilterStatus(e.target.value)}
-                className="glass-input"
-              >
-                <option value="all">All Registrations</option>
-                <option value="active">Active Accounts Only</option>
-                <option value="pending">Pending CRM Synced Leads</option>
-              </select>
+              <div className="search-box">
+                <i className="bi bi-search" aria-hidden="true"></i>
+                <input
+                  type="text"
+                  placeholder="Search by name, email, or Zen course"
+                  value={bulkSearch}
+                  onChange={(e) => setBulkSearch(e.target.value)}
+                  aria-label="Search students"
+                />
+              </div>
+              <div className="status-filter">
+                <i className="bi bi-funnel filter-icon" aria-hidden="true"></i>
+                <select
+                  value={bulkFilterStatus}
+                  onChange={(e) => setBulkFilterStatus(e.target.value)}
+                  aria-label="Filter by registration status"
+                >
+                  <option value="all">All registrations</option>
+                  <option value="active">Active accounts only</option>
+                  <option value="pending">Pending CRM synced leads</option>
+                </select>
+                <i className="bi bi-chevron-down filter-chevron" aria-hidden="true"></i>
+              </div>
               <label className="hide-enrolled-toggle">
                 <input
                   type="checkbox"
@@ -630,7 +675,7 @@ const EnrollStudents = () => {
                 Select all visible ({filteredBulkList.length})
               </label>
               {(selectedActiveIds.size > 0 || selectedPendingIds.size > 0) && (
-                <button type="button" className="glass-btn" onClick={clearBulkSelection}>
+                <button type="button" className="clear-btn" onClick={clearBulkSelection}>
                   Clear selection
                 </button>
               )}
@@ -642,6 +687,7 @@ const EnrollStudents = () => {
                   const isChecked = s.isPending
                     ? selectedPendingIds.has(s._id)
                     : selectedActiveIds.has(s._id);
+                  const name = s.name || "Sync Lead";
 
                   return (
                     <div
@@ -656,9 +702,16 @@ const EnrollStudents = () => {
                         checked={isChecked}
                         onChange={() => {}}
                         className="student-checkbox"
+                        aria-label={`Select ${name}`}
                       />
+                      <span
+                        className={`person-avatar tone-${toneForName(name)}`}
+                        aria-hidden="true"
+                      >
+                        {getInitials(name)}
+                      </span>
                       <div className="student-info">
-                        <strong>{s.name || "Sync Lead"}</strong>
+                        <strong>{name}</strong>
                         <span>{s.email}</span>
                         {s.zenCourseName && (
                           <span className="zen-course-hint">Zen: {s.zenCourseName}</span>
@@ -671,24 +724,22 @@ const EnrollStudents = () => {
                   );
                 })
               ) : (
-                <div className="text-center py-5 text-secondary">
-                  No matching student accounts found.
-                </div>
+                <div className="empty-bulk">No matching student accounts found.</div>
               )}
             </div>
 
             <div className="selection-summary">
-              <span className="text-secondary">
+              <span className="summary-text">
                 Selected: <strong>{selectedActiveIds.size}</strong> active,{" "}
                 <strong>{selectedPendingIds.size}</strong> pending leads
               </span>
               <button
                 type="button"
                 onClick={handleBulkEnroll}
-                className="btn btn-emerald"
+                className="create-btn"
                 disabled={selectedActiveIds.size === 0 && selectedPendingIds.size === 0}
               >
-                Enroll Selected Students
+                Enroll selected students
               </button>
             </div>
           </div>
@@ -696,11 +747,9 @@ const EnrollStudents = () => {
 
         {activeTab === "csv" && (
           <div className="tab-pane-content">
-            <h3 className="pane-title">Bulk Enrollment via CSV File</h3>
-
             <div className="section-block">
               <label className="section-label" htmlFor="csv-batch-select">
-                Select Target Batch
+                Select target batch
               </label>
               <select
                 id="csv-batch-select"
@@ -725,23 +774,27 @@ const EnrollStudents = () => {
             </div>
 
             <div className="csv-upload-dropzone">
-              <i className="bi bi-file-earmark-spreadsheet"></i>
-              <h4>Upload CSV Student Registry</h4>
-              <p className="text-secondary">
-                Include an <code>email</code> column (recommended). Matching active users and Zen CRM
-                pending leads are enrolled; unknown emails are skipped.
+              <i className="bi bi-file-earmark-spreadsheet" aria-hidden="true"></i>
+              <h3>Upload CSV student registry</h3>
+              <p>
+                Include an <code>email</code> column (recommended). Matching active users and Zen
+                CRM pending leads are enrolled; unknown emails are skipped.
               </p>
 
-              <div className="d-flex gap-2 flex-wrap justify-content-center mt-2">
-                <label htmlFor="csv-file-input" className="btn btn-outline-emerald mb-0">
-                  {isParsing ? "Parsing..." : csvFileName ? "Choose Different File" : "Select CSV File"}
+              <div className="csv-actions">
+                <label htmlFor="csv-file-input" className="btn-outline">
+                  {isParsing
+                    ? "Parsing..."
+                    : csvFileName
+                      ? "Choose different file"
+                      : "Select CSV file"}
                 </label>
                 <button
                   type="button"
-                  className="btn btn-outline-light"
+                  className="btn-secondary"
                   onClick={downloadEnrollmentCsvTemplate}
                 >
-                  Download Template
+                  Download template
                 </button>
               </div>
               <input
@@ -749,19 +802,20 @@ const EnrollStudents = () => {
                 type="file"
                 accept=".csv,text/csv"
                 onChange={handleCSVUpload}
-                style={{ display: "none" }}
+                className="sr-only"
               />
 
               {csvFileName && (
                 <div className="file-loaded-badge">
-                  <i className="bi bi-check-circle-fill"></i> Loaded: <strong>{csvFileName}</strong>
+                  <i className="bi bi-check-circle-fill" aria-hidden="true"></i> Loaded:{" "}
+                  <strong>{csvFileName}</strong>
                 </div>
               )}
             </div>
 
             {parsedEmails.length > 0 && (
-              <div className="parsed-emails-preview" style={{ marginTop: "20px" }}>
-                <h5>Emails Parsed for Import ({parsedEmails.length}):</h5>
+              <div className="parsed-emails-preview">
+                <h4>Emails parsed for import ({parsedEmails.length})</h4>
                 <div className="email-chips-container">
                   {parsedEmails.map((email) => (
                     <span key={email} className="email-chip">
@@ -771,8 +825,8 @@ const EnrollStudents = () => {
                 </div>
 
                 <div className="enroll-actions">
-                  <button type="button" onClick={handleCSVEnroll} className="btn btn-emerald">
-                    Import & Enroll Students
+                  <button type="button" onClick={handleCSVEnroll} className="create-btn">
+                    Import & enroll students
                   </button>
                 </div>
               </div>

@@ -1,234 +1,475 @@
-/* Recycle Bin Page */
+/* Recycle bin — matches Course management UI; sidebar unchanged */
+
 .admin-recycle-bin-page {
-    padding: 40px 50px;
-    background-color: var(--color-bg);
-    /* Match other admin pages */
-    min-height: 100vh;
-    font-family: var(--font-family-base), sans-serif;
+  background: var(--color-bg);
+  padding: 32px 40px 48px;
+  min-height: 100vh;
+  font-family: var(--font-family-base), sans-serif;
+  color: var(--color-text);
 }
 
-.admin-recycle-bin-page .recycle-bin-header-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
+.admin-recycle-bin-page .page-hero {
+  margin-bottom: 22px;
 }
 
 .admin-recycle-bin-page .page-title {
-    font-size: 32px;
-    font-weight: 500;
-    color: #7a7a7a;
-    margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
 }
 
-/* Card Styling */
-.admin-recycle-bin-page .recycle-bin-card {
-    background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    padding: 30px 25px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    min-height: 400px;
+.admin-recycle-bin-page .page-subtitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  line-height: 1.45;
 }
 
-
-.admin-recycle-bin-page .card-header {
-    font-size: 18px;
-    font-weight: 600;
-    color: #8B8B8B;
-    margin-bottom: 25px;
+.admin-recycle-bin-page .top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 14px;
 }
 
-.admin-recycle-bin-page .search-bar-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--color-surface);
-    padding: 8px 16px;
-    border-radius: 12px;
-    border: 1px solid var(--color-border);
-    width: 300px;
-    transition: all 0.2s;
+.admin-recycle-bin-page .search-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-.admin-recycle-bin-page .search-bar-container:focus-within {
-    border: 2px solid #00a35a !important;
-    outline: none !important;
-    box-shadow: none !important;
+.admin-recycle-bin-page .search-box {
+  position: relative;
+  flex: 1 1 280px;
+  max-width: 420px;
 }
 
-.admin-recycle-bin-page .search-icon {
-    color: var(--color-text-muted);
-    font-size: 14px;
+.admin-recycle-bin-page .search-box input {
+  width: 100%;
+  padding: 11px 16px 11px 42px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  font-size: 14px;
+  outline: none;
+  color: var(--color-text);
+  background: var(--color-surface) !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.admin-recycle-bin-page .search-input {
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-    -webkit-box-shadow: none !important;
-    width: 100%;
-    font-size: 14px;
-    color: var(--color-text);
-    background: transparent !important;
+.admin-recycle-bin-page .search-box input::placeholder {
+  color: var(--color-text-muted);
 }
 
-/* Table Styling */
-.admin-recycle-bin-page .table-container {
-    width: 100%;
-    overflow-x: auto;
+.admin-recycle-bin-page .search-box input:focus {
+  border-color: #10B981 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
 }
 
-.admin-recycle-bin-page .bin-table {
-    width: 100%;
-    border-collapse: collapse;
+.admin-recycle-bin-page .search-box i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  font-size: 15px;
 }
 
-.admin-recycle-bin-page .bin-table thead th {
-    text-align: left;
-    font-size: 13px;
-    font-weight: 400;
-    color: #bbb;
-    padding-bottom: 18px;
-    border-bottom: 1px solid var(--color-bg-muted);
-    padding: 0 15px 18px 15px;
+.admin-recycle-bin-page .type-filter {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 0 1 200px;
 }
 
-.admin-recycle-bin-page .bin-table tbody tr {
-    border-bottom: 1px solid #f5f5f5;
-    transition: background-color 0.2s;
+.admin-recycle-bin-page .type-filter .filter-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  font-size: 15px;
+  pointer-events: none;
+  z-index: 1;
 }
 
-.admin-recycle-bin-page .bin-table tbody tr:hover {
-    background-color: transparent;
+.admin-recycle-bin-page .type-filter .filter-chevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  font-size: 12px;
+  pointer-events: none;
 }
 
-.admin-recycle-bin-page .bin-table tbody td {
-    padding: 20px 15px;
-    font-size: 14px;
-    color: #666;
+.admin-recycle-bin-page .type-filter select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 11px 36px 11px 40px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  width: 100%;
+  min-width: 180px;
+  font-size: 14px;
+  font-family: var(--font-family-base), sans-serif;
+  color: var(--color-text);
+  background: var(--color-surface);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.admin-recycle-bin-page .bin-table th.s-no,
-.admin-recycle-bin-page .bin-table td.s-no {
-    width: 60px;
-    text-align: center !important;
-    color: #bbb !important;
-    font-weight: 500;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+.admin-recycle-bin-page .type-filter select:focus {
+  border-color: #10B981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
 }
 
-.admin-recycle-bin-page .item-name {
-    font-weight: 400;
-    color: var(--color-text-muted);
+.admin-recycle-bin-page .type-filter .clear-filter-btn {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  line-height: 1;
+  z-index: 2;
 }
 
-.admin-recycle-bin-page .item-type {
-    text-transform: capitalize;
-    font-weight: 500;
+.admin-recycle-bin-page .type-filter .clear-filter-btn:hover {
+  color: #e34545;
 }
 
-.admin-recycle-bin-page .item-type.user {
-    color: var(--color-primary);
-    /* Greenish for users */
+.admin-recycle-bin-page .content-card {
+  background: var(--color-surface);
+  padding: 24px 28px 28px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px rgba(17, 24, 39, 0.04);
+  min-height: 420px;
+  overflow: hidden;
 }
 
-.admin-recycle-bin-page .item-type.course {
-    color: var(--color-primary);
-    /* Blueish for courses */
+.admin-recycle-bin-page .card-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 18px;
 }
 
-.admin-recycle-bin-page .item-type.batch {
-    color: var(--color-warning);
-    /* Amber/Orange for batches */
+.admin-recycle-bin-page .card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
 }
 
-.admin-recycle-bin-page .deleted-date {
-    color: #bbb;
-    font-size: 13px;
+.admin-recycle-bin-page .card-count {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
 }
 
-/* Action Icons */
-.admin-recycle-bin-page .action-icons {
-    text-align: center;
-    padding-right: 0 !important;
+.admin-recycle-bin-page .page-error {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-error);
 }
 
-.admin-recycle-bin-page .icon-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-    margin-left: 12px;
-    border-radius: 4px;
-    transition: all 0.2s;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+.admin-recycle-bin-page .page-error .retry-btn {
+  margin-top: 12px;
+  background: #059669;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.admin-recycle-bin-page .icon-btn:hover {
-    background-color: #F5F5F5;
+.admin-recycle-bin-page .page-error .retry-btn:hover {
+  background: #047857;
 }
 
-.admin-recycle-bin-page .restore-btn {
-    color: var(--color-primary-bright);
-    /* Green for restore */
+.admin-recycle-bin-page .table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.admin-recycle-bin-page .restore-btn:hover {
-    background-color: var(--color-primary-light);
+.admin-recycle-bin-page .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
 }
 
-.admin-recycle-bin-page .delete-btn {
-    color: var(--color-error);
-    /* Red for permanent delete */
+.admin-recycle-bin-page .data-table thead th {
+  text-align: left;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  padding: 12px 10px 14px;
+  border-bottom: 1px solid var(--color-border);
 }
 
-.admin-recycle-bin-page .delete-btn:hover {
-    background-color: var(--color-error-bg);
+.admin-recycle-bin-page .data-table tbody tr {
+  border-bottom: 1px solid #F3F4F6;
+  transition: background 0.15s;
 }
 
-/* Empty State */
+.admin-recycle-bin-page .data-table tbody tr:hover {
+  background: #FAFBFC;
+}
+
+.admin-recycle-bin-page .data-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.admin-recycle-bin-page .data-table tbody td {
+  padding: 18px 10px;
+  vertical-align: middle;
+  color: var(--color-text-secondary);
+  font-size: 14px;
+}
+
+.admin-recycle-bin-page .col-sno {
+  color: var(--color-text-muted) !important;
+  width: 56px;
+  font-weight: 500;
+}
+
+.admin-recycle-bin-page .type-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+  background: #F3F4F6;
+  color: #4B5563;
+  white-space: nowrap;
+}
+
+.admin-recycle-bin-page .type-badge.type-user,
+.admin-recycle-bin-page .type-badge.type-student,
+.admin-recycle-bin-page .type-badge.type-trainer,
+.admin-recycle-bin-page .type-badge.type-instructor {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.admin-recycle-bin-page .type-badge.type-course {
+  background: #EFF6FF;
+  color: #2563EB;
+}
+
+.admin-recycle-bin-page .type-badge.type-batch {
+  background: #FFF7ED;
+  color: #EA580C;
+}
+
+.admin-recycle-bin-page .person-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-recycle-bin-page .person-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.admin-recycle-bin-page .person-avatar.tone-green { background: #059669; }
+.admin-recycle-bin-page .person-avatar.tone-blue { background: #2563EB; }
+.admin-recycle-bin-page .person-avatar.tone-orange { background: #EA580C; }
+.admin-recycle-bin-page .person-avatar.tone-purple { background: #7C3AED; }
+.admin-recycle-bin-page .person-avatar.tone-teal { background: #0D9488; }
+.admin-recycle-bin-page .person-avatar.tone-rose { background: #E11D48; }
+
+.admin-recycle-bin-page .person-name {
+  font-size: 14px;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.admin-recycle-bin-page .col-date {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.admin-recycle-bin-page .actions-cell {
+  text-align: left;
+  width: 110px;
+}
+
+.admin-recycle-bin-page .admin-action-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.admin-recycle-bin-page .admin-action-btn {
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #9CA3AF;
+  border-right: none;
+}
+
+.admin-recycle-bin-page .admin-action-btn:hover {
+  background: var(--color-bg-muted);
+  color: #4B5563;
+}
+
+.admin-recycle-bin-page .admin-action-btn--success:hover {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.admin-recycle-bin-page .admin-action-btn--danger:hover {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.admin-recycle-bin-page .admin-action-btn svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 1.6;
+}
+
+.admin-recycle-bin-page .empty-row {
+  text-align: center;
+  padding: 36px 10px !important;
+  color: var(--color-text-muted);
+}
+
 .admin-recycle-bin-page .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 0;
-    color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  gap: 10px;
 }
 
 .admin-recycle-bin-page .empty-state i {
-    font-size: 48px;
-    margin-bottom: 15px;
-    color: var(--color-border);
+  font-size: 36px;
+  color: var(--color-border);
 }
 
 .admin-recycle-bin-page .empty-state p {
-    font-size: 16px;
+  margin: 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .recycle-bin-page {
-        padding: 20px;
-    }
+.admin-recycle-bin-page .pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 28px;
+  gap: 6px;
+}
 
-    .recycle-bin-card {
-        padding: 20px;
-    }
+.admin-recycle-bin-page .pagination button {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  padding: 0 8px;
+}
 
-    .bin-table {
-        font-size: 13px;
-    }
+.admin-recycle-bin-page .pagination button.active {
+  background: #059669;
+  border-color: #059669;
+  color: #fff;
+  box-shadow: none;
+}
 
-    .bin-table thead th,
-    .bin-table tbody td {
-        padding: 12px 8px;
-    }
+.admin-recycle-bin-page .pagination button:disabled {
+  color: var(--color-border-strong);
+  cursor: not-allowed;
+  background: var(--color-bg-muted);
+}
 
-    .icon-btn {
-        margin-left: 6px;
-    }
+.admin-recycle-bin-page .pagination button:hover:not(.active):not(:disabled) {
+  background: var(--color-bg-muted);
+  color: var(--color-text);
+}
+
+@media screen and (max-width: 768px) {
+  .admin-recycle-bin-page {
+    padding: 20px 16px 32px;
+  }
+
+  .admin-recycle-bin-page .page-title {
+    font-size: 24px;
+  }
+
+  .admin-recycle-bin-page .search-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-recycle-bin-page .search-box,
+  .admin-recycle-bin-page .type-filter {
+    max-width: none;
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .admin-recycle-bin-page .content-card {
+    padding: 18px 16px 22px;
+    border-radius: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .admin-recycle-bin-page .page-title {
+    font-size: 22px;
+  }
+
+  .admin-recycle-bin-page .data-table {
+    min-width: 600px;
+  }
 }

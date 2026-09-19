@@ -5,7 +5,24 @@ import Swal from "sweetalert2";
 import { useCourses, useDeleteCourse } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
-import { LuEye, LuPencil, LuUsers, LuTrash2 } from "react-icons/lu";
+import { LuEye, LuPencil, LuUserPlus, LuTrash2 } from "react-icons/lu";
+
+const AVATAR_TONES = ["green", "blue", "orange", "purple", "teal", "rose"];
+
+const getInitials = (name = "") => {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (!parts.length) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase();
+};
+
+const toneForName = (name = "") => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i += 1) {
+    hash = (hash + name.charCodeAt(i) * (i + 1)) % AVATAR_TONES.length;
+  }
+  return AVATAR_TONES[hash];
+};
 
 const Courses = () => {
   const navigate = useNavigate();
@@ -18,7 +35,6 @@ const Courses = () => {
 
   const courses = useMemo(() => coursesList || [], [coursesList]);
 
-  // Derive unique sorted instructor list for the dropdown
   const instructorOptions = React.useMemo(() => {
     const map = new Map();
     courses.forEach((course) => {
@@ -33,7 +49,6 @@ const Courses = () => {
       .sort((a, b) => a.label.localeCompare(b.label));
   }, [courses]);
 
-  // Filter courses based on search term AND selected instructor
   const filteredCourses = courses.filter((course) => {
     const matchesSearch = course.courseName?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesInstructor =
@@ -52,12 +67,10 @@ const Courses = () => {
   const paginated = filteredCourses.slice(start, start + rowsPerPage);
   const totalPages = Math.ceil(filteredCourses.length / rowsPerPage);
 
-  // Reset to page 1 when search or instructor filter changes
   React.useEffect(() => {
     setPage(1);
   }, [searchTerm, selectedInstructor]);
 
-  // ----------------------------- ACTION HANDLERS -----------------------------
   const viewHandler = (course) => {
     navigate(`/admin/course/${course._id}`);
   };
@@ -81,7 +94,7 @@ const Courses = () => {
       confirmButtonText: "Yes, delete!",
       background: "#fff",
       color: "#333",
-      borderRadius: "15px"
+      borderRadius: "15px",
     }).then((result) => {
       if (result.isConfirmed) {
         deleteCourseMutation(course._id, {
@@ -91,7 +104,7 @@ const Courses = () => {
               text: `"${course.courseName}" has been deleted successfully.`,
               icon: "success",
               confirmButtonColor: "#28a745",
-              timer: 1500
+              timer: 1500,
             });
           },
           onError: (err) => {
@@ -101,74 +114,86 @@ const Courses = () => {
               icon: "error",
               confirmButtonColor: "#d33",
             });
-          }
+          },
         });
       }
     });
   };
-  // ---------------------------------------------------------------------------
 
   return (
     <div className="admin-courses-page">
-      <h1 className="course-title">Course Management</h1>
+      <header className="page-hero">
+        <h1 className="course-title">Course management</h1>
+        <p className="course-subtitle">
+          Add courses, assign instructors and see who is enrolled.
+        </p>
+      </header>
 
       <div className="top-row">
-        {/* SEARCH, INSTRUCTOR FILTER & CREATE BUTTON */}
         <div className="search-actions">
           <div className="search-box">
-            <i className="bi bi-search"></i>
+            <i className="bi bi-search" aria-hidden="true"></i>
             <input
               type="text"
               placeholder="Search courses"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              aria-label="Search courses"
             />
           </div>
 
-          {/* INSTRUCTOR FILTER */}
           <div className="instructor-filter">
-            <i className="bi bi-person-fill filter-icon"></i>
+            <i className="bi bi-person filter-icon" aria-hidden="true"></i>
             <select
               value={selectedInstructor}
               onChange={(e) => setSelectedInstructor(e.target.value)}
+              aria-label="Filter by instructor"
             >
-              <option value="">All Instructors</option>
+              <option value="">All instructors</option>
               {instructorOptions.map(({ id, label }) => (
                 <option key={id} value={id}>
                   {label}
                 </option>
               ))}
             </select>
+            <i className="bi bi-chevron-down filter-chevron" aria-hidden="true"></i>
             {selectedInstructor && (
               <button
+                type="button"
                 className="clear-filter-btn"
                 onClick={() => setSelectedInstructor("")}
                 title="Clear filter"
+                aria-label="Clear instructor filter"
               >
-                <i className="bi bi-x"></i>
+                <i className="bi bi-x" aria-hidden="true"></i>
               </button>
             )}
           </div>
 
-          <button className="create-btn" onClick={() => navigate("/admin/create-course")}>
-            + Create New Course
+          <button
+            type="button"
+            className="create-btn"
+            onClick={() => navigate("/admin/create-course")}
+          >
+            + Create new course
           </button>
         </div>
       </div>
 
-      {/* CONTENT CARD */}
       <div className="content-card">
-        <h2 className="card-title">All Courses</h2>
+        <div className="card-title-row">
+          <h2 className="card-title">All courses</h2>
+          <span className="card-count">{filteredCourses.length} shown</span>
+        </div>
 
         {isLoading ? (
           <Loader />
         ) : isError ? (
-          <div style={{ textAlign: "center", padding: "40px", color: "red" }}>
+          <div className="courses-error">
             Error loading courses: {error?.message || "Something went wrong"}
           </div>
         ) : (
           <>
-            {/* TABLE */}
             <p className="admin-table-scroll-hint">Swipe horizontally to view all columns.</p>
             <div className="table-responsive admin-table-wrap" tabIndex={0} aria-label="Courses table">
               <table className="course-table admin-data-table">
@@ -176,7 +201,7 @@ const Courses = () => {
                 <thead>
                   <tr>
                     <th scope="col">S.No</th>
-                    <th scope="col">Courses</th>
+                    <th scope="col">Course</th>
                     <th scope="col">Instructors</th>
                     <th scope="col">Enrolled</th>
                     <th scope="col">Actions</th>
@@ -185,91 +210,92 @@ const Courses = () => {
 
                 <tbody>
                   {paginated.length > 0 ? (
-                    paginated.map((course, index) => (
-                      <tr key={course._id}>
-                        <td>{(page - 1) * rowsPerPage + index + 1}</td>
-                        <td>{course.courseName}</td>
-                        <td>
-                          <div className="avatar-group">
-                            {course.instructor && course.instructor.length > 0 ? (
-                              course.instructor.map((inst) => (
-                                 <span key={inst._id || inst.name}>
-                                {/* // <img
-                                //   key={inst._id || i}
-                                //   src={inst.profilePicture?.url || "https://ui-avatars.com/api/?name=" + (inst.firstName || inst.name || "T") + "&background=random"}
-                                //   className="avatar"
-                                //   title={inst.name || `${inst.firstName || ""} ${inst.lastName || ""}`}
-                                //   alt="instructor"
-                                // /> */}
-                                {inst.name || `${inst.firstName || ""} ${inst.lastName || ""}`}
-                                &nbsp;
-                                </span>
-                              ))
-                            ) : (
-                              <span style={{ fontSize: "12px", color: "#999" }}>No Instructors</span>
-                            )}
-                          </div>
-                        </td>
+                    paginated.map((course, index) => {
+                      const count =
+                        course.enrolledCount ??
+                        course.enrolledStudents?.length ??
+                        course.totalEnrolled ??
+                        course.studentsCount ??
+                        0;
 
-                        <td>
-                          {(() => {
-                            const count =
-                              course.enrolledCount ??
-                              course.enrolledStudents?.length ??
-                              course.totalEnrolled ??
-                              course.studentsCount ??
-                              0;
-                            return count > 0 ? (
-                              <span className="enrolled-badge">
-                                <i className="bi bi-people-fill"></i> {count}
-                              </span>
-                            ) : (
-                              <span className="enrolled-zero">0</span>
-                            );
-                          })()}
-                        </td>
+                      return (
+                        <tr key={course._id}>
+                          <td className="col-sno">{(page - 1) * rowsPerPage + index + 1}</td>
+                          <td className="col-course">{course.courseName}</td>
+                          <td>
+                            <div className="instructor-list">
+                              {course.instructor && course.instructor.length > 0 ? (
+                                course.instructor.map((inst) => {
+                                  const name =
+                                    inst.name ||
+                                    `${inst.firstName || ""} ${inst.lastName || ""}`.trim() ||
+                                    "Instructor";
+                                  return (
+                                    <div key={inst._id || name} className="instructor-chip">
+                                      <span
+                                        className={`instructor-avatar tone-${toneForName(name)}`}
+                                        aria-hidden="true"
+                                      >
+                                        {getInitials(name)}
+                                      </span>
+                                      <span className="instructor-name">{name}</span>
+                                    </div>
+                                  );
+                                })
+                              ) : (
+                                <span className="no-instructors">No instructors</span>
+                              )}
+                            </div>
+                          </td>
 
-                        <td className="actions-cell">
-                          <div className="admin-action-group">
-                            <button
-                              type="button"
-                              className="admin-action-btn"
-                              aria-label={`View ${course.courseName}`}
-                              onClick={() => viewHandler(course)}
-                            >
-                              <LuEye aria-hidden="true" />
-                            </button>
-                            <button
-                              type="button"
-                              className="admin-action-btn"
-                              aria-label={`Edit ${course.courseName}`}
-                              onClick={() => editHandler(course)}
-                            >
-                              <LuPencil aria-hidden="true" />
-                            </button>
-                            <button
-                              type="button"
-                              className="admin-action-btn"
-                              aria-label={`Manage instructors for ${course.courseName}`}
-                              onClick={() => usersHandler(course)}
-                            >
-                              <LuUsers aria-hidden="true" />
-                            </button>
-                            <button
-                              type="button"
-                              className="admin-action-btn admin-action-btn--danger"
-                              aria-label={`Delete ${course.courseName}`}
-                              onClick={() => deleteHandler(course)}
-                            >
-                              <LuTrash2 aria-hidden="true" />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
+                          <td>
+                            <span className="enrolled-badge">
+                              {count} {count === 1 ? "student" : "students"}
+                            </span>
+                          </td>
+
+                          <td className="actions-cell">
+                            <div className="admin-action-group">
+                              <button
+                                type="button"
+                                className="admin-action-btn"
+                                aria-label={`View ${course.courseName}`}
+                                onClick={() => viewHandler(course)}
+                              >
+                                <LuEye aria-hidden="true" />
+                              </button>
+                              <button
+                                type="button"
+                                className="admin-action-btn"
+                                aria-label={`Edit ${course.courseName}`}
+                                onClick={() => editHandler(course)}
+                              >
+                                <LuPencil aria-hidden="true" />
+                              </button>
+                              <button
+                                type="button"
+                                className="admin-action-btn"
+                                aria-label={`Manage instructors for ${course.courseName}`}
+                                onClick={() => usersHandler(course)}
+                              >
+                                <LuUserPlus aria-hidden="true" />
+                              </button>
+                              <button
+                                type="button"
+                                className="admin-action-btn admin-action-btn--danger"
+                                aria-label={`Delete ${course.courseName}`}
+                                onClick={() => deleteHandler(course)}
+                              >
+                                <LuTrash2 aria-hidden="true" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
                   ) : (
                     <tr>
-                      <td colSpan="5" style={{ textAlign: "center", padding: "30px" }}>
+                      <td colSpan="5" className="empty-row">
                         No courses found.
                       </td>
                     </tr>
@@ -278,7 +304,6 @@ const Courses = () => {
               </table>
             </div>
 
-            {/* PAGINATION */}
             {filteredCourses.length > 0 && totalPages > 1 && (
               <PaginationBar
                 currentPage={page}

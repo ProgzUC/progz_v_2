@@ -1,195 +1,363 @@
+/* Instructor management — matches Course management UI; sidebar unchanged */
+
 .admin-instructors-page {
-  font-family: var(--font-family-base), sans-serif;
-  padding: 40px 50px;
   background: var(--color-bg);
+  padding: 32px 40px 48px;
   min-height: 100vh;
+  font-family: var(--font-family-base), sans-serif;
+  color: var(--color-text);
 }
 
-/* Header */
-.admin-instructors-page .inst-header {
+.admin-instructors-page .page-hero {
+  margin-bottom: 22px;
+}
+
+.admin-instructors-page .page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.admin-instructors-page .page-subtitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  line-height: 1.45;
+}
+
+.admin-instructors-page .top-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 14px;
 }
 
-.admin-instructors-page .inst-header h2 {
-  font-size: 32px;
-  font-weight: 500;
-  color: #7a7a7a;
-}
-
-.admin-instructors-page .inst-header-right {
+.admin-instructors-page .search-actions {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
-.admin-instructors-page .inst-search {
-  width: 260px;
-  padding: 11px 20px;
-  border-radius: var(--radius-sm);
-  border: 1px solid #d0d0d0;
+.admin-instructors-page .search-box {
+  position: relative;
+  flex: 1 1 280px;
+  max-width: 420px;
+}
+
+.admin-instructors-page .search-box input {
+  width: 100%;
+  padding: 11px 16px 11px 42px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  font-size: 14px;
+  outline: none;
+  color: var(--color-text);
   background: var(--color-surface) !important;
-  font-size: 14px;
-  color: #333;
-  outline: none;
-  transition: all 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.admin-instructors-page .inst-search:focus {
-  border-color: #0FA958 !important;
-  box-shadow: 0 0 0 3px rgba(15, 169, 88, 0.1);
-  outline: none;
+.admin-instructors-page .search-box input::placeholder {
+  color: var(--color-text-muted);
 }
 
-.admin-instructors-page .inst-search::placeholder {
-  color: #bbb;
+.admin-instructors-page .search-box input:focus {
+  border-color: #10B981 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
 }
 
-/* Add Button */
-.admin-instructors-page .inst-add-btn {
-  background: var(--color-surface);
-  color: #0FA958;
-  border: 1px solid #0FA958;
-  padding: 11px 20px;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
-  font-weight: 500;
+.admin-instructors-page .search-box i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  font-size: 15px;
+}
+
+.admin-instructors-page .create-btn {
+  background: #059669;
+  color: #fff;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: 0.2s;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  margin-left: auto;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 1px 2px rgba(5, 150, 105, 0.2);
 }
 
-.admin-instructors-page .inst-add-btn:hover {
-  background: #f5fdf9;
+.admin-instructors-page .create-btn:hover {
+  background: #047857;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
 }
 
-/* Card */
-.admin-instructors-page .inst-card {
+.admin-instructors-page .content-card {
   background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: 30px 35px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 24px 28px 28px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px rgba(17, 24, 39, 0.04);
+  min-height: 420px;
+  overflow: hidden;
 }
 
-.admin-instructors-page .title {
-  font-size: 20px;
-  margin-bottom: 25px;
+.admin-instructors-page .card-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.admin-instructors-page .card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.admin-instructors-page .card-count {
+  font-size: 13px;
   font-weight: 500;
   color: var(--color-text-muted);
 }
 
-/* Table */
-.admin-instructors-page .inst-table {
+.admin-instructors-page .page-error {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-error);
+}
+
+.admin-instructors-page .table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-instructors-page .data-table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 780px;
 }
 
-.admin-instructors-page .inst-table thead th {
+.admin-instructors-page .data-table thead th {
   text-align: left;
-  font-size: 13px;
-  font-weight: 400;
-  color: #bbb;
-  padding-bottom: 18px;
-  border-bottom: 1px solid var(--color-bg-muted);
+  color: var(--color-text-muted);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  padding: 12px 10px 14px;
+  border-bottom: 1px solid var(--color-border);
 }
 
-/* Individual Heading Alignments */
-.admin-instructors-page .inst-table thead th:nth-child(2) {
-  padding-left: 10px;
+.admin-instructors-page .data-table tbody tr {
+  border-bottom: 1px solid #F3F4F6;
+  transition: background 0.15s;
 }
 
-/* Instructor */
-.admin-instructors-page .inst-table thead th:nth-child(3) {
-  padding-left: 8px;
+.admin-instructors-page .data-table tbody tr:hover {
+  background: #FAFBFC;
 }
 
-/* E-mail */
-.admin-instructors-page .inst-table thead th:nth-child(4) {
-  padding-left: 8px;
-}
-
-/* Mobile No */
-.admin-instructors-page .inst-table thead th:nth-child(5) {
-  padding-left: 8px;
-}
-
-/* Qualification */
-.admin-instructors-page .inst-table thead th:last-child {
-  text-align: center;
-  padding-right: 15px;
-  /* Shifting "Actions" heading slightly to the left */
-}
-
-.admin-instructors-page .inst-table tbody tr {
-  border-bottom: 1px solid #f5f5f5;
-}
-
-.admin-instructors-page .inst-table tbody tr:last-child {
+.admin-instructors-page .data-table tbody tr:last-child {
   border-bottom: none;
 }
 
-.admin-instructors-page .inst-table tbody td {
-  padding: 20px 10px;
-  font-size: 14px;
-  color: #666;
+.admin-instructors-page .data-table tbody td {
+  padding: 18px 10px;
   vertical-align: middle;
+  color: var(--color-text-secondary);
+  font-size: 14px;
 }
 
-.admin-instructors-page .inst-table th.s-no,
-.admin-instructors-page .inst-table td.s-no {
-  width: 70px;
-  text-align: center !important;
-  color: #bbb !important;
+.admin-instructors-page .col-sno {
+  color: var(--color-text-muted) !important;
+  width: 56px;
   font-weight: 500;
-  padding-left: 0 !important;
-  padding-right: 0 !important;
 }
 
-.admin-instructors-page .actions {
-  display: flex;
+.admin-instructors-page .person-chip {
+  display: inline-flex;
   align-items: center;
+  gap: 8px;
 }
 
-.admin-instructors-page .icon {
-  font-size: 18px;
-  cursor: pointer;
+.admin-instructors-page .person-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+}
+
+.admin-instructors-page .person-avatar.tone-green { background: #059669; }
+.admin-instructors-page .person-avatar.tone-blue { background: #2563EB; }
+.admin-instructors-page .person-avatar.tone-orange { background: #EA580C; }
+.admin-instructors-page .person-avatar.tone-purple { background: #7C3AED; }
+.admin-instructors-page .person-avatar.tone-teal { background: #0D9488; }
+.admin-instructors-page .person-avatar.tone-rose { background: #E11D48; }
+
+.admin-instructors-page .person-name {
+  font-size: 14px;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.admin-instructors-page .qual-cell {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+.admin-instructors-page .actions-cell {
+  text-align: left;
+  width: 130px;
+}
+
+.admin-instructors-page .admin-action-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.admin-instructors-page .admin-action-btn {
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #9CA3AF;
+  border-right: none;
+}
+
+.admin-instructors-page .admin-action-btn:hover {
+  background: var(--color-bg-muted);
+  color: #4B5563;
+}
+
+.admin-instructors-page .admin-action-btn--danger:hover {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.admin-instructors-page .admin-action-btn svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 1.6;
+}
+
+.admin-instructors-page .empty-row {
+  text-align: center;
+  padding: 36px 10px !important;
   color: var(--color-text-muted);
-  transition: 0.2s;
 }
 
-.admin-instructors-page .icon:hover {
-  color: #555;
-}
-
-/* Pagination */
 .admin-instructors-page .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 30px;
-  gap: 10px;
   align-items: center;
+  margin-top: 28px;
+  gap: 6px;
 }
 
-.admin-instructors-page .page-btn,
-.admin-instructors-page .page-arrow {
-  padding: 8px 14px;
-  border: none;
+.admin-instructors-page .pagination button {
   background: var(--color-surface);
-  color: #666;
-  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 14px;
-  transition: 0.2s;
-  min-width: 38px;
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  padding: 0 8px;
 }
 
-.admin-instructors-page .page-btn.active {
-  background: #0FA958;
-  color: var(--color-text-on-primary);
+.admin-instructors-page .pagination button.active {
+  background: #059669;
+  border-color: #059669;
+  color: #fff;
+  box-shadow: none;
 }
 
-.admin-instructors-page .page-btn:hover:not(.active),
-.admin-instructors-page .page-arrow:hover {
-  background: #f5f5f5;
+.admin-instructors-page .pagination button:disabled {
+  color: var(--color-border-strong);
+  cursor: not-allowed;
+  background: var(--color-bg-muted);
+}
+
+.admin-instructors-page .pagination button:hover:not(.active):not(:disabled) {
+  background: var(--color-bg-muted);
+  color: var(--color-text);
+}
+
+@media screen and (max-width: 768px) {
+  .admin-instructors-page {
+    padding: 20px 16px 32px;
+  }
+
+  .admin-instructors-page .page-title {
+    font-size: 24px;
+  }
+
+  .admin-instructors-page .search-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-instructors-page .search-box {
+    max-width: none;
+    flex: 1 1 auto;
+    width: 100%;
+  }
+
+  .admin-instructors-page .create-btn {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .admin-instructors-page .content-card {
+    padding: 18px 16px 22px;
+    border-radius: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .admin-instructors-page .page-title {
+    font-size: 22px;
+  }
+
+  .admin-instructors-page .data-table {
+    min-width: 640px;
+  }
 }

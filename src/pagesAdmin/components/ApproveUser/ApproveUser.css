@@ -1,309 +1,156 @@
-/* Approve Users Page */
+/* Approve users — matches Course management UI; sidebar unchanged */
+
 .admin-approve-user-page {
-  padding: 40px 50px;
-  background-color: var(--color-bg);
-  /* Match Students page */
+  background: var(--color-bg);
+  padding: 32px 40px 48px;
   min-height: 100vh;
   font-family: var(--font-family-base), sans-serif;
+  color: var(--color-text);
+  overflow-x: hidden;
 }
 
-.admin-approve-user-page .approve-user-header-main {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 30px;
+.admin-approve-user-page .page-hero {
+  margin-bottom: 22px;
 }
 
 .admin-approve-user-page .page-title {
-  font-size: 32px;
-  font-weight: 500;
-  color: #7a7a7a;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.admin-approve-user-page .page-subtitle {
   margin: 0;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  line-height: 1.45;
 }
 
-/* Card Styling */
-.admin-approve-user-page .pending-registrations-card {
-  background: var(--color-surface);
-  border-radius: var(--radius-lg);
-  padding: 30px 35px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+.admin-approve-user-page .top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 14px;
 }
 
-.admin-approve-user-page .card-header {
-  font-size: 20px;
-  font-weight: 500;
+.admin-approve-user-page .search-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.admin-approve-user-page .search-box {
+  position: relative;
+  flex: 1 1 280px;
+  max-width: 420px;
+}
+
+.admin-approve-user-page .search-box input {
+  width: 100%;
+  padding: 11px 16px 11px 42px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  font-size: 14px;
+  outline: none;
+  color: var(--color-text);
+  background: var(--color-surface) !important;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.admin-approve-user-page .search-box input::placeholder {
   color: var(--color-text-muted);
-  margin: 0 0 25px 0;
 }
 
-/* Table Styling */
-.admin-approve-user-page .table-container,
-.admin-approve-user-page .table-responsive {
-  width: 100%;
-  overflow-x: auto;
-  overflow-y: visible;
-  -webkit-overflow-scrolling: touch;
-  /* Prevent horizontal scroll container from trapping vertical page scroll */
-  overscroll-behavior: auto;
-  touch-action: pan-x pan-y;
+.admin-approve-user-page .search-box input:focus {
+  border-color: #10B981 !important;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
 }
 
-.admin-approve-user-page .approve-user-card {
-  overflow: visible;
+.admin-approve-user-page .search-box i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  font-size: 15px;
 }
 
-.admin-approve-user-page .pending-registrations-card {
-  overflow: visible;
-}
-
-.admin-approve-user-page {
-  overflow-x: hidden;
-  overflow-y: visible;
-  height: auto;
-  max-height: none;
-}
-
-.admin-approve-user-page .user-table {
-  width: 100%;
-  min-width: 760px;
-  border-collapse: collapse;
-  table-layout: fixed;
-}
-
-.admin-approve-user-page .user-table col.col-select { width: 44px; }
-.admin-approve-user-page .user-table col.col-sno { width: 64px; }
-.admin-approve-user-page .user-table col.col-name { width: auto; }
-.admin-approve-user-page .user-table col.col-source { width: 120px; }
-.admin-approve-user-page .user-table col.col-course { width: 170px; }
-.admin-approve-user-page .user-table col.col-date { width: 200px; }
-.admin-approve-user-page .user-table col.col-actions { width: 150px; }
-
-.admin-approve-user-page .user-table thead th {
-  text-align: left;
-  font-size: 13px;
-  font-weight: 400;
-  color: #bbb;
-  padding: 0 10px 16px;
-  border-bottom: 1px solid var(--color-bg-muted);
-  vertical-align: middle;
-  white-space: nowrap;
-}
-
-.admin-approve-user-page .user-table tbody tr {
-  border-bottom: 1px solid #f5f5f5;
-  transition: background-color 0.2s;
-}
-
-.admin-approve-user-page .user-table tbody tr:last-child {
-  border-bottom: none;
-}
-
-.admin-approve-user-page .user-table tbody td {
-  padding: 18px 10px;
-  font-size: 14px;
-  color: #666;
-  vertical-align: middle;
-}
-
-.admin-approve-user-page .user-table tbody tr:hover {
-  background-color: transparent;
-}
-
-.admin-approve-user-page .user-table th.select-col,
-.admin-approve-user-page .user-table td.select-col {
-  width: 44px;
-  text-align: center;
-  padding-left: 0;
-  padding-right: 4px;
-}
-
-.admin-approve-user-page .user-table th.s-no,
-.admin-approve-user-page .user-table td.s-no {
-  width: 64px;
-  text-align: center;
-  color: #bbb;
-  font-weight: 500;
-  padding-left: 0;
-  padding-right: 8px;
-}
-
-.admin-approve-user-page .user-table th.col-name,
-.admin-approve-user-page .user-table td.col-name {
-  text-align: left;
-}
-
-.admin-approve-user-page .user-name {
-  font-weight: 400;
-  color: #666;
-}
-
-.admin-approve-user-page .user-date {
-  color: #666;
-  font-size: 14px;
-}
-
-.admin-approve-user-page .user-table th.col-actions,
-.admin-approve-user-page .user-table td.col-actions {
-  text-align: right;
-  padding-right: 0;
-}
-
-.admin-approve-user-page .action-icons {
-  text-align: right;
-}
-
-.admin-approve-user-page .action-icons .admin-action-group {
+.admin-approve-user-page .tab-pills {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
   margin-left: auto;
 }
 
-.admin-approve-user-page .empty-row {
-  text-align: center;
-  color: #999;
-  padding: 40px 10px !important;
-}
-
-.admin-approve-user-page .icon-btn {
-  background: none;
+.admin-approve-user-page .tab-pill {
+  background: transparent;
   border: none;
-  cursor: pointer;
-  padding: 6px;
-  margin-left: 12px;
-  border-radius: 4px;
-  transition: all 0.2s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.admin-approve-user-page .icon-btn:hover {
-  background-color: #F5F5F5;
-}
-
-.admin-approve-user-page .view-btn {
-  color: #7A7A7A;
-}
-
-.admin-approve-user-page .view-btn:hover {
-  color: #5A5A5A;
-}
-
-.admin-approve-user-page .approve-btn {
-  color: var(--color-primary-bright);
-}
-
-.admin-approve-user-page .approve-btn:hover {
-  background-color: var(--color-primary-light);
-}
-
-.admin-approve-user-page .reject-btn {
-  color: var(--color-error);
-}
-
-.admin-approve-user-page .reject-btn:hover {
-  background-color: var(--color-error-bg);
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .admin-approve-user-page {
-    padding: 20px;
-  }
-
-  .admin-approve-user-page .pending-registrations-card {
-    padding: 20px;
-  }
-
-  .admin-approve-user-page .user-table thead th,
-  .admin-approve-user-page .user-table tbody td {
-    padding: 14px 8px;
-  }
-
-  .admin-approve-user-page .user-table th.select-col,
-  .admin-approve-user-page .user-table td.select-col,
-  .admin-approve-user-page .user-table th.s-no,
-  .admin-approve-user-page .user-table td.s-no {
-    padding-left: 0;
-    padding-right: 4px;
-  }
-
-  .admin-approve-user-page .approve-user-header-main {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-
-  .admin-approve-user-page .search-bar-container {
-    width: 100%;
-  }
-}
-
-/* Tab Styles */
-.admin-approve-user-page .tab-container {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #eee;
-}
-
-.admin-approve-user-page .search-bar-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--color-surface);
   padding: 8px 16px;
-  border-radius: 12px;
-  border: 1px solid var(--color-border);
-  width: 300px;
-  transition: all 0.2s;
-}
-
-.admin-approve-user-page .search-bar-container:focus-within {
-  border: 2px solid #00a35a !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
-
-.admin-approve-user-page .search-icon {
-  color: var(--color-text-muted);
-  font-size: 14px;
-}
-
-.admin-approve-user-page .search-input {
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  -webkit-box-shadow: none !important;
-  width: 100%;
-  font-size: 14px;
-  color: var(--color-text);
-  background: transparent !important;
-}
-
-.admin-approve-user-page .tab-btn {
-  background: none;
-  border: none;
-  padding: 10px 4px 12px;
-  margin-right: 24px;
-  font-size: 15px;
+  border-radius: 8px;
+  font-size: 13px;
   font-weight: 500;
-  color: #666;
+  color: var(--color-text-secondary);
   cursor: pointer;
-  position: relative;
+  transition: background 0.15s, color 0.15s;
 }
 
-.admin-approve-user-page .tab-btn.active {
-  color: var(--color-primary);
+.admin-approve-user-page .tab-pill:hover {
+  color: var(--color-text);
+  background: var(--color-bg-muted);
+}
+
+.admin-approve-user-page .tab-pill.active {
+  background: #059669;
+  color: #fff;
   font-weight: 600;
 }
 
-.admin-approve-user-page .tab-btn.active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -1px;
-  height: 2px;
-  background: var(--color-primary);
+.admin-approve-user-page .content-card {
+  background: var(--color-surface);
+  padding: 24px 28px 28px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  box-shadow: 0 1px 3px rgba(17, 24, 39, 0.04);
+  min-height: 420px;
+  overflow: hidden;
+}
+
+.admin-approve-user-page .card-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.admin-approve-user-page .card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.admin-approve-user-page .card-count {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+}
+
+.admin-approve-user-page .page-error {
+  text-align: center;
+  padding: 40px;
+  color: var(--color-error);
 }
 
 .admin-approve-user-page .bulk-actions-bar {
@@ -314,26 +161,26 @@
   flex-wrap: wrap;
   margin-bottom: 16px;
   padding: 12px 16px;
-  background: var(--color-primary-soft);
-  border: 1px solid var(--color-primary-light);
-  border-radius: var(--radius-md);
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  border-radius: 10px;
 }
 
 .admin-approve-user-page .bulk-selection-count {
   font-size: 14px;
   font-weight: 600;
-  color: var(--color-success-text);
+  color: #047857;
 }
 
 .admin-approve-user-page .bulk-actions-buttons {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .admin-approve-user-page .bulk-btn {
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: 8px;
   padding: 8px 14px;
   font-size: 13px;
   font-weight: 600;
@@ -347,8 +194,12 @@
 }
 
 .admin-approve-user-page .bulk-approve-btn {
-  background: #0FA958;
-  color: var(--color-text-on-primary);
+  background: #059669;
+  color: #fff;
+}
+
+.admin-approve-user-page .bulk-approve-btn:hover:not(:disabled) {
+  background: #047857;
 }
 
 .admin-approve-user-page .bulk-reject-btn {
@@ -359,65 +210,250 @@
 .admin-approve-user-page .bulk-clear-btn {
   background: var(--color-surface);
   color: var(--color-text);
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid var(--color-border);
+}
+
+.admin-approve-user-page .table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.admin-approve-user-page .data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 780px;
+}
+
+.admin-approve-user-page .data-table thead th {
+  text-align: left;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  padding: 12px 10px 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-approve-user-page .data-table tbody tr {
+  border-bottom: 1px solid #F3F4F6;
+  transition: background 0.15s;
+}
+
+.admin-approve-user-page .data-table tbody tr:hover {
+  background: #FAFBFC;
+}
+
+.admin-approve-user-page .data-table tbody tr.row-selected {
+  background: #ECFDF5;
+}
+
+.admin-approve-user-page .data-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.admin-approve-user-page .data-table tbody td {
+  padding: 18px 10px;
+  vertical-align: middle;
+  color: var(--color-text-secondary);
+  font-size: 14px;
 }
 
 .admin-approve-user-page .select-col {
   width: 44px;
   text-align: center;
+  padding-left: 4px !important;
+  padding-right: 4px !important;
 }
 
 .admin-approve-user-page .select-col input[type="checkbox"] {
   width: 16px;
   height: 16px;
   cursor: pointer;
-  accent-color: #0FA958;
+  accent-color: #059669;
 }
 
-.admin-approve-user-page .user-table tr.row-selected {
-  background: var(--color-primary-soft);
+.admin-approve-user-page .col-sno {
+  color: var(--color-text-muted) !important;
+  width: 56px;
+  font-weight: 500;
 }
 
+.admin-approve-user-page .person-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
 
-/* Pagination */
+.admin-approve-user-page .person-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.admin-approve-user-page .person-avatar.tone-green { background: #059669; }
+.admin-approve-user-page .person-avatar.tone-blue { background: #2563EB; }
+.admin-approve-user-page .person-avatar.tone-orange { background: #EA580C; }
+.admin-approve-user-page .person-avatar.tone-purple { background: #7C3AED; }
+.admin-approve-user-page .person-avatar.tone-teal { background: #0D9488; }
+.admin-approve-user-page .person-avatar.tone-rose { background: #E11D48; }
+
+.admin-approve-user-page .person-name {
+  font-size: 14px;
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.admin-approve-user-page .col-date {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.admin-approve-user-page .actions-cell {
+  text-align: left;
+  width: 130px;
+}
+
+.admin-approve-user-page .admin-action-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+.admin-approve-user-page .admin-action-btn {
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #9CA3AF;
+  border-right: none;
+}
+
+.admin-approve-user-page .admin-action-btn:hover {
+  background: var(--color-bg-muted);
+  color: #4B5563;
+}
+
+.admin-approve-user-page .admin-action-btn--success:hover {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.admin-approve-user-page .admin-action-btn--danger:hover {
+  background: var(--color-error-bg);
+  color: var(--color-error);
+}
+
+.admin-approve-user-page .admin-action-btn svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 1.6;
+}
+
+.admin-approve-user-page .empty-row {
+  text-align: center;
+  padding: 36px 10px !important;
+  color: var(--color-text-muted);
+}
+
 .admin-approve-user-page .pagination {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 30px;
-  gap: 8px;
   align-items: center;
+  margin-top: 28px;
+  gap: 6px;
 }
 
 .admin-approve-user-page .pagination button {
-  padding: 8px 14px;
-  border: none;
   background: var(--color-surface);
-  color: #666;
-  border-radius: 6px;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 14px;
-  transition: 0.2s;
-  min-width: 38px;
-  border: 1px solid #eee;
-  /* Added border to make them visible on white bg if needed, or match Students exactly */
+  min-width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  padding: 0 8px;
 }
 
-.admin-approve-user-page .pagination .active {
-  background: #0FA958;
-  color: var(--color-text-on-primary);
-  border-color: #0FA958;
-}
-
-.admin-approve-user-page .pagination button:hover:not(.active):not(:disabled) {
-  background: #f5f5f5;
+.admin-approve-user-page .pagination button.active {
+  background: #059669;
+  border-color: #059669;
+  color: #fff;
+  box-shadow: none;
 }
 
 .admin-approve-user-page .pagination button:disabled {
-  opacity: 0.4;
+  color: var(--color-border-strong);
   cursor: not-allowed;
+  background: var(--color-bg-muted);
 }
 
-.admin-approve-user-page .page-arrow {
-  font-weight: bold;
+.admin-approve-user-page .pagination button:hover:not(.active):not(:disabled) {
+  background: var(--color-bg-muted);
+  color: var(--color-text);
+}
+
+@media screen and (max-width: 768px) {
+  .admin-approve-user-page {
+    padding: 20px 16px 32px;
+  }
+
+  .admin-approve-user-page .page-title {
+    font-size: 24px;
+  }
+
+  .admin-approve-user-page .search-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-approve-user-page .search-box {
+    max-width: none;
+    width: 100%;
+  }
+
+  .admin-approve-user-page .tab-pills {
+    margin-left: 0;
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .admin-approve-user-page .tab-pill {
+    flex: 1;
+    text-align: center;
+  }
+
+  .admin-approve-user-page .content-card {
+    padding: 18px 16px 22px;
+    border-radius: 14px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .admin-approve-user-page .page-title {
+    font-size: 22px;
+  }
+
+  .admin-approve-user-page .data-table {
+    min-width: 640px;
+  }
 }
