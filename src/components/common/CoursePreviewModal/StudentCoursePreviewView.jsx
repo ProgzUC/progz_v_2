@@ -215,43 +215,61 @@ export default function StudentCoursePreviewView({ course }) {
 
   if (!course) return null;
 
-  if (viewLesson) {
-    return (
-      <div className="student-mycourses-page student-course-preview-view">
-        <div className="lesson-content-view">
-          <button
-            type="button"
-            className="jc-back-btn mb-4"
-            onClick={() => {
-              setViewLesson(null);
-              setActiveModuleName("");
-            }}
-          >
-            <div className="back-icon-circle">
-              <i className="bi bi-arrow-left" />
-            </div>
-            <span>Back to Course</span>
-          </button>
-          <Introduction
-            sectionData={viewLesson}
-            courseName={course.courseName || "Course"}
-            moduleName={activeModuleName}
-          />
-        </div>
-      </div>
-    );
-  }
+  const courseName = course.courseName || "Untitled Course";
+  const initial = courseName.charAt(0).toUpperCase();
+
+  const openLesson = (section, module) => {
+    setActiveModuleName(module.moduleName || module.title || "");
+    setViewLesson(normalizeSectionForStudent(section));
+  };
 
   return (
     <div className="student-mycourses-page student-course-preview-view">
-      <PreviewLargeCard course={course} lessonsCount={lessonsCount} />
-      <PreviewCurriculum
-        modules={course.modules || []}
-        onOpenLesson={(section, module) => {
-          setActiveModuleName(module.moduleName || module.title || "");
-          setViewLesson(normalizeSectionForStudent(section));
-        }}
-      />
+      <div className="mycourses-layout">
+        <aside className="mycourses-rail" aria-label="Course list">
+          <nav className="rail-nav">
+            <button type="button" className="rail-item active" aria-current="page">
+              <span className="rail-icon">{initial}</span>
+              <span className="rail-text">
+                <span className="rail-item-title">{courseName}</span>
+                <span className="rail-item-meta">
+                  0% · 0/{lessonsCount} lessons
+                </span>
+              </span>
+            </button>
+          </nav>
+        </aside>
+
+        <div className="right-section">
+          {viewLesson ? (
+            <div className="lesson-content-view">
+              <button
+                type="button"
+                className="jc-back-btn mb-4"
+                onClick={() => {
+                  setViewLesson(null);
+                  setActiveModuleName("");
+                }}
+              >
+                <div className="back-icon-circle">
+                  <i className="bi bi-arrow-left" />
+                </div>
+                <span>Back to Course</span>
+              </button>
+              <Introduction
+                sectionData={viewLesson}
+                courseName={courseName}
+                moduleName={activeModuleName}
+              />
+            </div>
+          ) : (
+            <>
+              <PreviewLargeCard course={course} lessonsCount={lessonsCount} />
+              <PreviewCurriculum modules={course.modules || []} onOpenLesson={openLesson} />
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

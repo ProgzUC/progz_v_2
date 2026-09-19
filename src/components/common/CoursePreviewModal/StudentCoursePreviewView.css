@@ -1,13 +1,37 @@
 .student-course-preview-view {
-  margin-top: 0 !important;
+  margin: 0 !important;
   background: var(--color-bg);
   border-radius: 0;
-  padding: 28px 40px 48px;
+  padding: 0 !important;
   min-height: 100%;
+  height: 100%;
   width: 100%;
-  max-width: 960px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: none !important;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.student-course-preview-view .mycourses-layout {
+  min-height: 100%;
+  height: 100%;
+  width: 100%;
+}
+
+.student-course-preview-view .mycourses-rail {
+  position: relative;
+  top: auto;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.student-course-preview-view .right-section {
+  height: 100%;
+  min-width: 0;
+  flex: 1 1 auto;
+  width: auto;
+  padding: 24px 28px 40px;
+  overflow-x: hidden;
+  overflow-y: auto;
   box-sizing: border-box;
 }
 
@@ -15,11 +39,62 @@
   margin: 0 0 28px;
   width: 100%;
   max-width: none;
+  box-sizing: border-box;
 }
 
 .student-course-preview-view .course-curriculum-container {
   margin: 0;
   width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+.student-course-preview-view .module-header {
+  justify-content: space-between;
+}
+
+.student-course-preview-view .module-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.student-course-preview-view .accordion-icon {
+  flex-shrink: 0;
+  font-size: 14px;
+  color: #64748b;
+  transition: transform 0.2s ease;
+}
+
+.student-course-preview-view .accordion-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.student-course-preview-view .module-header-left .module-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.student-course-preview-view .module-meta {
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.student-course-preview-view .lesson-number {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  background: #e2e8f0;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .student-preview-empty {
@@ -30,15 +105,9 @@
 }
 
 .student-course-preview-view .lesson-content-view {
-  max-width: 960px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
   width: 100%;
-}
-
-@media (max-width: 800px) {
-  .student-course-preview-view {
-    padding: 16px 14px 32px;
-  }
 }
 
 .student-course-preview-view .jc-back-btn {
@@ -63,4 +132,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+@media (max-width: 800px) {
+  .student-course-preview-view .right-section {
+    padding: 16px 14px 32px;
+  }
 }
