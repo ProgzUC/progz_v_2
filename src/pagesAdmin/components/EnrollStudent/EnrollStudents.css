@@ -78,7 +78,7 @@
 }
 
 .admin-enroll-students-page .tab-pill.active {
-  background: #059669;
+  background: var(--color-primary-bright);
   color: #fff;
   font-weight: 600;
 }
@@ -105,7 +105,7 @@
 }
 
 .admin-enroll-students-page .zen-crm-banner a {
-  color: #059669;
+  color: var(--color-primary-bright);
   font-weight: 600;
   text-decoration: none;
 }
@@ -193,8 +193,8 @@
 }
 
 .admin-enroll-students-page .input-select:focus {
-  border-color: #10B981 !important;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+  border-color: var(--color-primary-bright) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 12%, transparent);
 }
 
 .admin-enroll-students-page .grid-select-group {
@@ -219,18 +219,18 @@
   padding: 0;
   font-size: 12px;
   font-weight: 600;
-  color: #059669;
+  color: var(--color-primary-bright);
   cursor: pointer;
 }
 
 .admin-enroll-students-page .create-batch-link:hover {
   text-decoration: underline;
-  color: #047857;
+  color: var(--color-primary-hover);
 }
 
 .admin-enroll-students-page .btn-outline {
-  border: 1px solid #059669;
-  color: #059669;
+  border: 1px solid var(--color-primary-bright);
+  color: var(--color-primary-bright);
   background: transparent;
   border-radius: 8px;
   padding: 8px 14px;
@@ -243,7 +243,7 @@
 }
 
 .admin-enroll-students-page .btn-outline:hover {
-  background: #059669;
+  background: var(--color-primary-bright);
   color: #fff;
 }
 
@@ -279,7 +279,7 @@
 }
 
 .admin-enroll-students-page .create-btn {
-  background: #059669;
+  background: var(--color-primary-bright);
   color: #fff;
   border: none;
   padding: 11px 18px;
@@ -296,7 +296,7 @@
 }
 
 .admin-enroll-students-page .create-btn:hover:not(:disabled) {
-  background: #047857;
+  background: var(--color-primary-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
 }
@@ -407,8 +407,8 @@
 }
 
 .admin-enroll-students-page .status-filter select:focus {
-  border-color: #10B981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+  border-color: var(--color-primary-bright);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 12%, transparent);
 }
 
 .admin-enroll-students-page .hide-enrolled-toggle {
@@ -428,7 +428,7 @@
 }
 
 .admin-enroll-students-page .hide-enrolled-toggle input {
-  accent-color: #059669;
+  accent-color: var(--color-primary-bright);
   width: 16px;
   height: 16px;
   margin: 0;
@@ -457,7 +457,7 @@
 .admin-enroll-students-page .select-all-label input {
   width: 16px;
   height: 16px;
-  accent-color: #059669;
+  accent-color: var(--color-primary-bright);
 }
 
 .admin-enroll-students-page .clear-btn {
@@ -502,7 +502,7 @@
 }
 
 .admin-enroll-students-page .student-select-row.selected {
-  background: #ECFDF5;
+  background: var(--color-primary-light);
 }
 
 .admin-enroll-students-page .student-checkbox {
@@ -510,7 +510,7 @@
   width: 16px;
   height: 16px;
   cursor: pointer;
-  accent-color: #059669;
+  accent-color: var(--color-primary-bright);
   flex-shrink: 0;
 }
 
@@ -527,7 +527,7 @@
   flex-shrink: 0;
 }
 
-.admin-enroll-students-page .person-avatar.tone-green { background: #059669; }
+.admin-enroll-students-page .person-avatar.tone-green { background: var(--color-primary-bright); }
 .admin-enroll-students-page .person-avatar.tone-blue { background: #5B7C99; }
 .admin-enroll-students-page .person-avatar.tone-orange { background: #A67C52; }
 .admin-enroll-students-page .person-avatar.tone-purple { background: #6B7280; }
@@ -551,11 +551,11 @@
 }
 
 .admin-enroll-students-page .student-info--selectable:hover strong {
-  color: #059669;
+  color: var(--color-primary-bright);
 }
 
 .admin-enroll-students-page .student-info--selectable:focus-visible {
-  outline: 2px solid #059669;
+  outline: 2px solid var(--color-primary-bright);
   outline-offset: 2px;
 }
 
@@ -585,8 +585,8 @@
 }
 
 .admin-enroll-students-page .status-pill.active {
-  background: #ECFDF5;
-  color: #059669;
+  background: var(--color-primary-light);
+  color: var(--color-primary-bright);
 }
 
 .admin-enroll-students-page .status-pill.pending {
@@ -622,7 +622,7 @@
 /* CSV */
 .admin-enroll-students-page .csv-upload-dropzone {
   border: 2px dashed #A7F3D0;
-  background: #ECFDF5;
+  background: var(--color-primary-light);
   border-radius: 12px;
   padding: 40px 24px;
   text-align: center;
@@ -636,7 +636,7 @@
 .admin-enroll-students-page .csv-upload-dropzone i {
   font-size: 2.5rem;
   margin-bottom: 4px;
-  color: #059669;
+  color: var(--color-primary-bright);
 }
 
 .admin-enroll-students-page .csv-upload-dropzone h3 {
@@ -655,7 +655,7 @@
 }
 
 .admin-enroll-students-page .csv-upload-dropzone code {
-  color: #059669;
+  color: var(--color-primary-bright);
   font-size: 0.9em;
   background: var(--color-surface);
   padding: 1px 6px;
@@ -672,7 +672,7 @@
 
 .admin-enroll-students-page .file-loaded-badge {
   background: var(--color-surface);
-  color: #059669;
+  color: var(--color-primary-bright);
   border: 1px solid #A7F3D0;
   padding: 8px 14px;
   border-radius: 8px;
@@ -705,12 +705,12 @@
 }
 
 .admin-enroll-students-page .email-chip {
-  background: #ECFDF5;
+  background: var(--color-primary-light);
   border: 1px solid #A7F3D0;
   padding: 4px 12px;
   border-radius: 999px;
   font-size: 12px;
-  color: #047857;
+  color: var(--color-primary-hover);
   font-weight: 500;
 }
 

@@ -10,6 +10,7 @@ import {
 import { exportToCSV } from "../../../utils/csvExport";
 import { downloadAttendanceCSV } from "../../../api/reportApi";
 import Loader from "../../../components/common/Loader/Loader";
+import { useAdminTheme } from "../../context/AdminThemeContext";
 import {
   AreaChart,
   Area,
@@ -25,7 +26,15 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const COLORS = ["#059669", "#0EA5E9", "#8B5CF6", "#F97316", "#64748B"];
+function useAccentPaint() {
+  const { accentSwatch } = useAdminTheme();
+  const swatch = accentSwatch || ["#064E3B", "#10B981"];
+  return {
+    primary: swatch[0],
+    bright: swatch[1],
+    colors: [swatch[1], "#0EA5E9", "#8B5CF6", "#F97316", "#64748B"],
+  };
+}
 
 const TABS = [
   { id: "executive", label: "Overview", icon: "bi-speedometer2" },
@@ -204,6 +213,7 @@ function ExecutiveTab() {
 function AttendanceTab() {
   const { data, isLoading, isError, refetch } = useAttendanceAnalytics();
   const [exporting, setExporting] = useState(false);
+  const { bright } = useAccentPaint();
 
   const handleExport = async () => {
     try {
@@ -252,15 +262,15 @@ function AttendanceTab() {
             <AreaChart data={trend}>
               <defs>
                 <linearGradient id="orAtt" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10B981" stopOpacity={0.28} />
-                  <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
+                  <stop offset="5%" stopColor={bright} stopOpacity={0.28} />
+                  <stop offset="95%" stopColor={bright} stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" />
               <XAxis dataKey="date" tick={{ fill: "var(--color-text-secondary)", fontSize: 12 }} />
               <YAxis domain={[0, 100]} tick={{ fill: "var(--color-text-secondary)", fontSize: 12 }} />
               <Tooltip />
-              <Area type="monotone" dataKey="attendanceRate" stroke="#10B981" fill="url(#orAtt)" />
+              <Area type="monotone" dataKey="attendanceRate" stroke={bright} fill="url(#orAtt)" />
             </AreaChart>
           </ResponsiveContainer>
         )}
@@ -307,6 +317,7 @@ function AttendanceTab() {
 
 function EnrollmentTab() {
   const { data, isLoading, isError, refetch } = useEnrollmentAnalytics();
+  const { bright, colors } = useAccentPaint();
 
   const handleExport = () => {
     const rows = (Array.isArray(data?.courseDistribution) ? data.courseDistribution : []).filter(
@@ -376,7 +387,7 @@ function EnrollmentTab() {
               <XAxis dataKey="month" tick={{ fill: "var(--color-text-secondary)", fontSize: 11 }} />
               <YAxis allowDecimals={false} tick={{ fill: "var(--color-text-secondary)", fontSize: 12 }} />
               <Tooltip />
-              <Bar dataKey="value" fill="#059669" radius={[6, 6, 0, 0]} />
+              <Bar dataKey="value" fill={bright} radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         )}
@@ -537,6 +548,7 @@ function TrainerTab() {
 
 function HealthTab() {
   const { data, isLoading, isError, refetch } = useBatchHealth();
+  const { colors } = useAccentPaint();
 
   if (isLoading) return <Loader message="Loading batch health..." />;
   if (isError) return <ErrorBlock message="Failed to load batch health" onRetry={refetch} />;
@@ -563,7 +575,7 @@ function HealthTab() {
               <PieChart>
                 <Pie data={pieData} innerRadius={58} outerRadius={84} paddingAngle={4} dataKey="value" label>
                   {pieData.map((entry, index) => (
-                    <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={entry.name} fill={colors[index % colors.length]} />
                   ))}
                 </Pie>
                 <Tooltip />

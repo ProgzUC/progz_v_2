@@ -83,7 +83,7 @@
 }
 
 .admin-students-page .create-btn {
-  background: #059669;
+  background: var(--color-primary-bright);
   color: #fff;
   border: none;
   padding: 11px 18px;
@@ -101,7 +101,7 @@
 }
 
 .admin-students-page .create-btn:hover {
-  background: #047857;
+  background: var(--color-primary-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
 }
@@ -210,7 +210,7 @@
   letter-spacing: 0.02em;
 }
 
-.admin-students-page .person-avatar.tone-green { background: #059669; }
+.admin-students-page .person-avatar.tone-green { background: var(--color-primary-bright); }
 .admin-students-page .person-avatar.tone-blue { background: #5B7C99; }
 .admin-students-page .person-avatar.tone-orange { background: #A67C52; }
 .admin-students-page .person-avatar.tone-purple { background: #6B7280; }
@@ -315,8 +315,8 @@
 }
 
 .admin-students-page .pagination button.active {
-  background: #059669;
-  border-color: #059669;
+  background: var(--color-primary-bright);
+  border-color: var(--color-primary-bright);
   color: #fff;
   box-shadow: none;
 }

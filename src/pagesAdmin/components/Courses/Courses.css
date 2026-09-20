@@ -83,7 +83,7 @@
 }
 
 .admin-courses-page .create-btn {
-  background: #059669;
+  background: var(--color-primary-bright);
   color: #fff;
   border: none;
   padding: 11px 18px;
@@ -101,7 +101,7 @@
 }
 
 .admin-courses-page .create-btn:hover {
-  background: #047857;
+  background: var(--color-primary-hover);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
 }
@@ -152,8 +152,8 @@
 }
 
 .admin-courses-page .instructor-filter select:focus {
-  border-color: #10B981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+  border-color: var(--color-primary-bright);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 12%, transparent);
 }
 
 .admin-courses-page .instructor-filter .clear-filter-btn {
@@ -354,8 +354,8 @@
 }
 
 .admin-courses-page .pagination button.active {
-  background: #059669;
-  border-color: #059669;
+  background: var(--color-primary-bright);
+  border-color: var(--color-primary-bright);
   color: #fff;
   box-shadow: none;
 }

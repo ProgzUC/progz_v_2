@@ -884,7 +884,7 @@ input:focus,
 }
 
 .admin-create-course-page .add-video-btn {
-  color: #059669;
+  color: var(--color-primary-bright);
   cursor: pointer;
   font-weight: 600;
 }
@@ -896,7 +896,7 @@ input:focus,
 .admin-create-course-page .video-item {
   font-size: 14px;
   padding: 6px;
-  background: #ECFDF5;
+  background: var(--color-primary-light);
   margin-top: 6px;
   border-radius: 6px;
 }

@@ -575,7 +575,7 @@ select.glass-input {
 }
 
 .monitor-table.errors-table .method-badge.post {
-  background: #047857;
+  background: var(--color-primary-hover);
 }
 
 .monitor-table.errors-table .method-badge.put {

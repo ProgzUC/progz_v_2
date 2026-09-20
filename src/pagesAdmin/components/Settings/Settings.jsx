@@ -47,12 +47,13 @@ const AUDIENCE_OPTIONS = [
   { id: "students", label: "Students" },
 ];
 
-function ThemePreview({ mode, resolvedMode, accent, accents }) {
+function ThemePreview({ mode, resolvedMode, accent, accents, accentGradient }) {
   const { stats, isLoading } = useAdminDashboard();
   const { data: ops } = useOperationalSummary();
-  const gradient = accents.find((a) => a.id === accent)?.gradient;
+  const preset = accents.find((a) => a.id === accent);
+  const gradient = accentGradient || preset?.gradient;
   const label = mode === "system" ? "System" : mode === "dark" ? "Dark" : "Light";
-  const accentLabel = accents.find((a) => a.id === accent)?.label;
+  const accentLabel = accent === "custom" ? "Custom" : preset?.label;
 
   const students = stats?.students ?? 0;
   const batches = stats?.totalBatches ?? stats?.batches ?? 0;
@@ -120,17 +121,27 @@ function AppearancePanel() {
     resolvedMode,
     accent,
     accents,
+    accentGradient,
+    customPrimary,
+    customBright,
     corners,
     density,
     setMode,
     setAccent,
+    setCustomAccent,
     setCorners,
     setDensity,
   } = useAdminTheme();
 
   return (
     <div className="as-panel-stack">
-      <ThemePreview mode={mode} resolvedMode={resolvedMode} accent={accent} accents={accents} />
+      <ThemePreview
+        mode={mode}
+        resolvedMode={resolvedMode}
+        accent={accent}
+        accents={accents}
+        accentGradient={accentGradient}
+      />
 
       <section className="as-block">
         <header className="as-block-head">
@@ -166,7 +177,7 @@ function AppearancePanel() {
       <section className="as-block">
         <header className="as-block-head">
           <h2>Accent colour</h2>
-          <p>Sidebar, buttons, and highlights update together.</p>
+          <p>Pick a preset, or build your own with two colours.</p>
         </header>
         <div className="as-accent-grid" role="radiogroup" aria-label="Accent colour">
           {accents.map((item) => {
@@ -189,7 +200,85 @@ function AppearancePanel() {
               </button>
             );
           })}
+
+          <button
+            type="button"
+            role="radio"
+            aria-checked={accent === "custom"}
+            className={`as-choice-card as-accent-card ${accent === "custom" ? "is-selected" : ""}`}
+            onClick={() => setCustomAccent(customPrimary, customBright)}
+          >
+            <span
+              className="as-swatch"
+              style={{ background: accentGradient }}
+              aria-hidden="true"
+            />
+            <span className="as-choice-copy">
+              <strong>Custom</strong>
+              <span>Your own primary + bright colours</span>
+            </span>
+            {accent === "custom" ? (
+              <i className="bi bi-check-circle-fill as-check" aria-hidden="true" />
+            ) : null}
+          </button>
         </div>
+
+        {accent === "custom" ? (
+          <div className="as-custom-accent">
+            <label className="as-color-field">
+              <span>Deep / sidebar</span>
+              <div className="as-color-row">
+                <input
+                  type="color"
+                  value={customPrimary}
+                  onChange={(e) => setCustomAccent(e.target.value, customBright)}
+                  aria-label="Deep accent colour"
+                />
+                <input
+                  type="text"
+                  defaultValue={customPrimary}
+                  key={`p-${customPrimary}`}
+                  onBlur={(e) => setCustomAccent(e.target.value, customBright)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.currentTarget.blur();
+                    }
+                  }}
+                  spellCheck={false}
+                  aria-label="Deep accent hex"
+                />
+              </div>
+            </label>
+            <label className="as-color-field">
+              <span>Bright / buttons</span>
+              <div className="as-color-row">
+                <input
+                  type="color"
+                  value={customBright}
+                  onChange={(e) => setCustomAccent(customPrimary, e.target.value)}
+                  aria-label="Bright accent colour"
+                />
+                <input
+                  type="text"
+                  defaultValue={customBright}
+                  key={`b-${customBright}`}
+                  onBlur={(e) => setCustomAccent(customPrimary, e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.currentTarget.blur();
+                    }
+                  }}
+                  spellCheck={false}
+                  aria-label="Bright accent hex"
+                />
+              </div>
+            </label>
+            <div className="as-custom-preview" aria-hidden="true">
+              <span className="as-custom-preview-bar" style={{ background: accentGradient }} />
+              <em>Soft shades generate automatically for the whole admin UI.</em>
+            </div>
+          </div>
+        ) : null}
       </section>
 
       <section className="as-block">

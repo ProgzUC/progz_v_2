@@ -266,8 +266,8 @@
 }
 
 .or-pill.ok {
-  background: #ecfdf5;
-  color: #047857;
+  background: var(--color-primary-light);
+  color: var(--color-primary-hover);
 }
 
 .or-pill.warn {

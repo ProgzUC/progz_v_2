@@ -31,7 +31,7 @@
 }
 
 .view-batch-page .back-btn:hover {
-    background: #047857 !important;
+    background: var(--color-primary-hover) !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 4px 12px rgba(16, 163, 88, 0.2) !important;
 }
@@ -127,7 +127,7 @@
     width: 48px;
     height: 48px;
     border-radius: 50%;
-    background: #059669;
+    background: var(--color-primary-bright);
     color: var(--color-text-on-primary);
     display: flex;
     align-items: center;
@@ -303,7 +303,7 @@
 }
 
 .view-batch-page .completed-by {
-    color: #059669;
+    color: var(--color-primary-bright);
     font-weight: 500;
 }
 

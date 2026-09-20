@@ -1,5 +1,17 @@
 /* Admin-scoped theme: applies only under .layout */
 
+.layout {
+  --admin-primary: var(--color-primary);
+  --admin-primary-bright: var(--color-primary-bright);
+  --admin-primary-light: var(--color-primary-light);
+  --admin-primary-soft: var(--color-primary-soft);
+  --admin-primary-muted: var(--color-primary-muted);
+  --admin-primary-hover: var(--color-primary-hover);
+  --admin-primary-gradient: var(--color-primary-gradient);
+  --color-text-on-primary: #ffffff;
+  accent-color: var(--color-primary-bright);
+}
+
 /* ── Accent: Emerald (default / brand) ── */
 .layout[data-admin-accent="emerald"] {
   --color-primary: #064E3B;
@@ -90,6 +102,11 @@
   --color-focus-ring: rgba(100, 116, 139, 0.3);
   --color-surface-dark: #0F172A;
   --shadow-btn: 0 4px 14px rgba(30, 41, 59, 0.25);
+}
+
+/* Custom accent — CSS vars injected inline from AdminLayout */
+.layout[data-admin-accent="custom"] {
+  /* populated via style={{ ...customAccentStyle }} */
 }
 
 /* ── Dark mode (admin only) ── */

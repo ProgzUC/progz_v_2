@@ -26,7 +26,7 @@
 }
 
 .report-header h2 i {
-    color: #059669;
+    color: var(--color-primary-bright);
 }
 
 /* Batch Selector */
@@ -55,7 +55,7 @@
 }
 
 .batch-dropdown:focus {
-    border-color: #059669;
+    border-color: var(--color-primary-bright);
     outline: none;
 }
 
@@ -127,7 +127,7 @@
     width: 64px;
     height: 64px;
     border-radius: 12px;
-    background: linear-gradient(135deg, #059669, #047857);
+    background: linear-gradient(135deg, var(--color-primary-bright), var(--color-primary-hover));
     color: var(--color-surface);
     display: flex;
     align-items: center;
@@ -258,7 +258,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #059669, #047857);
+    background: linear-gradient(135deg, var(--color-primary-bright), var(--color-primary-hover));
     color: var(--color-surface);
     display: flex;
     align-items: center;
@@ -319,7 +319,7 @@
 }
 
 .percentage-bar.good .percentage-fill {
-    background: #059669;
+    background: var(--color-primary-bright);
 }
 
 .percentage-bar.average .percentage-fill {

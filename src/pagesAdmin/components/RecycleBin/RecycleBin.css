@@ -128,8 +128,8 @@
 }
 
 .admin-recycle-bin-page .type-filter select:focus {
-  border-color: #10B981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+  border-color: var(--color-primary-bright);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 12%, transparent);
 }
 
 .admin-recycle-bin-page .type-filter .clear-filter-btn {
@@ -191,7 +191,7 @@
 
 .admin-recycle-bin-page .page-error .retry-btn {
   margin-top: 12px;
-  background: #059669;
+  background: var(--color-primary-bright);
   color: #fff;
   border: none;
   padding: 10px 18px;
@@ -202,7 +202,7 @@
 }
 
 .admin-recycle-bin-page .page-error .retry-btn:hover {
-  background: #047857;
+  background: var(--color-primary-hover);
 }
 
 .admin-recycle-bin-page .table-responsive {
@@ -270,8 +270,8 @@
 .admin-recycle-bin-page .type-badge.type-student,
 .admin-recycle-bin-page .type-badge.type-trainer,
 .admin-recycle-bin-page .type-badge.type-instructor {
-  background: #ECFDF5;
-  color: #059669;
+  background: var(--color-primary-light);
+  color: var(--color-primary-bright);
 }
 
 .admin-recycle-bin-page .type-badge.type-course {
@@ -303,7 +303,7 @@
   flex-shrink: 0;
 }
 
-.admin-recycle-bin-page .person-avatar.tone-green { background: #059669; }
+.admin-recycle-bin-page .person-avatar.tone-green { background: var(--color-primary-bright); }
 .admin-recycle-bin-page .person-avatar.tone-blue { background: #5B7C99; }
 .admin-recycle-bin-page .person-avatar.tone-orange { background: #A67C52; }
 .admin-recycle-bin-page .person-avatar.tone-purple { background: #6B7280; }
@@ -353,8 +353,8 @@
 }
 
 .admin-recycle-bin-page .admin-action-btn--success:hover {
-  background: #ECFDF5;
-  color: #059669;
+  background: var(--color-primary-light);
+  color: var(--color-primary-bright);
 }
 
 .admin-recycle-bin-page .admin-action-btn--danger:hover {
@@ -420,8 +420,8 @@
 }
 
 .admin-recycle-bin-page .pagination button.active {
-  background: #059669;
-  border-color: #059669;
+  background: var(--color-primary-bright);
+  border-color: var(--color-primary-bright);
   color: #fff;
   box-shadow: none;
 }

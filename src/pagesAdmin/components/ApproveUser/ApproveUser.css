@@ -112,7 +112,7 @@
 }
 
 .admin-approve-user-page .tab-pill.active {
-  background: #059669;
+  background: var(--color-primary-bright);
   color: #fff;
   font-weight: 600;
 }
@@ -161,7 +161,7 @@
   flex-wrap: wrap;
   margin-bottom: 16px;
   padding: 12px 16px;
-  background: #ECFDF5;
+  background: var(--color-primary-light);
   border: 1px solid #A7F3D0;
   border-radius: 10px;
 }
@@ -169,7 +169,7 @@
 .admin-approve-user-page .bulk-selection-count {
   font-size: 14px;
   font-weight: 600;
-  color: #047857;
+  color: var(--color-primary-hover);
 }
 
 .admin-approve-user-page .bulk-actions-buttons {
@@ -194,12 +194,12 @@
 }
 
 .admin-approve-user-page .bulk-approve-btn {
-  background: #059669;
+  background: var(--color-primary-bright);
   color: #fff;
 }
 
 .admin-approve-user-page .bulk-approve-btn:hover:not(:disabled) {
-  background: #047857;
+  background: var(--color-primary-hover);
 }
 
 .admin-approve-user-page .bulk-reject-btn {
@@ -245,7 +245,7 @@
 }
 
 .admin-approve-user-page .data-table tbody tr.row-selected {
-  background: #ECFDF5;
+  background: var(--color-primary-light);
 }
 
 .admin-approve-user-page .data-table tbody tr:last-child {
@@ -270,7 +270,7 @@
   width: 16px;
   height: 16px;
   cursor: pointer;
-  accent-color: #059669;
+  accent-color: var(--color-primary-bright);
 }
 
 .admin-approve-user-page .col-sno {
@@ -294,11 +294,11 @@
 }
 
 .admin-approve-user-page .person-chip--selectable:hover .person-name {
-  color: #059669;
+  color: var(--color-primary-bright);
 }
 
 .admin-approve-user-page .person-chip--selectable:focus-visible {
-  outline: 2px solid #059669;
+  outline: 2px solid var(--color-primary-bright);
   outline-offset: 2px;
 }
 
@@ -315,7 +315,7 @@
   flex-shrink: 0;
 }
 
-.admin-approve-user-page .person-avatar.tone-green { background: #059669; }
+.admin-approve-user-page .person-avatar.tone-green { background: var(--color-primary-bright); }
 .admin-approve-user-page .person-avatar.tone-blue { background: #5B7C99; }
 .admin-approve-user-page .person-avatar.tone-orange { background: #A67C52; }
 .admin-approve-user-page .person-avatar.tone-purple { background: #6B7280; }
@@ -365,8 +365,8 @@
 }
 
 .admin-approve-user-page .admin-action-btn--success:hover {
-  background: #ECFDF5;
-  color: #059669;
+  background: var(--color-primary-light);
+  color: var(--color-primary-bright);
 }
 
 .admin-approve-user-page .admin-action-btn--danger:hover {
@@ -412,8 +412,8 @@
 }
 
 .admin-approve-user-page .pagination button.active {
-  background: #059669;
-  border-color: #059669;
+  background: var(--color-primary-bright);
+  border-color: var(--color-primary-bright);
   color: #fff;
   box-shadow: none;
 }

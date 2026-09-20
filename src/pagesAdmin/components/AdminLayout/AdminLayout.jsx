@@ -7,7 +7,7 @@ import "./AdminLayout.css";
 
 const AdminLayoutShell = ({ children }) => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const { resolvedMode, accent, corners, density } = useAdminTheme();
+  const { resolvedMode, accent, corners, density, customAccentStyle } = useAdminTheme();
 
   useEffect(() => {
     document.body.classList.toggle("admin-no-scroll", mobileNavOpen);
@@ -33,6 +33,7 @@ const AdminLayoutShell = ({ children }) => {
         data-admin-accent={accent}
         data-admin-corners={corners}
         data-admin-density={density}
+        style={customAccentStyle}
       >
         <Sidebar mobileOpen={mobileNavOpen} onMobileClose={() => setMobileNavOpen(false)} />
 

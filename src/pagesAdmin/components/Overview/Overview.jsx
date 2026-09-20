@@ -6,6 +6,7 @@ import StudentListModal from "../StudentListModal/StudentListModal";
 import Loader from "../../../components/common/Loader/Loader";
 import { useAdminDashboard } from "../../../hooks/useAdminStats";
 import { getStoredUser } from "../../../utils/authStorage";
+import { useAdminTheme } from "../../context/AdminThemeContext";
 
 import {
   AreaChart,
@@ -168,6 +169,9 @@ const Overview = () => {
   const [range, setRange] = useState(() => getWeekContaining());
   const [pickerOpen, setPickerOpen] = useState(false);
   const pickerRef = useRef(null);
+  const { accentSwatch } = useAdminTheme();
+  const chartPrimary = accentSwatch?.[0] || "#064E3B";
+  const chartBright = accentSwatch?.[1] || "#10B981";
 
   const rangeLabel = useMemo(
     () => formatRangeLabel(range.startDate, range.endDate),
@@ -532,8 +536,8 @@ const Overview = () => {
               <AreaChart data={chartData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="enrollFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#10B981" stopOpacity={0.28} />
-                    <stop offset="100%" stopColor="#10B981" stopOpacity={0} />
+                    <stop offset="0%" stopColor={chartBright} stopOpacity={0.28} />
+                    <stop offset="100%" stopColor={chartBright} stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <XAxis
@@ -546,10 +550,10 @@ const Overview = () => {
                 <Area
                   type="monotone"
                   dataKey="value"
-                  stroke="#10B981"
+                  stroke={chartBright}
                   strokeWidth={2.5}
                   fill="url(#enrollFill)"
-                  activeDot={{ r: 6, fill: "#064E3B", stroke: "#fff", strokeWidth: 2 }}
+                  activeDot={{ r: 6, fill: chartPrimary, stroke: "#fff", strokeWidth: 2 }}
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -579,7 +583,7 @@ const Overview = () => {
                       {dist.map((entry, i) => (
                         <Cell
                           key={entry.name}
-                          fill={i === 0 ? "#064E3B" : "#10B981"}
+                          fill={i === 0 ? chartPrimary : chartBright}
                         />
                       ))}
                     </Pie>

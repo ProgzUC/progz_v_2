@@ -24,7 +24,7 @@
   align-self: flex-start;
   border: none;
   background: transparent;
-  color: #059669;
+  color: var(--color-primary-bright);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -52,7 +52,7 @@
 .course-view-page .cv-hero-banner {
   height: 120px;
   width: 100%;
-  background: linear-gradient(90deg, #0f3d2e 0%, #059669 55%, #6EE7B7 100%);
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-primary-bright) 55%, var(--color-primary-muted) 100%);
   background-size: cover;
   background-position: center;
   display: flex;
@@ -63,7 +63,7 @@
 }
 
 .course-view-page .cv-hero-banner.has-thumbnail {
-  background-color: #0f3d2e;
+  background-color: var(--color-primary);
 }
 
 .course-view-page .cv-header-id {
@@ -99,7 +99,7 @@
 .course-view-page .cv-icon-circle {
   width: 72px;
   height: 72px;
-  background: linear-gradient(135deg, #6EE7B7 0%, #059669 100%);
+  background: linear-gradient(135deg, var(--color-primary-muted) 0%, var(--color-primary-bright) 100%);
   border-radius: 14px;
   display: flex;
   align-items: center;
@@ -179,22 +179,22 @@
 
 .course-view-page .cv-preview-btn {
   background: var(--color-surface);
-  color: #059669;
-  border: 1px solid #059669;
+  color: var(--color-primary-bright);
+  border: 1px solid var(--color-primary-bright);
 }
 
 .course-view-page .cv-preview-btn:hover {
-  background: #ecfdf5;
+  background: var(--color-primary-light);
 }
 
 .course-view-page .cv-edit-btn {
-  background: #059669;
+  background: var(--color-primary-bright);
   color: #fff;
   border: none;
 }
 
 .course-view-page .cv-edit-btn:hover {
-  background: #047857;
+  background: var(--color-primary-hover);
 }
 
 /* Content panels */
@@ -243,7 +243,7 @@
 .course-view-page .cv-preview-link {
   border: none;
   background: transparent;
-  color: #059669;
+  color: var(--color-primary-bright);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -276,7 +276,7 @@
   align-self: flex-start;
   border: none;
   background: transparent;
-  color: #059669;
+  color: var(--color-primary-bright);
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
@@ -298,7 +298,7 @@
   gap: 14px;
   padding: 14px 16px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #6EE7B7 0%, #059669 100%);
+  background: linear-gradient(135deg, var(--color-primary-muted) 0%, var(--color-primary-bright) 100%);
   color: #fff;
 }
 
@@ -352,8 +352,8 @@
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: #ECFDF5;
-  color: #059669;
+  background: var(--color-primary-light);
+  color: var(--color-primary-bright);
   font-weight: 700;
   font-size: 13px;
   display: inline-flex;
@@ -415,8 +415,8 @@
 }
 
 .course-view-page .cv-section-toggle.active {
-  background: #ECFDF5;
-  color: #059669;
+  background: var(--color-primary-light);
+  color: var(--color-primary-bright);
   font-weight: 600;
   cursor: default;
 }
@@ -543,8 +543,8 @@
 }
 
 .course-view-page .cv-action-icon.download {
-  color: #059669;
-  background: #ECFDF5;
+  color: var(--color-primary-bright);
+  background: var(--color-primary-light);
 }
 
 @media (max-width: 768px) {

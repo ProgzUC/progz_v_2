@@ -25,7 +25,7 @@
 .course-multi-select-trigger:hover,
 .course-multi-select-trigger.open,
 .course-multi-select-trigger:focus-visible {
-  border-color: var(--color-primary, #047857);
+  border-color: var(--color-primary, var(--color-primary-hover));
   box-shadow: 0 0 0 3px rgba(42, 125, 56, 0.2);
 }
 
@@ -93,7 +93,7 @@
 .course-multi-select-option input[type="checkbox"] {
   width: 16px;
   height: 16px;
-  accent-color: var(--color-primary-bright, #059669);
+  accent-color: var(--color-primary-bright, var(--color-primary-bright));
   cursor: pointer;
   flex-shrink: 0;
 }

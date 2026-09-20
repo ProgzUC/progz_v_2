@@ -6,6 +6,12 @@ import {
   useMemo,
   useState,
 } from "react";
+import {
+  buildCustomAccentVars,
+  customAccentGradient,
+  isValidHex,
+  normalizeHex,
+} from "../utils/accentPalette";
 
 const STORAGE_KEY = "progz-admin-theme";
 const BRANDING_KEY = "progz-admin-branding";
@@ -62,6 +68,11 @@ const MODE_IDS = new Set(["light", "dark", "system"]);
 const CORNER_IDS = new Set(["sharp", "rounded", "soft"]);
 const DENSITY_IDS = new Set(["comfortable", "compact"]);
 
+const DEFAULT_CUSTOM = {
+  primary: "#064E3B",
+  bright: "#10B981",
+};
+
 const readJson = (key, fallback) => {
   if (typeof window === "undefined") return fallback;
   try {
@@ -87,12 +98,24 @@ const getInitialTheme = () => {
     accent: "emerald",
     corners: "rounded",
     density: "comfortable",
+    customPrimary: DEFAULT_CUSTOM.primary,
+    customBright: DEFAULT_CUSTOM.bright,
   });
+  const accentOk =
+    ACCENT_IDS.has(parsed.accent) || parsed.accent === "custom"
+      ? parsed.accent
+      : "emerald";
   return {
     mode: MODE_IDS.has(parsed.mode) ? parsed.mode : "light",
-    accent: ACCENT_IDS.has(parsed.accent) ? parsed.accent : "emerald",
+    accent: accentOk,
     corners: CORNER_IDS.has(parsed.corners) ? parsed.corners : "rounded",
     density: DENSITY_IDS.has(parsed.density) ? parsed.density : "comfortable",
+    customPrimary: isValidHex(parsed.customPrimary)
+      ? normalizeHex(parsed.customPrimary)
+      : DEFAULT_CUSTOM.primary,
+    customBright: isValidHex(parsed.customBright)
+      ? normalizeHex(parsed.customBright)
+      : DEFAULT_CUSTOM.bright,
   };
 };
 
@@ -163,8 +186,19 @@ export const AdminThemeProvider = ({ children }) => {
   }, []);
 
   const setAccent = useCallback((accent) => {
-    if (!ACCENT_IDS.has(accent)) return;
+    if (!ACCENT_IDS.has(accent) && accent !== "custom") return;
     setSettings((prev) => ({ ...prev, accent }));
+  }, []);
+
+  const setCustomAccent = useCallback((primary, bright) => {
+    const nextPrimary = normalizeHex(primary, DEFAULT_CUSTOM.primary);
+    const nextBright = normalizeHex(bright, DEFAULT_CUSTOM.bright);
+    setSettings((prev) => ({
+      ...prev,
+      accent: "custom",
+      customPrimary: nextPrimary,
+      customBright: nextBright,
+    }));
   }, []);
 
   const setCorners = useCallback((corners) => {
@@ -223,11 +257,43 @@ export const AdminThemeProvider = ({ children }) => {
     }));
   }, []);
 
+  const customPrimary = settings.customPrimary;
+  const customBright = settings.customBright;
+  const isCustom = settings.accent === "custom";
+
+  const accentSwatch = useMemo(() => {
+    if (isCustom) return [customPrimary, customBright];
+    return (
+      ADMIN_ACCENTS.find((a) => a.id === settings.accent)?.swatch || [
+        DEFAULT_CUSTOM.primary,
+        DEFAULT_CUSTOM.bright,
+      ]
+    );
+  }, [isCustom, customPrimary, customBright, settings.accent]);
+
+  const accentGradient = useMemo(() => {
+    if (isCustom) return customAccentGradient(customPrimary, customBright);
+    return (
+      ADMIN_ACCENTS.find((a) => a.id === settings.accent)?.gradient ||
+      customAccentGradient(DEFAULT_CUSTOM.primary, DEFAULT_CUSTOM.bright)
+    );
+  }, [isCustom, customPrimary, customBright, settings.accent]);
+
+  const customAccentStyle = useMemo(() => {
+    if (!isCustom) return undefined;
+    return buildCustomAccentVars(customPrimary, customBright, resolvedMode === "dark");
+  }, [isCustom, customPrimary, customBright, resolvedMode]);
+
   const value = useMemo(
     () => ({
       mode: settings.mode,
       resolvedMode,
       accent: settings.accent,
+      customPrimary,
+      customBright,
+      accentSwatch,
+      accentGradient,
+      customAccentStyle,
       corners: settings.corners,
       density: settings.density,
       dark: resolvedMode === "dark",
@@ -237,6 +303,7 @@ export const AdminThemeProvider = ({ children }) => {
       prefs,
       setMode,
       setAccent,
+      setCustomAccent,
       setCorners,
       setDensity,
       toggleMode,
@@ -249,11 +316,17 @@ export const AdminThemeProvider = ({ children }) => {
     [
       settings,
       resolvedMode,
+      customPrimary,
+      customBright,
+      accentSwatch,
+      accentGradient,
+      customAccentStyle,
       branding,
       announcements,
       prefs,
       setMode,
       setAccent,
+      setCustomAccent,
       setCorners,
       setDensity,
       toggleMode,
