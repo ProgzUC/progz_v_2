@@ -299,7 +299,14 @@ function CourseCurriculum({ modules, setViewLesson }) {
 
 export default function MyCourses() {
     const { data: coursesData, isLoading: listLoading, isError } = useStudentCourses();
-    const courses = useMemo(() => coursesData?.enrolledCourses || [], [coursesData?.enrolledCourses]);
+    const courses = useMemo(() => {
+        const list = coursesData?.enrolledCourses || [];
+        return [...list].sort((a, b) =>
+            String(a.courseName || "").localeCompare(String(b.courseName || ""), undefined, {
+                sensitivity: "base",
+            })
+        );
+    }, [coursesData?.enrolledCourses]);
 
     const navigate = useNavigate();
     const [selectedCourseId, setSelectedCourseId] = useState(null);
