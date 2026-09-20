@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import './MyCourses.css';
-import { BsBook, BsPeople, BsLightningCharge } from 'react-icons/bs';
+import { BsBook, BsPeople, BsLightningCharge, BsArrowRight } from 'react-icons/bs';
 import {
     BiPlus,
-    BiDotsHorizontalRounded,
+    BiDotsVerticalRounded,
     BiPencil,
     BiTrash,
     BiCheckSquare,
@@ -19,15 +19,6 @@ import { useDeleteCourse } from '../../../hooks/useCourses';
 import { confirmDelete } from '../../../utils/confirmDelete';
 import { showSuccess, showError } from '../../../utils/toast';
 import Loader from '../../../components/common/Loader/Loader';
-
-/** Icon badge gradients; View Course button is always brand green via CSS */
-const ICON_ACCENTS = [
-    'linear-gradient(135deg, #10B981, #059669)',
-    'linear-gradient(135deg, #34D399, #047857)',
-    'linear-gradient(135deg, #6EE7B7, #059669)',
-];
-
-const iconBgForCourse = (index = 0) => ICON_ACCENTS[index % ICON_ACCENTS.length];
 
 const getCourseLogo = (name, initial) => {
     const lower = (name || '').toLowerCase();
@@ -120,8 +111,8 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
 
     return (
         <div className="my-courses-container trainer-myCourses">
-            <div className="trainer-stats-row">
-                <div className="stat-card">
+            <div className="trainer-stats-row" role="list">
+                <div className="stat-card" role="listitem" style={{ '--stat-i': 0 }}>
                     <div className="stat-icon-box stat-courses">
                         <BsBook aria-hidden="true" />
                     </div>
@@ -131,7 +122,7 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                     </div>
                 </div>
 
-                <div className="stat-card">
+                <div className="stat-card" role="listitem" style={{ '--stat-i': 1 }}>
                     <div className="stat-icon-box stat-sections">
                         <BiCheckSquare aria-hidden="true" />
                     </div>
@@ -141,7 +132,7 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                     </div>
                 </div>
 
-                <div className="stat-card">
+                <div className="stat-card" role="listitem" style={{ '--stat-i': 2 }}>
                     <div className="stat-icon-box stat-students">
                         <BiUser aria-hidden="true" />
                     </div>
@@ -151,13 +142,13 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                     </div>
                 </div>
 
-                <div className="stat-card">
+                <div className="stat-card" role="listitem" style={{ '--stat-i': 3 }}>
                     <div className="stat-icon-box stat-published">
                         <BsLightningCharge aria-hidden="true" />
                     </div>
                     <div className="stat-info">
                         <span className="stat-value">100%</span>
-                        <span className="stat-label">% Published</span>
+                        <span className="stat-label">Published</span>
                     </div>
                 </div>
             </div>
@@ -171,12 +162,14 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                     const students = course.totalStudents || 0;
 
                     return (
-                        <article key={courseId} className="trainer-course-card">
-                            <div className="trainer-card-header">
-                                <div
-                                    className="course-avatar-box"
-                                    style={{ background: iconBgForCourse(index) }}
-                                >
+                        <article
+                            key={courseId}
+                            className="trainer-course-card"
+                            style={{ '--card-i': index }}
+                        >
+                            <div className="trainer-card-media">
+                                <div className="course-media-pattern" aria-hidden="true" />
+                                <div className="course-avatar-box">
                                     {course.thumbnail?.url ? (
                                         <img
                                             src={course.thumbnail.url}
@@ -187,18 +180,57 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                                         getCourseLogo(course.courseName, initial)
                                     )}
                                 </div>
+
+                                <div className="dropdown-wrapper">
+                                    <button
+                                        type="button"
+                                        className={`three-dots-action-btn${isDropdownOpen ? ' is-open' : ''}`}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setOpenDropdownId(isDropdownOpen ? null : courseId);
+                                        }}
+                                        title="Course options"
+                                        aria-label="Course options"
+                                        aria-expanded={isDropdownOpen}
+                                    >
+                                        <BiDotsVerticalRounded aria-hidden="true" />
+                                    </button>
+
+                                    {isDropdownOpen && (
+                                        <div className="three-dots-menu" role="menu">
+                                            <button
+                                                type="button"
+                                                className="menu-item edit-item"
+                                                role="menuitem"
+                                                onClick={(e) => handleEditCourse(e, course)}
+                                            >
+                                                <BiPencil aria-hidden="true" /> Edit
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className="menu-item delete-item"
+                                                role="menuitem"
+                                                onClick={(e) => handleDeleteCourse(e, course)}
+                                            >
+                                                <BiTrash aria-hidden="true" /> Delete
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
 
                             <div className="trainer-card-body">
-                                <h3 className="trainer-course-title">{course.courseName}</h3>
                                 <p className="trainer-course-subtitle">Course Curriculum</p>
+                                <h3 className="trainer-course-title">{course.courseName}</h3>
 
                                 <div className="trainer-course-meta">
                                     <span className="meta-badge">
-                                        <BsBook aria-hidden="true" /> {sections} Sections
+                                        <BsBook aria-hidden="true" />
+                                        <span>{sections} Sections</span>
                                     </span>
                                     <span className="meta-badge">
-                                        <BsPeople aria-hidden="true" /> {students} Students
+                                        <BsPeople aria-hidden="true" />
+                                        <span>{students} Students</span>
                                     </span>
                                 </div>
                             </div>
@@ -209,42 +241,9 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                                     className="trainer-view-course-btn"
                                     onClick={() => onManageCourse(course)}
                                 >
-                                    View Course →
+                                    <span>View Course</span>
+                                    <BsArrowRight className="view-course-arrow" aria-hidden="true" />
                                 </button>
-
-                                <div className="dropdown-wrapper">
-                                    <button
-                                        type="button"
-                                        className="three-dots-action-btn"
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setOpenDropdownId(isDropdownOpen ? null : courseId);
-                                        }}
-                                        title="Course options"
-                                        aria-label="Course options"
-                                    >
-                                        <BiDotsHorizontalRounded aria-hidden="true" />
-                                    </button>
-
-                                    {isDropdownOpen && (
-                                        <div className="three-dots-menu">
-                                            <button
-                                                type="button"
-                                                className="menu-item edit-item"
-                                                onClick={(e) => handleEditCourse(e, course)}
-                                            >
-                                                <BiPencil aria-hidden="true" /> Edit
-                                            </button>
-                                            <button
-                                                type="button"
-                                                className="menu-item delete-item"
-                                                onClick={(e) => handleDeleteCourse(e, course)}
-                                            >
-                                                <BiTrash aria-hidden="true" /> Delete
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
                             </div>
                         </article>
                     );
@@ -253,6 +252,7 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                 <button
                     type="button"
                     className="create-new-course-card"
+                    style={{ '--card-i': coursesData.length }}
                     onClick={onCreateNew}
                 >
                     <div className="plus-icon-circle">

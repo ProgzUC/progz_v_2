@@ -4,10 +4,6 @@ import {
   FaCopy,
   FaEdit,
   FaPlay,
-  FaBullseye,
-  FaGraduationCap,
-  FaInfoCircle,
-  FaChartBar,
   FaImage,
   FaStar,
 } from "react-icons/fa";
@@ -17,16 +13,13 @@ import {
   BiTime,
   BiBook,
   BiLayer,
-  BiUser,
-  BiCalendar,
   BiLogoHtml5,
   BiLogoCss3,
   BiLogoBootstrap,
   BiLogoJavascript,
 } from "react-icons/bi";
 import "./CourseView.css";
-import RichTextContent from "../../../components/common/RichTextEditor/RichTextContent";
-import { isHtmlEmpty } from "../../../components/common/RichTextEditor/richTextUtils";
+import { getHtmlPlainText, hasMeaningfulHtml } from "../../../components/common/RichTextEditor/richTextUtils";
 import SectionDetails from "../../../components/common/CourseCurriculum/SectionDetails";
 import CoursePreviewModal from "../../../components/common/CoursePreviewModal/CoursePreviewModal";
 import { useCourse } from "../../../hooks/useCourses";
@@ -50,15 +43,6 @@ function getThumbLines(name) {
   }
   if (words.length === 1) return [words[0].toUpperCase()];
   return [words[0].toUpperCase(), words[1].toUpperCase()];
-}
-
-function toPlainText(html) {
-  return String(html || "")
-    .replace(/<br\s*\/?>/gi, " ")
-    .replace(/<[^>]*>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
 }
 
 function formatDuration(hours, months) {
@@ -85,13 +69,6 @@ function getCourseLogo(name) {
   return null;
 }
 
-function formatDate(value) {
-  if (!value) return null;
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return null;
-  return date.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-}
-
 const CourseView = ({ courseData, onBack, onEdit }) => {
   const courseId = courseData?._id || courseData?.courseId;
   const { data: fullCourse, isLoading, isError, error } = useCourse(courseId);
@@ -116,12 +93,9 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
     course?.courseDuration || course?.duration,
     course?.courseDurationMonths || course?.durationMonths
   );
-  const updatedLabel = formatDate(course?.updatedAt || course?.updatedOn);
-  const enrolledCount =
-    course?.enrolledCount ??
-    course?.enrolledStudents?.length ??
-    course?.students?.length;
-  const descriptionText = toPlainText(course?.courseDescription);
+  const descriptionText = hasMeaningfulHtml(course?.courseDescription)
+    ? getHtmlPlainText(course?.courseDescription)
+    : "";
   const thumbLines = useMemo(() => getThumbLines(courseName), [courseName]);
 
   const allExpanded = modules.length > 0 && expandedModules.size === modules.length;
@@ -159,10 +133,6 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
   if (isError) return <div className="error-state">Error: {error?.message || "Failed to load course"}</div>;
   if (!course) return <div className="error-state">Course not found</div>;
 
-  const stats = [
-    { icon: <BiUser />, label: "Students Enrolled", value: enrolledCount ?? 0 },
-    updatedLabel ? { icon: <BiCalendar />, label: "Last Updated", value: updatedLabel } : null,
-  ].filter(Boolean);
   const courseLogo = getCourseLogo(courseName);
   const levelLabel = course.level || course.difficulty || "";
 
@@ -203,9 +173,9 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
           <div className="cv-hero-copy">
             {category && <span className="cv-category-pill">{category}</span>}
             <h1>{courseName}</h1>
-            <p className="cv-hero-desc">
-              {descriptionText || "No description available."}
-            </p>
+            {descriptionText ? (
+              <p className="cv-hero-desc">{descriptionText}</p>
+            ) : null}
             <div className="cv-hero-meta">
               <span><BiBook /> {lessonsCount} Lessons</span>
               <span><BiLayer /> {modules.length} Modules</span>
@@ -235,125 +205,81 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
           </div>
         </section>
 
-        <div className="cv-main-grid">
-          <section className="cv-curriculum-card">
-            <div className="cv-column-header">
-              <span className="cv-card-heading">
-                <FaBook /> Curriculum
-              </span>
-              {modules.length > 0 && (
-                <button type="button" className="cv-preview-link" onClick={toggleAll}>
-                  {allExpanded ? "Collapse All" : "Expand All"}
-                  <BiChevronDown className={`cv-list-icon ${allExpanded ? "is-open" : ""}`} />
-                </button>
-              )}
-            </div>
+        <section className="cv-curriculum-card">
+          <div className="cv-column-header">
+            <span className="cv-card-heading">
+              <FaBook /> Curriculum
+            </span>
+            {modules.length > 0 && (
+              <button type="button" className="cv-preview-link" onClick={toggleAll}>
+                {allExpanded ? "Collapse All" : "Expand All"}
+                <BiChevronDown className={`cv-list-icon ${allExpanded ? "is-open" : ""}`} />
+              </button>
+            )}
+          </div>
 
-            {modules.length === 0 && <div className="cv-empty-state">No modules found</div>}
+          {modules.length === 0 && <div className="cv-empty-state">No modules found</div>}
 
-            <div className="cv-module-list">
-              {modules.map((mod, index) => {
-                const isOpen = expandedModules.has(index);
-                const sectionCount = mod.sections?.length || 0;
-                return (
-                  <div key={mod.id || index} className={`cv-module-row ${isOpen ? "open" : ""}`}>
-                    <button
-                      type="button"
-                      className="cv-module-toggle"
-                      onClick={() => toggleModule(index)}
-                    >
-                      <span className="cv-module-index">{String(index + 1).padStart(2, "0")}</span>
-                      <span className="cv-module-toggle-text">
-                        <span className="cv-module-title">{mod.title || `Module ${index + 1}`}</span>
-                        <span className="cv-module-sub">
-                          {sectionCount} section{sectionCount === 1 ? "" : "s"}
-                        </span>
+          <div className="cv-module-list">
+            {modules.map((mod, index) => {
+              const isOpen = expandedModules.has(index);
+              const sectionCount = mod.sections?.length || 0;
+              return (
+                <div key={mod.id || index} className={`cv-module-row ${isOpen ? "open" : ""}`}>
+                  <button
+                    type="button"
+                    className="cv-module-toggle"
+                    onClick={() => toggleModule(index)}
+                  >
+                    <span className="cv-module-index">{String(index + 1).padStart(2, "0")}</span>
+                    <span className="cv-module-toggle-text">
+                      <span className="cv-module-title">{mod.title || `Module ${index + 1}`}</span>
+                      <span className="cv-module-sub">
+                        {sectionCount} section{sectionCount === 1 ? "" : "s"}
                       </span>
-                      <span className="cv-module-lessons">
-                        <BiBook /> {sectionCount} Lessons
-                      </span>
-                      <BiChevronDown className={`cv-list-icon ${isOpen ? "is-open" : ""}`} />
-                    </button>
+                    </span>
+                    <span className="cv-module-lessons">
+                      <BiBook /> {sectionCount} Lessons
+                    </span>
+                    <BiChevronDown className={`cv-list-icon ${isOpen ? "is-open" : ""}`} />
+                  </button>
 
-                    {isOpen && (
-                      <div className="cv-module-body">
-                        {sectionCount === 0 && (
-                          <div className="cv-empty-state">No sections in this module</div>
-                        )}
-                        {mod.sections?.map((sec, idx) => {
-                          const isSectionOpen =
-                            expandedSection?.moduleIndex === index &&
-                            expandedSection?.sectionIndex === idx;
-                          return (
-                            <div key={sec._id || idx} className={`cv-section-card ${isSectionOpen ? "open" : ""}`}>
-                              <button
-                                type="button"
-                                className={`cv-section-toggle ${isSectionOpen ? "active" : ""}`}
-                                onClick={() =>
-                                  setExpandedSection(isSectionOpen ? null : { moduleIndex: index, sectionIndex: idx })
-                                }
-                              >
-                                <span>{sec.sectionName || sec.title}</span>
-                                <BiChevronRight className="cv-list-icon" />
-                              </button>
-                              {isSectionOpen && (
-                                <div className="cv-section-details">
-                                  <SectionDetails sec={sec} />
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-
-          <aside className="cv-side-stack">
-            <section className="cv-side-card">
-              <h2><FaInfoCircle /> About This Course</h2>
-              {isHtmlEmpty(course.courseDescription) ? (
-                <p className="cv-side-copy">No description available.</p>
-              ) : (
-                <div className="cv-side-copy">
-                  <RichTextContent html={course.courseDescription} />
+                  {isOpen && (
+                    <div className="cv-module-body">
+                      {sectionCount === 0 && (
+                        <div className="cv-empty-state">No sections in this module</div>
+                      )}
+                      {mod.sections?.map((sec, idx) => {
+                        const isSectionOpen =
+                          expandedSection?.moduleIndex === index &&
+                          expandedSection?.sectionIndex === idx;
+                        return (
+                          <div key={sec._id || idx} className={`cv-section-card ${isSectionOpen ? "open" : ""}`}>
+                            <button
+                              type="button"
+                              className={`cv-section-toggle ${isSectionOpen ? "active" : ""}`}
+                              onClick={() =>
+                                setExpandedSection(isSectionOpen ? null : { moduleIndex: index, sectionIndex: idx })
+                              }
+                            >
+                              <span>{sec.sectionName || sec.title}</span>
+                              <BiChevronRight className="cv-list-icon" />
+                            </button>
+                            {isSectionOpen && (
+                              <div className="cv-section-details">
+                                <SectionDetails sec={sec} />
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
-              )}
-              <div className="cv-goal-box">
-                <FaBullseye />
-                <div>
-                  <strong>Goal</strong>
-                  <p>Keep modules clear so every batch can follow the same path.</p>
-                </div>
-              </div>
-            </section>
-
-            <section className="cv-side-card">
-              <h2><FaChartBar /> Course Stats</h2>
-              <ul className="cv-stats-list">
-                {stats.map((item) => (
-                  <li key={item.label}>
-                    <span className="cv-stat-icon">{item.icon}</span>
-                    <span>{item.label}</span>
-                    <strong>{item.value}</strong>
-                  </li>
-                ))}
-              </ul>
-            </section>
-
-            <section className="cv-motivate-card">
-              <div className="cv-motivate-art" aria-hidden="true">
-                <FaGraduationCap />
-                <span />
-                <span />
-              </div>
-              <p>Keep learning, keep growing! You are making great progress as a trainer.</p>
-            </section>
-          </aside>
-        </div>
+              );
+            })}
+          </div>
+        </section>
       </div>
 
       {showPreview && (

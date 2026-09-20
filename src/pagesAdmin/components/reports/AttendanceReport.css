@@ -238,7 +238,7 @@
 }
 
 .report-table tbody tr:hover {
-    background: var(--color-bg);
+    background: var(--color-primary-light);
 }
 
 .report-table td {

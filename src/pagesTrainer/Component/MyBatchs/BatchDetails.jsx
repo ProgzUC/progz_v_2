@@ -88,6 +88,7 @@ const BatchDetailsContent = ({
     const assignedModules = batch.trainerAssignment?.assignedModules || [];
     const primaryCourseId = String(batch.primaryCourseId || "");
     const [selectedCourseId, setSelectedCourseId] = useState("");
+    const [expandedModuleKeys, setExpandedModuleKeys] = useState(() => new Set());
 
     const curricula = useMemo(() => {
         if (Array.isArray(batch.curricula) && batch.curricula.length) {
@@ -185,6 +186,25 @@ const BatchDetailsContent = ({
 
         return groups;
     }, [filteredSections]);
+
+    useEffect(() => {
+        setExpandedModuleKeys((prev) => {
+            if (!sectionsByModule.length) return new Set();
+            const validKeys = new Set(sectionsByModule.map((g) => g.key));
+            const stillOpen = [...prev].filter((key) => validKeys.has(key));
+            if (stillOpen.length) return new Set(stillOpen);
+            return new Set([sectionsByModule[0].key]);
+        });
+    }, [selectedCourseId, sectionsByModule]);
+
+    const toggleModuleExpanded = (moduleKey) => {
+        setExpandedModuleKeys((prev) => {
+            const next = new Set(prev);
+            if (next.has(moduleKey)) next.delete(moduleKey);
+            else next.add(moduleKey);
+            return next;
+        });
+    };
 
     const totalSections = filteredSections.length;
     const completedSections = filteredSections.filter((s) => s.completed).length;
@@ -390,64 +410,92 @@ const BatchDetailsContent = ({
 
                             <div className="section-items-list">
                                 {sectionsByModule.length > 0 ? (
-                                    sectionsByModule.map((group) => (
-                                        <div key={group.key} className="section-module-group">
-                                            <h3 className="section-module-heading">{group.moduleTitle}</h3>
-                                            {group.sections.map((item) => {
-                                                const isThisSectionToggling =
-                                                    isToggling &&
-                                                    String(togglingVariables?.courseId || "") === String(item.courseId || "") &&
-                                                    togglingVariables?.moduleIndex === item.moduleIndex &&
-                                                    togglingVariables?.sectionIndex === item.sectionIndex;
-                                                return (
-                                                    <div
-                                                        key={item.uniqueId}
-                                                        className={`section-item ${item.completed ? 'completed' : ''} ${isThisSectionToggling ? 'section-item-toggling' : ''}`}
-                                                    >
-                                                        <div
-                                                            className="item-radio"
-                                                            onClick={(e) => {
-                                                                if (isThisSectionToggling) return;
-                                                                e.stopPropagation();
-                                                                toggleSection({
-                                                                    batchId,
-                                                                    courseId: item.courseId,
-                                                                    moduleIndex: item.moduleIndex,
-                                                                    sectionIndex: item.sectionIndex,
-                                                                }, {
-                                                                    onError: (err) => {
-                                                                        alert(`Failed to toggle: ${err?.response?.data?.message || err?.message || 'Unknown error'}`);
-                                                                    }
-                                                                });
-                                                            }}
-                                                            style={{ cursor: isThisSectionToggling ? 'wait' : 'pointer' }}
-                                                            title={item.completed ? "Click to lock section" : "Click to unlock section"}
-                                                        >
-                                                            {isThisSectionToggling ? (
-                                                                <div className="item-radio-loader" aria-hidden="true"></div>
-                                                            ) : item.completed ? (
-                                                                <div className="radio-check active">
-                                                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                    sectionsByModule.map((group) => {
+                                        const isExpanded = expandedModuleKeys.has(group.key);
+                                        const unlockedCount = group.sections.filter((s) => s.completed).length;
+                                        return (
+                                            <div
+                                                key={group.key}
+                                                className={`section-module-group ${isExpanded ? 'is-expanded' : 'is-collapsed'}`}
+                                            >
+                                                <button
+                                                    type="button"
+                                                    className="section-module-heading"
+                                                    onClick={() => toggleModuleExpanded(group.key)}
+                                                    aria-expanded={isExpanded}
+                                                >
+                                                    <span className="section-module-heading-main">
+                                                        <span className={`section-module-chevron ${isExpanded ? 'is-open' : ''}`} aria-hidden="true">
+                                                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                                                <polyline points="6 9 12 15 18 9" />
+                                                            </svg>
+                                                        </span>
+                                                        <span className="section-module-title-text">{group.moduleTitle}</span>
+                                                    </span>
+                                                    <span className="section-module-count">
+                                                        {unlockedCount}/{group.sections.length}
+                                                    </span>
+                                                </button>
+                                                {isExpanded && (
+                                                    <div className="section-module-lessons">
+                                                        {group.sections.map((item) => {
+                                                            const isThisSectionToggling =
+                                                                isToggling &&
+                                                                String(togglingVariables?.courseId || "") === String(item.courseId || "") &&
+                                                                togglingVariables?.moduleIndex === item.moduleIndex &&
+                                                                togglingVariables?.sectionIndex === item.sectionIndex;
+                                                            return (
+                                                                <div
+                                                                    key={item.uniqueId}
+                                                                    className={`section-item ${item.completed ? 'completed' : ''} ${isThisSectionToggling ? 'section-item-toggling' : ''}`}
+                                                                >
+                                                                    <div
+                                                                        className="item-radio"
+                                                                        onClick={(e) => {
+                                                                            if (isThisSectionToggling) return;
+                                                                            e.stopPropagation();
+                                                                            toggleSection({
+                                                                                batchId,
+                                                                                courseId: item.courseId,
+                                                                                moduleIndex: item.moduleIndex,
+                                                                                sectionIndex: item.sectionIndex,
+                                                                            }, {
+                                                                                onError: (err) => {
+                                                                                    alert(`Failed to toggle: ${err?.response?.data?.message || err?.message || 'Unknown error'}`);
+                                                                                }
+                                                                            });
+                                                                        }}
+                                                                        style={{ cursor: isThisSectionToggling ? 'wait' : 'pointer' }}
+                                                                        title={item.completed ? "Click to lock section" : "Click to unlock section"}
+                                                                    >
+                                                                        {isThisSectionToggling ? (
+                                                                            <div className="item-radio-loader" aria-hidden="true"></div>
+                                                                        ) : item.completed ? (
+                                                                            <div className="radio-check active">
+                                                                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                                            </div>
+                                                                        ) : (
+                                                                            <div className="radio-check"></div>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className="item-content">
+                                                                        <h3 className="item-title">{item.title}</h3>
+                                                                        <div className="completed-info">
+                                                                            <span className={`section-status-chip ${item.completed ? 'is-unlocked' : 'is-locked'}`}>
+                                                                                {item.completed
+                                                                                    ? `Unlocked${item.date ? ` · ${item.date}` : ""}`
+                                                                                    : "Locked for students"}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
-                                                            ) : (
-                                                                <div className="radio-check"></div>
-                                                            )}
-                                                        </div>
-                                                        <div className="item-content">
-                                                            <h3 className="item-title">{item.title}</h3>
-                                                            <div className="completed-info">
-                                                                <span className={`section-status-chip ${item.completed ? 'is-unlocked' : 'is-locked'}`}>
-                                                                    {item.completed
-                                                                        ? `Unlocked${item.date ? ` · ${item.date}` : ""}`
-                                                                        : "Locked for students"}
-                                                                </span>
-                                                            </div>
-                                                        </div>
+                                                            );
+                                                        })}
                                                     </div>
-                                                );
-                                            })}
-                                        </div>
-                                    ))
+                                                )}
+                                            </div>
+                                        );
+                                    })
                                 ) : (
                                     <p className="empty-message">No sections found. Assign modules or add courses to this batch.</p>
                                 )}

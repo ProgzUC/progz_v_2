@@ -3,7 +3,7 @@
  * UI components should import from here instead of redefining these helpers.
  */
 import { createEmptyModule, withStableIds } from "../../utils/courseBuilder";
-import { isHtmlEmpty } from "../../components/common/RichTextEditor/richTextUtils";
+import { hasMeaningfulHtml } from "../../components/common/RichTextEditor/richTextUtils";
 
 export const emptyCourseState = () => ({
   courseName: "",
@@ -69,8 +69,8 @@ export const validateCourseInformation = (course) => {
   if (!String(course?.courseName || "").trim()) {
     errors.courseName = "Course Name is required";
   }
-  if (isHtmlEmpty(course?.courseDescription)) {
-    errors.courseDescription = "Description is required";
+  if (!hasMeaningfulHtml(course?.courseDescription, { minChars: 10 })) {
+    errors.courseDescription = "Enter a proper course description (at least a short sentence)";
   }
   if (!course?.courseDuration) {
     errors.courseDuration = "Duration is required";

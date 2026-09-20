@@ -47,3 +47,208 @@
     width: 100%;
   }
 }
+
+/* Soft hover for admin interactive controls */
+.layout button:not(:disabled),
+.layout a.icon-action,
+.layout .as-btn,
+.layout .or-btn,
+.layout .or-tab,
+.layout .as-nav-item,
+.layout .as-choice-card,
+.layout .as-segment button,
+.layout .count-btn:not(:disabled),
+.layout .menu-item,
+.layout .admin-menu-toggle {
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.layout button:not(:disabled):hover,
+.layout a.icon-action:hover,
+.layout .as-btn:not(.as-btn-primary):not(.as-btn-danger):hover,
+.layout .or-btn:not(.or-btn-primary):hover,
+.layout .count-btn:not(:disabled):hover,
+.layout .admin-menu-toggle:hover {
+  border-color: var(--color-primary-muted);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+
+.layout .as-btn-primary:hover,
+.layout .or-btn-primary:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--color-primary-bright) 28%, transparent);
+}
+
+.layout .as-btn-danger:hover {
+  background: #ffe4e6;
+  border-color: #fda4af;
+  color: #9f1239;
+}
+
+.layout button:not(:disabled):active,
+.layout a.icon-action:active,
+.layout .as-btn:active,
+.layout .or-btn:active {
+  background: var(--color-primary-soft);
+}
+
+.layout .as-btn-primary:active,
+.layout .or-btn-primary:active {
+  filter: brightness(0.96);
+}
+
+.layout .or-tab:hover,
+.layout .as-nav-item:hover,
+.layout .as-choice-card:hover,
+.layout .as-segment button:hover,
+.layout .menu-item:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.layout .or-tab.is-active:hover,
+.layout .as-nav-item.is-active:hover,
+.layout .as-choice-card.is-selected:hover,
+.layout .as-segment button.is-selected:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+/* Soft row hover — same feel as button hover, all admin tables */
+.layout table tbody tr,
+.layout .course-table tbody tr,
+.layout .data-table tbody tr,
+.layout .report-table tbody tr,
+.layout .monitor-table tbody tr,
+.layout .or-table tbody tr {
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease;
+}
+
+.layout table tbody tr:hover,
+.layout .course-table tbody tr:hover,
+.layout .data-table tbody tr:hover,
+.layout .report-table tbody tr:hover,
+.layout .monitor-table tbody tr:hover,
+.layout .or-table tbody tr:hover,
+.layout .table-card table tbody tr:hover {
+  background: var(--color-primary-light);
+}
+
+.layout table tbody tr:hover > td,
+.layout .course-table tbody tr:hover > td,
+.layout .data-table tbody tr:hover > td,
+.layout .report-table tbody tr:hover > td,
+.layout .monitor-table tbody tr:hover > td,
+.layout .or-table tbody tr:hover > td {
+  color: var(--color-text);
+}
+
+.layout table tbody tr:hover > td:first-child,
+.layout .course-table tbody tr:hover > td:first-child,
+.layout .data-table tbody tr:hover > td:first-child,
+.layout .report-table tbody tr:hover > td:first-child,
+.layout .monitor-table tbody tr:hover > td:first-child,
+.layout .or-table tbody tr:hover > td:first-child {
+  box-shadow: inset 3px 0 0 var(--color-primary-muted);
+}
+
+/* Keep empty / disabled rows calm */
+.layout table tbody tr:has(.empty-cell):hover,
+.layout table tbody tr:has(td[colspan]):hover {
+  background: transparent;
+}
+
+.layout table tbody tr:has(.empty-cell):hover > td,
+.layout table tbody tr:has(td[colspan]):hover > td,
+.layout table tbody tr:has(.empty-cell):hover > td:first-child,
+.layout table tbody tr:has(td[colspan]):hover > td:first-child {
+  color: inherit;
+  box-shadow: none;
+}
+
+/* ── Clean search fields (no inner white box / gray rails) ── */
+.layout .dashboard-search,
+.layout .as-search {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.layout .dashboard-search:focus-within,
+.layout .as-search:focus-within {
+  border-color: var(--color-primary-muted);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 14%, transparent);
+}
+
+.layout .dashboard-search input,
+.layout .dashboard-search input:hover,
+.layout .dashboard-search input:focus,
+.layout .dashboard-search input:focus-visible,
+.layout .as-search input,
+.layout .as-search input:hover,
+.layout .as-search input:focus,
+.layout .as-search input:focus-visible {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -webkit-text-fill-color: var(--color-text) !important;
+  caret-color: var(--color-primary);
+}
+
+.layout .dashboard-search input:-webkit-autofill,
+.layout .dashboard-search input:-webkit-autofill:focus,
+.layout .as-search input:-webkit-autofill,
+.layout .as-search input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-text) !important;
+  transition: background-color 99999s ease-out 0s;
+  box-shadow: 0 0 0 1000px var(--color-bg-muted) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--color-bg-muted) inset !important;
+}
+
+.layout .as-search input:-webkit-autofill,
+.layout .as-search input:-webkit-autofill:focus {
+  box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
+}
+
+.layout .search-box input,
+.layout .mi-search input,
+.layout .mi-searchable-input {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.layout .search-box input:focus,
+.layout .search-box input:focus-visible,
+.layout .mi-search input:focus,
+.layout .mi-search input:focus-visible,
+.layout .mi-searchable-input:focus,
+.layout .mi-searchable-input:focus-visible {
+  outline: none !important;
+  border-color: var(--color-primary-muted) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 14%, transparent) !important;
+  -webkit-box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 14%, transparent) !important;
+  background-color: var(--color-surface) !important;
+}
+
+.layout .search-box input:-webkit-autofill,
+.layout .search-box input:-webkit-autofill:focus,
+.layout .mi-search input:-webkit-autofill,
+.layout .mi-searchable-input:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-text) !important;
+  transition: background-color 99999s ease-out 0s;
+  box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
+}

@@ -344,15 +344,7 @@
   justify-content: center;
 }
 
-.cv-main-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.75fr) minmax(280px, 0.85fr);
-  gap: 22px;
-  align-items: start;
-}
-
-.cv-curriculum-card,
-.cv-side-card {
+.cv-curriculum-card {
   background: #fff;
   border: 1px solid #e8eee9;
   border-radius: 24px;
@@ -367,8 +359,7 @@
   margin-bottom: 14px;
 }
 
-.cv-card-heading,
-.cv-side-card h2 {
+.cv-card-heading {
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -581,128 +572,8 @@
   font-size: 14px;
 }
 
-.cv-side-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.cv-side-copy {
-  font-size: 13px;
-  line-height: 1.65;
-  color: #64748b;
-}
-
-.cv-goal-box {
-  margin-top: 14px;
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  background: #ecfdf5;
-  border-radius: 14px;
-  padding: 12px 14px;
-  color: #065f46;
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-.cv-goal-box strong {
-  display: block;
-  margin-bottom: 2px;
-}
-
-.cv-goal-box p {
-  margin: 0;
-  color: #047857;
-}
-
-.cv-stats-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.cv-stats-list li {
-  display: grid;
-  grid-template-columns: 28px 1fr auto;
-  align-items: center;
-  gap: 12px;
-  font-size: 13px;
-  color: #64748b;
-}
-
-.cv-stats-list li > span:nth-child(2) {
-  min-width: 0;
-}
-
-.cv-stats-list strong {
-  color: #0f172a;
-  text-align: right;
-  min-width: 72px;
-}
-
-.cv-stat-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: #ecfdf5;
-  color: #059669;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cv-motivate-card {
-  background: #d1fae5;
-  color: #064e3b;
-  border-radius: 20px;
-  padding: 18px 18px 16px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.cv-motivate-art {
-  position: relative;
-  width: 54px;
-  height: 46px;
-  flex-shrink: 0;
-  color: #064e3b;
-  font-size: 28px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-.cv-motivate-art span {
-  position: absolute;
-  bottom: 0;
-  width: 22px;
-  height: 14px;
-  border-radius: 3px;
-  background: #064e3b;
-}
-
-.cv-motivate-art span:last-child {
-  left: 8px;
-  width: 28px;
-  height: 10px;
-  background: #047857;
-}
-
-.cv-motivate-card p {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.5;
-  font-weight: 700;
-}
-
 @media (max-width: 980px) {
-  .cv-hero-body,
-  .cv-main-grid {
+  .cv-hero-body {
     grid-template-columns: 1fr;
   }
 

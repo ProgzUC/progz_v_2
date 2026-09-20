@@ -68,6 +68,7 @@
   padding-bottom: 6px;
   position: relative;
   transition: border-color 0.3s;
+  background: transparent;
 }
 
 .auth-input-group.has-error .input-wrapper {
@@ -97,22 +98,51 @@
   flex-shrink: 0;
 }
 
-.input-wrapper input {
+.input-wrapper:focus-within .input-icon {
+  color: var(--color-primary);
+}
+
+.input-wrapper input,
+.input-wrapper input:hover,
+.input-wrapper input:focus,
+.input-wrapper input:focus-visible,
+.input-wrapper input:active {
   flex: 1;
-  /* Allow input to fill available space */
   width: auto;
-  /* reset absolute width */
-  border: none;
+  min-width: 0;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
   font-size: 15px;
-  color: #333;
-  outline: none;
-  background: transparent;
+  color: #333 !important;
+  -webkit-text-fill-color: #333 !important;
   padding: 0;
+  margin: 0;
+  border-radius: 0;
+  caret-color: var(--color-primary);
 }
 
 .input-wrapper input::placeholder {
   color: var(--color-text-muted);
   font-weight: 400;
+  opacity: 1;
+  -webkit-text-fill-color: var(--color-text-muted);
+}
+
+.input-wrapper input:-webkit-autofill,
+.input-wrapper input:-webkit-autofill:hover,
+.input-wrapper input:-webkit-autofill:focus,
+.input-wrapper input:-webkit-autofill:active {
+  -webkit-text-fill-color: #333 !important;
+  caret-color: var(--color-primary);
+  transition: background-color 99999s ease-out 0s;
+  box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
 }
 
 .eye-icon {

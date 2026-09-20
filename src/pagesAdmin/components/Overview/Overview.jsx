@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./Overview.css";
 
@@ -60,15 +60,74 @@ function EnrollTooltip({ active, payload, label }) {
   );
 }
 
-function weekRangeLabel() {
-  const now = new Date();
-  const day = now.getDay() || 7;
-  const start = new Date(now);
-  start.setDate(now.getDate() - day + 1);
+/** Local YYYY-MM-DD helpers */
+function toYmd(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function parseYmd(value) {
+  if (!value || typeof value !== "string") return null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value.trim());
+  if (!m) return null;
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+function formatRangeLabel(startDate, endDate) {
+  const start = parseYmd(startDate);
+  const end = parseYmd(endDate);
+  if (!start || !end) return "";
+  const fmt = (d) => d.toLocaleDateString("en-IN", { month: "short", day: "numeric" });
+  const sameYear = start.getFullYear() === end.getFullYear();
+  return sameYear
+    ? `${fmt(start)} – ${fmt(end)}, ${end.getFullYear()}`
+    : `${fmt(start)}, ${start.getFullYear()} – ${fmt(end)}, ${end.getFullYear()}`;
+}
+
+/** Monday–Sunday week containing a date (default: today) */
+function getWeekContaining(anchor = new Date()) {
+  const base = anchor instanceof Date ? new Date(anchor) : parseYmd(anchor) || new Date();
+  const day = base.getDay() || 7;
+  const start = new Date(base);
+  start.setHours(0, 0, 0, 0);
+  start.setDate(base.getDate() - day + 1);
   const end = new Date(start);
   end.setDate(start.getDate() + 6);
-  const fmt = (d) => d.toLocaleDateString("en-IN", { month: "short", day: "numeric" });
-  return `${fmt(start)} – ${fmt(end)}, ${end.getFullYear()}`;
+  return { startDate: toYmd(start), endDate: toYmd(end) };
+}
+
+function shiftRange(startDate, endDate, deltaDays) {
+  const start = parseYmd(startDate);
+  const end = parseYmd(endDate);
+  if (!start || !end) return getWeekContaining();
+  start.setDate(start.getDate() + deltaDays);
+  end.setDate(end.getDate() + deltaDays);
+  return { startDate: toYmd(start), endDate: toYmd(end) };
+}
+
+function getMonthRange(yearMonth) {
+  // yearMonth = "YYYY-MM"
+  const m = /^(\d{4})-(\d{2})$/.exec(String(yearMonth || ""));
+  if (!m) {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    return { startDate: toYmd(start), endDate: toYmd(end) };
+  }
+  const y = Number(m[1]);
+  const mo = Number(m[2]) - 1;
+  const start = new Date(y, mo, 1);
+  const end = new Date(y, mo + 1, 0);
+  return { startDate: toYmd(start), endDate: toYmd(end) };
+}
+
+function monthValueFromRange(startDate) {
+  const d = parseYmd(startDate);
+  if (!d) return toYmd(new Date()).slice(0, 7);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
 }
 
 function readStats(stats = {}) {
@@ -106,6 +165,19 @@ function studentStatus(student) {
 }
 
 const Overview = () => {
+  const [range, setRange] = useState(() => getWeekContaining());
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const pickerRef = useRef(null);
+
+  const rangeLabel = useMemo(
+    () => formatRangeLabel(range.startDate, range.endDate),
+    [range.startDate, range.endDate]
+  );
+  const isCurrentWeek = useMemo(() => {
+    const cur = getWeekContaining();
+    return range.startDate === cur.startDate && range.endDate === cur.endDate;
+  }, [range.startDate, range.endDate]);
+
   const {
     stats,
     enrollments,
@@ -113,7 +185,8 @@ const Overview = () => {
     recentCourses,
     recentStudents,
     isLoading,
-  } = useAdminDashboard();
+    isFetching,
+  } = useAdminDashboard({ startDate: range.startDate, endDate: range.endDate });
 
   const user = getStoredUser();
   const firstName = (user?.name || "Admin").split(" ")[0];
@@ -132,8 +205,7 @@ const Overview = () => {
 
   const sparkPoints = chartData.map((d) => d.value);
   const enrollTrend = trendFromSeries(sparkPoints);
-  const monthlyEnrollments = sparkPoints.length ? sparkPoints[sparkPoints.length - 1] : 0;
-  const totalEnrollments = sparkPoints.reduce((sum, n) => sum + n, 0);
+  const weeklyEnrollments = sparkPoints.reduce((sum, n) => sum + n, 0);
 
   const dist = (userDistribution || []).map((d) => ({
     name: d.name || d.role || "Other",
@@ -162,10 +234,12 @@ const Overview = () => {
   const handleGenerateReport = () => {
     const rows = [
       ["Metric", "Value"],
-      ["Total Courses", numbers.courses],
-      ["Total Instructors", numbers.instructors],
-      ["Total Students", numbers.students],
-      ["Total Batches", numbers.batches],
+      ["Range", rangeLabel],
+      ["Courses", numbers.courses],
+      ["Instructors joined", numbers.instructors],
+      ["Students joined", numbers.students],
+      ["Batches", numbers.batches],
+      ["Enrollments", weeklyEnrollments],
       ["Pending Approvals", numbers.pending],
       ["Generated At", new Date().toLocaleString()],
     ];
@@ -182,33 +256,75 @@ const Overview = () => {
     URL.revokeObjectURL(url);
   };
 
+  const applyStartDate = (value) => {
+    if (!value) return;
+    let end = range.endDate;
+    if (parseYmd(value) && parseYmd(end) && parseYmd(value) > parseYmd(end)) {
+      end = value;
+    }
+    setRange({ startDate: value, endDate: end });
+  };
+
+  const applyEndDate = (value) => {
+    if (!value) return;
+    let start = range.startDate;
+    if (parseYmd(value) && parseYmd(start) && parseYmd(value) < parseYmd(start)) {
+      start = value;
+    }
+    setRange({ startDate: start, endDate: value });
+  };
+
+  const applyMonth = (yearMonth) => {
+    if (!yearMonth) return;
+    setRange(getMonthRange(yearMonth));
+  };
+
+  const jumpToDate = (value) => {
+    if (!value) return;
+    setRange(getWeekContaining(value));
+  };
+
   useEffect(() => {
     const onKey = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         searchRef.current?.focus();
       }
+      if (e.key === "Escape") setPickerOpen(false);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
+  useEffect(() => {
+    if (!pickerOpen) return undefined;
+    const onPointer = (e) => {
+      if (pickerRef.current && !pickerRef.current.contains(e.target)) {
+        setPickerOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onPointer);
+    return () => document.removeEventListener("mousedown", onPointer);
+  }, [pickerOpen]);
+
   if (isLoading) {
     return <Loader message="Loading dashboard..." />;
   }
 
+  const peakDay = sparkPoints.length ? Math.max(...sparkPoints) : 0;
+
   const topCards = [
-    { key: "courses", label: "Total Courses", value: numbers.courses, icon: "bi-book", tone: "amber", trend: null },
-    { key: "instructors", label: "Total Instructors", value: numbers.instructors, icon: "bi-person-video3", tone: "sky", trend: null },
-    { key: "students", label: "Total Students", value: numbers.students, icon: "bi-mortarboard", tone: "emerald", trend: enrollTrend },
-    { key: "batches", label: "Total Batches", value: numbers.batches, icon: "bi-layers", tone: "primary", trend: null },
+    { key: "courses", label: "Courses", value: numbers.courses, icon: "bi-book", tone: "amber", trend: null },
+    { key: "instructors", label: "Instructors joined", value: numbers.instructors, icon: "bi-person-video3", tone: "sky", trend: null },
+    { key: "students", label: "Students joined", value: numbers.students, icon: "bi-mortarboard", tone: "emerald", trend: enrollTrend },
+    { key: "batches", label: "Batches", value: numbers.batches, icon: "bi-layers", tone: "primary", trend: null },
   ];
 
   const bottomCards = [
-    { key: "enroll-month", label: "Monthly Enrollments", value: monthlyEnrollments, icon: "bi-graph-up-arrow", tone: "emerald", trend: enrollTrend },
-    { key: "enroll-total", label: "Total Enrollments", value: totalEnrollments, icon: "bi-people", tone: "primary", trend: enrollTrend },
+    { key: "enroll-week", label: "Enrollments", value: weeklyEnrollments, icon: "bi-graph-up-arrow", tone: "emerald", trend: enrollTrend },
+    { key: "enroll-peak", label: "Peak day enrollments", value: peakDay, icon: "bi-people", tone: "primary", trend: null },
     { key: "pending", label: "Pending Approvals", value: numbers.pending, icon: "bi-hourglass-split", tone: "rose", trend: null },
-    { key: "users", label: "Total Users", value: numbers.users, icon: "bi-person-check", tone: "sky", trend: null },
+    { key: "users", label: "Users joined", value: numbers.users, icon: "bi-person-check", tone: "sky", trend: null },
   ];
 
   const renderStatCard = (card, i) => (
@@ -229,7 +345,7 @@ const Overview = () => {
           {card.trend != null && (
             <span className={`trend ${card.trend >= 0 ? "up" : "down"}`}>
               <i className={`bi ${card.trend >= 0 ? "bi-arrow-up-right" : "bi-arrow-down-right"}`}></i>
-              {Math.abs(card.trend)}% this month
+              {Math.abs(card.trend)}% vs prior day
             </span>
           )}
         </div>
@@ -250,19 +366,138 @@ const Overview = () => {
           <i className="bi bi-search"></i>
           <input
             ref={searchRef}
-            type="search"
+            type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search anything..."
             aria-label="Search dashboard"
+            autoComplete="off"
+            spellCheck={false}
           />
           <kbd>Ctrl + K</kbd>
         </label>
 
         <div className="dashboard-actions">
-          <div className="date-chip">
-            <i className="bi bi-calendar3"></i>
-            <span>{weekRangeLabel()}</span>
+          <div
+            className={`date-chip ${isFetching ? "is-fetching" : ""} ${pickerOpen ? "is-open" : ""}`}
+            role="group"
+            aria-label="Date filter"
+            ref={pickerRef}
+          >
+            <button
+              type="button"
+              className="date-nav"
+              onClick={() => setRange((r) => shiftRange(r.startDate, r.endDate, -7))}
+              aria-label="Previous period"
+              title="Previous 7 days"
+            >
+              <i className="bi bi-chevron-left"></i>
+            </button>
+
+            <button
+              type="button"
+              className="date-chip-toggle"
+              onClick={() => setPickerOpen((o) => !o)}
+              aria-expanded={pickerOpen}
+              aria-haspopup="dialog"
+              title="Edit date range"
+            >
+              <i className="bi bi-calendar3"></i>
+              <span>{rangeLabel}</span>
+              <i className={`bi bi-chevron-${pickerOpen ? "up" : "down"} date-caret`}></i>
+            </button>
+
+            <button
+              type="button"
+              className="date-nav"
+              onClick={() => setRange((r) => shiftRange(r.startDate, r.endDate, 7))}
+              aria-label="Next period"
+              title="Next 7 days"
+            >
+              <i className="bi bi-chevron-right"></i>
+            </button>
+
+            {!isCurrentWeek && (
+              <button
+                type="button"
+                className="date-today"
+                onClick={() => {
+                  setRange(getWeekContaining());
+                  setPickerOpen(false);
+                }}
+                title="Back to this week"
+              >
+                Today
+              </button>
+            )}
+
+            {pickerOpen && (
+              <div className="date-picker-panel" role="dialog" aria-label="Select date range">
+                <div className="date-picker-row">
+                  <label>
+                    <span>From</span>
+                    <input
+                      type="date"
+                      value={range.startDate}
+                      max={range.endDate}
+                      onChange={(e) => applyStartDate(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    <span>To</span>
+                    <input
+                      type="date"
+                      value={range.endDate}
+                      min={range.startDate}
+                      onChange={(e) => applyEndDate(e.target.value)}
+                    />
+                  </label>
+                </div>
+
+                <div className="date-picker-row">
+                  <label className="date-picker-month">
+                    <span>Month</span>
+                    <input
+                      type="month"
+                      value={monthValueFromRange(range.startDate)}
+                      onChange={(e) => applyMonth(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    <span>Jump to date</span>
+                    <input
+                      type="date"
+                      value={range.startDate}
+                      onChange={(e) => jumpToDate(e.target.value)}
+                    />
+                  </label>
+                </div>
+
+                <div className="date-picker-actions">
+                  <button
+                    type="button"
+                    className="date-preset"
+                    onClick={() => setRange(getWeekContaining())}
+                  >
+                    This week
+                  </button>
+                  <button
+                    type="button"
+                    className="date-preset"
+                    onClick={() => setRange(getMonthRange(monthValueFromRange(toYmd(new Date()))))}
+                  >
+                    This month
+                  </button>
+                  <button
+                    type="button"
+                    className="date-preset date-preset-done"
+                    onClick={() => setPickerOpen(false)}
+                  >
+                    Done
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           <button className="icon-action" type="button" onClick={handleGenerateReport} title="Generate report">
@@ -290,6 +525,7 @@ const Overview = () => {
         <MotionDiv className="chart-card enrollment-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
           <div className="card-head">
             <h2 className="chart-title">Enrollment Overview</h2>
+            <span className="card-sub">{rangeLabel}</span>
           </div>
           {chartData.length > 0 ? (
             <ResponsiveContainer width="100%" height={280}>

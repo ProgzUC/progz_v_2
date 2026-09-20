@@ -388,14 +388,22 @@
     border: 1px solid var(--trainer-border);
     border-radius: var(--trainer-radius-md);
     font-size: 14px;
-    background: var(--color-surface);
-    transition: var(--trainer-transition);
+    background: var(--color-surface) !important;
+    background-color: var(--color-surface) !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    color: var(--color-text) !important;
+    -webkit-text-fill-color: var(--color-text) !important;
 }
 
-.search-box input:focus {
+.search-box input:focus,
+.search-box input:focus-visible {
     border-color: var(--trainer-primary);
     box-shadow: 0 0 0 3px var(--trainer-primary-light);
-    outline: none;
+    outline: none !important;
+    background: var(--color-surface) !important;
+    background-color: var(--color-surface) !important;
 }
 
 .mark-all-present-btn {

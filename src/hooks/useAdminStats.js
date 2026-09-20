@@ -1,32 +1,37 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, keepPreviousData } from '@tanstack/react-query';
 import { fetchAdminStats, fetchEnrollmentTrends, fetchUserDistribution, fetchRecentActivities } from '../api/adminApi';
 
-export const useAdminDashboard = () => {
-    // 1. Stats Counter
+export const useAdminDashboard = (range = {}) => {
+    const startDate = range.startDate || null;
+    const endDate = range.endDate || null;
+    const queryRange = { startDate, endDate };
+
     const statsQuery = useQuery({
-        queryKey: ['adminStats'],
-        queryFn: fetchAdminStats,
-        retry: 1
+        queryKey: ['adminStats', startDate, endDate],
+        queryFn: () => fetchAdminStats(queryRange),
+        placeholderData: keepPreviousData,
+        retry: 1,
     });
 
-    // 2. Charts Data
     const trendsQuery = useQuery({
-        queryKey: ['adminTrends'],
-        queryFn: fetchEnrollmentTrends,
-        retry: 1
+        queryKey: ['adminTrends', startDate, endDate],
+        queryFn: () => fetchEnrollmentTrends(queryRange),
+        placeholderData: keepPreviousData,
+        retry: 1,
     });
 
     const distributionQuery = useQuery({
-        queryKey: ['adminDistribution'],
-        queryFn: fetchUserDistribution,
-        retry: 1
+        queryKey: ['adminDistribution', startDate, endDate],
+        queryFn: () => fetchUserDistribution(queryRange),
+        placeholderData: keepPreviousData,
+        retry: 1,
     });
 
-    // 3. Recent Tables
     const activityQuery = useQuery({
-        queryKey: ['adminActivity'],
-        queryFn: fetchRecentActivities,
-        retry: 1
+        queryKey: ['adminActivity', startDate, endDate],
+        queryFn: () => fetchRecentActivities(queryRange),
+        placeholderData: keepPreviousData,
+        retry: 1,
     });
 
     return {
@@ -37,6 +42,7 @@ export const useAdminDashboard = () => {
         recentStudents: activityQuery.data?.students || [],
 
         isLoading: statsQuery.isLoading || trendsQuery.isLoading || distributionQuery.isLoading || activityQuery.isLoading,
-        isError: statsQuery.isError || trendsQuery.isError || distributionQuery.isError || activityQuery.isError
+        isFetching: statsQuery.isFetching || trendsQuery.isFetching || distributionQuery.isFetching || activityQuery.isFetching,
+        isError: statsQuery.isError || trendsQuery.isError || distributionQuery.isError || activityQuery.isError,
     };
 };

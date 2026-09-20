@@ -1,274 +1,458 @@
-/* Trainer My Courses — light white cards (reference UI) */
+/* ================================================================
+   Trainer My Courses — Premium media-banner cards + motion
+   ================================================================ */
 
 .my-courses-container.trainer-myCourses {
-  padding: calc(75px + 24px) 32px 48px 32px;
+  padding: var(--page-top-offset) var(--trainer-spacing-lg) var(--spacing-2xl);
   width: 100%;
-  background: #F3F4F8 !important;
+  max-width: var(--container-wide);
+  margin: 0 auto;
+  background:
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(16, 185, 129, 0.07), transparent 60%),
+    var(--mc-page-bg, var(--color-bg));
   font-family: var(--font-family-base), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
   box-sizing: border-box;
   overflow-x: hidden;
-  color: #111827;
+  color: var(--color-text);
 }
 
-.courses-error {
+.trainer-myCourses .courses-error {
   text-align: center;
-  padding: 40px;
-  color: #DC2626;
+  padding: var(--spacing-2xl);
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
 }
 
-/* ========== Stats row ========== */
-.trainer-stats-row {
+/* ========== Stats ========== */
+.trainer-myCourses .trainer-stats-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
-.stat-card {
-  background: #FFFFFF;
-  border-radius: 16px;
+.trainer-myCourses .stat-card {
+  --stat-i: 0;
+  background: var(--mc-stat-bg, var(--color-surface));
   padding: 18px 20px;
-  border: 1px solid #E5E7EB;
   display: flex;
   align-items: center;
   gap: 14px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  min-width: 0;
+  border: 1px solid var(--mc-stat-border, var(--color-border));
+  border-radius: 14px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: mcRiseIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(var(--stat-i) * 60ms);
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s ease,
+    border-color 0.2s ease;
 }
 
-.stat-icon-box {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+.trainer-myCourses .stat-card::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--color-primary-bright);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.trainer-myCourses .stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 28px rgba(6, 78, 59, 0.1);
+  border-color: rgba(16, 185, 129, 0.35);
+}
+
+.trainer-myCourses .stat-card:hover::after {
+  opacity: 1;
+}
+
+.trainer-myCourses .stat-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 18px;
   flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.stat-courses {
-  background: #ECFDF5;
-  color: #059669;
+.trainer-myCourses .stat-card:hover .stat-icon-box {
+  transform: scale(1.08);
 }
 
-.stat-sections {
-  background: #F3F4F6;
-  color: #6B7280;
-}
-
-.stat-students {
-  background: #FEF3C7;
-  color: #B45309;
-}
-
-.stat-published {
-  background: #ECFDF5;
+.trainer-myCourses .stat-courses {
+  background: linear-gradient(145deg, #ECFDF5, #D1FAE5);
   color: #047857;
 }
 
-.stat-info {
+.trainer-myCourses .stat-sections {
+  background: linear-gradient(145deg, #F8FAFC, #E2E8F0);
+  color: #475569;
+}
+
+.trainer-myCourses .stat-students {
+  background: linear-gradient(145deg, #ECFDF5, #A7F3D0);
+  color: #065F46;
+}
+
+.trainer-myCourses .stat-published {
+  background: linear-gradient(145deg, #ECFDF5, #6EE7B7);
+  color: #064E3B;
+}
+
+.trainer-myCourses .stat-info {
   display: flex;
   flex-direction: column;
   min-width: 0;
+  gap: 3px;
 }
 
-.stat-value {
-  font-size: 22px;
-  font-weight: 800;
-  color: #0F172A;
+.trainer-myCourses .stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--mc-stat-value, var(--color-text));
   line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
 }
 
-.stat-label {
-  font-size: 12px;
-  font-weight: 500;
-  color: #6B7280;
-  margin-top: 2px;
+.trainer-myCourses .stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mc-stat-label, var(--color-text-secondary));
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ========== Course grid ========== */
-.trainer-courses-grid {
+.trainer-myCourses .trainer-courses-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 22px;
 }
 
-.trainer-course-card {
-  background: #FFFFFF;
-  border-radius: 20px;
-  border: 1px solid #E5E7EB;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-  padding: 24px;
+/* ========== Course card (media-banner style) ========== */
+.trainer-myCourses .trainer-course-card {
+  --card-i: 0;
+  background: var(--mc-card-bg, var(--color-surface));
+  border-radius: 16px;
+  border: 1px solid var(--mc-card-border, var(--color-border));
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  padding: 0;
   display: flex;
   flex-direction: column;
-  min-height: 240px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-height: 300px;
+  overflow: hidden;
+  position: relative;
+  opacity: 0;
+  animation: mcRiseIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(0.15s + var(--card-i) * 55ms);
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease,
+    border-color 0.25s ease;
 }
 
-.trainer-course-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+.trainer-myCourses .trainer-course-card:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 18px 40px rgba(6, 78, 59, 0.12),
+    0 4px 12px rgba(15, 23, 42, 0.06);
+  border-color: rgba(16, 185, 129, 0.4);
 }
 
-.trainer-card-header {
+/* Media banner */
+.trainer-myCourses .trainer-card-media {
+  position: relative;
+  height: 110px;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
-  margin-bottom: 16px;
+  justify-content: center;
+  background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #10B981 100%);
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-.course-avatar-box {
-  width: 52px;
-  height: 52px;
+.trainer-myCourses .course-media-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 85% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 35%),
+    linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.06) 100%);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.trainer-myCourses .trainer-course-card:hover .course-media-pattern {
+  transform: scale(1.12);
+}
+
+.trainer-myCourses .course-avatar-box {
+  position: relative;
+  z-index: 1;
+  width: 58px;
+  height: 58px;
   border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #FFFFFF;
+  color: #064E3B;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
   overflow: hidden;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.course-avatar-img {
+.trainer-myCourses .trainer-course-card:hover .course-avatar-box {
+  transform: scale(1.08) translateY(-2px);
+}
+
+.trainer-myCourses .course-avatar-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.course-avatar-initial {
+.trainer-myCourses .course-avatar-initial {
   font-size: 22px;
   font-weight: 800;
-  color: #FFFFFF;
+  color: #064E3B;
+  letter-spacing: -0.02em;
 }
 
-.logo-icon-svg {
+.trainer-myCourses .logo-icon-svg {
   font-size: 30px;
-  color: #FFFFFF;
+  color: #064E3B;
 }
 
-.trainer-card-body {
+/* Body */
+.trainer-myCourses .trainer-card-body {
   flex: 1;
-  margin-bottom: 20px;
+  padding: 18px 18px 12px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
-.trainer-course-title {
-  font-size: 18px;
-  font-weight: 800;
-  color: #0F172A;
-  margin: 0 0 4px;
-  line-height: 1.3;
+.trainer-myCourses .trainer-course-subtitle {
+  font-size: 11px;
+  color: var(--color-primary-bright);
+  font-weight: 700;
+  margin: 0 0 6px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-.trainer-course-subtitle {
-  font-size: 13px;
-  color: #9CA3AF;
-  font-weight: 500;
+.trainer-myCourses .trainer-course-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--mc-card-title, var(--color-text));
   margin: 0 0 14px;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.2s ease;
 }
 
-.trainer-course-meta {
+.trainer-myCourses .trainer-course-card:hover .trainer-course-title {
+  color: var(--color-primary);
+}
+
+.trainer-myCourses .trainer-course-meta {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   flex-wrap: wrap;
-}
-
-.meta-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  color: #64748B;
-}
-
-.meta-badge svg {
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.trainer-card-footer {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  width: 100%;
   margin-top: auto;
 }
 
-.trainer-view-course-btn {
-  flex: 1;
-  height: 44px;
-  padding: 0 16px;
-  border-radius: 12px;
-  border: none;
-  background: #059669;
-  color: #FFFFFF;
-  font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
+.trainer-myCourses .meta-badge {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  transition: filter 0.2s, transform 0.15s, background 0.2s;
-  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.2);
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mc-card-meta, var(--color-text-secondary));
+  line-height: 1;
+  padding: 6px 10px;
+  background: var(--color-bg-muted);
+  border-radius: 8px;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
-.trainer-view-course-btn:hover {
-  background: #047857;
-  filter: none;
-  transform: translateY(-1px);
+.trainer-myCourses .trainer-course-card:hover .meta-badge {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
-.dropdown-wrapper {
-  position: relative;
+.trainer-myCourses .meta-badge svg {
+  font-size: 12px;
   flex-shrink: 0;
+  opacity: 0.75;
 }
 
-.three-dots-action-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  color: #64748B;
-  font-size: 22px;
+/* Footer */
+.trainer-myCourses .trainer-card-footer {
+  padding: 4px 18px 18px;
+  margin-top: auto;
+}
+
+.trainer-myCourses .trainer-view-course-btn {
+  width: 100%;
+  height: 42px;
+  padding: 0 16px;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #064E3B 0%, #047857 100%);
+  color: #FFFFFF;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: inherit;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(6, 78, 59, 0.25);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.25s ease;
+}
+
+.trainer-myCourses .trainer-view-course-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.15) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.trainer-myCourses .trainer-view-course-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(6, 78, 59, 0.35);
+}
+
+.trainer-myCourses .trainer-view-course-btn:hover::before {
+  transform: translateX(100%);
+}
+
+.trainer-myCourses .trainer-view-course-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(6, 78, 59, 0.2);
+}
+
+.trainer-myCourses .trainer-view-course-btn:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.trainer-myCourses .view-course-arrow {
+  font-size: 14px;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.trainer-myCourses .trainer-view-course-btn:hover .view-course-arrow {
+  transform: translateX(4px);
+}
+
+/* Dropdown on media banner */
+.trainer-myCourses .dropdown-wrapper {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+}
+
+.trainer-myCourses .three-dots-action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  color: #FFFFFF;
+  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, color 0.15s;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
-.three-dots-action-btn:hover {
-  background: #F8FAFC;
-  border-color: #CBD5E1;
-  color: #0F172A;
+.trainer-myCourses .three-dots-action-btn:hover,
+.trainer-myCourses .three-dots-action-btn.is-open {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(255, 255, 255, 0.95);
+  color: #064E3B;
+  transform: scale(1.05);
 }
 
-.three-dots-menu {
+.trainer-myCourses .three-dots-action-btn:focus-visible {
+  outline: 2px solid #FFFFFF;
+  outline-offset: 2px;
+}
+
+.trainer-myCourses .three-dots-menu {
   position: absolute;
   right: 0;
-  bottom: 52px;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
-  padding: 6px;
-  width: 135px;
+  top: calc(100% + 6px);
+  background: var(--mc-menu-bg, var(--color-surface));
+  border: 1px solid var(--mc-menu-border, var(--color-border));
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.16);
+  padding: 5px;
+  width: 148px;
   z-index: 100;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  animation: menuFadeIn 0.15s ease-out;
+  gap: 1px;
+  animation: mcMenuIn 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: top right;
 }
 
-@keyframes menuFadeIn {
+@keyframes mcMenuIn {
   from {
     opacity: 0;
-    transform: translateY(4px);
+    transform: scale(0.94) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes mcRiseIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -276,112 +460,216 @@
   }
 }
 
-.menu-item {
+.trainer-myCourses .menu-item {
   width: 100%;
-  padding: 9px 12px;
+  padding: 9px 10px;
   border: none;
   background: transparent;
-  border-radius: 8px;
+  border-radius: 7px;
   font-size: 13px;
   font-weight: 600;
+  font-family: inherit;
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
   text-align: left;
+  color: var(--mc-menu-text, var(--color-text));
 }
 
-.edit-item {
-  color: #334155;
+.trainer-myCourses .menu-item:hover {
+  transform: translateX(2px);
 }
 
-.edit-item:hover {
-  background: #F3F4F6;
-  color: #059669;
+.trainer-myCourses .menu-item svg {
+  font-size: 15px;
+  flex-shrink: 0;
 }
 
-.delete-item {
-  color: #DC2626;
+.trainer-myCourses .edit-item:hover {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
-.delete-item:hover {
-  background: #FEF2F2;
+.trainer-myCourses .delete-item {
+  color: var(--color-error);
+}
+
+.trainer-myCourses .delete-item:hover {
+  background: var(--color-error-bg);
+  color: var(--color-error);
 }
 
 /* ========== Create card ========== */
-.create-new-course-card {
-  background: #FFFFFF;
-  border: 2px dashed #CBD5E1;
-  border-radius: 20px;
-  padding: 32px 24px;
-  min-height: 240px;
+.trainer-myCourses .create-new-course-card {
+  --card-i: 0;
+  background: transparent;
+  border: 1.5px dashed rgba(16, 185, 129, 0.35);
+  border-radius: 16px;
+  padding: 28px 20px;
+  min-height: 300px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: border-color 0.2s, background 0.2s, transform 0.2s;
   text-align: center;
   color: inherit;
   font: inherit;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: mcRiseIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(0.15s + var(--card-i) * 55ms);
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s ease;
 }
 
-.create-new-course-card:hover {
-  border-color: #059669;
-  background: #F8FAFC;
-  transform: translateY(-3px);
+.trainer-myCourses .create-new-course-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.08), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
-.plus-icon-circle {
+.trainer-myCourses .create-new-course-card:hover {
+  border-color: var(--color-primary-bright);
+  background: rgba(236, 253, 245, 0.6);
+  transform: translateY(-6px);
+  box-shadow: 0 14px 32px rgba(6, 78, 59, 0.1);
+}
+
+.trainer-myCourses .create-new-course-card:hover::before {
+  opacity: 1;
+}
+
+.trainer-myCourses .create-new-course-card:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.trainer-myCourses .plus-icon-circle {
+  position: relative;
+  z-index: 1;
   width: 52px;
   height: 52px;
-  border-radius: 50%;
-  background: #064E3B;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #064E3B 0%, #10B981 100%);
   color: #FFFFFF;
   font-size: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 14px rgba(6, 78, 59, 0.25);
-  transition: transform 0.2s;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 20px rgba(6, 78, 59, 0.28);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
 }
 
-.create-new-course-card:hover .plus-icon-circle {
-  transform: scale(1.06);
+.trainer-myCourses .create-new-course-card:hover .plus-icon-circle {
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 12px 28px rgba(6, 78, 59, 0.35);
 }
 
-.create-card-title {
-  font-size: 17px;
-  font-weight: 800;
-  color: #0F172A;
+.trainer-myCourses .create-card-title {
+  position: relative;
+  z-index: 1;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text);
   margin: 0 0 4px;
+  letter-spacing: -0.01em;
 }
 
-.create-card-subtitle {
-  font-size: 13px;
-  color: #9CA3AF;
+.trainer-myCourses .create-card-subtitle {
+  position: relative;
+  z-index: 1;
+  font-size: 12px;
+  color: var(--color-text-muted);
   font-weight: 500;
   margin: 0;
 }
 
+/* ========== Reduced motion ========== */
+@media (prefers-reduced-motion: reduce) {
+  .trainer-myCourses .stat-card,
+  .trainer-myCourses .trainer-course-card,
+  .trainer-myCourses .create-new-course-card {
+    animation: none;
+    opacity: 1;
+  }
+
+  .trainer-myCourses .stat-card,
+  .trainer-myCourses .trainer-course-card,
+  .trainer-myCourses .create-new-course-card,
+  .trainer-myCourses .course-avatar-box,
+  .trainer-myCourses .course-media-pattern,
+  .trainer-myCourses .plus-icon-circle,
+  .trainer-myCourses .trainer-view-course-btn,
+  .trainer-myCourses .view-course-arrow {
+    transition: none;
+  }
+}
+
+/* ========== Responsive ========== */
 @media (max-width: 1100px) {
-  .trainer-stats-row {
+  .trainer-myCourses .trainer-stats-row {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .my-courses-container.trainer-myCourses {
-    padding: calc(75px + 16px) 16px 32px 16px;
+    padding: var(--page-top-offset) var(--spacing-sm) var(--spacing-xl);
   }
 
-  .trainer-stats-row {
+  .trainer-myCourses .trainer-stats-row {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
-  .trainer-courses-grid {
+  .trainer-myCourses .trainer-courses-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
+
+  .trainer-myCourses .trainer-course-card,
+  .trainer-myCourses .create-new-course-card {
+    min-height: 0;
+  }
+
+  .trainer-myCourses .trainer-card-media {
+    height: 96px;
+  }
+}
+
+/* Dark theme */
+[data-theme="dark"] .my-courses-container.trainer-myCourses,
+html.dark-mode .my-courses-container.trainer-myCourses {
+  background:
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(16, 185, 129, 0.1), transparent 60%),
+    var(--mc-page-bg, var(--color-bg));
+}
+
+[data-theme="dark"] .trainer-myCourses .course-avatar-box,
+html.dark-mode .trainer-myCourses .course-avatar-box {
+  background: rgba(18, 20, 29, 0.95);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .trainer-myCourses .logo-icon-svg,
+[data-theme="dark"] .trainer-myCourses .course-avatar-initial,
+html.dark-mode .trainer-myCourses .logo-icon-svg,
+html.dark-mode .trainer-myCourses .course-avatar-initial {
+  color: var(--color-primary);
+}
+
+[data-theme="dark"] .trainer-myCourses .create-new-course-card:hover,
+html.dark-mode .trainer-myCourses .create-new-course-card:hover {
+  background: rgba(16, 185, 129, 0.08);
 }

@@ -347,8 +347,8 @@
 }
 
 .admin-enroll-students-page .search-box input:focus {
-  border-color: #10B981 !important;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.12);
+  border-color:  var(--color-primary-muted) !important;
+  box-shadow:  0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 14%, transparent);
 }
 
 .admin-enroll-students-page .search-box i {

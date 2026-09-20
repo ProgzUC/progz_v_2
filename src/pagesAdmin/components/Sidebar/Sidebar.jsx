@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { runManualSyncAndWait } from "../../../api/userApi";
 import { logout } from "../../../api/authApi";
+import { useAdminTheme } from "../../context/AdminThemeContext";
 import Swal from "sweetalert2";
 import "./Sidebar.css";
 
@@ -28,6 +29,10 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
   const [syncLoading, setSyncLoading] = useState(false);
   const navigate = useNavigate();
   const expanded = hoverOpen || mobileOpen;
+  const { branding } = useAdminTheme();
+  const academyName = branding?.academyName?.trim() || "ProgZ Academy";
+  const tagline = branding?.tagline?.trim() || "Super Admin";
+  const logoSrc = branding?.logoDataUrl || "/admin/logo.png";
 
   const handleLogout = () => {
     Swal.fire({
@@ -116,12 +121,12 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
     >
       <div className="sidebar-header">
         <div className="sidebar-logo-text">
-          <img src="/admin/logo.png" alt="ProgZ admin logo" />
+          <img src={logoSrc} alt={`${academyName} logo`} />
         </div>
         {expanded && (
           <div className="sidebar-brand">
-            <h3 className="sidebar-title">Portal</h3>
-            <p className="sidebar-subtitle">Super Admin</p>
+            <h3 className="sidebar-title">{academyName}</h3>
+            <p className="sidebar-subtitle">{tagline}</p>
           </div>
         )}
       </div>

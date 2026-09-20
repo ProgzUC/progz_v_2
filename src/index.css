@@ -35,7 +35,7 @@ body {
   /* Firefox */
 }
 
-/* Fix for auto-filled inputs having dark/wrong background */
+/* Fix for auto-filled inputs — only when autofilled, not every input */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
@@ -48,15 +48,11 @@ select:-webkit-autofill,
 select:-webkit-autofill:hover,
 select:-webkit-autofill:focus,
 select:-webkit-autofill:active {
-  transition: background-color 5000s ease-in-out 0s;
-  -webkit-text-fill-color: inherit !important;
-  background-color: inherit !important;
-  color: inherit !important;
-  caret-color: inherit !important;
-  -webkit-box-shadow: 0 0 0px 1000px inherit inset !important;
-  box-shadow: 0 0 0px 1000px inherit inset !important;
-  appearance: none;
-  -webkit-appearance: none;
+  -webkit-text-fill-color: var(--color-text) !important;
+  caret-color: var(--color-text);
+  transition: background-color 99999s ease-out 0s;
+  box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
 }
 
 input,
@@ -64,15 +60,6 @@ textarea,
 select {
   -webkit-user-select: auto !important;
   user-select: auto !important;
-  transition: background-color 5000s ease-in-out 0s;
-  -webkit-text-fill-color: inherit !important;
-  background-color: inherit !important;
-  color: inherit !important;
-  caret-color: inherit !important;
-  -webkit-box-shadow: 0 0 0px 1000px inherit inset !important;
-  box-shadow: 0 0 0px 1000px inherit inset !important;
-  appearance: none;
-  -webkit-appearance: none;
 }
 
 /* Restore checkbox and radio appearance */
@@ -81,11 +68,8 @@ input[type="radio"] {
   appearance: auto !important;
   -webkit-appearance: auto !important;
   background-color: transparent !important;
-  /* Allow checkmark to show */
   -webkit-text-fill-color: initial !important;
-  /* Reset text fill if relevant */
   box-shadow: none !important;
-  /* Remove the autofill shadow if applied */
   transition: none !important;
 }
 

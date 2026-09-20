@@ -4,7 +4,7 @@ import { FaBook } from "react-icons/fa";
 import { BiChevronRight, BiChevronLeft } from "react-icons/bi";
 import "./CourseView.css";
 import RichTextContent from "../../../components/common/RichTextEditor/RichTextContent";
-import { isHtmlEmpty } from "../../../components/common/RichTextEditor/richTextUtils";
+import { hasMeaningfulHtml } from "../../../components/common/RichTextEditor/richTextUtils";
 import SectionDetails from "../../../components/common/CourseCurriculum/SectionDetails";
 import CoursePreviewModal from "../../../components/common/CoursePreviewModal/CoursePreviewModal";
 
@@ -106,10 +106,10 @@ const CourseView = () => {
         <section className="cv-panel">
           <h2 className="cv-panel-title">Course description</h2>
           <div className="cv-description-box">
-            {isHtmlEmpty(course.courseDescription) ? (
-              <span className="cv-detail-empty">No description available.</span>
-            ) : (
+            {hasMeaningfulHtml(course.courseDescription) ? (
               <RichTextContent html={course.courseDescription} />
+            ) : (
+              <span className="cv-detail-empty">No description available.</span>
             )}
           </div>
         </section>
