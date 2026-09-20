@@ -233,6 +233,96 @@
 }
 
 /* ================================
+   SOFT INTERACTIONS (match admin polish)
+   ================================ */
+
+/* Search focus ring */
+.trainer-app .search-box input,
+.trainer-app .search-box input:hover {
+    appearance: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.trainer-app .search-box input:focus,
+.trainer-app .search-box input:focus-visible {
+    border-color: var(--color-primary-muted) !important;
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 14%, transparent) !important;
+    -webkit-box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 14%, transparent) !important;
+    outline: none !important;
+    background-color: var(--color-surface) !important;
+}
+
+.trainer-app .search-box:focus-within i {
+    color: var(--color-primary);
+}
+
+/* Soft table / list row hover */
+.trainer-app table tbody tr,
+.trainer-app .students-table tbody tr,
+.trainer-app .attendance-history-table tbody tr,
+.trainer-app .student-attendance-row {
+    transition: background 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+}
+
+.trainer-app table tbody tr:hover,
+.trainer-app .students-table tbody tr:hover,
+.trainer-app .attendance-history-table tbody tr:hover {
+    background: var(--color-primary-light);
+}
+
+.trainer-app table tbody tr:hover > td,
+.trainer-app .students-table tbody tr:hover > td,
+.trainer-app .attendance-history-table tbody tr:hover > td,
+.trainer-app .attendance-history-table tbody tr:hover td {
+    background: var(--color-primary-light);
+    color: var(--color-text);
+}
+
+.trainer-app table tbody tr:hover > td:first-child,
+.trainer-app .students-table tbody tr:hover > td:first-child,
+.trainer-app .attendance-history-table tbody tr:hover > td:first-child {
+    box-shadow: inset 3px 0 0 var(--color-primary-muted);
+}
+
+.trainer-app table tbody tr:has(.empty-cell):hover,
+.trainer-app table tbody tr:has(td[colspan]):hover,
+.trainer-app .students-table tbody tr:has(.students-empty-cell):hover {
+    background: transparent;
+}
+
+.trainer-app table tbody tr:has(.empty-cell):hover > td,
+.trainer-app table tbody tr:has(td[colspan]):hover > td,
+.trainer-app .students-table tbody tr:has(.students-empty-cell):hover > td,
+.trainer-app table tbody tr:has(.empty-cell):hover > td:first-child,
+.trainer-app table tbody tr:has(td[colspan]):hover > td:first-child {
+    background: transparent;
+    color: inherit;
+    box-shadow: none;
+}
+
+.trainer-app .student-attendance-row:hover {
+    background: var(--color-primary-light);
+    box-shadow: inset 3px 0 0 var(--color-primary-muted);
+}
+
+/* Soft secondary controls */
+.trainer-app .nav-item:not(.active):hover,
+.trainer-app .quick-action-row:hover,
+.trainer-app .trainer-btn-secondary:hover,
+.trainer-app .attendance-btn:hover:not(:disabled):not(.active) {
+    border-color: var(--color-primary-muted);
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+.trainer-app .trainer-btn-primary:hover,
+.trainer-app .start-class-btn:hover,
+.trainer-app .mark-all-present-btn:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 4px 14px color-mix(in srgb, var(--color-primary-bright) 28%, transparent);
+}
+
+/* ================================
    RESPONSIVE UTILITIES
    ================================ */
 

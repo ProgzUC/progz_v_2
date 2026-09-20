@@ -192,7 +192,11 @@
 }
 
 .attendance-table tbody tr:hover {
-    background: var(--color-bg);
+    background: var(--color-primary-light);
+}
+
+.attendance-table tbody tr:hover > td:first-child {
+    box-shadow: inset 3px 0 0 var(--color-primary-muted);
 }
 
 .attendance-table td {

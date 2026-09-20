@@ -399,8 +399,8 @@
 
 .search-box input:focus,
 .search-box input:focus-visible {
-    border-color: var(--trainer-primary);
-    box-shadow: 0 0 0 3px var(--trainer-primary-light);
+    border-color: var(--color-primary-muted);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 14%, transparent);
     outline: none !important;
     background: var(--color-surface) !important;
     background-color: var(--color-surface) !important;
@@ -452,7 +452,8 @@
 }
 
 .student-attendance-row:hover {
-    background: var(--trainer-page-bg);
+    background: var(--color-primary-light);
+    box-shadow: inset 3px 0 0 var(--color-primary-muted);
 }
 
 .student-info {

@@ -166,7 +166,7 @@
 }
 
 .attendance-history-table tr:hover td {
-    background-color: rgba(6, 78, 59, 0.02);
+    background-color: var(--color-primary-light);
 }
 
 .date-col {

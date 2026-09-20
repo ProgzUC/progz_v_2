@@ -788,8 +788,8 @@
 }
 
 .profile-tab:hover:not(.active) {
-    background: var(--color-bg);
-    color: var(--color-text);
+    background: var(--color-primary-light);
+    color: var(--color-primary);
 }
 
 /* ============================================================

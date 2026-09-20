@@ -238,10 +238,12 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                         {sectionCount} section{sectionCount === 1 ? "" : "s"}
                       </span>
                     </span>
-                    <span className="cv-module-lessons">
-                      <BiBook /> {sectionCount} Lessons
+                    <span className="cv-module-meta">
+                      <span className="cv-module-lessons">
+                        <BiBook /> {sectionCount} Lessons
+                      </span>
+                      <BiChevronDown className={`cv-list-icon ${isOpen ? "is-open" : ""}`} />
                     </span>
-                    <BiChevronDown className={`cv-list-icon ${isOpen ? "is-open" : ""}`} />
                   </button>
 
                   {isOpen && (

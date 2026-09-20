@@ -421,11 +421,10 @@
 
 .course-view-page .cv-module-toggle {
   width: 100%;
-  display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) 120px 28px;
+  display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px 18px;
+  gap: 14px;
+  padding: 14px 16px;
   border: none !important;
   background: transparent !important;
   cursor: pointer;
@@ -444,14 +443,14 @@
 }
 
 .cv-module-index {
-  width: 48px;
-  height: 48px;
-  border-radius: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background: #ffffff;
   border: 1.5px solid #6ee7b7;
   color: #047857;
   font-weight: 800;
-  font-size: 14px;
+  font-size: 13px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -468,8 +467,9 @@
 .cv-module-toggle-text {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   min-width: 0;
+  flex: 1;
   justify-content: center;
 }
 
@@ -478,6 +478,9 @@
   font-weight: 700;
   color: #0f172a;
   line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cv-module-sub {
@@ -487,19 +490,32 @@
   line-height: 1.2;
 }
 
+.cv-module-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
 .cv-module-lessons {
   display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 6px;
-  font-size: 13px;
+  min-width: 108px;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  font-size: 12px;
   font-weight: 600;
-  color: #64748b;
+  color: #475569;
   white-space: nowrap;
 }
 
 .cv-module-lessons svg {
-  font-size: 16px;
+  font-size: 15px;
   color: #059669;
   flex-shrink: 0;
 }
@@ -508,7 +524,7 @@
   font-size: 22px;
   color: #94a3b8;
   transition: transform 0.2s ease, color 0.2s ease;
-  justify-self: end;
+  flex-shrink: 0;
 }
 
 .course-view-page .cv-module-toggle .cv-list-icon.is-open {
@@ -517,7 +533,7 @@
 }
 
 .cv-module-body {
-  padding: 0 18px 18px 82px;
+  padding: 12px 14px 14px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -586,13 +602,16 @@
   }
 
   .course-view-page .cv-module-toggle {
-    grid-template-columns: 48px minmax(0, 1fr) 28px;
     padding: 14px 16px;
-    gap: 14px;
+    gap: 12px;
   }
 
   .cv-module-lessons {
     display: none;
+  }
+
+  .cv-module-meta {
+    gap: 0;
   }
 
   .cv-module-body {

@@ -58,17 +58,62 @@
 
 /* COURSE CARD */
 .trainer-home-batches .batches-batch-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     background: var(--trainer-card-bg);
-    border-radius: var(--trainer-radius-lg);
-    padding: var(--trainer-spacing-lg);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    transition: all 0.35s cubic-bezier(0.165, 0.84, 0.44, 1);
-    border: 1px solid var(--trainer-border);
+    border-radius: 18px;
+    padding: 18px 18px 16px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+    transition:
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.35s ease,
+        border-color 0.35s ease,
+        background 0.35s ease;
+    border: 1px solid rgba(15, 23, 42, 0.08);
     animation: trainerBatchCardEntrance 0.5s ease-out forwards;
     opacity: 0;
     display: flex;
     flex-direction: column;
+    gap: 16px;
     min-height: 0;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    appearance: none;
+}
+
+.trainer-home-batches .batches-batch-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--trainer-primary) 0%, #10b981 100%);
+    transform: scaleY(0);
+    transform-origin: center;
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    border-radius: 4px 0 0 4px;
+    z-index: 1;
+}
+
+.trainer-home-batches .batches-batch-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        115deg,
+        transparent 35%,
+        rgba(255, 255, 255, 0.55) 48%,
+        transparent 62%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.65s ease;
+    pointer-events: none;
+    z-index: 0;
 }
 
 .trainer-home-batches .batches-batch-card:nth-child(1) { animation-delay: 0.05s; }
@@ -88,101 +133,200 @@
 }
 
 .trainer-home-batches .batches-batch-card:hover {
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
-    transform: translateY(-6px);
-    border-color: rgba(25, 135, 84, 0.2);
+    background: linear-gradient(165deg, #ffffff 0%, #f0fdf4 100%);
+    box-shadow:
+        0 14px 36px rgba(6, 78, 59, 0.14),
+        0 4px 12px rgba(15, 23, 42, 0.06);
+    transform: translateY(-6px) scale(1.015);
+    border-color: rgba(16, 185, 129, 0.35);
 }
 
-.trainer-home-batches .batches-batch-tag {
-    display: inline-block;
-    width: fit-content;
-    max-width: 100%;
-    align-self: flex-start;
-    padding: 5px 10px;
-    border-radius: 999px;
-    font-size: 11px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    background: var(--trainer-primary-light);
-    color: var(--trainer-primary);
+.trainer-home-batches .batches-batch-card:hover::before {
+    transform: scaleY(1);
+}
+
+.trainer-home-batches .batches-batch-card:hover::after {
+    transform: translateX(120%);
+}
+
+.trainer-home-batches .batches-batch-card:active {
+    transform: translateY(-2px) scale(1.005);
+    box-shadow: 0 8px 22px rgba(6, 78, 59, 0.12);
+}
+
+.trainer-home-batches .batches-batch-card:focus-visible {
+    outline: 2px solid var(--trainer-primary);
+    outline-offset: 2px;
+}
+
+.trainer-home-batches .batches-batch-head {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.trainer-home-batches .batches-batch-avatar {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(145deg, var(--trainer-primary) 0%, #0f766e 100%);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
     letter-spacing: 0.02em;
+    box-shadow: 0 6px 14px rgba(6, 78, 59, 0.22);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+
+.trainer-home-batches .batches-batch-card:hover .batches-batch-avatar {
+    transform: scale(1.08) rotate(-3deg);
+    box-shadow: 0 10px 20px rgba(6, 78, 59, 0.32);
+}
+
+.trainer-home-batches .batches-batch-copy {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 2px;
 }
 
 .trainer-home-batches .batches-batch-title {
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
-    margin: 0 0 var(--trainer-spacing-sm) 0;
-    color: var(--color-text);
-    line-height: 1.35;
-    letter-spacing: -0.01em;
+    margin: 0;
+    color: #0f172a;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: color 0.25s ease;
+}
+
+.trainer-home-batches .batches-batch-card:hover .batches-batch-title {
+    color: var(--trainer-primary);
 }
 
 .trainer-home-batches .batches-batch-info-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    color: var(--trainer-text-muted);
-    margin-bottom: var(--trainer-spacing-sm);
+    gap: 6px;
+    font-size: 13px;
+    color: #64748b;
+    margin: 0;
+    font-weight: 500;
 }
 
-.trainer-home-batches .batches-arrow-wrap {
-    margin-top: auto;
-    display: flex;
-    justify-content: flex-end;
-    padding-top: var(--trainer-spacing-sm);
+.trainer-home-batches .batches-batch-info-item svg {
+    flex-shrink: 0;
+    opacity: 0.85;
+}
+
+.trainer-home-batches .batches-arrow-btn {
+    flex-shrink: 0;
+    background: #ecfdf5;
+    border: none;
+    color: var(--trainer-primary);
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+    margin-top: 2px;
+    pointer-events: none;
+}
+
+.trainer-home-batches .batches-batch-card:hover .batches-arrow-btn {
+    color: #fff;
+    background: var(--trainer-primary);
+    transform: translateX(4px);
+    box-shadow: 0 6px 14px rgba(6, 78, 59, 0.28);
 }
 
 /* Progress Bar */
 .trainer-home-batches .batches-progress-container {
-    margin: var(--trainer-spacing-md) 0;
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding-top: 14px;
+    border-top: 1px solid #f1f5f9;
+    transition: border-color 0.3s ease;
+}
+
+.trainer-home-batches .batches-batch-card:hover .batches-progress-container {
+    border-top-color: #d1fae5;
 }
 
 .trainer-home-batches .batches-progress-label {
     display: flex;
     justify-content: space-between;
-    font-size: 13px;
+    align-items: center;
+    font-size: 12px;
     margin-bottom: 8px;
-    color: var(--trainer-text-muted);
+    color: #64748b;
     font-weight: 500;
 }
 
+.trainer-home-batches .batches-progress-value {
+    font-weight: 700;
+    color: #0f172a;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.25s ease;
+}
+
+.trainer-home-batches .batches-batch-card:hover .batches-progress-value {
+    color: var(--trainer-primary);
+}
+
 .trainer-home-batches .batches-progress-bar {
-    height: 8px;
-    background: var(--trainer-divider);
+    height: 7px;
+    background: #e2e8f0;
     border-radius: 999px;
     overflow: hidden;
 }
 
 .trainer-home-batches .batches-progress-fill {
     height: 100%;
-    background: var(--trainer-primary);
+    background: linear-gradient(90deg, var(--trainer-primary) 0%, #10b981 100%);
     border-radius: 999px;
-    transition: width 0.3s ease;
+    transition: width 0.35s ease, filter 0.3s ease;
 }
 
-.trainer-home-batches .batches-arrow-btn {
-    background: var(--trainer-primary-light);
-    border: none;
-    color: var(--trainer-primary);
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    transition: var(--trainer-transition);
+.trainer-home-batches .batches-batch-card:hover .batches-progress-fill {
+    filter: brightness(1.08);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.45);
 }
 
-.trainer-home-batches .batches-arrow-btn:hover {
-    color: var(--color-text-on-primary);
-    background: var(--trainer-primary);
-    transform: translateX(2px);
+@media (prefers-reduced-motion: reduce) {
+    .trainer-home-batches .batches-batch-card,
+    .trainer-home-batches .batches-batch-card::before,
+    .trainer-home-batches .batches-batch-card::after,
+    .trainer-home-batches .batches-batch-avatar,
+    .trainer-home-batches .batches-arrow-btn,
+    .trainer-home-batches .batches-progress-fill {
+        transition: none;
+        animation: none;
+    }
+
+    .trainer-home-batches .batches-batch-card {
+        opacity: 1;
+    }
+
+    .trainer-home-batches .batches-batch-card:hover {
+        transform: none;
+    }
 }
 
 /* RIGHT SIDEBAR */
@@ -345,11 +489,11 @@
     }
 
     .trainer-home-batches .batches-batch-card {
-        padding: var(--trainer-spacing-md);
+        padding: 16px;
     }
 
     .trainer-home-batches .batches-batch-title {
-        font-size: 20px;
+        font-size: 17px;
         font-weight: 700;
     }
 
@@ -374,20 +518,22 @@
     }
 
     .trainer-home-batches .batches-batch-card {
-        padding: var(--trainer-spacing-sm);
+        padding: 14px;
     }
 
     .trainer-home-batches .batches-batch-title {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 700;
     }
 
     .trainer-home-batches .batches-batch-info-item {
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .trainer-home-batches .batches-arrow-btn {
-        font-size: 1.1rem;
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
     }
 
     .trainer-home-batches .batches-class-footer {

@@ -406,7 +406,7 @@
 }
 
 .jc-module-header:hover {
-    background: #f9f9f9;
+    background: var(--color-primary-light);
 }
 
 .jc-module-header-left {
@@ -463,7 +463,8 @@
 }
 
 .jc-lesson-item:hover {
-    background: rgba(25, 135, 84, 0.03);
+    background: var(--color-primary-light);
+    box-shadow: inset 3px 0 0 var(--color-primary-muted);
     padding-left: 65px;
 }
 
