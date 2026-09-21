@@ -13,7 +13,7 @@ import './TrainerGlobal.css'
 import './TrainerApp.css'
 import { useTrainerBootstrap } from '../hooks/useTrainerBootstrap'
 import Loader from '../components/common/Loader/Loader'
-import AnnouncementBanner from '../../components/common/AnnouncementBanner/AnnouncementBanner'
+import AnnouncementBanner from '../components/common/AnnouncementBanner/AnnouncementBanner'
 
 function TrainerApp() {
   const [activeTab, setActiveTab] = React.useState('home');
