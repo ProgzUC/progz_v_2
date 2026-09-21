@@ -13,6 +13,7 @@ import './TrainerGlobal.css'
 import './TrainerApp.css'
 import { useTrainerBootstrap } from '../hooks/useTrainerBootstrap'
 import Loader from '../components/common/Loader/Loader'
+import AnnouncementBanner from '../components/common/AnnouncementBanner/AnnouncementBanner'
 
 function TrainerApp() {
   const [activeTab, setActiveTab] = React.useState('home');
@@ -56,6 +57,7 @@ function TrainerApp() {
           setIsEditingProfile(false);
         }}
       />
+      <AnnouncementBanner source="trainer" />
       <main className="main-content">
         {activeTab === 'home' && (
           <>

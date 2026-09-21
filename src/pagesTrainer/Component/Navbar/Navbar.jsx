@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import { logout } from '../../../api/authApi';
+import NotificationBell from '../../../components/common/NotificationBell/NotificationBell';
 
 const Navbar = ({ activeTab, setActiveTab }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,16 +32,6 @@ const Navbar = ({ activeTab, setActiveTab }) => {
                 <div className="trainer-brand" onClick={() => handleTabClick('home')}>
                     <img src="/logo.png" alt="ProgZ" className="brand-logo" />
                 </div>
-
-                <button
-                    className={`trainer-menu-toggle ${isMenuOpen ? 'active' : ''}`}
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    aria-label="Toggle navigation"
-                >
-                    <span className="bar"></span>
-                    <span className="bar"></span>
-                    <span className="bar"></span>
-                </button>
 
                 <div className={`trainer-nav-menu ${isMenuOpen ? 'active' : ''}`}>
                     <div className="nav-items">
@@ -84,6 +75,19 @@ const Navbar = ({ activeTab, setActiveTab }) => {
                             <span>Log Out</span>
                         </button>
                     </div>
+                </div>
+
+                <div className="header-end">
+                    <NotificationBell />
+                    <button
+                        className={`trainer-menu-toggle ${isMenuOpen ? 'active' : ''}`}
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="bar"></span>
+                        <span className="bar"></span>
+                        <span className="bar"></span>
+                    </button>
                 </div>
 
                 {isMenuOpen && (

@@ -17,3 +17,6 @@ export const updateTrainerProfile = data =>
 
 export const fetchTrainerCourses = () =>
     axiosInstance.get("/trainer/trainer-courses").then(res => res.data);
+
+export const fetchTrainerAnnouncements = () =>
+    axiosInstance.get("/trainer/announcements").then((res) => res.data);

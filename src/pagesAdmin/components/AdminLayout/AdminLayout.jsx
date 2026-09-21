@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
 import SkipLink from "../../../components/common/SkipLink/SkipLink";
+import NotificationBell from "../../../components/common/NotificationBell/NotificationBell";
 import { AdminThemeProvider, useAdminTheme } from "../../context/AdminThemeContext";
 import "../../styles/admin-theme.css";
 import "./AdminLayout.css";
@@ -8,6 +10,8 @@ import "./AdminLayout.css";
 const AdminLayoutShell = ({ children }) => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const { resolvedMode, accent, corners, density, customAccentStyle } = useAdminTheme();
+  const location = useLocation();
+  const isOverview = /\/admin\/?(overview)?$/.test(location.pathname);
 
   useEffect(() => {
     document.body.classList.toggle("admin-no-scroll", mobileNavOpen);
@@ -61,7 +65,14 @@ const AdminLayoutShell = ({ children }) => {
               <span className="sr-only">{mobileNavOpen ? "Close menu" : "Open menu"}</span>
             </button>
             <p className="admin-mobile-title">Admin Portal</p>
+            <NotificationBell variant="admin" settingsHref="/admin/settings?section=notifications" />
           </header>
+
+          {!isOverview ? (
+            <div className="admin-notify-dock" aria-hidden={false}>
+              <NotificationBell variant="admin" settingsHref="/admin/settings?section=notifications" />
+            </div>
+          ) : null}
 
           <main id="admin-main-content" className="admin-page-body" tabIndex={-1}>
             {children}

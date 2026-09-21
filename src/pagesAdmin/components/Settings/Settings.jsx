@@ -1,7 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAdminTheme } from "../../context/AdminThemeContext";
 import { useAdminDashboard } from "../../../hooks/useAdminStats";
 import { useOperationalSummary } from "../../../hooks/useReports";
+import { sendAnnouncementEmail } from "../../../api/adminApi";
+import { showError, showSuccess } from "../../../utils/toast";
+import {
+  useNotificationPrefs,
+  useUpdateNotificationPrefs,
+} from "../../../hooks/useNotifications";
 import "./Settings.css";
 
 const NAV_GROUPS = [
@@ -479,38 +486,50 @@ function AnnouncementsPanel() {
     removeAnnouncement,
     prefs,
     setPrefs,
+    branding,
   } = useAdminTheme();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [audience, setAudience] = useState("all");
   const [email, setEmail] = useState(prefs.lastAnnouncementEmail || "");
+  const [sending, setSending] = useState(false);
 
-  const publish = () => {
+  const publish = async () => {
     if (!title.trim()) return;
-    if (!email.trim()) {
-      import("../../../utils/toast").then(({ showError }) => {
-        showError("Add an email address before publishing");
-      });
+    const recipient = email.trim();
+    if (!recipient) {
+      showError("Add an email address before publishing");
       return;
     }
 
-    addAnnouncement({
-      title,
-      body,
-      audience,
-      active: true,
-      email: email.trim(),
-      emailSent: false,
-    });
+    setSending(true);
+    try {
+      await sendAnnouncementEmail({
+        email: recipient,
+        title: title.trim(),
+        body: body.trim(),
+        academyName: branding?.academyName || "ProgZ",
+      });
 
-    setPrefs({ lastAnnouncementEmail: email.trim() });
-    setTitle("");
-    setBody("");
-    setAudience("all");
+      addAnnouncement({
+        title,
+        body,
+        audience,
+        active: true,
+        email: recipient,
+        emailSent: true,
+      });
 
-    import("../../../utils/toast").then(({ showSuccess }) => {
-      showSuccess("Announcement saved (email send will be wired after Brevo setup)");
-    });
+      setPrefs({ lastAnnouncementEmail: recipient });
+      setTitle("");
+      setBody("");
+      setAudience("all");
+      showSuccess(`Announcement emailed to ${recipient}`);
+    } catch (err) {
+      showError(err.response?.data?.message || err.message || "Failed to send announcement email");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -518,7 +537,7 @@ function AnnouncementsPanel() {
       <section className="as-block">
         <header className="as-block-head">
           <h2>New announcement</h2>
-          <p>Compose a notice and set the email recipient. Sending will be enabled after Brevo is configured.</p>
+          <p>Compose a notice and email it to a student, trainer, or any address you enter.</p>
         </header>
         <div className="as-form-grid">
           <label className="as-field as-field-wide">
@@ -547,25 +566,25 @@ function AnnouncementsPanel() {
           <label className="as-field">
             <span>Email</span>
             <input
-              type="email"
+              type="text"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="student@email.com"
+              placeholder="student@email.com, trainer@email.com"
               autoComplete="email"
             />
           </label>
         </div>
         <p className="as-help">
-          UI only for now — Publish saves the announcement. Live email delivery comes after your team sets up Brevo.
+          Publish sends the announcement email from Progz Support. Separate multiple addresses with commas.
         </p>
         <div className="as-block-actions">
           <button
             type="button"
             className="as-btn as-btn-primary"
             onClick={publish}
-            disabled={!title.trim() || !email.trim()}
+            disabled={sending || !title.trim() || !email.trim()}
           >
-            Publish announcement
+            {sending ? "Sending…" : "Publish announcement"}
           </button>
         </div>
       </section>
@@ -720,76 +739,120 @@ function DefaultsPanel() {
 }
 
 function NotificationsPanel() {
-  const { prefs, setPrefs } = useAdminTheme();
-  const [draft, setDraft] = useState(() => ({
-    emailDigest: prefs.emailDigest,
-    batchReminders: prefs.batchReminders,
-    approvalAlerts: prefs.approvalAlerts,
-  }));
+  const { setPrefs } = useAdminTheme();
+  const { data, isLoading } = useNotificationPrefs(true);
+  const updatePrefs = useUpdateNotificationPrefs();
+  const serverPrefs = data?.prefs;
+  const [draft, setDraft] = useState(null);
   const [dirty, setDirty] = useState(false);
 
   useEffect(() => {
-    if (dirty) return;
-    setDraft({
-      emailDigest: prefs.emailDigest,
-      batchReminders: prefs.batchReminders,
-      approvalAlerts: prefs.approvalAlerts,
-    });
-  }, [prefs, dirty]);
+    if (dirty || !serverPrefs) return;
+    setDraft({ ...serverPrefs });
+  }, [serverPrefs, dirty]);
 
   const patchDraft = (patch) => {
     setDraft((prev) => ({ ...prev, ...patch }));
     setDirty(true);
   };
 
-  const saveChanges = () => {
-    const next = {
-      emailDigest: Boolean(draft.emailDigest),
-      batchReminders: Boolean(draft.batchReminders),
-      approvalAlerts: Boolean(draft.approvalAlerts),
-    };
-    setPrefs(next);
-    setDraft(next);
-    setDirty(false);
-    import("../../../utils/toast").then(({ showSuccess }) => {
+  const saveChanges = async () => {
+    if (!draft) return;
+    try {
+      const saved = await updatePrefs.mutateAsync(draft);
+      const next = saved?.prefs || draft;
+      setDraft(next);
+      setPrefs({
+        emailDigest: Boolean(next.emailDigest),
+        batchReminders: Boolean(next.classReminders),
+        approvalAlerts: Boolean(next.approvalAlerts),
+      });
+      setDirty(false);
       showSuccess("Notification preferences saved");
-    });
+    } catch (err) {
+      showError(err.message || "Could not save notification preferences");
+    }
   };
 
   const discardChanges = () => {
-    setDraft({
-      emailDigest: prefs.emailDigest,
-      batchReminders: prefs.batchReminders,
-      approvalAlerts: prefs.approvalAlerts,
-    });
+    setDraft(serverPrefs ? { ...serverPrefs } : null);
     setDirty(false);
   };
+
+  if (isLoading || !draft) {
+    return (
+      <div className="as-panel-stack">
+        <section className="as-block">
+          <p>Loading alert preferences…</p>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="as-panel-stack">
       <section className="as-block">
         <header className="as-block-head">
-          <h2>Alert preferences</h2>
-          <p>Choose which admin alerts you want to receive.</p>
+          <h2>Delivery</h2>
+          <p>Choose how you want to receive academy alerts.</p>
         </header>
         <div className="as-toggle-list">
           <Toggle
-            checked={draft.emailDigest}
-            onChange={(v) => patchDraft({ emailDigest: v })}
-            label="Weekly email digest"
-            description="Summary of enrollments and batch activity"
+            checked={draft.inAppEnabled}
+            onChange={(v) => patchDraft({ inAppEnabled: v })}
+            label="In-app notifications"
+            description="Show alerts in the bell on every admin page"
           />
           <Toggle
-            checked={draft.batchReminders}
-            onChange={(v) => patchDraft({ batchReminders: v })}
-            label="Batch reminders"
-            description="Upcoming class and schedule nudges"
+            checked={draft.emailEnabled}
+            onChange={(v) => patchDraft({ emailEnabled: v })}
+            label="Email notifications"
+            description="Send matching alerts to your inbox"
           />
+        </div>
+      </section>
+
+      <section className="as-block">
+        <header className="as-block-head">
+          <h2>Alert types</h2>
+          <p>Turn individual event types on or off.</p>
+        </header>
+        <div className="as-toggle-list">
           <Toggle
             checked={draft.approvalAlerts}
             onChange={(v) => patchDraft({ approvalAlerts: v })}
             label="Approval alerts"
-            description="Notify when a new user needs review"
+            description="New registrations waiting for review"
+          />
+          <Toggle
+            checked={draft.batchAssignment}
+            onChange={(v) => patchDraft({ batchAssignment: v })}
+            label="Batch assignment"
+            description="When students or trainers are added to a batch"
+          />
+          <Toggle
+            checked={draft.classReminders}
+            onChange={(v) => patchDraft({ classReminders: v })}
+            label="Class reminders"
+            description="Upcoming class and schedule nudges"
+          />
+          <Toggle
+            checked={draft.attendanceWarnings}
+            onChange={(v) => patchDraft({ attendanceWarnings: v })}
+            label="Attendance warnings"
+            description="Students falling below 75% attendance"
+          />
+          <Toggle
+            checked={draft.adminEvents}
+            onChange={(v) => patchDraft({ adminEvents: v })}
+            label="Administrative events"
+            description="Announcements, sync failures, and batch status changes"
+          />
+          <Toggle
+            checked={draft.emailDigest}
+            onChange={(v) => patchDraft({ emailDigest: v })}
+            label="Weekly digest"
+            description="Monday summary of pending approvals and attendance"
           />
         </div>
       </section>
@@ -804,7 +867,12 @@ function NotificationsPanel() {
           <button type="button" className="as-btn" onClick={discardChanges} disabled={!dirty}>
             Discard
           </button>
-          <button type="button" className="as-btn as-btn-primary" onClick={saveChanges} disabled={!dirty}>
+          <button
+            type="button"
+            className="as-btn as-btn-primary"
+            onClick={saveChanges}
+            disabled={!dirty || updatePrefs.isPending}
+          >
             Save changes
           </button>
         </div>
@@ -830,7 +898,11 @@ const TITLES = {
 };
 
 export default function Settings() {
-  const [active, setActive] = useState("appearance");
+  const [searchParams] = useSearchParams();
+  const initialSection = searchParams.get("section");
+  const [active, setActive] = useState(
+    TITLES[initialSection] ? initialSection : "appearance"
+  );
   const [query, setQuery] = useState("");
 
   const filteredGroups = useMemo(() => {

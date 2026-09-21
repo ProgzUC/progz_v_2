@@ -16,3 +16,6 @@ export const fetchStudentCourses = () =>
 
 export const fetchCourseProgress = (courseId) =>
     axiosInstance.get(`/student/course/${courseId}/progress`).then(res => res.data);
+
+export const fetchStudentAnnouncements = () =>
+    axiosInstance.get("/student/announcements").then((res) => res.data);

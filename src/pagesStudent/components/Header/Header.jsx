@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./Header.css";
 import { Link, useLocation } from "react-router-dom";
 import { BiGridAlt, BiBookOpen, BiSearch, BiUserCircle, BiLogOut } from "react-icons/bi";
+import NotificationBell from "../../../components/common/NotificationBell/NotificationBell";
 
 function HeaderContent({ onLogout }) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,12 +20,12 @@ function HeaderContent({ onLogout }) {
         const handleScroll = () => {
             setScrolled(window.scrollY > 20);
         };
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     }, []);
 
     useEffect(() => {
@@ -34,50 +35,52 @@ function HeaderContent({ onLogout }) {
     }, [isMenuOpen]);
 
     return (
-        <nav className={`student-navbar ${scrolled ? 'scrolled' : ''}`}>
+        <nav className={`student-navbar ${scrolled ? "scrolled" : ""}`}>
             <div className="student-nav-container">
-
                 <Link to="/student-dashboard/" className="student-brand">
                     <img src="/logo.png" alt="ProgZ" className="brand-logo" />
                 </Link>
 
-                <button
-                    className={`student-menu-toggle ${isMenuOpen ? 'active' : ''}`}
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
-                    aria-label="Toggle navigation"
-                >
-                    <span className="bar"></span>
-                    <span className="bar"></span>
-                    <span className="bar"></span>
-                </button>
-
-                <div className={`student-nav-menu ${isMenuOpen ? 'active' : ''}`}>
+                <div className={`student-nav-menu ${isMenuOpen ? "active" : ""}`}>
                     <div className="nav-items">
                         {links.map((link, index) => {
                             const isActive = location.pathname === link.href;
 
                             return (
-                            <Link
-                                key={index}
-                                to={link.href}
-                                state={link.name === "My Courses" ? { reset: true } : {}}
-                                className={`student-nav-item ${isActive ? 'active' : ''}`}
-                                onClick={() => setIsMenuOpen(false)}
-                            >
-                                <span className="nav-icon">{link.icon}</span>
-                                {link.name}
-                            </Link>
+                                <Link
+                                    key={index}
+                                    to={link.href}
+                                    state={link.name === "My Courses" ? { reset: true } : {}}
+                                    className={`student-nav-item ${isActive ? "active" : ""}`}
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    <span className="nav-icon">{link.icon}</span>
+                                    {link.name}
+                                </Link>
                             );
                         })}
                     </div>
 
-                    <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div className="nav-actions" style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                         <span className="brand-badge">Student</span>
                         <button className="student-logout-btn" onClick={onLogout}>
                             <span className="nav-icon"><BiLogOut /></span>
                             <span>Log Out</span>
                         </button>
                     </div>
+                </div>
+
+                <div className="header-end">
+                    <NotificationBell />
+                    <button
+                        className={`student-menu-toggle ${isMenuOpen ? "active" : ""}`}
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="bar"></span>
+                        <span className="bar"></span>
+                        <span className="bar"></span>
+                    </button>
                 </div>
 
                 {isMenuOpen && (

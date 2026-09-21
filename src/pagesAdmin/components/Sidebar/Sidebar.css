@@ -135,14 +135,31 @@
   color: var(--color-text-on-primary);
 }
 
+/* Selected page only — liquid glass highlight, same size/flow as before */
 .admin-sidebar .menu-item.active {
-  background: var(--color-primary-bright);
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0) 42%),
+    linear-gradient(165deg, #34d399 0%, #10b981 48%, #059669 100%);
   color: var(--color-text-on-primary);
   font-weight: var(--font-weight-semibold);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.55) inset,
+    0 -1px 0 rgba(4, 47, 35, 0.2) inset,
+    0 8px 18px rgba(16, 185, 129, 0.35);
+}
+
+.layout .admin-sidebar .menu-item.active,
+.layout .admin-sidebar .menu-item.active:hover {
+  background:
+    linear-gradient(155deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0) 42%),
+    linear-gradient(165deg, #34d399 0%, #10b981 48%, #059669 100%) !important;
+  color: var(--color-text-on-primary) !important;
+  border-color: rgba(255, 255, 255, 0.28);
 }
 
 .admin-sidebar .menu-item.active i {
-  color: var(--color-text-on-primary);
+  color: #ffffff;
 }
 
 .admin-sidebar .menu-item:disabled {

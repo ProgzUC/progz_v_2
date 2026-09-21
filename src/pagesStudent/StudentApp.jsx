@@ -13,6 +13,7 @@ import CompilerPage from "./components/Compiler/CompilerPage";
 
 import Header from "./components/Header/Header";
 import CourseDetails from "./components/CourseDetails/CourseDetails";
+import AnnouncementBanner from "../components/common/AnnouncementBanner/AnnouncementBanner";
 import "./StudentGlobal.css";
 
 export default function StudentApp() {
@@ -26,6 +27,7 @@ export default function StudentApp() {
   return (
     <div className="student-app-layout student-header">
       <Header onLogout={handleLogout} />
+      <AnnouncementBanner source="student" />
       <main className="student-main-content">
       <Routes>
         <Route path="/" element={

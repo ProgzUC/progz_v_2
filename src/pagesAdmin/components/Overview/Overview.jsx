@@ -4,6 +4,7 @@ import "./Overview.css";
 
 import StudentListModal from "../StudentListModal/StudentListModal";
 import Loader from "../../../components/common/Loader/Loader";
+import NotificationBell from "../../../components/common/NotificationBell/NotificationBell";
 import { useAdminDashboard } from "../../../hooks/useAdminStats";
 import { getStoredUser } from "../../../utils/authStorage";
 import { useAdminTheme } from "../../context/AdminThemeContext";
@@ -508,10 +509,11 @@ const Overview = () => {
             <i className="bi bi-download"></i>
           </button>
 
-          <Link to="/admin/approve-users" className="icon-action" title="Notifications">
-            <i className="bi bi-bell"></i>
-            {numbers.pending > 0 && <span className="notify-badge">{numbers.pending}</span>}
-          </Link>
+          <NotificationBell
+            variant="admin"
+            triggerClassName="icon-action"
+            settingsHref="/admin/settings?section=notifications"
+          />
 
           <div className="profile-chip">
             <img src={avatarFallback(user?.name || "Admin")} alt="" />

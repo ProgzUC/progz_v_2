@@ -18,6 +18,19 @@
   color: var(--color-text);
 }
 
+.admin-notify-dock {
+  position: sticky;
+  top: 12px;
+  z-index: 40;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 8px 8px;
+}
+
+.admin-mobile-header .notify-bell {
+  margin-left: auto;
+}
+
 .admin-menu-toggle {
   width: 44px;
   height: 44px;
@@ -81,6 +94,10 @@ body.admin-no-scroll {
 
   .admin-sidebar-backdrop {
     display: block;
+  }
+
+  .admin-notify-dock {
+    display: none;
   }
 }
 

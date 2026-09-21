@@ -1,0 +1,214 @@
+.notify-bell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notify-bell-btn {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md, 10px);
+  border: 1px solid var(--color-border, rgba(15, 23, 42, 0.12));
+  background: var(--color-surface, #fff);
+  color: var(--color-text-secondary, #475569);
+  cursor: pointer;
+}
+
+.notify-bell-btn i {
+  font-size: 1.05rem;
+}
+
+.notify-bell-btn:hover,
+.notify-bell-btn[aria-expanded="true"] {
+  border-color: var(--color-primary-muted, #6ee7b7);
+  color: var(--color-primary, #064e3b);
+  background: var(--color-primary-light, #ecfdf5);
+}
+
+.notify-bell-btn:focus-visible {
+  outline: 2px solid var(--color-focus-ring, #10b981);
+  outline-offset: 2px;
+}
+
+.notify-bell-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: var(--color-error, #dc2626);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.notify-panel {
+  position: fixed;
+  z-index: 1400;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--color-surface, #fff);
+  color: var(--color-text, #0f172a);
+  border: 1px solid var(--color-border, rgba(15, 23, 42, 0.12));
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.18);
+}
+
+.notify-panel-head,
+.notify-panel-foot {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border, rgba(15, 23, 42, 0.08));
+}
+
+.notify-panel-foot {
+  border-bottom: 0;
+  border-top: 1px solid var(--color-border, rgba(15, 23, 42, 0.08));
+  flex-direction: column;
+}
+
+.notify-panel-head strong,
+.notify-pref-row strong,
+.notify-item strong {
+  display: block;
+  font-size: 0.95rem;
+  line-height: 1.3;
+}
+
+.notify-panel-head span,
+.notify-item small,
+.notify-pref-row em,
+.notify-item em,
+.notify-empty {
+  color: var(--color-text-secondary, #64748b);
+}
+
+.notify-panel-head span {
+  font-size: 0.75rem;
+}
+
+.notify-text-btn {
+  border: 0;
+  background: transparent;
+  color: var(--color-primary, #064e3b);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.notify-text-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.notify-panel-list {
+  overflow: auto;
+  min-height: 120px;
+}
+
+.notify-empty {
+  margin: 0;
+  padding: 28px 16px;
+  text-align: center;
+  font-size: 0.88rem;
+}
+
+.notify-item {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+
+.notify-item i {
+  margin-top: 2px;
+  color: var(--color-primary, #064e3b);
+}
+
+.notify-item em {
+  display: -webkit-box;
+  margin: 4px 0 0;
+  font-style: normal;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.notify-item small {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.7rem;
+}
+
+.notify-item:hover {
+  background: var(--color-bg-muted, #f8fafc);
+}
+
+.notify-item.is-unread {
+  background: var(--color-primary-light, #ecfdf5);
+}
+
+.notify-prefs {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 220px;
+  overflow: auto;
+}
+
+.notify-pref-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.notify-pref-row em {
+  display: block;
+  margin-top: 2px;
+  font-style: normal;
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.notify-pref-row input {
+  margin-top: 4px;
+}
+
+.admin-notify-dock .notify-bell-btn,
+.admin-mobile-header .notify-bell-btn,
+.admin-overview-page .notify-bell-btn {
+  background: var(--color-surface);
+}
+
+@media (max-width: 640px) {
+  .notify-panel {
+    left: 8px !important;
+    width: calc(100vw - 16px) !important;
+  }
+}
