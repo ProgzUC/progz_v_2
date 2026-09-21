@@ -3,7 +3,13 @@ import { useSearchParams } from "react-router-dom";
 import { useAdminTheme } from "../../context/AdminThemeContext";
 import { useAdminDashboard } from "../../../hooks/useAdminStats";
 import { useOperationalSummary } from "../../../hooks/useReports";
-import { sendAnnouncementEmail } from "../../../api/adminApi";
+import {
+  createAnnouncement,
+  deleteAnnouncement,
+  fetchAdminAnnouncements,
+  fetchAnnouncementRecipients,
+  updateAnnouncement,
+} from "../../../api/adminApi";
 import { showError, showSuccess } from "../../../utils/toast";
 import {
   useNotificationPrefs,
@@ -49,9 +55,10 @@ const DENSITY_OPTIONS = [
 ];
 
 const AUDIENCE_OPTIONS = [
-  { id: "all", label: "Everyone" },
-  { id: "trainers", label: "Trainers" },
+  { id: "custom", label: "Specific emails" },
   { id: "students", label: "Students" },
+  { id: "trainers", label: "Trainers" },
+  { id: "all", label: "Everyone" },
 ];
 
 function ThemePreview({ mode, resolvedMode, accent, accents, accentGradient }) {
@@ -479,65 +486,108 @@ function BrandingPanel() {
 }
 
 function AnnouncementsPanel() {
-  const {
-    announcements,
-    addAnnouncement,
-    updateAnnouncement,
-    removeAnnouncement,
-    prefs,
-    setPrefs,
-    branding,
-  } = useAdminTheme();
+  const { branding } = useAdminTheme();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const [audience, setAudience] = useState("all");
-  const [email, setEmail] = useState(prefs.lastAnnouncementEmail || "");
+  const [audience, setAudience] = useState("custom");
+  const [email, setEmail] = useState("");
   const [sending, setSending] = useState(false);
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [recipientCount, setRecipientCount] = useState(null);
+
+  const loadItems = async () => {
+    const data = await fetchAdminAnnouncements();
+    setItems(data?.items || []);
+  };
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchAdminAnnouncements()
+      .then((data) => {
+        if (!cancelled) setItems(data?.items || []);
+      })
+      .catch(() => {
+        if (!cancelled) setItems([]);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchAnnouncementRecipients(audience, email)
+      .then((data) => {
+        if (!cancelled) setRecipientCount(data?.count ?? 0);
+      })
+      .catch(() => {
+        if (!cancelled) setRecipientCount(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [audience, email]);
 
   const publish = async () => {
     if (!title.trim()) return;
-    const recipient = email.trim();
-    if (!recipient) {
-      showError("Add an email address before publishing");
+    if (audience === "custom" && !email.trim()) {
+      showError("Add at least one email for a specific send");
       return;
     }
 
     setSending(true);
     try {
-      await sendAnnouncementEmail({
-        email: recipient,
+      const result = await createAnnouncement({
         title: title.trim(),
         body: body.trim(),
+        audience,
+        email: email.trim(),
         academyName: branding?.academyName || "ProgZ",
       });
-
-      addAnnouncement({
-        title,
-        body,
-        audience,
-        active: true,
-        email: recipient,
-        emailSent: true,
-      });
-
-      setPrefs({ lastAnnouncementEmail: recipient });
       setTitle("");
       setBody("");
-      setAudience("all");
-      showSuccess(`Announcement emailed to ${recipient}`);
+      setAudience("custom");
+      showSuccess(result?.message || "Announcement published");
+      await loadItems();
     } catch (err) {
-      showError(err.response?.data?.message || err.message || "Failed to send announcement email");
+      showError(err.response?.data?.message || err.message || "Failed to publish announcement");
     } finally {
       setSending(false);
     }
   };
+
+  const toggleActive = async (item) => {
+    try {
+      const result = await updateAnnouncement(item.id, { active: !item.active });
+      showSuccess(result?.message || "Announcement updated");
+      await loadItems();
+    } catch (err) {
+      showError(err.response?.data?.message || "Failed to update announcement");
+    }
+  };
+
+  const removeItem = async (item) => {
+    try {
+      await deleteAnnouncement(item.id);
+      showSuccess("Announcement deleted");
+      await loadItems();
+    } catch (err) {
+      showError(err.response?.data?.message || "Failed to delete announcement");
+    }
+  };
+
+  const canPublish = Boolean(title.trim()) && (audience !== "custom" || Boolean(email.trim()));
 
   return (
     <div className="as-panel-stack">
       <section className="as-block">
         <header className="as-block-head">
           <h2>New announcement</h2>
-          <p>Compose a notice and email it to a student, trainer, or any address you enter.</p>
+          <p>Publish a notice to the portal and email the selected audience.</p>
         </header>
         <div className="as-form-grid">
           <label className="as-field as-field-wide">
@@ -564,7 +614,7 @@ function AnnouncementsPanel() {
             </select>
           </label>
           <label className="as-field">
-            <span>Email</span>
+            <span>{audience === "custom" ? "Email" : "Extra email (optional)"}</span>
             <input
               type="text"
               value={email}
@@ -575,14 +625,16 @@ function AnnouncementsPanel() {
           </label>
         </div>
         <p className="as-help">
-          Publish sends the announcement email from Progz Support. Separate multiple addresses with commas.
+          {recipientCount == null
+            ? "Publish sends email from ProgZ Academy and shows the notice in the portal."
+            : `This will email ${recipientCount} recipient${recipientCount === 1 ? "" : "s"}.`}
         </p>
         <div className="as-block-actions">
           <button
             type="button"
             className="as-btn as-btn-primary"
             onClick={publish}
-            disabled={sending || !title.trim() || !email.trim()}
+            disabled={sending || !canPublish}
           >
             {sending ? "Sending…" : "Publish announcement"}
           </button>
@@ -592,33 +644,38 @@ function AnnouncementsPanel() {
       <section className="as-block">
         <header className="as-block-head">
           <h2>Published</h2>
-          <p>{announcements.length} announcement{announcements.length === 1 ? "" : "s"}</p>
+          <p>
+            {loading
+              ? "Loading…"
+              : `${items.length} announcement${items.length === 1 ? "" : "s"}`}
+          </p>
         </header>
-        {announcements.length === 0 ? (
+        {loading ? (
+          <div className="as-empty">Loading announcements…</div>
+        ) : items.length === 0 ? (
           <div className="as-empty">No announcements yet. Publish one above.</div>
         ) : (
           <ul className="as-announce-list">
-            {announcements.map((item) => (
+            {items.map((item) => (
               <li key={item.id} className={`as-announce-item ${item.active ? "" : "is-off"}`}>
                 <div>
                   <strong>{item.title}</strong>
                   <p>{item.body || "No message body"}</p>
                   <span>
                     {AUDIENCE_OPTIONS.find((a) => a.id === item.audience)?.label || "Everyone"} ·{" "}
-                    {new Date(item.createdAt).toLocaleDateString()}
-                    {item.email ? ` · ${item.email}` : ""}
-                    {item.emailSent ? " · sent" : " · draft saved"}
+                    {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : ""}
+                    {item.emailStats?.total
+                      ? ` · ${item.emailStats.sent}/${item.emailStats.total} emailed`
+                      : item.emailStatus
+                        ? ` · ${item.emailStatus}`
+                        : ""}
                   </span>
                 </div>
                 <div className="as-announce-actions">
-                  <button
-                    type="button"
-                    className="as-btn"
-                    onClick={() => updateAnnouncement(item.id, { active: !item.active })}
-                  >
+                  <button type="button" className="as-btn" onClick={() => toggleActive(item)}>
                     {item.active ? "Pause" : "Activate"}
                   </button>
-                  <button type="button" className="as-btn as-btn-danger" onClick={() => removeAnnouncement(item.id)}>
+                  <button type="button" className="as-btn as-btn-danger" onClick={() => removeItem(item)}>
                     Delete
                   </button>
                 </div>
