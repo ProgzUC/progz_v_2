@@ -5,6 +5,7 @@ import "./Overview.css";
 import StudentListModal from "../StudentListModal/StudentListModal";
 import Loader from "../../../components/common/Loader/Loader";
 import NotificationBell from "../../../components/common/NotificationBell/NotificationBell";
+import AdminAccountMenu from "../AdminAccountMenu/AdminAccountMenu";
 import { useAdminDashboard } from "../../../hooks/useAdminStats";
 import { getStoredUser } from "../../../utils/authStorage";
 import { useAdminTheme } from "../../context/AdminThemeContext";
@@ -195,7 +196,6 @@ const Overview = () => {
 
   const user = getStoredUser();
   const firstName = (user?.name || "Admin").split(" ")[0];
-  const roleLabel = user?.role ? String(user.role).replace(/^\w/, (c) => c.toUpperCase()) : "Super Admin";
 
   const searchRef = useRef(null);
   const [query, setQuery] = useState("");
@@ -515,13 +515,7 @@ const Overview = () => {
             settingsHref="/admin/settings?section=notifications"
           />
 
-          <div className="profile-chip">
-            <img src={avatarFallback(user?.name || "Admin")} alt="" />
-            <div>
-              <strong>{user?.name || "Admin"}</strong>
-              <span>{roleLabel}</span>
-            </div>
-          </div>
+          <AdminAccountMenu />
         </div>
       </div>
 

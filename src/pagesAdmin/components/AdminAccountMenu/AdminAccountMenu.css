@@ -1,0 +1,175 @@
+.admin-account-menu {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.admin-account-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 6px 12px 6px 6px;
+  border: 1px solid color-mix(in srgb, var(--color-primary-muted) 35%, var(--color-border));
+  border-radius: 999px;
+  background: var(--color-primary-light);
+  color: var(--color-text);
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-account-trigger:hover {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-muted);
+}
+
+.admin-account-trigger:focus-visible {
+  outline: 2px solid var(--color-focus-ring);
+  outline-offset: 2px;
+}
+
+.admin-account-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--color-primary-soft);
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.admin-account-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  min-width: 0;
+  text-align: left;
+}
+
+.admin-account-name {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  line-height: 1.2;
+  white-space: nowrap;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-account-role {
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  line-height: 1.2;
+}
+
+.admin-account-chevron {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  margin-left: 2px;
+}
+
+.admin-account-menu.is-compact .admin-account-trigger {
+  padding: 4px 10px 4px 4px;
+  min-height: 40px;
+  gap: 6px;
+}
+
+.admin-account-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 1200;
+  min-width: 220px;
+  padding: 10px 0 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  animation: admin-account-in 0.16s ease;
+}
+
+.admin-account-section {
+  margin: 0 0 4px;
+  padding: 4px 16px 8px;
+  font-size: 11px;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.admin-account-item {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--color-text);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.admin-account-item:hover,
+.admin-account-item:focus-visible {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  outline: none;
+}
+
+@keyframes admin-account-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.layout[data-admin-mode="dark"] .admin-account-trigger {
+  background: color-mix(in srgb, var(--color-primary-bright) 12%, var(--color-surface));
+  border-color: color-mix(in srgb, var(--color-primary-bright) 28%, var(--color-border));
+}
+
+.layout[data-admin-mode="dark"] .admin-account-avatar {
+  background: color-mix(in srgb, var(--color-primary-bright) 22%, transparent);
+  color: var(--color-primary-muted);
+}
+
+.layout[data-admin-mode="dark"] .admin-account-dropdown {
+  background: var(--color-card-bg);
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-xl);
+}
+
+@media (max-width: 768px) {
+  .admin-account-name {
+    max-width: 96px;
+  }
+
+  .admin-account-dropdown {
+    min-width: 200px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-account-dropdown {
+    animation: none;
+  }
+}

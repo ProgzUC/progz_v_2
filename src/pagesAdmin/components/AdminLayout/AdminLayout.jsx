@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Sidebar from "../Sidebar/Sidebar";
 import SkipLink from "../../../components/common/SkipLink/SkipLink";
 import NotificationBell from "../../../components/common/NotificationBell/NotificationBell";
+import AdminAccountMenu from "../AdminAccountMenu/AdminAccountMenu";
 import { AdminThemeProvider, useAdminTheme } from "../../context/AdminThemeContext";
 import "../../styles/admin-theme.css";
 import "./AdminLayout.css";
@@ -65,12 +66,16 @@ const AdminLayoutShell = ({ children }) => {
               <span className="sr-only">{mobileNavOpen ? "Close menu" : "Open menu"}</span>
             </button>
             <p className="admin-mobile-title">Admin Portal</p>
-            <NotificationBell variant="admin" settingsHref="/admin/settings?section=notifications" />
+            <div className="admin-mobile-actions">
+              <NotificationBell variant="admin" settingsHref="/admin/settings?section=notifications" />
+              <AdminAccountMenu compact />
+            </div>
           </header>
 
           {!isOverview ? (
             <div className="admin-notify-dock" aria-hidden={false}>
               <NotificationBell variant="admin" settingsHref="/admin/settings?section=notifications" />
+              <AdminAccountMenu />
             </div>
           ) : null}
 

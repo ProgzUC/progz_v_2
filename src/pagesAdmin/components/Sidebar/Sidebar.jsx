@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { runManualSyncAndWait } from "../../../api/userApi";
-import { logout } from "../../../api/authApi";
 import { useAdminTheme } from "../../context/AdminThemeContext";
 import Swal from "sweetalert2";
 import "./Sidebar.css";
 
 const NAV_ITEMS = [
   { to: "/admin/overview", icon: "bi-grid", label: "Dashboard" },
-  { to: "/admin/courses", icon: "bi-inbox", label: "Courses" },
+  { to: "/admin/courses", icon: "bi-book", label: "Courses" },
   { to: "/admin/instructors", icon: "bi-person-video3", label: "Instructors" },
   { to: "/admin/students", icon: "bi-mortarboard", label: "Students" },
   { to: "/admin/batches", icon: "bi-layers", label: "Batches" },
   { to: "/admin/enroll", icon: "bi-person-plus", label: "Enroll Students" },
   { to: "/admin/approve-users", icon: "bi-check-circle", label: "Approve Users" },
   { to: "/admin/recycle-bin", icon: "bi-trash", label: "Recycle Bin" },
-  { to: "/admin/reports", icon: "bi-bar-chart-line", label: "Reports & Analytics" },
+  { to: "/admin/reports", icon: "bi-pie-chart", label: "Reports & Analytics" },
   { to: "/admin/monitoring", icon: "bi-activity", label: "Monitoring" },
+];
+
+const FOOTER_ITEMS = [
   { to: "/admin/settings", icon: "bi-gear", label: "Settings" },
 ];
 
@@ -27,29 +29,11 @@ const canHoverExpand = () =>
 const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
   const [hoverOpen, setHoverOpen] = useState(false);
   const [syncLoading, setSyncLoading] = useState(false);
-  const navigate = useNavigate();
   const expanded = hoverOpen || mobileOpen;
   const { branding } = useAdminTheme();
   const academyName = branding?.academyName?.trim() || "ProgZ Academy";
   const tagline = branding?.tagline?.trim() || "Super Admin";
   const logoSrc = branding?.logoDataUrl || "/admin/logo.png";
-
-  const handleLogout = () => {
-    Swal.fire({
-      title: "Logout?",
-      text: "Are you sure you want to logout?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, logout!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        await logout();
-        navigate("/", { replace: true });
-      }
-    });
-  };
 
   const handleSync = async () => {
     if (syncLoading) return;
@@ -157,36 +141,44 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
 
         <div className="menu-spacer" aria-hidden="true" />
 
-        <div className="menu-divider" role="presentation" />
+        <div className="sidebar-footer">
+          {FOOTER_ITEMS.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) => (isActive ? "menu-item active" : "menu-item")}
+              onClick={handleNavClick}
+              title={!expanded ? item.label : undefined}
+            >
+              {({ isActive }) => (
+                <>
+                  <i className={`bi ${item.icon}`} aria-hidden="true" />
+                  {expanded ? <span>{item.label}</span> : <span className="sr-only">{item.label}</span>}
+                  {isActive ? <span className="sr-only"> (current page)</span> : null}
+                </>
+              )}
+            </NavLink>
+          ))}
 
-        <button
-          type="button"
-          className="menu-item"
-          onClick={handleSync}
-          disabled={syncLoading}
-          aria-busy={syncLoading}
-          title={!expanded ? (syncLoading ? "Syncing from Zen" : "Sync from Zen") : undefined}
-        >
-          <i
-            className={`bi ${syncLoading ? "bi-arrow-repeat spin-icon" : "bi-arrow-repeat"}`}
-            aria-hidden="true"
-          />
-          {expanded ? (
-            <span>{syncLoading ? "Syncing..." : "Sync from Zen"}</span>
-          ) : (
-            <span className="sr-only">{syncLoading ? "Syncing from Zen" : "Sync from Zen"}</span>
-          )}
-        </button>
-
-        <button
-          type="button"
-          className="menu-item logout-item"
-          onClick={handleLogout}
-          title={!expanded ? "Logout" : undefined}
-        >
-          <i className="bi bi-box-arrow-right" aria-hidden="true" />
-          {expanded ? <span>Logout</span> : <span className="sr-only">Logout</span>}
-        </button>
+          <button
+            type="button"
+            className="menu-item"
+            onClick={handleSync}
+            disabled={syncLoading}
+            aria-busy={syncLoading}
+            title={!expanded ? (syncLoading ? "Syncing from Zen" : "Sync from Zen") : undefined}
+          >
+            <i
+              className={`bi ${syncLoading ? "bi-arrow-repeat spin-icon" : "bi-arrow-repeat"}`}
+              aria-hidden="true"
+            />
+            {expanded ? (
+              <span>{syncLoading ? "Syncing..." : "Sync from Zen"}</span>
+            ) : (
+              <span className="sr-only">{syncLoading ? "Syncing from Zen" : "Sync from Zen"}</span>
+            )}
+          </button>
+        </div>
       </nav>
     </aside>
   );

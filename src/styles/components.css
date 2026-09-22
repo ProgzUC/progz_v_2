@@ -239,7 +239,13 @@
   color: var(--color-navbar-hover-text);
 }
 
-.admin-sidebar .menu-item,
+/* Icon → label (left → right), vertically centered */
+.admin-sidebar .menu-item {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .ds-sidebar-item {
   flex-direction: row-reverse;
   justify-content: flex-end;

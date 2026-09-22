@@ -371,32 +371,6 @@
   line-height: 1;
 }
 
-.admin-overview-page .profile-chip {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-left: 4px;
-}
-
-.admin-overview-page .profile-chip img {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--radius-full);
-  object-fit: cover;
-}
-
-.admin-overview-page .profile-chip strong {
-  display: block;
-  font-size: var(--font-size-sm);
-  color: var(--color-text);
-  line-height: 1.2;
-}
-
-.admin-overview-page .profile-chip span {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-}
-
 /* ── Stats ── */
 .admin-overview-page .stats-row {
   display: grid;
@@ -809,6 +783,10 @@
   .admin-overview-page .dashboard-actions {
     flex-wrap: wrap;
     justify-content: flex-start;
+  }
+
+  .admin-overview-page .dashboard-actions .admin-account-menu {
+    display: none;
   }
 
   .admin-overview-page .donut-layout {
