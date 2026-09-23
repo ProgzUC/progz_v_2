@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchPendingUsers, fetchAllUsers, approveUser, rejectUser, deleteUser, updateUser, adminCreateUser } from "../api/userApi";
+import { fetchPendingUsers, fetchAllUsers, approveUser, rejectUser, deleteUser, updateUser, adminCreateUser, bulkImportStudents } from "../api/userApi";
 
 export const usePendingUsers = () =>
     useQuery({
@@ -63,6 +63,19 @@ export const useAdminCreateUser = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["allUsers"] });
             queryClient.refetchQueries({ queryKey: ["allUsers"] });
+        },
+    });
+};
+
+export const useBulkImportStudents = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: bulkImportStudents,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["allUsers"] });
+            queryClient.invalidateQueries({ queryKey: ["pendingUsers"] });
+            queryClient.invalidateQueries({ queryKey: ["batches"] });
+            queryClient.invalidateQueries({ queryKey: ["courses"] });
         },
     });
 };

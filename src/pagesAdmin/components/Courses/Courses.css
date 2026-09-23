@@ -2,14 +2,15 @@
 
 .admin-courses-page {
   background: var(--color-bg);
-  padding: 32px 40px 48px;
+  padding: 20px 40px 48px;
   min-height: 100vh;
   font-family: var(--font-family-base), sans-serif;
   color: var(--color-text);
 }
 
 .admin-courses-page .page-hero {
-  margin-bottom: 22px;
+  margin-bottom: 18px;
+  padding-right: 280px; /* clear floating notify + account menu */
 }
 
 .admin-courses-page .course-title {
@@ -113,47 +114,9 @@
   flex: 0 1 220px;
 }
 
-.admin-courses-page .instructor-filter .filter-icon {
-  position: absolute;
-  left: 14px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--color-text-muted);
-  font-size: 15px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.admin-courses-page .instructor-filter .filter-chevron {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--color-text-muted);
-  font-size: 12px;
-  pointer-events: none;
-}
-
-.admin-courses-page .instructor-filter select {
-  appearance: none;
-  -webkit-appearance: none;
-  padding: 11px 36px 11px 40px;
-  border-radius: 10px;
-  border: 1px solid var(--color-border);
+.admin-courses-page .instructor-filter .app-select {
   width: 100%;
   min-width: 200px;
-  font-size: 14px;
-  font-family: var(--font-family-base), sans-serif;
-  color: var(--color-text);
-  background: var(--color-surface);
-  cursor: pointer;
-  outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.admin-courses-page .instructor-filter select:focus {
-  border-color: var(--color-primary-bright);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 12%, transparent);
 }
 
 .admin-courses-page .instructor-filter .clear-filter-btn {
@@ -175,6 +138,10 @@
 
 .admin-courses-page .instructor-filter .clear-filter-btn:hover {
   color: #e34545;
+}
+
+.admin-courses-page .instructor-filter:has(.clear-filter-btn) .app-select-trigger {
+  padding-right: 48px;
 }
 
 .admin-courses-page .content-card {
@@ -236,7 +203,7 @@
 }
 
 .admin-courses-page .course-table tbody tr {
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid #DFF0D8;
   transition: background 0.15s;
 }
 
@@ -269,8 +236,8 @@
 .admin-courses-page .enrolled-badge {
   display: inline-flex;
   align-items: center;
-  background: #F3F4F6;
-  color: #4B5563;
+  background: #DFF0D8;
+  color: #718096;
   font-size: 12px;
   font-weight: 500;
   padding: 5px 12px;
@@ -302,13 +269,13 @@
   border: none;
   border-radius: 8px;
   background: transparent;
-  color: #9CA3AF;
+  color: #8B9AAB;
   border-right: none;
 }
 
 .admin-courses-page .admin-action-btn:hover {
   background: var(--color-bg-muted);
-  color: #4B5563;
+  color: #718096;
 }
 
 .admin-courses-page .admin-action-btn--danger:hover {
@@ -374,6 +341,10 @@
 @media screen and (max-width: 768px) {
   .admin-courses-page {
     padding: 20px 16px 32px;
+  }
+
+  .admin-courses-page .page-hero {
+    padding-right: 0;
   }
 
   .admin-courses-page .course-title {

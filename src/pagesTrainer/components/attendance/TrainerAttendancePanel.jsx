@@ -163,7 +163,7 @@ export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSc
             text: "Are you sure you want to end this class session?",
             icon: "question",
             showCancelButton: true,
-            confirmButtonColor: "#064E3B",
+            confirmButtonColor: "#0B3D2E",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, End Class",
         });
@@ -188,7 +188,7 @@ export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSc
             <p><strong>Duration:</strong> ${endedSession.duration}</p>
             <p><strong>Present:</strong> ${presentCount} | <strong>Late:</strong> ${lateCount} | <strong>Absent:</strong> ${absentCount}</p>
           `,
-                    confirmButtonColor: "#064E3B",
+                    confirmButtonColor: "#0B3D2E",
                 });
             } catch (error) {
                 Swal.fire({

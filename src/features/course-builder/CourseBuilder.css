@@ -312,7 +312,7 @@
   width: 100%;
   height: 44px;
   box-sizing: border-box;
-  background: #ecfdf5;
+  background: #E8F5E1;
   color: var(--color-primary);
   border: 1.5px dashed var(--color-primary-muted);
   border-radius: 14px;
@@ -416,7 +416,7 @@
   border-radius: 999px;
   background: var(--color-primary);
   color: var(--color-text-on-primary);
-  box-shadow: 0 8px 18px rgba(6, 78, 59, 0.16);
+  box-shadow: 0 8px 18px rgba(11, 61, 46, 0.16);
 }
 
 .add-module-dashed-btn .add-module-dashed-icon svg {
@@ -642,7 +642,7 @@
 .section-chevron {
   cursor: pointer;
   font-size: 20px;
-  color: #4b5563;
+  color: #718096;
   transition: 0.2s;
   pointer-events: none;
 }
@@ -729,7 +729,7 @@
   border-color: var(--color-primary);
   color: var(--color-text-on-primary);
   transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(6, 78, 59, 0.16);
+  box-shadow: 0 8px 18px rgba(11, 61, 46, 0.16);
 }
 
 .add-video-btn-icon {
@@ -739,7 +739,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(6, 78, 59, 0.08);
+  background: rgba(11, 61, 46, 0.08);
   flex-shrink: 0;
 }
 

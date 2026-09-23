@@ -1,0 +1,193 @@
+.app-select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  font-family: var(--font-family-base, "Lato", sans-serif);
+}
+
+/* When reused with form utility classes, don't double-style the wrapper */
+.app-select.modal-input,
+.app-select.form-control,
+.app-select.form-select,
+.app-select.profile-select-input {
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  min-height: 0;
+}
+
+.app-select.is-disabled {
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.app-select-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted, #8B9AAB);
+  font-size: 15px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.app-select.has-icon .app-select-trigger {
+  padding-left: 42px;
+}
+
+.app-select-trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 40px 10px 16px;
+  border: 1px solid var(--color-border, #C9DBC0);
+  border-radius: 12px;
+  background: var(--color-surface, #F9FCF7);
+  color: var(--color-text, #073B32);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+
+.app-select-trigger:hover {
+  border-color: var(--color-primary-muted, #7DCBB0);
+}
+
+/* Exact open look: mint/seafoam border, no blue OS ring */
+.app-select.is-open .app-select-trigger,
+.app-select-trigger:focus-visible {
+  outline: none;
+  border-color: var(--color-primary-muted, #7DCBB0);
+  box-shadow: none;
+}
+
+.app-select-value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--color-text, #073B32);
+}
+
+.app-select-value.is-placeholder {
+  color: var(--color-text-muted, #8B9AAB);
+}
+
+.app-select-chevron {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: var(--color-text-muted, #8B9AAB);
+  pointer-events: none;
+}
+
+.app-select-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 1300;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  max-height: 280px;
+  overflow-y: auto;
+  background: var(--color-surface, #F9FCF7);
+  border: 1px solid var(--color-border, #C9DBC0);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(11, 61, 46, 0.1);
+}
+
+.app-select-option {
+  display: block;
+  width: 100%;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-text, #073B32);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.app-select-option:hover,
+.app-select-option:focus-visible {
+  outline: none;
+  background: var(--color-primary-light, #DFF0D8);
+  color: var(--color-primary, #0B3D2E);
+}
+
+/* Exact reference: dark forest green + white text */
+.app-select-option.is-active,
+.app-select-option.is-active:hover,
+.app-select-option.is-active:focus-visible {
+  background: var(--color-primary, #0B3D2E) !important;
+  color: #ffffff !important;
+}
+
+.app-select-option:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+[data-theme="dark"] .app-select-trigger,
+html.dark-mode .app-select-trigger,
+.layout[data-admin-mode="dark"] .app-select-trigger {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .app-select.is-open .app-select-trigger,
+html.dark-mode .app-select.is-open .app-select-trigger,
+.layout[data-admin-mode="dark"] .app-select.is-open .app-select-trigger {
+  border-color: var(--color-primary-muted, #7DCBB0);
+}
+
+[data-theme="dark"] .app-select-value,
+html.dark-mode .app-select-value,
+.layout[data-admin-mode="dark"] .app-select-value {
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .app-select-menu,
+html.dark-mode .app-select-menu,
+.layout[data-admin-mode="dark"] .app-select-menu {
+  background: var(--color-card-bg, var(--color-surface));
+  border-color: var(--color-border);
+}
+
+[data-theme="dark"] .app-select-option,
+html.dark-mode .app-select-option,
+.layout[data-admin-mode="dark"] .app-select-option {
+  color: var(--color-text);
+}
+
+[data-theme="dark"] .app-select-option.is-active,
+[data-theme="dark"] .app-select-option.is-active:hover,
+html.dark-mode .app-select-option.is-active,
+html.dark-mode .app-select-option.is-active:hover,
+.layout[data-admin-mode="dark"] .app-select-option.is-active,
+.layout[data-admin-mode="dark"] .app-select-option.is-active:hover {
+  background: var(--color-primary, #0B3D2E) !important;
+  color: #ffffff !important;
+}

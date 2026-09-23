@@ -3,6 +3,7 @@ import "./AttendanceReport.css";
 import { useBatchAttendanceReport } from "../../../hooks/useClassSession";
 import { useBatches } from "../../../hooks/useBatches";
 import Loader from "../../../components/common/Loader/Loader";
+import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import { downloadAttendanceCSV } from "../../../api/reportApi";
 import { Link } from "react-router-dom";
 
@@ -43,22 +44,24 @@ export default function AttendanceReport() {
 
                 <div className="batch-selector">
                     <label htmlFor="batch-select">Select Batch:</label>
-                    <select
+                    <AppSelect
                         id="batch-select"
+                        className="batch-dropdown"
                         value={selectedBatchId}
                         onChange={handleBatchChange}
-                        className="batch-dropdown"
                         disabled={batchesLoading}
-                    >
-                        <option value="">
-                            {batchesLoading ? "Loading batches..." : "-- Select a Batch --"}
-                        </option>
-                        {batches?.map((batch) => (
-                            <option key={batch._id} value={batch._id}>
-                                {batch.name}
-                            </option>
-                        ))}
-                    </select>
+                        aria-label="Select batch"
+                        options={[
+                            {
+                                value: "",
+                                label: batchesLoading ? "Loading batches..." : "-- Select a Batch --",
+                            },
+                            ...(batches || []).map((batch) => ({
+                                value: batch._id,
+                                label: batch.name,
+                            })),
+                        ]}
+                    />
                 </div>
             </div>
 

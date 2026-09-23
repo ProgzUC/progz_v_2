@@ -10,6 +10,7 @@ import Loader from "../../../../components/common/Loader/Loader";
 import SortableList from "../../../../components/common/Sortable/SortableList";
 import SortableItem from "../../../../components/common/Sortable/SortableItem";
 import FileDropZone from "../../../../components/common/FileDropZone/FileDropZone";
+import AppSelect from "../../../../components/common/AppSelect/AppSelect";
 import CoursePreviewModal from "../../../../components/common/CoursePreviewModal/CoursePreviewModal";
 import RichTextEditor from "../../../../components/common/RichTextEditor/RichTextEditor";
 import { COURSE_FILE_ACCEPT } from "../../../../utils/fileDrop";
@@ -445,14 +446,17 @@ const CreateCourse = ({ onBack, onSave, initialData, isEditMode = false }) => {
                                         <div className="section-details">
                                           {/* Lesson Type */}
                                           <label>Lesson Type</label>
-                                          <select 
-                                            value={section.lessonType || "Theory"} 
-                                            onChange={(e) => updateSectionField(mIndex, sIndex, "lessonType", e.target.value)}
-                                            style={{ width: "100%", padding: "10px", marginBottom: "15px", borderRadius: "4px", border: "1px solid #ccc" }}
-                                          >
-                                            <option value="Theory">Theory</option>
-                                            <option value="Coding Practice">Coding Practice</option>
-                                          </select>
+                                          <div style={{ marginBottom: "15px" }}>
+                                            <AppSelect
+                                              value={section.lessonType || "Theory"}
+                                              onChange={(e) => updateSectionField(mIndex, sIndex, "lessonType", e.target.value)}
+                                              aria-label="Lesson Type"
+                                              options={[
+                                                { value: "Theory", label: "Theory" },
+                                                { value: "Coding Practice", label: "Coding Practice" },
+                                              ]}
+                                            />
+                                          </div>
 
                                           {/* Materials Upload */}
                                           <label>Learning Material Files</label>

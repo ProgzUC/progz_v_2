@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './EducationEmployment.css';
+import AppSelect from '../../components/common/AppSelect/AppSelect';
 
 const EducationEmployment = ({ onCancel, onSubmit, initialValues = {} }) => {
 
@@ -68,16 +69,14 @@ const EducationEmployment = ({ onCancel, onSubmit, initialValues = {} }) => {
                     <div key={field.id} className="form-group">
                         <label className="form-label">{field.label}</label>
                         {field.type === 'select' ? (
-                            <select
+                            <AppSelect
                                 className={`form-select ${errors[field.id] ? 'error' : ''}`}
                                 name={field.id}
                                 value={formData[field.id]}
                                 onChange={handleChange}
-                            >
-                                {field.options.map(opt => (
-                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                ))}
-                            </select>
+                                aria-label={field.label}
+                                options={field.options}
+                            />
                         ) : (
                             <input
                                 type={field.type}

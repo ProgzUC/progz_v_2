@@ -41,7 +41,7 @@ const Footer = () => {
             icon: "success",
             title: "Subscribed!",
             text: "Thank you for subscribing to our newsletter.",
-            confirmButtonColor: "#064E3B",
+            confirmButtonColor: "#0B3D2E",
             timer: 3000,
             timerProgressBar: true,
         });

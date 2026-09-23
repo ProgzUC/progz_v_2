@@ -8,7 +8,7 @@
   max-width: var(--container-wide);
   margin: 0 auto;
   background:
-    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(16, 185, 129, 0.07), transparent 60%),
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(16, 168, 121, 0.07), transparent 60%),
     var(--mc-page-bg, var(--color-bg));
   font-family: var(--font-family-base), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
@@ -69,8 +69,8 @@
 
 .trainer-myCourses .stat-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 28px rgba(6, 78, 59, 0.1);
-  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: 0 10px 28px rgba(11, 61, 46, 0.1);
+  border-color: rgba(16, 168, 121, 0.35);
 }
 
 .trainer-myCourses .stat-card:hover::after {
@@ -94,8 +94,8 @@
 }
 
 .trainer-myCourses .stat-courses {
-  background: linear-gradient(145deg, #ECFDF5, #D1FAE5);
-  color: #047857;
+  background: linear-gradient(145deg, #E8F5E1, #DFF0D8);
+  color: #0B3D2E;
 }
 
 .trainer-myCourses .stat-sections {
@@ -104,13 +104,13 @@
 }
 
 .trainer-myCourses .stat-students {
-  background: linear-gradient(145deg, #ECFDF5, #A7F3D0);
+  background: linear-gradient(145deg, #E8F5E1, #DFF0D8);
   color: #065F46;
 }
 
 .trainer-myCourses .stat-published {
-  background: linear-gradient(145deg, #ECFDF5, #6EE7B7);
-  color: #064E3B;
+  background: linear-gradient(145deg, #E8F5E1, #7DCBB0);
+  color: #0B3D2E;
 }
 
 .trainer-myCourses .stat-info {
@@ -147,17 +147,21 @@
   gap: 22px;
 }
 
-/* ========== Course card (media-banner style) ========== */
+/* ========== Course card (reference layout) ========== */
 .trainer-myCourses .trainer-course-card {
   --card-i: 0;
+  --tone-soft: #E8F5E1;
+  --tone-mid: #DFF0D8;
+  --tone-ink: #0B3D2E;
+  --tone-icon: #10A879;
   background: var(--mc-card-bg, var(--color-surface));
   border-radius: 16px;
   border: 1px solid var(--mc-card-border, var(--color-border));
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
   padding: 0;
   display: flex;
   flex-direction: column;
-  min-height: 300px;
+  min-height: 360px;
   overflow: hidden;
   position: relative;
   opacity: 0;
@@ -169,22 +173,57 @@
     border-color 0.25s ease;
 }
 
+.trainer-myCourses .trainer-course-card.theme-emerald {
+  --tone-soft: #E8F5E1;
+  --tone-mid: #DFF0D8;
+  --tone-ink: #0B3D2E;
+  --tone-icon: #10A879;
+}
+
+.trainer-myCourses .trainer-course-card.theme-sky {
+  --tone-soft: #EFF6FF;
+  --tone-mid: #DBEAFE;
+  --tone-ink: #1D4ED8;
+  --tone-icon: #3B82F6;
+}
+
+.trainer-myCourses .trainer-course-card.theme-violet {
+  --tone-soft: #F5F3FF;
+  --tone-mid: #EDE9FE;
+  --tone-ink: #6D28D9;
+  --tone-icon: #8B5CF6;
+}
+
+.trainer-myCourses .trainer-course-card.theme-amber {
+  --tone-soft: #FFFBEB;
+  --tone-mid: #FEF3C7;
+  --tone-ink: #B45309;
+  --tone-icon: #F59E0B;
+}
+
+.trainer-myCourses .trainer-course-card.theme-teal {
+  --tone-soft: #F0FDFA;
+  --tone-mid: #CCFBF1;
+  --tone-ink: #0F766E;
+  --tone-icon: #14B8A6;
+}
+
 .trainer-myCourses .trainer-course-card:hover {
   transform: translateY(-6px);
   box-shadow:
-    0 18px 40px rgba(6, 78, 59, 0.12),
-    0 4px 12px rgba(15, 23, 42, 0.06);
-  border-color: rgba(16, 185, 129, 0.4);
+    0 18px 40px rgba(11, 61, 46, 0.1),
+    0 4px 12px rgba(15, 23, 42, 0.05);
+  border-color: color-mix(in srgb, var(--tone-icon) 35%, var(--color-border));
 }
 
-/* Media banner */
+/* Media banner — soft pastel + waves */
 .trainer-myCourses .trainer-card-media {
   position: relative;
-  height: 110px;
+  height: 128px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #064E3B 0%, #059669 55%, #10B981 100%);
+  background: linear-gradient(160deg, var(--tone-soft) 0%, var(--tone-mid) 100%);
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -193,36 +232,36 @@
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 85% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 35%),
-    linear-gradient(135deg, transparent 40%, rgba(255, 255, 255, 0.06) 100%);
+    radial-gradient(ellipse 80% 60% at 10% 100%, color-mix(in srgb, var(--tone-icon) 18%, transparent), transparent 55%),
+    radial-gradient(ellipse 70% 50% at 90% 0%, color-mix(in srgb, var(--tone-icon) 14%, transparent), transparent 50%),
+    radial-gradient(circle at 50% 120%, color-mix(in srgb, var(--tone-icon) 10%, transparent), transparent 45%);
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .trainer-myCourses .trainer-course-card:hover .course-media-pattern {
-  transform: scale(1.12);
+  transform: scale(1.08);
 }
 
 .trainer-myCourses .course-avatar-box {
   position: relative;
   z-index: 1;
-  width: 58px;
-  height: 58px;
-  border-radius: 14px;
+  width: 72px;
+  height: 72px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #064E3B;
-  background: rgba(255, 255, 255, 0.95);
-  border: 2px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  color: var(--tone-ink);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 10px 28px color-mix(in srgb, var(--tone-ink) 16%, transparent);
   overflow: hidden;
   flex-shrink: 0;
   transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .trainer-myCourses .trainer-course-card:hover .course-avatar-box {
-  transform: scale(1.08) translateY(-2px);
+  transform: scale(1.06) translateY(-2px);
 }
 
 .trainer-myCourses .course-avatar-img {
@@ -232,100 +271,120 @@
 }
 
 .trainer-myCourses .course-avatar-initial {
-  font-size: 22px;
+  font-size: 26px;
   font-weight: 800;
-  color: #064E3B;
+  color: var(--tone-ink);
   letter-spacing: -0.02em;
 }
 
 .trainer-myCourses .logo-icon-svg {
-  font-size: 30px;
-  color: #064E3B;
+  font-size: 40px;
+  color: var(--tone-icon);
 }
 
 /* Body */
 .trainer-myCourses .trainer-card-body {
   flex: 1;
-  padding: 18px 18px 12px;
+  padding: 18px 18px 10px;
   display: flex;
   flex-direction: column;
   min-width: 0;
 }
 
-.trainer-myCourses .trainer-course-subtitle {
-  font-size: 11px;
-  color: var(--color-primary-bright);
+.trainer-myCourses .trainer-course-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  margin: 0 0 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10px;
   font-weight: 700;
-  margin: 0 0 6px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  color: var(--tone-ink);
+  background: var(--tone-soft);
 }
 
 .trainer-myCourses .trainer-course-title {
-  font-size: 1.0625rem;
+  font-size: 1.125rem;
   font-weight: 700;
   color: var(--mc-card-title, var(--color-text));
-  margin: 0 0 14px;
-  line-height: 1.35;
+  margin: 0 0 8px;
+  line-height: 1.3;
   letter-spacing: -0.02em;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  transition: color 0.2s ease;
 }
 
-.trainer-myCourses .trainer-course-card:hover .trainer-course-title {
-  color: var(--color-primary);
+.trainer-myCourses .trainer-course-desc {
+  margin: 0 0 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .trainer-myCourses .trainer-course-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 12px;
   margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-border);
 }
 
 .trainer-myCourses .meta-badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
   font-size: 12px;
   font-weight: 600;
   color: var(--mc-card-meta, var(--color-text-secondary));
   line-height: 1;
-  padding: 6px 10px;
-  background: var(--color-bg-muted);
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
+.trainer-myCourses .meta-icon {
+  width: 28px;
+  height: 28px;
   border-radius: 8px;
-  transition: background 0.2s ease, color 0.2s ease;
-}
-
-.trainer-myCourses .trainer-course-card:hover .meta-badge {
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-}
-
-.trainer-myCourses .meta-badge svg {
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tone-soft);
+  color: var(--tone-ink);
   flex-shrink: 0;
-  opacity: 0.75;
+}
+
+.trainer-myCourses .meta-icon svg {
+  font-size: 13px;
+}
+
+.trainer-myCourses .meta-divider {
+  width: 1px;
+  height: 22px;
+  background: var(--color-border);
+  flex-shrink: 0;
 }
 
 /* Footer */
 .trainer-myCourses .trainer-card-footer {
-  padding: 4px 18px 18px;
+  padding: 8px 18px 18px;
   margin-top: auto;
 }
 
 .trainer-myCourses .trainer-view-course-btn {
   width: 100%;
-  height: 42px;
+  height: 44px;
   padding: 0 16px;
-  border-radius: 10px;
-  border: none;
-  background: linear-gradient(135deg, #064E3B 0%, #047857 100%);
-  color: #FFFFFF;
+  border-radius: 12px;
   font-size: 13px;
   font-weight: 700;
   font-family: inherit;
@@ -337,33 +396,37 @@
   gap: 8px;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(6, 78, 59, 0.25);
   transition:
     transform 0.2s ease,
-    box-shadow 0.25s ease;
+    box-shadow 0.25s ease,
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
-.trainer-myCourses .trainer-view-course-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.15) 50%, transparent 70%);
-  transform: translateX(-100%);
-  transition: transform 0.5s ease;
+.trainer-myCourses .trainer-view-course-btn.is-solid {
+  border: none;
+  background: var(--color-primary);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(11, 61, 46, 0.22);
 }
 
-.trainer-myCourses .trainer-view-course-btn:hover {
+.trainer-myCourses .trainer-view-course-btn.is-outline {
+  border: 1.5px solid var(--color-primary);
+  background: transparent;
+  color: var(--color-primary);
+  box-shadow: none;
+}
+
+.trainer-myCourses .trainer-view-course-btn.is-solid:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 22px rgba(6, 78, 59, 0.35);
+  filter: brightness(1.05);
+  box-shadow: 0 8px 20px rgba(11, 61, 46, 0.3);
 }
 
-.trainer-myCourses .trainer-view-course-btn:hover::before {
-  transform: translateX(100%);
-}
-
-.trainer-myCourses .trainer-view-course-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(6, 78, 59, 0.2);
+.trainer-myCourses .trainer-view-course-btn.is-outline:hover {
+  background: var(--color-primary-light);
+  transform: translateY(-1px);
 }
 
 .trainer-myCourses .trainer-view-course-btn:focus-visible {
@@ -392,10 +455,10 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.72);
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  color: var(--tone-ink);
   font-size: 18px;
   display: flex;
   align-items: center;
@@ -409,14 +472,14 @@
 
 .trainer-myCourses .three-dots-action-btn:hover,
 .trainer-myCourses .three-dots-action-btn.is-open {
-  background: rgba(255, 255, 255, 0.92);
-  border-color: rgba(255, 255, 255, 0.95);
-  color: #064E3B;
+  background: #FFFFFF;
+  border-color: #FFFFFF;
+  color: var(--tone-ink);
   transform: scale(1.05);
 }
 
 .trainer-myCourses .three-dots-action-btn:focus-visible {
-  outline: 2px solid #FFFFFF;
+  outline: 2px solid var(--tone-ink);
   outline-offset: 2px;
 }
 
@@ -505,7 +568,7 @@
 .trainer-myCourses .create-new-course-card {
   --card-i: 0;
   background: transparent;
-  border: 1.5px dashed rgba(16, 185, 129, 0.35);
+  border: 1.5px dashed rgba(16, 168, 121, 0.35);
   border-radius: 16px;
   padding: 28px 20px;
   min-height: 300px;
@@ -533,7 +596,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(16, 185, 129, 0.08), transparent 65%);
+  background: radial-gradient(circle at center, rgba(16, 168, 121, 0.08), transparent 65%);
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -542,7 +605,7 @@
   border-color: var(--color-primary-bright);
   background: rgba(236, 253, 245, 0.6);
   transform: translateY(-6px);
-  box-shadow: 0 14px 32px rgba(6, 78, 59, 0.1);
+  box-shadow: 0 14px 32px rgba(11, 61, 46, 0.1);
 }
 
 .trainer-myCourses .create-new-course-card:hover::before {
@@ -560,20 +623,20 @@
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background: linear-gradient(135deg, #064E3B 0%, #10B981 100%);
+  background: linear-gradient(135deg, #0B3D2E 0%, #10A879 100%);
   color: #FFFFFF;
   font-size: 26px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 14px;
-  box-shadow: 0 8px 20px rgba(6, 78, 59, 0.28);
+  box-shadow: 0 8px 20px rgba(11, 61, 46, 0.28);
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
 }
 
 .trainer-myCourses .create-new-course-card:hover .plus-icon-circle {
   transform: scale(1.1) rotate(90deg);
-  box-shadow: 0 12px 28px rgba(6, 78, 59, 0.35);
+  box-shadow: 0 12px 28px rgba(11, 61, 46, 0.35);
 }
 
 .trainer-myCourses .create-card-title {
@@ -652,7 +715,7 @@
 [data-theme="dark"] .my-courses-container.trainer-myCourses,
 html.dark-mode .my-courses-container.trainer-myCourses {
   background:
-    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(16, 185, 129, 0.1), transparent 60%),
+    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(16, 168, 121, 0.1), transparent 60%),
     var(--mc-page-bg, var(--color-bg));
 }
 
@@ -671,5 +734,5 @@ html.dark-mode .trainer-myCourses .course-avatar-initial {
 
 [data-theme="dark"] .trainer-myCourses .create-new-course-card:hover,
 html.dark-mode .trainer-myCourses .create-new-course-card:hover {
-  background: rgba(16, 185, 129, 0.08);
+  background: rgba(16, 168, 121, 0.08);
 }

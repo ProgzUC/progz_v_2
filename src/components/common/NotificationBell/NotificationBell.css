@@ -25,13 +25,13 @@
 
 .notify-bell-btn:hover,
 .notify-bell-btn[aria-expanded="true"] {
-  border-color: var(--color-primary-muted, #6ee7b7);
-  color: var(--color-primary, #064e3b);
-  background: var(--color-primary-light, #ecfdf5);
+  border-color: var(--color-primary-muted, #7DCBB0);
+  color: var(--color-primary, #0B3D2E);
+  background: var(--color-primary-light, #E8F5E1);
 }
 
 .notify-bell-btn:focus-visible {
-  outline: 2px solid var(--color-focus-ring, #10b981);
+  outline: 2px solid var(--color-focus-ring, #10A879);
   outline-offset: 2px;
 }
 
@@ -105,7 +105,7 @@
 .notify-text-btn {
   border: 0;
   background: transparent;
-  color: var(--color-primary, #064e3b);
+  color: var(--color-primary, #0B3D2E);
   font-size: 0.78rem;
   font-weight: 700;
   cursor: pointer;
@@ -144,7 +144,7 @@
 
 .notify-item i {
   margin-top: 2px;
-  color: var(--color-primary, #064e3b);
+  color: var(--color-primary, #0B3D2E);
 }
 
 .notify-item em {
@@ -169,7 +169,7 @@
 }
 
 .notify-item.is-unread {
-  background: var(--color-primary-light, #ecfdf5);
+  background: var(--color-primary-light, #E8F5E1);
 }
 
 .notify-prefs {

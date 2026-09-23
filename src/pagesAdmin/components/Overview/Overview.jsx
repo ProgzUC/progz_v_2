@@ -26,7 +26,7 @@ import { motion } from "framer-motion";
 const MotionDiv = motion.div;
 
 const avatarFallback = (name = "User") =>
-  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=064E3B&color=fff&size=64`;
+  `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0B3D2E&color=fff&size=64`;
 
 const COURSE_TONES = ["emerald", "amber", "sky", "rose"];
 
@@ -172,8 +172,8 @@ const Overview = () => {
   const [pickerOpen, setPickerOpen] = useState(false);
   const pickerRef = useRef(null);
   const { accentSwatch } = useAdminTheme();
-  const chartPrimary = accentSwatch?.[0] || "#064E3B";
-  const chartBright = accentSwatch?.[1] || "#10B981";
+  const chartPrimary = accentSwatch?.[0] || "#0B3D2E";
+  const chartBright = accentSwatch?.[1] || "#10A879";
 
   const rangeLabel = useMemo(
     () => formatRangeLabel(range.startDate, range.endDate),
@@ -540,7 +540,7 @@ const Overview = () => {
                   dataKey="month"
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fill: "#9CA3AF", fontSize: 12 }}
+                  tick={{ fill: "#718096", fontSize: 12 }}
                 />
                 <Tooltip content={<EnrollTooltip />} />
                 <Area

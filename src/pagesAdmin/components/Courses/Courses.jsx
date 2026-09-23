@@ -6,6 +6,7 @@ import { useCourses, useDeleteCourse } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import PersonStack from "../../../components/common/PersonStack/PersonStack";
+import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import { LuEye, LuPencil, LuUserPlus, LuTrash2 } from "react-icons/lu";
 
 const Courses = () => {
@@ -127,20 +128,16 @@ const Courses = () => {
           </div>
 
           <div className="instructor-filter">
-            <i className="bi bi-person filter-icon" aria-hidden="true"></i>
-            <select
+            <AppSelect
+              icon="bi-person"
               value={selectedInstructor}
               onChange={(e) => setSelectedInstructor(e.target.value)}
               aria-label="Filter by instructor"
-            >
-              <option value="">All instructors</option>
-              {instructorOptions.map(({ id, label }) => (
-                <option key={id} value={id}>
-                  {label}
-                </option>
-              ))}
-            </select>
-            <i className="bi bi-chevron-down filter-chevron" aria-hidden="true"></i>
+              options={[
+                { value: "", label: "All instructors" },
+                ...instructorOptions.map(({ id, label }) => ({ value: id, label })),
+              ]}
+            />
             {selectedInstructor && (
               <button
                 type="button"
@@ -149,7 +146,7 @@ const Courses = () => {
                 title="Clear filter"
                 aria-label="Clear instructor filter"
               >
-                <i className="bi bi-x" aria-hidden="true"></i>
+                <i className="bi bi-x" aria-hidden="true" />
               </button>
             )}
           </div>

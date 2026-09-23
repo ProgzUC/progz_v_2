@@ -7,7 +7,7 @@ export async function confirmDelete(title, text) {
     icon: "warning",
     showCancelButton: true,
     confirmButtonColor: "#ef4444",
-    cancelButtonColor: "#6b7280",
+    cancelButtonColor: "#718096",
     confirmButtonText: "Yes, delete",
     cancelButtonText: "Cancel",
     reverseButtons: true,

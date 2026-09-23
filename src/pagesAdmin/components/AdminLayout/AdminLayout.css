@@ -19,14 +19,20 @@
 }
 
 .admin-notify-dock {
-  position: sticky;
-  top: 12px;
+  position: absolute;
+  top: 16px;
+  right: 24px;
   z-index: 40;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 10px;
-  padding: 0 8px 8px;
+  padding: 0;
+  pointer-events: none;
+}
+
+.admin-notify-dock > * {
+  pointer-events: auto;
 }
 
 .admin-mobile-actions {

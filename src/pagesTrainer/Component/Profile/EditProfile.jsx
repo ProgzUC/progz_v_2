@@ -11,6 +11,7 @@ import './Profile.css';
 import { useTrainerProfile, useUpdateTrainerProfile } from '../../../hooks/useTrainerProfile';
 import Loader from '../../../components/common/Loader/Loader';
 import FileDropZone from '../../../components/common/FileDropZone/FileDropZone';
+import AppSelect from '../../../components/common/AppSelect/AppSelect';
 import { uploadToCloudinary } from '../../../utils/cloudinary';
 import { showSuccess, showError } from '../../../utils/toast';
 
@@ -185,16 +186,18 @@ const EditProfile = ({ onCancel }) => {
                                     </div>
                                     <div className="form-group">
                                         <label>Gender</label>
-                                        <select
+                                        <AppSelect
                                             name="gender"
                                             value={formData.gender || ''}
                                             onChange={handleChange}
-                                        >
-                                            <option value="">Select Gender</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                            <option value="Other">Other</option>
-                                        </select>
+                                            aria-label="Gender"
+                                            options={[
+                                                { value: '', label: 'Select Gender' },
+                                                { value: 'Male', label: 'Male' },
+                                                { value: 'Female', label: 'Female' },
+                                                { value: 'Other', label: 'Other' },
+                                            ]}
+                                        />
                                     </div>
                                     <div className="form-group">
                                         <label>Address</label>
@@ -273,16 +276,18 @@ const EditProfile = ({ onCancel }) => {
                                     </div>
                                     <div className="form-group">
                                         <label>Employment Status</label>
-                                        <select
+                                        <AppSelect
                                             name="employmentStatus"
                                             value={formData.employmentStatus || ''}
                                             onChange={handleChange}
-                                        >
-                                            <option value="">Select Status</option>
-                                            <option value="Work">Work</option>
-                                            <option value="Student">Student</option>
-                                            <option value="Unemployed">Unemployed</option>
-                                        </select>
+                                            aria-label="Employment Status"
+                                            options={[
+                                                { value: '', label: 'Select Status' },
+                                                { value: 'Work', label: 'Work' },
+                                                { value: 'Student', label: 'Student' },
+                                                { value: 'Unemployed', label: 'Unemployed' },
+                                            ]}
+                                        />
                                     </div>
                                     <div className="form-group">
                                         <label>Skills</label>

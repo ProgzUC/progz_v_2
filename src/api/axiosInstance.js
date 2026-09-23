@@ -68,6 +68,7 @@ axiosInstance.interceptors.response.use(
       originalRequest &&
       !originalRequest._retry &&
       !originalRequest.url?.includes('/auth/login') &&
+      !originalRequest.url?.includes('/auth/magic-login') &&
       !originalRequest.url?.includes('/auth/refresh')
     ) {
       if (isRefreshing) {
@@ -93,7 +94,11 @@ axiosInstance.interceptors.response.use(
       } catch (refreshErr) {
         processQueue(refreshErr);
         clearAuthSession();
-        if (window.location.pathname !== '/login' && window.location.pathname !== '/') {
+        if (
+          window.location.pathname !== '/login' &&
+          window.location.pathname !== '/' &&
+          !window.location.pathname.startsWith('/magic-login')
+        ) {
           window.location.href = '/login';
         }
         return Promise.reject(refreshErr);

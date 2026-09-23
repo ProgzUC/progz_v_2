@@ -23,7 +23,7 @@
   border: 1px solid #e8eee9;
   border-radius: 28px;
   padding: 22px 28px 28px;
-  box-shadow: 0 12px 36px rgba(6, 78, 59, 0.06);
+  box-shadow: 0 12px 36px rgba(11, 61, 46, 0.06);
   margin-bottom: 24px;
 }
 
@@ -72,8 +72,8 @@
   height: 176px;
   border-radius: 22px;
   overflow: hidden;
-  background: linear-gradient(160deg, #064e3b 0%, #0b3d30 55%, #05281f 100%);
-  box-shadow: 0 10px 24px rgba(6, 78, 59, 0.2);
+  background: linear-gradient(160deg, #0B3D2E 0%, #0b3d30 55%, #05281f 100%);
+  box-shadow: 0 10px 24px rgba(11, 61, 46, 0.2);
 }
 
 .cv-hero-thumb-img {
@@ -98,8 +98,8 @@
 
 .cv-brand-logo.html { color: #A67C52; }
 .cv-brand-logo.css { color: #5B7C99; }
-.cv-brand-logo.bootstrap { color: #6B7280; }
-.cv-brand-logo.js { color: #059669; }
+.cv-brand-logo.bootstrap { color: #718096; }
+.cv-brand-logo.js { color: #10A879; }
 
 .cv-hero-thumb-title {
   margin: 0;
@@ -143,7 +143,7 @@
 
 .cv-category-pill {
   display: inline-block;
-  background: #d1fae5;
+  background: #DFF0D8;
   color: #065f46;
   font-size: 11px;
   font-weight: 800;
@@ -191,7 +191,7 @@
 }
 
 .cv-hero-meta svg {
-  color: #059669;
+  color: #10A879;
   font-size: 16px;
 }
 
@@ -231,16 +231,16 @@
 }
 
 .course-view-page .cv-hero-actions .cv-preview-btn {
-  background: #064e3b !important;
+  background: #0B3D2E !important;
   color: #fff !important;
-  border: 1.5px solid #064e3b !important;
-  box-shadow: 0 8px 18px rgba(6, 78, 59, 0.22);
+  border: 1.5px solid #0B3D2E !important;
+  box-shadow: 0 8px 18px rgba(11, 61, 46, 0.22);
 }
 
 .course-view-page .cv-hero-actions .cv-edit-btn {
   background: #fff !important;
-  color: #064e3b !important;
-  border: 1.5px solid #064e3b !important;
+  color: #0B3D2E !important;
+  border: 1.5px solid #0B3D2E !important;
   box-shadow: none !important;
 }
 
@@ -265,7 +265,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: rgba(6, 78, 59, 0.08);
+  background: rgba(11, 61, 46, 0.08);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -280,11 +280,11 @@
 
 .course-view-page .cv-hero-actions .cv-preview-btn:hover {
   transform: translateY(-1px);
-  background: #053d2e !important;
+  background: #083028 !important;
 }
 
 .course-view-page .cv-hero-actions .cv-edit-btn:hover {
-  background: #ecfdf5 !important;
+  background: #E8F5E1 !important;
 }
 
 .cv-hero-art {
@@ -330,15 +330,15 @@
 .cv-hero-window-body code {
   font-size: 26px;
   font-weight: 800;
-  color: #064e3b;
+  color: #0B3D2E;
 }
 
 .cv-hero-photo {
   width: 46px;
   height: 36px;
   border-radius: 8px;
-  background: #ecfdf5;
-  color: #059669;
+  background: #E8F5E1;
+  color: #10A879;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -349,7 +349,7 @@
   border: 1px solid #e8eee9;
   border-radius: 24px;
   padding: 20px 22px;
-  box-shadow: 0 8px 24px rgba(6, 78, 59, 0.04);
+  box-shadow: 0 8px 24px rgba(11, 61, 46, 0.04);
 }
 
 .cv-column-header {
@@ -376,7 +376,7 @@
 .cv-preview-link {
   border: none;
   background: transparent;
-  color: #064e3b;
+  color: #0B3D2E;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -395,7 +395,7 @@
 
 .cv-preview-link .cv-list-icon.is-open {
   transform: rotate(180deg);
-  color: #064e3b;
+  color: #0B3D2E;
 }
 
 .cv-module-list {
@@ -416,7 +416,7 @@
 .cv-module-row.open {
   background: #f1f5f4;
   border-color: #d8eee4;
-  box-shadow: 0 4px 14px rgba(6, 78, 59, 0.08);
+  box-shadow: 0 4px 14px rgba(11, 61, 46, 0.08);
 }
 
 .course-view-page .cv-module-toggle {
@@ -447,20 +447,20 @@
   height: 44px;
   border-radius: 12px;
   background: #ffffff;
-  border: 1.5px solid #6ee7b7;
-  color: #047857;
+  border: 1.5px solid #7DCBB0;
+  color: #0B3D2E;
   font-weight: 800;
   font-size: 13px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 1px 3px rgba(6, 78, 59, 0.06);
+  box-shadow: 0 1px 3px rgba(11, 61, 46, 0.06);
 }
 
 .cv-module-row.open .cv-module-index {
   background: #ffffff;
-  border-color: #10b981;
+  border-color: #10A879;
   color: #065f46;
 }
 
@@ -516,7 +516,7 @@
 
 .cv-module-lessons svg {
   font-size: 15px;
-  color: #059669;
+  color: #10A879;
   flex-shrink: 0;
 }
 
@@ -529,7 +529,7 @@
 
 .course-view-page .cv-module-toggle .cv-list-icon.is-open {
   transform: rotate(180deg);
-  color: #064e3b;
+  color: #0B3D2E;
 }
 
 .cv-module-body {
@@ -572,8 +572,8 @@
 
 .cv-section-toggle:hover,
 .cv-section-toggle.active {
-  background: #ecfdf5;
-  color: #064e3b;
+  background: #E8F5E1;
+  color: #0B3D2E;
 }
 
 .cv-section-details {

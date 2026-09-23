@@ -5,6 +5,7 @@ import { useStudentProfile, useUpdateStudentProfile, useChangePassword } from ".
 import { useStudentCourses } from "../../../hooks/useStudentCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import FileDropZone from "../../../components/common/FileDropZone/FileDropZone";
+import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import { uploadToCloudinary } from "../../../utils/cloudinary";
 
 import { MdPhone } from "react-icons/md";
@@ -314,16 +315,18 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                         </div>
                         <div className="profile-input-row">
                             <label>Gender</label>
-                            <select
+                            <AppSelect
                                 value={showOtherGender ? "other" : (form.gender || "").toLowerCase()}
                                 onChange={handleGenderSelect}
                                 className="profile-select-input"
-                            >
-                                <option value="">Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
+                                aria-label="Gender"
+                                options={[
+                                    { value: "", label: "Select Gender" },
+                                    { value: "male", label: "Male" },
+                                    { value: "female", label: "Female" },
+                                    { value: "other", label: "Other" },
+                                ]}
+                            />
                             {showOtherGender && (
                                 <input
                                     type="text"

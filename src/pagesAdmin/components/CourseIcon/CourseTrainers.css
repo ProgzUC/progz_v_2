@@ -253,21 +253,17 @@
 .mi-sort {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
-.mi-sort select {
-  border: none;
-  background: transparent;
-  color: #0f172a;
+.mi-sort .app-select {
+  min-width: 150px;
+}
+
+.mi-sort .app-select-trigger {
+  min-height: 34px;
+  padding: 6px 32px 6px 10px;
   font-size: 0.8rem;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 0;
-}
-
-.mi-sort select:focus {
-  outline: none;
 }
 
 /* ── Instructor cards ── */
@@ -293,7 +289,7 @@
 }
 
 .mi-instructor-card:hover {
-  border-color: #d1d5db;
+  border-color: #B5CBA8;
   box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
 }
 

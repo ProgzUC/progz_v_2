@@ -2,7 +2,7 @@
 
 .admin-enroll-students-page {
   background: var(--color-bg);
-  padding: 32px 40px 48px;
+  padding: 20px 40px 48px;
   min-height: 100vh;
   font-family: var(--font-family-base), sans-serif;
   color: var(--color-text);
@@ -11,7 +11,8 @@
 }
 
 .admin-enroll-students-page .page-hero {
-  margin-bottom: 22px;
+  margin-bottom: 18px;
+  padding-right: 280px;
 }
 
 .admin-enroll-students-page .page-title {
@@ -89,7 +90,7 @@
   gap: 12px;
   padding: 14px 18px;
   margin-bottom: 16px;
-  background: #F3F4F6;
+  background: #DFF0D8;
   border: 1px solid var(--color-border);
   border-radius: 12px;
   color: var(--color-text);
@@ -98,7 +99,7 @@
 }
 
 .admin-enroll-students-page .zen-crm-banner i {
-  color: #6B7280;
+  color: #718096;
   font-size: 1.2rem;
   margin-top: 2px;
   flex-shrink: 0;
@@ -190,6 +191,18 @@
   background-repeat: no-repeat !important;
   background-position: right 14px center !important;
   background-size: 12px 8px !important;
+}
+
+.admin-enroll-students-page .app-select.input-select {
+  padding: 0;
+  border: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  min-height: 0;
+}
+
+.admin-enroll-students-page .app-select.input-select .app-select-trigger {
+  min-height: 44px;
 }
 
 .admin-enroll-students-page .input-select:focus {
@@ -489,7 +502,7 @@
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid #DFF0D8;
   transition: background 0.15s;
 }
 
@@ -498,7 +511,7 @@
 }
 
 .admin-enroll-students-page .student-select-row:hover {
-  background: #FAFBFC;
+  background: #F9FCF7;
 }
 
 .admin-enroll-students-page .student-select-row.selected {
@@ -530,7 +543,7 @@
 .admin-enroll-students-page .person-avatar.tone-green { background: var(--color-primary-bright); }
 .admin-enroll-students-page .person-avatar.tone-blue { background: #5B7C99; }
 .admin-enroll-students-page .person-avatar.tone-orange { background: #A67C52; }
-.admin-enroll-students-page .person-avatar.tone-purple { background: #6B7280; }
+.admin-enroll-students-page .person-avatar.tone-purple { background: #718096; }
 .admin-enroll-students-page .person-avatar.tone-teal { background: #5F8F86; }
 .admin-enroll-students-page .person-avatar.tone-rose { background: #8B6B6B; }
 
@@ -572,7 +585,7 @@
 
 .admin-enroll-students-page .zen-course-hint {
   font-size: 11px !important;
-  color: #6B7280 !important;
+  color: #718096 !important;
 }
 
 .admin-enroll-students-page .status-pill {
@@ -590,8 +603,8 @@
 }
 
 .admin-enroll-students-page .status-pill.pending {
-  background: #F3F4F6;
-  color: #6B7280;
+  background: #DFF0D8;
+  color: #718096;
 }
 
 .admin-enroll-students-page .empty-bulk {
@@ -621,7 +634,7 @@
 
 /* CSV */
 .admin-enroll-students-page .csv-upload-dropzone {
-  border: 2px dashed #A7F3D0;
+  border: 2px dashed #DFF0D8;
   background: var(--color-primary-light);
   border-radius: 12px;
   padding: 40px 24px;
@@ -673,7 +686,7 @@
 .admin-enroll-students-page .file-loaded-badge {
   background: var(--color-surface);
   color: var(--color-primary-bright);
-  border: 1px solid #A7F3D0;
+  border: 1px solid #DFF0D8;
   padding: 8px 14px;
   border-radius: 8px;
   font-size: 13px;
@@ -706,7 +719,7 @@
 
 .admin-enroll-students-page .email-chip {
   background: var(--color-primary-light);
-  border: 1px solid #A7F3D0;
+  border: 1px solid #DFF0D8;
   padding: 4px 12px;
   border-radius: 999px;
   font-size: 12px;

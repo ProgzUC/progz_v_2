@@ -1,6 +1,6 @@
 /** Hex / RGB helpers for custom admin accents */
 
-export function normalizeHex(value, fallback = "#064E3B") {
+export function normalizeHex(value, fallback = "#0B3D2E") {
   const raw = String(value || "").trim();
   const m = /^#?([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.exec(raw);
   if (!m) return fallback;
@@ -50,8 +50,8 @@ function rgba(hex, alpha) {
  * @param {boolean} darkMode
  */
 export function buildCustomAccentVars(primaryHex, brightHex, darkMode = false) {
-  const primary = normalizeHex(primaryHex, "#064E3B");
-  const bright = normalizeHex(brightHex, "#10B981");
+  const primary = normalizeHex(primaryHex, "#0B3D2E");
+  const bright = normalizeHex(brightHex, "#10A879");
   const p = hexToRgb(primary);
   const br = hexToRgb(bright);
   const white = { r: 255, g: 255, b: 255 };

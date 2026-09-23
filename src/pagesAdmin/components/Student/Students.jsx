@@ -122,6 +122,14 @@ const Students = () => {
           <button
             type="button"
             className="create-btn"
+            onClick={() => navigate("/admin/bulk-import")}
+            style={{ marginRight: 8 }}
+          >
+            Bulk Import
+          </button>
+          <button
+            type="button"
+            className="create-btn"
             onClick={() => navigate("/admin/add-student")}
           >
             + Add student

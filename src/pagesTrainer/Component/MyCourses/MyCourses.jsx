@@ -20,6 +20,20 @@ import { confirmDelete } from '../../../utils/confirmDelete';
 import { showSuccess, showError } from '../../../utils/toast';
 import Loader from '../../../components/common/Loader/Loader';
 
+const COURSE_THEMES = [
+    { id: 'emerald', match: /html/, category: 'Web Development' },
+    { id: 'sky', match: /css/, category: 'Web Development' },
+    { id: 'violet', match: /bootstrap|react/, category: 'Frontend Framework' },
+    { id: 'amber', match: /javascript|js|es6|node/, category: 'JavaScript' },
+    { id: 'teal', match: /git/, category: 'Tools' },
+];
+
+const getCourseTheme = (name = '') => {
+    const lower = String(name).toLowerCase();
+    const found = COURSE_THEMES.find((t) => t.match.test(lower));
+    return found || { id: 'emerald', category: 'Course Curriculum' };
+};
+
 const getCourseLogo = (name, initial) => {
     const lower = (name || '').toLowerCase();
     if (lower.includes('html')) {
@@ -44,6 +58,12 @@ const getCourseLogo = (name, initial) => {
         return <FaGithub className="logo-icon-svg" aria-hidden="true" />;
     }
     return <span className="course-avatar-initial">{initial}</span>;
+};
+
+const shortDescription = (course) => {
+    const raw = String(course.description || course.courseDescription || '').replace(/<[^>]+>/g, '').trim();
+    if (raw) return raw.length > 90 ? `${raw.slice(0, 87)}…` : raw;
+    return `Master ${course.courseName || 'this course'} with structured lessons and hands-on practice.`;
 };
 
 const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
@@ -160,11 +180,13 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                     const initial = (course.courseName || 'C').charAt(0).toUpperCase();
                     const sections = course.totalSections || 0;
                     const students = course.totalStudents || 0;
+                    const theme = getCourseTheme(course.courseName);
+                    const isPrimaryCta = index === 0;
 
                     return (
                         <article
                             key={courseId}
-                            className="trainer-course-card"
+                            className={`trainer-course-card theme-${theme.id}`}
                             style={{ '--card-i': index }}
                         >
                             <div className="trainer-card-media">
@@ -220,16 +242,22 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                             </div>
 
                             <div className="trainer-card-body">
-                                <p className="trainer-course-subtitle">Course Curriculum</p>
+                                <span className="trainer-course-badge">{theme.category}</span>
                                 <h3 className="trainer-course-title">{course.courseName}</h3>
+                                <p className="trainer-course-desc">{shortDescription(course)}</p>
 
                                 <div className="trainer-course-meta">
                                     <span className="meta-badge">
-                                        <BsBook aria-hidden="true" />
+                                        <span className="meta-icon" aria-hidden="true">
+                                            <BsBook />
+                                        </span>
                                         <span>{sections} Sections</span>
                                     </span>
+                                    <span className="meta-divider" aria-hidden="true" />
                                     <span className="meta-badge">
-                                        <BsPeople aria-hidden="true" />
+                                        <span className="meta-icon" aria-hidden="true">
+                                            <BsPeople />
+                                        </span>
                                         <span>{students} Students</span>
                                     </span>
                                 </div>
@@ -238,7 +266,7 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                             <div className="trainer-card-footer">
                                 <button
                                     type="button"
-                                    className="trainer-view-course-btn"
+                                    className={`trainer-view-course-btn${isPrimaryCta ? ' is-solid' : ' is-outline'}`}
                                     onClick={() => onManageCourse(course)}
                                 >
                                     <span>View Course</span>

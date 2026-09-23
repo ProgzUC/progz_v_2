@@ -13,6 +13,7 @@ import CreateBatchModal from "../EnrollStudent/CreateBatchModal";
 import AddStudentToBatchModal from "./AddStudentToBatchModal";
 import EditBatchModal from "./EditBatchModal";
 import AccessibleModal from "../../../components/common/AccessibleModal/AccessibleModal";
+import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import { formatBatchCourseNames, getBatchCourseNames } from "../../../features/batches/batchFormState";
 
 const Batches = () => {
@@ -143,18 +144,18 @@ const Batches = () => {
           </div>
 
           <div className="status-filter">
-            <i className="bi bi-funnel filter-icon" aria-hidden="true"></i>
-            <select
+            <AppSelect
+              icon="bi-funnel"
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
               aria-label="Filter by status"
-            >
-              <option value="">All status</option>
-              <option value="active">Active</option>
-              <option value="completed">Completed</option>
-              <option value="upcoming">Upcoming</option>
-            </select>
-            <i className="bi bi-chevron-down filter-chevron" aria-hidden="true"></i>
+              options={[
+                { value: "", label: "All status" },
+                { value: "active", label: "Active" },
+                { value: "completed", label: "Completed" },
+                { value: "upcoming", label: "Upcoming" },
+              ]}
+            />
             {filterStatus && (
               <button
                 type="button"
@@ -163,7 +164,7 @@ const Batches = () => {
                 title="Clear filter"
                 aria-label="Clear status filter"
               >
-                <i className="bi bi-x" aria-hidden="true"></i>
+                <i className="bi bi-x" aria-hidden="true" />
               </button>
             )}
           </div>

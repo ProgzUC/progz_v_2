@@ -110,8 +110,8 @@ const ApproveUser = () => {
       text: `${ids.length} ${activeTab}(s) will be ${isApprove ? "approved" : "rejected"}.`,
       icon: isApprove ? "question" : "warning",
       showCancelButton: true,
-      confirmButtonColor: isApprove ? "#059669" : "#d33",
-      cancelButtonColor: "#6b7280",
+      confirmButtonColor: isApprove ? "#10A879" : "#d33",
+      cancelButtonColor: "#718096",
       confirmButtonText: isApprove ? "Yes, approve all" : "Yes, reject all",
     });
 
@@ -161,7 +161,7 @@ const ApproveUser = () => {
       text: `Are you sure you want to approve ${user.name}?`,
       icon: "question",
       showCancelButton: true,
-      confirmButtonColor: "#059669",
+      confirmButtonColor: "#10A879",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, approve!",
     }).then((result) => {

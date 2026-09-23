@@ -5,13 +5,13 @@ import { Link } from "react-router-dom";
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import pattern from "../../assets/login/pattern.png";
 import "./Auth.css";
-import { login, forgotPassword } from "../../api/authApi";
+import { login, forgotPassword, requestMagicLogin } from "../../api/authApi";
 
 const SignIn = () => {
   const navigate = useNavigate();
 
   // ================= STATE =================
-  // Views: 'login' | 'forgot'
+  // Views: 'login' | 'forgot' | 'magic'
   const [view, setView] = useState("login");
 
   // Login State
@@ -21,8 +21,9 @@ const SignIn = () => {
   const [rememberMe, setRememberMe] = useState(true);
   const [fieldErrors, setFieldErrors] = useState({});
 
-  // Forgot Password State  
+  // Forgot Password / Magic Link State  
   const [forgotEmail, setForgotEmail] = useState("");
+  const [magicEmail, setMagicEmail] = useState("");
 
   // General State
   const [loading, setLoading] = useState(false);
@@ -103,6 +104,34 @@ const SignIn = () => {
     }
   };
 
+  const handleMagicSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setSuccessMessage("");
+    setFieldErrors({});
+
+    if (!magicEmail.trim()) {
+      setFieldErrors({ magicEmail: "Email is required" });
+      return;
+    }
+    if (!emailRegex.test(magicEmail.trim())) {
+      setFieldErrors({ magicEmail: "Please enter a valid email address" });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await requestMagicLogin({ email: magicEmail.trim() });
+      setSuccessMessage(
+        res.msg || `If an account exists for ${magicEmail}, a login link has been sent.`
+      );
+    } catch (err) {
+      setError(err.message || "Could not send login link");
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
 
   // Popup Component
@@ -131,10 +160,8 @@ const SignIn = () => {
           msg={successMessage}
           actionName={"Back to Login"}
           onAction={() => {
-            if (view === "forgot") {
-              // Simulate clicking email link -> go into reset route
-              navigate("/");
-            }
+            setView("login");
+            navigate("/");
           }}
         />
       )}
@@ -228,6 +255,20 @@ const SignIn = () => {
                 {loading ? "Logging in..." : "Login"}
               </button>
 
+              <button
+                type="button"
+                className="forgot forgot-btn"
+                style={{ marginTop: 14, width: "100%", textAlign: "center" }}
+                onClick={() => {
+                  setError("");
+                  setFieldErrors({});
+                  setMagicEmail(email);
+                  setView("magic");
+                }}
+              >
+                Email me a login link instead
+              </button>
+
               <p className="register-text">
                 <Link to="/signup" className="register-link">Sign up</Link> for new account
               </p>
@@ -288,6 +329,51 @@ const SignIn = () => {
           </>
         )}
 
+        {/* VIEW: PASSWORDLESS MAGIC LINK */}
+        {view === "magic" && (
+          <>
+            <button type="button" className="welcome back-link" onClick={() => setView("login")}>
+              ← Back to Login
+            </button>
+            <h2 className="auth-title">Passwordless Login</h2>
+            <p className="auth-subtitle">
+              Enter your registered email and we&apos;ll send a secure one-time link to open your Student Dashboard.
+            </p>
+            <div className="admin-live-region" role="alert" aria-live="polite">
+              {error && <p className="auth-error">{error}</p>}
+            </div>
+
+            <form onSubmit={handleMagicSubmit} className="auth-form" noValidate>
+              <div className={`auth-input-group ${fieldErrors.magicEmail ? "has-error" : ""}`}>
+                <label htmlFor="magic-email">Email</label>
+                <div className="input-wrapper">
+                  <FiMail className="input-icon" aria-hidden="true" />
+                  <input
+                    id="magic-email"
+                    type="email"
+                    placeholder="e.g. student@college.edu"
+                    value={magicEmail}
+                    name="email"
+                    onChange={(e) => {
+                      setMagicEmail(e.target.value);
+                      if (fieldErrors.magicEmail) setFieldErrors((prev) => ({ ...prev, magicEmail: "" }));
+                    }}
+                    aria-invalid={fieldErrors.magicEmail ? "true" : "false"}
+                    aria-describedby={fieldErrors.magicEmail ? "magic-email-error" : undefined}
+                  />
+                </div>
+                {fieldErrors.magicEmail && (
+                  <span className="field-error" id="magic-email-error">
+                    {fieldErrors.magicEmail}
+                  </span>
+                )}
+              </div>
+              <button className="login-btn" type="submit" disabled={loading}>
+                {loading ? "Sending..." : "Send Login Link"}
+              </button>
+            </form>
+          </>
+        )}
 
 
       </div>

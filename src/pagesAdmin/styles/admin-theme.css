@@ -14,17 +14,17 @@
 
 /* ── Accent: Emerald (default / brand) ── */
 .layout[data-admin-accent="emerald"] {
-  --color-primary: #064E3B;
-  --color-primary-hover: #053D2E;
-  --color-primary-active: #042F23;
-  --color-primary-soft: #D1FAE5;
-  --color-primary-light: #ECFDF5;
-  --color-primary-muted: #6EE7B7;
-  --color-primary-bright: #10B981;
-  --color-primary-gradient: linear-gradient(135deg, #064E3B 0%, #10B981 100%);
-  --color-focus-ring: rgba(6, 78, 59, 0.22);
-  --color-surface-dark: #053D2E;
-  --shadow-btn: 0 4px 14px rgba(16, 185, 129, 0.25);
+  --color-primary: #0B3D2E;
+  --color-primary-hover: #083028;
+  --color-primary-active: #0B3D2E;
+  --color-primary-soft: #DFF0D8;
+  --color-primary-light: #DFF0D8;
+  --color-primary-muted: #7DCBB0;
+  --color-primary-bright: #10A879;
+  --color-primary-gradient: linear-gradient(135deg, #0B3D2E 0%, #10A879 100%);
+  --color-focus-ring: rgba(11, 61, 46, 0.22);
+  --color-surface-dark: #0B3D2E;
+  --shadow-btn: 0 4px 14px rgba(16, 168, 121, 0.25);
 }
 
 /* ── Accent: Ocean ── */
@@ -141,19 +141,19 @@
 
 .layout[data-admin-mode="dark"][data-admin-accent="emerald"] {
   --color-primary: #34D399;
-  --color-primary-hover: #6EE7B7;
-  --color-primary-active: #065F46;
-  --color-primary-soft: rgba(16, 185, 129, 0.18);
-  --color-primary-light: rgba(16, 185, 129, 0.12);
-  --color-primary-muted: #6EE7B7;
-  --color-primary-bright: #10B981;
-  --color-primary-gradient: linear-gradient(135deg, #064E3B 0%, #10B981 100%);
+  --color-primary-hover: #7DCBB0;
+  --color-primary-active: #0B3D2E;
+  --color-primary-soft: rgba(16, 168, 121, 0.18);
+  --color-primary-light: rgba(16, 168, 121, 0.12);
+  --color-primary-muted: #7DCBB0;
+  --color-primary-bright: #10A879;
+  --color-primary-gradient: linear-gradient(135deg, #0B3D2E 0%, #10A879 100%);
   --color-text-on-primary: #06281C;
-  --color-focus-ring: rgba(16, 185, 129, 0.35);
+  --color-focus-ring: rgba(16, 168, 121, 0.35);
   --color-surface-dark: #0B0D14;
-  --color-navbar-hover-bg: rgba(16, 185, 129, 0.12);
+  --color-navbar-hover-bg: rgba(16, 168, 121, 0.12);
   --color-navbar-hover-text: #34D399;
-  --shadow-btn: 0 4px 14px rgba(16, 185, 129, 0.25);
+  --shadow-btn: 0 4px 14px rgba(16, 168, 121, 0.25);
 }
 
 .layout[data-admin-mode="dark"][data-admin-accent="ocean"] {

@@ -12,10 +12,10 @@ const ImageWithFallback = ({ src, alt, className, fallbackText }) => {
         if (!text) return ['#008952', '#004d40'];
 
         const colors = [
-            ['#059669', '#047857'], // Green
-            ['#047857', '#064E3B'], // Deep green
+            ['#10A879', '#0B3D2E'], // Green
+            ['#0B3D2E', '#0B3D2E'], // Deep green
             ['#5B7C99', '#475569'], // Slate blue
-            ['#6B7280', '#4B5563'], // Grey
+            ['#718096', '#718096'], // Grey
             ['#5F8F86', '#0F766E'], // Soft teal
             ['#A67C52', '#78716C'], // Taupe
             ['#008952', '#004d40'], // Brand teal

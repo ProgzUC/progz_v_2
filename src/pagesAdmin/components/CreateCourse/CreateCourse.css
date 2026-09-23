@@ -556,7 +556,7 @@ input:focus,
 
 .admin-create-course-page .drag-expand-grip:hover,
 .create-course-page .drag-expand-grip:hover {
-  color: #4b5563;
+  color: #718096;
 }
 
 .admin-create-course-page .drag-expand-grip:active,
@@ -576,7 +576,7 @@ input:focus,
   justify-content: center;
   border: none;
   background: transparent;
-  color: #4b5563;
+  color: #718096;
   font-size: 18px;
   cursor: pointer;
   padding: 2px 4px;

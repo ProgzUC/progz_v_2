@@ -21,21 +21,22 @@ import {
 } from "recharts";
 import Swal from "sweetalert2";
 import { motion, AnimatePresence } from "framer-motion";
+import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import "./MonitoringDashboard.css";
 
-const COLORS = ["#059669", "#047857", "#6B7280", "#9CA3AF"];
+const COLORS = ["#10A879", "#0B3D2E", "#718096", "#8B9AAB"];
 const PIE_COLORS = {
-  "2xx": "#059669",
-  "3xx": "#6B7280",
-  "4xx": "#9CA3AF",
+  "2xx": "#10A879",
+  "3xx": "#718096",
+  "4xx": "#8B9AAB",
   "5xx": "#DC2626"
 };
 const CHART_TOOLTIP_STYLE = {
   backgroundColor: "#FFFFFF",
-  borderColor: "#E5E7EB",
-  color: "#111827",
+  borderColor: "#C9DBC0",
+  color: "#073B32",
   borderRadius: 12,
-  boxShadow: "0 6px 20px rgba(6, 78, 59, 0.08)"
+  boxShadow: "0 6px 20px rgba(11, 61, 46, 0.08)"
 };
 
 export default function MonitoringDashboard() {
@@ -172,7 +173,7 @@ export default function MonitoringDashboard() {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#DC2626",
-      cancelButtonColor: "#064E3B",
+      cancelButtonColor: "#0B3D2E",
       confirmButtonText: "Yes, delete!"
     }).then(async (result) => {
       if (result.isConfirmed) {
@@ -337,7 +338,7 @@ export default function MonitoringDashboard() {
                               className="progress-bar-fill"
                               style={{
                                 width: `${Math.min(metrics?.cpuUsagePercent || 0, 100)}%`,
-                                backgroundColor: metrics?.cpuUsagePercent > 70 ? "#DC2626" : "#10B981"
+                                backgroundColor: metrics?.cpuUsagePercent > 70 ? "#DC2626" : "#10A879"
                               }}
                             ></div>
                           </div>
@@ -405,16 +406,18 @@ export default function MonitoringDashboard() {
                   <div className="monitor-card glass trends-chart">
                     <div className="chart-header">
                       <h3>API Throughput & Latency Trend</h3>
-                      <select
-                        value={historyHours}
+                      <AppSelect
+                        value={String(historyHours)}
                         onChange={(e) => setHistoryHours(Number(e.target.value))}
-                        className="form-select-sm glass-input"
-                      >
-                        <option value={6}>Last 6 Hours</option>
-                        <option value={12}>Last 12 Hours</option>
-                        <option value={24}>Last 24 Hours</option>
-                        <option value={48}>Last 48 Hours</option>
-                      </select>
+                        className="glass-input monitor-select"
+                        aria-label="History range"
+                        options={[
+                          { value: "6", label: "Last 6 Hours" },
+                          { value: "12", label: "Last 12 Hours" },
+                          { value: "24", label: "Last 24 Hours" },
+                          { value: "48", label: "Last 48 Hours" },
+                        ]}
+                      />
                     </div>
 
                     <div className="chart-wrapper">
@@ -423,20 +426,20 @@ export default function MonitoringDashboard() {
                           <AreaChart data={historical} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                             <defs>
                               <linearGradient id="colorReqs" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#10B981" stopOpacity={0.28}/>
-                                <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                                <stop offset="5%" stopColor="#10A879" stopOpacity={0.28}/>
+                                <stop offset="95%" stopColor="#10A879" stopOpacity={0}/>
                               </linearGradient>
                               <linearGradient id="colorLatency" x1="0" y1="0" x2="0" y2="1">
                                 <stop offset="5%" stopColor="#D97706" stopOpacity={0.22}/>
                                 <stop offset="95%" stopColor="#D97706" stopOpacity={0}/>
                               </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                            <XAxis dataKey="timestamp" tickFormatter={formatHistoricalDate} stroke="#6B7280" fontSize={11} />
-                            <YAxis yAxisId="left" stroke="#10B981" fontSize={11} label={{ value: "Requests", angle: -90, position: "insideLeft", fill: "#10B981", fontSize: 11 }} />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#C9DBC0" />
+                            <XAxis dataKey="timestamp" tickFormatter={formatHistoricalDate} stroke="#718096" fontSize={11} />
+                            <YAxis yAxisId="left" stroke="#10A879" fontSize={11} label={{ value: "Requests", angle: -90, position: "insideLeft", fill: "#10A879", fontSize: 11 }} />
                             <YAxis yAxisId="right" orientation="right" stroke="#D97706" fontSize={11} label={{ value: "Latency (ms)", angle: 90, position: "insideRight", fill: "#D97706", fontSize: 11 }} />
                             <Tooltip contentStyle={CHART_TOOLTIP_STYLE} />
-                            <Area yAxisId="left" type="monotone" dataKey="requestCount" name="Throughput" stroke="#10B981" fillOpacity={1} fill="url(#colorReqs)" strokeWidth={2} />
+                            <Area yAxisId="left" type="monotone" dataKey="requestCount" name="Throughput" stroke="#10A879" fillOpacity={1} fill="url(#colorReqs)" strokeWidth={2} />
                             <Area yAxisId="right" type="monotone" dataKey="averageLatency" name="Avg Latency" stroke="#D97706" fillOpacity={1} fill="url(#colorLatency)" strokeWidth={2} />
                           </AreaChart>
                         </ResponsiveContainer>
@@ -518,39 +521,43 @@ export default function MonitoringDashboard() {
                 </div>
                 <div className="filter-input-group">
                   <label>Action Type</label>
-                  <select
+                  <AppSelect
                     value={auditAction}
                     onChange={(e) => { setAuditAction(e.target.value); setAuditPage(1); }}
-                    className="glass-input"
-                  >
-                    <option value="">All Actions</option>
-                    <option value="approve_user">User Approval</option>
-                    <option value="reject_user">User Rejection</option>
-                    <option value="delete_user">User Delete</option>
-                    <option value="create_course">Create Course</option>
-                    <option value="update_course">Edit Course</option>
-                    <option value="rollback_course">Rollback Course</option>
-                    <option value="delete_course">Delete Course</option>
-                    <option value="enroll_student">Enroll Student</option>
-                    <option value="unenroll_student">Unenroll Student</option>
-                    <option value="sync_zen">Zen Sync Activity</option>
-                    <option value="restore_item">Restore Bin Item</option>
-                    <option value="permanently_delete_item">Permanent Delete</option>
-                  </select>
+                    className="glass-input monitor-select"
+                    aria-label="Action type"
+                    options={[
+                      { value: "", label: "All Actions" },
+                      { value: "approve_user", label: "User Approval" },
+                      { value: "reject_user", label: "User Rejection" },
+                      { value: "delete_user", label: "User Delete" },
+                      { value: "create_course", label: "Create Course" },
+                      { value: "update_course", label: "Edit Course" },
+                      { value: "rollback_course", label: "Rollback Course" },
+                      { value: "delete_course", label: "Delete Course" },
+                      { value: "enroll_student", label: "Enroll Student" },
+                      { value: "unenroll_student", label: "Unenroll Student" },
+                      { value: "sync_zen", label: "Zen Sync Activity" },
+                      { value: "restore_item", label: "Restore Bin Item" },
+                      { value: "permanently_delete_item", label: "Permanent Delete" },
+                    ]}
+                  />
                 </div>
                 <div className="filter-input-group">
                   <label>User Role</label>
-                  <select
+                  <AppSelect
                     value={auditRole}
                     onChange={(e) => { setAuditRole(e.target.value); setAuditPage(1); }}
-                    className="glass-input"
-                  >
-                    <option value="">All Roles</option>
-                    <option value="admin">Admin</option>
-                    <option value="trainer">Trainer</option>
-                    <option value="student">Student</option>
-                    <option value="system">System / Cron</option>
-                  </select>
+                    className="glass-input monitor-select"
+                    aria-label="User role"
+                    options={[
+                      { value: "", label: "All Roles" },
+                      { value: "admin", label: "Admin" },
+                      { value: "trainer", label: "Trainer" },
+                      { value: "student", label: "Student" },
+                      { value: "system", label: "System / Cron" },
+                    ]}
+                  />
                 </div>
                 <div className="filter-input-group">
                   <label>User Email</label>
@@ -683,15 +690,17 @@ export default function MonitoringDashboard() {
                 </div>
                 <div className="filter-input-group">
                   <label>Resolution Status</label>
-                  <select
+                  <AppSelect
                     value={errorResolved}
                     onChange={(e) => { setErrorResolved(e.target.value); setErrorPage(1); }}
-                    className="glass-input"
-                  >
-                    <option value="all">All Errors</option>
-                    <option value="false">Unresolved</option>
-                    <option value="true">Resolved</option>
-                  </select>
+                    className="glass-input monitor-select"
+                    aria-label="Resolution status"
+                    options={[
+                      { value: "all", label: "All Errors" },
+                      { value: "false", label: "Unresolved" },
+                      { value: "true", label: "Resolved" },
+                    ]}
+                  />
                 </div>
                 <span className="total-badge error-count-badge">{errorTotal} Exception Logs</span>
               </div>

@@ -71,6 +71,50 @@ export async function forgotPassword(payload) {
 }
 
 /**
+ * Request a passwordless magic login link.
+ * payload: { email }
+ */
+export async function requestMagicLogin(payload) {
+    const res = await axiosInstance.post("/auth/magic-login", payload);
+    return res.data;
+}
+
+/**
+ * Consume magic login token and establish session (same shape as login()).
+ */
+export async function verifyMagicLogin(token, rememberMe = true) {
+    clearAuthSession();
+    try {
+        await axiosInstance.post("/auth/logout");
+    } catch {
+        // ignore
+    }
+
+    const res = await axiosInstance.post(`/auth/magic-login/${token}`);
+    const data = res.data || {};
+    let user = data.user || null;
+
+    try {
+        const meData = await getMe();
+        if (meData?.user) user = meData.user;
+    } catch {
+        // keep login response user
+    }
+
+    if (!user) {
+        throw new Error(data.msg || "Login succeeded but user data is missing");
+    }
+
+    saveAuthSession({ user, rememberMe });
+
+    return {
+        ...data,
+        user,
+        role: user.role || data.role,
+    };
+}
+
+/**
  * Reset Password API
  * payload: { password }
  */

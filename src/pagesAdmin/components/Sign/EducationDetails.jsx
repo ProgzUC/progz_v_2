@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import AppSelect from '../../../components/common/AppSelect/AppSelect';
 import './UserEnrollment.css';
 
 
@@ -91,17 +91,19 @@ const EducationDetails = ({ formData, setFormData, onBack, onSubmit }) => {
                         <div key={field.id} className={`form-group ${field.width === 'full' ? 'full-width' : 'half-width'}`}>
                             <label htmlFor={field.id}>{field.label}</label>
                             {field.type === 'select' ? (
-                                <select
+                                <AppSelect
                                     id={field.id}
+                                    name={field.id}
                                     className={`form-control ${errors[field.id] ? 'is-invalid' : ''}`}
                                     onChange={handleChange}
                                     value={formData[field.id] || ''}
-                                >
-                                    <option value="" disabled>Select {field.label}</option>
-                                    {field.options.map(opt => (
-                                        <option key={opt} value={opt}>{opt}</option>
-                                    ))}
-                                </select>
+                                    aria-label={field.label}
+                                    placeholder={`Select ${field.label}`}
+                                    options={[
+                                        { value: '', label: `Select ${field.label}`, disabled: true },
+                                        ...field.options.map((opt) => ({ value: opt, label: opt })),
+                                    ]}
+                                />
                             ) : (
                                 <input
                                     type={field.type}

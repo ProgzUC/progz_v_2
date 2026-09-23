@@ -7,12 +7,19 @@ import { useCourses } from "../../../hooks/useCourses";
 import { useBatches, useEnrollStudent, useBulkEnrollStudents } from "../../../hooks/useBatches";
 import Swal from "sweetalert2";
 import Loader from "../../../components/common/Loader/Loader";
+import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import { createId } from "../../../utils/courseBuilder";
-import { parseEmailsFromCsv, downloadEnrollmentCsvTemplate } from "../../../utils/csvImport";
+import BulkStudentImport from "../BulkImport/BulkStudentImport";
 
 import CreateBatchModal from "./CreateBatchModal";
 
-const VALID_TABS = new Set(["single", "bulk", "csv"]);
+/** `csv` kept as alias → import for old deep links */
+const VALID_TABS = new Set(["single", "bulk", "import", "csv"]);
+
+const resolveTab = (tabParam) => {
+  if (tabParam === "csv") return "import";
+  return VALID_TABS.has(tabParam) ? tabParam : "single";
+};
 
 const AVATAR_TONES = ["green", "blue", "orange", "purple", "teal", "rose"];
 
@@ -44,7 +51,7 @@ const EnrollStudents = () => {
 
   const tabParam = searchParams.get("tab");
   const batchParam = searchParams.get("batchId") || "";
-  const activeTab = VALID_TABS.has(tabParam) ? tabParam : "single";
+  const activeTab = resolveTab(tabParam);
 
   const setActiveTab = (tab) => {
     const next = new URLSearchParams(searchParams);
@@ -79,19 +86,23 @@ const EnrollStudents = () => {
   const [bulkSearch, setBulkSearch] = useState("");
   const [bulkFilterStatus, setBulkFilterStatus] = useState("all");
   const [hideAlreadyEnrolled, setHideAlreadyEnrolled] = useState(true);
-
-  const [csvBatchId, setCsvBatchId] = useState(batchParam);
-  const [parsedEmails, setParsedEmails] = useState([]);
-  const [csvFileName, setCsvFileName] = useState("");
-  const [isParsing, setIsParsing] = useState(false);
+  const [importBatchId, setImportBatchId] = useState(batchParam);
 
   const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
   useEffect(() => {
     if (!batchParam) return;
     setBulkBatchId(batchParam);
-    setCsvBatchId(batchParam);
+    setImportBatchId(batchParam);
   }, [batchParam]);
+
+  useEffect(() => {
+    if (tabParam === "csv") {
+      const next = new URLSearchParams(searchParams);
+      next.set("tab", "import");
+      setSearchParams(next, { replace: true });
+    }
+  }, [tabParam, searchParams, setSearchParams]);
 
   const selectedBulkBatch = useMemo(
     () => batchesList.find((b) => String(b._id) === String(bulkBatchId)),
@@ -110,43 +121,6 @@ const EnrollStudents = () => {
     refetchUsers();
     refetchPending();
     refetchBatches();
-  };
-
-  const handleCSVUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setCsvFileName(file.name);
-    setIsParsing(true);
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const uniqueEmails = parseEmailsFromCsv(event.target.result);
-        setParsedEmails(uniqueEmails);
-
-        Swal.fire({
-          toast: true,
-          position: "top-end",
-          icon: uniqueEmails.length ? "success" : "warning",
-          title: uniqueEmails.length
-            ? `Parsed ${uniqueEmails.length} unique emails from CSV`
-            : "No valid emails found in CSV",
-          showConfirmButton: false,
-          timer: 3000,
-        });
-      } catch {
-        Swal.fire("Error", "Failed to parse CSV file. Ensure standard CSV format.", "error");
-      } finally {
-        setIsParsing(false);
-      }
-    };
-    reader.onerror = () => {
-      setIsParsing(false);
-      Swal.fire("Error", "Could not read the selected file.", "error");
-    };
-    reader.readAsText(file);
-    e.target.value = "";
   };
 
   const updateSection = (id, field, value) => {
@@ -221,7 +195,7 @@ const EnrollStudents = () => {
              <p class="text-secondary" style="font-size:0.85rem">Pending CRM leads are auto-approved on enroll.</p>`,
       icon: "question",
       showCancelButton: true,
-      confirmButtonColor: "#059669",
+      confirmButtonColor: "#10A879",
       confirmButtonText: "Yes, enroll",
     });
     if (!confirm.isConfirmed) return;
@@ -263,59 +237,6 @@ const EnrollStudents = () => {
           err.response?.data?.message ||
           err.message ||
           "Failed to process bulk enrollment",
-        "error"
-      );
-    }
-  };
-
-  const handleCSVEnroll = async () => {
-    if (!csvBatchId) {
-      Swal.fire("Warning", "Please select a target batch first.", "warning");
-      return;
-    }
-
-    if (parsedEmails.length === 0) {
-      Swal.fire("Warning", "Please upload a CSV file containing valid emails.", "warning");
-      return;
-    }
-
-    Swal.fire({
-      title: "Importing CSV Emails",
-      text: "Resolving emails, approving pending leads, and enrolling...",
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
-
-    try {
-      const response = await bulkEnrollMutation({
-        batchId: csvBatchId,
-        emails: parsedEmails,
-      });
-
-      let alertText = `Successfully enrolled: <strong>${response.enrolledCount}</strong> students.<br/>Approved pending CRM profiles: <strong>${response.approvedCount}</strong>.`;
-
-      if (response.errors?.length > 0) {
-        alertText += `<br/><br/><div style="text-align:left; font-size:12px; color:#ef4444; max-height:100px; overflow-y:auto;"><strong>Skipped / Failed:</strong><br/>${response.errors.map((e) => `• ${e}`).join("<br/>")}</div>`;
-      }
-
-      Swal.fire({
-        title: "CSV Enrollment Run",
-        html: alertText,
-        icon: response.errors?.length > 0 ? "info" : "success",
-      });
-
-      setParsedEmails([]);
-      setCsvFileName("");
-      handleRefreshData();
-    } catch (err) {
-      Swal.fire(
-        "Error",
-        err.response?.data?.msg ||
-          err.response?.data?.message ||
-          err.message ||
-          "Failed to import CSV",
         "error"
       );
     }
@@ -407,7 +328,7 @@ const EnrollStudents = () => {
   const paneTitles = {
     single: "Individual enrollment",
     bulk: "Bulk multi-select",
-    csv: "CSV import",
+    import: "Import & invite",
   };
 
   if (usersLoading || pendingLoading || coursesLoading || batchesLoading) {
@@ -423,7 +344,8 @@ const EnrollStudents = () => {
       <header className="page-hero">
         <h1 className="page-title">Student course enrollment</h1>
         <p className="page-subtitle">
-          Enroll individuals, multi-select students, or import emails via CSV.
+          Enroll existing students, or import a college email list to create accounts and send
+          passwordless login links.
         </p>
       </header>
 
@@ -451,11 +373,11 @@ const EnrollStudents = () => {
             <button
               type="button"
               role="tab"
-              aria-selected={activeTab === "csv"}
-              className={`tab-pill ${activeTab === "csv" ? "active" : ""}`}
-              onClick={() => setActiveTab("csv")}
+              aria-selected={activeTab === "import"}
+              className={`tab-pill ${activeTab === "import" ? "active" : ""}`}
+              onClick={() => setActiveTab("import")}
             >
-              CSV import
+              Import & invite
             </button>
           </div>
         </div>
@@ -483,19 +405,20 @@ const EnrollStudents = () => {
               <label className="section-label" htmlFor="enroll-student-select">
                 Select student profile
               </label>
-              <select
+              <AppSelect
                 id="enroll-student-select"
                 className="input-select"
                 value={selectedStudent}
                 onChange={(e) => setSelectedStudent(e.target.value)}
-              >
-                <option value="">Select student</option>
-                {studentsList.map((s) => (
-                  <option key={s._id} value={s._id}>
-                    {s.name} ({s.email})
-                  </option>
-                ))}
-              </select>
+                aria-label="Select student profile"
+                options={[
+                  { value: "", label: "Select student" },
+                  ...studentsList.map((s) => ({
+                    value: s._id,
+                    label: `${s.name} (${s.email})`,
+                  })),
+                ]}
+              />
             </div>
 
             {courseSections.map((section, idx) => (
@@ -524,59 +447,62 @@ const EnrollStudents = () => {
                 <div className="grid-select-group">
                   <div className="field-group">
                     <label className="section-label">Course</label>
-                    <select
+                    <AppSelect
                       className="input-select"
                       value={section.courseId}
                       onChange={(e) => updateSection(section.id, "courseId", e.target.value)}
-                    >
-                      <option value="">Select course</option>
-                      {coursesList.map((c) => (
-                        <option key={c._id} value={c._id}>
-                          {c.courseName}
-                        </option>
-                      ))}
-                    </select>
+                      aria-label="Select course"
+                      options={[
+                        { value: "", label: "Select course" },
+                        ...coursesList.map((c) => ({
+                          value: c._id,
+                          label: c.courseName,
+                        })),
+                      ]}
+                    />
                   </div>
 
                   <div className="field-group">
                     <label className="section-label">Instructor</label>
-                    <select
+                    <AppSelect
                       className="input-select"
                       value={section.instructorId}
                       onChange={(e) => updateSection(section.id, "instructorId", e.target.value)}
-                    >
-                      <option value="">Select instructor</option>
-                      {instructorsList.map((ins) => (
-                        <option key={ins._id} value={ins._id}>
-                          {ins.name}
-                        </option>
-                      ))}
-                    </select>
+                      aria-label="Select instructor"
+                      options={[
+                        { value: "", label: "Select instructor" },
+                        ...instructorsList.map((ins) => ({
+                          value: ins._id,
+                          label: ins.name,
+                        })),
+                      ]}
+                    />
                   </div>
 
                   <div className="batch-select-box">
                     <label className="section-label">Batch</label>
-                    <select
+                    <AppSelect
                       className="input-select"
                       value={section.batchId}
                       onChange={(e) => updateSection(section.id, "batchId", e.target.value)}
-                    >
-                      <option value="">Select batch</option>
-                      {batchesList
-                        .filter((b) => {
-                          if (!section.courseId) return true;
-                          const ids =
-                            Array.isArray(b.courses) && b.courses.length
-                              ? b.courses.map((c) => String(c?._id || c))
-                              : [String(b.course?._id || b.course)].filter(Boolean);
-                          return ids.includes(String(section.courseId));
-                        })
-                        .map((b) => (
-                          <option key={b._id} value={b._id}>
-                            {b.name}
-                          </option>
-                        ))}
-                    </select>
+                      aria-label="Select batch"
+                      options={[
+                        { value: "", label: "Select batch" },
+                        ...batchesList
+                          .filter((b) => {
+                            if (!section.courseId) return true;
+                            const ids =
+                              Array.isArray(b.courses) && b.courses.length
+                                ? b.courses.map((c) => String(c?._id || c))
+                                : [String(b.course?._id || b.course)].filter(Boolean);
+                            return ids.includes(String(section.courseId));
+                          })
+                          .map((b) => ({
+                            value: b._id,
+                            label: b.name,
+                          })),
+                      ]}
+                    />
                     <button
                       type="button"
                       className="create-batch-link"
@@ -608,7 +534,7 @@ const EnrollStudents = () => {
               <label className="section-label" htmlFor="bulk-batch-select">
                 Select target batch
               </label>
-              <select
+              <AppSelect
                 id="bulk-batch-select"
                 className="input-select"
                 value={bulkBatchId}
@@ -620,14 +546,15 @@ const EnrollStudents = () => {
                   else next.delete("batchId");
                   setSearchParams(next, { replace: true });
                 }}
-              >
-                <option value="">Choose batch...</option>
-                {batchesList.map((b) => (
-                  <option key={b._id} value={b._id}>
-                    {b.name} ({b.course?.courseName || "No course"})
-                  </option>
-                ))}
-              </select>
+                aria-label="Select target batch"
+                options={[
+                  { value: "", label: "Choose batch..." },
+                  ...batchesList.map((b) => ({
+                    value: b._id,
+                    label: `${b.name} (${b.course?.courseName || "No course"})`,
+                  })),
+                ]}
+              />
             </div>
 
             <div className="list-filters-row">
@@ -642,17 +569,17 @@ const EnrollStudents = () => {
                 />
               </div>
               <div className="status-filter">
-                <i className="bi bi-funnel filter-icon" aria-hidden="true"></i>
-                <select
+                <AppSelect
+                  icon="bi-funnel"
                   value={bulkFilterStatus}
                   onChange={(e) => setBulkFilterStatus(e.target.value)}
                   aria-label="Filter by registration status"
-                >
-                  <option value="all">All registrations</option>
-                  <option value="active">Active accounts only</option>
-                  <option value="pending">Pending CRM synced leads</option>
-                </select>
-                <i className="bi bi-chevron-down filter-chevron" aria-hidden="true"></i>
+                  options={[
+                    { value: "all", label: "All registrations" },
+                    { value: "active", label: "Active accounts only" },
+                    { value: "pending", label: "Pending CRM synced leads" },
+                  ]}
+                />
               </div>
               <label className="hide-enrolled-toggle">
                 <input
@@ -758,92 +685,24 @@ const EnrollStudents = () => {
           </div>
         )}
 
-        {activeTab === "csv" && (
+        {activeTab === "import" && (
           <div className="tab-pane-content">
-            <div className="section-block">
-              <label className="section-label" htmlFor="csv-batch-select">
-                Select target batch
-              </label>
-              <select
-                id="csv-batch-select"
-                className="input-select"
-                value={csvBatchId}
-                onChange={(e) => {
-                  setCsvBatchId(e.target.value);
-                  const next = new URLSearchParams(searchParams);
-                  next.set("tab", "csv");
-                  if (e.target.value) next.set("batchId", e.target.value);
-                  else next.delete("batchId");
-                  setSearchParams(next, { replace: true });
-                }}
-              >
-                <option value="">Choose batch...</option>
-                {batchesList.map((b) => (
-                  <option key={b._id} value={b._id}>
-                    {b.name} ({b.course?.courseName || "No course"})
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="csv-upload-dropzone">
-              <i className="bi bi-file-earmark-spreadsheet" aria-hidden="true"></i>
-              <h3>Upload CSV student registry</h3>
-              <p>
-                Include an <code>email</code> column (recommended). Matching active users and Zen
-                CRM pending leads are enrolled; unknown emails are skipped.
-              </p>
-
-              <div className="csv-actions">
-                <label htmlFor="csv-file-input" className="btn-outline">
-                  {isParsing
-                    ? "Parsing..."
-                    : csvFileName
-                      ? "Choose different file"
-                      : "Select CSV file"}
-                </label>
-                <button
-                  type="button"
-                  className="btn-secondary"
-                  onClick={downloadEnrollmentCsvTemplate}
-                >
-                  Download template
-                </button>
-              </div>
-              <input
-                id="csv-file-input"
-                type="file"
-                accept=".csv,text/csv"
-                onChange={handleCSVUpload}
-                className="sr-only"
-              />
-
-              {csvFileName && (
-                <div className="file-loaded-badge">
-                  <i className="bi bi-check-circle-fill" aria-hidden="true"></i> Loaded:{" "}
-                  <strong>{csvFileName}</strong>
-                </div>
-              )}
-            </div>
-
-            {parsedEmails.length > 0 && (
-              <div className="parsed-emails-preview">
-                <h4>Emails parsed for import ({parsedEmails.length})</h4>
-                <div className="email-chips-container">
-                  {parsedEmails.map((email) => (
-                    <span key={email} className="email-chip">
-                      {email}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="enroll-actions">
-                  <button type="button" onClick={handleCSVEnroll} className="create-btn">
-                    Import & enroll students
-                  </button>
-                </div>
-              </div>
-            )}
+            <p className="import-tab-hint">
+              For college lists: create student accounts, assign to a batch, and email a secure
+              login link. Existing emails are assigned without creating duplicates.
+            </p>
+            <BulkStudentImport
+              embedded
+              batchId={importBatchId}
+              onBatchIdChange={(id) => {
+                setImportBatchId(id);
+                const next = new URLSearchParams(searchParams);
+                next.set("tab", "import");
+                if (id) next.set("batchId", id);
+                else next.delete("batchId");
+                setSearchParams(next, { replace: true });
+              }}
+            />
           </div>
         )}
       </div>

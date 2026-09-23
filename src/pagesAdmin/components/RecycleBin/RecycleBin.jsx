@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { fetchBinItems, restoreBinItem, permanentlyDeleteBinItem } from "../../../api/userApi";
 import Loader from "../../../components/common/Loader/Loader";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
+import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import "./RecycleBin.css";
 
 const AVATAR_TONES = ["green", "blue", "orange", "purple", "teal", "rose"];
@@ -85,7 +86,7 @@ const RecycleBin = () => {
       text: "This item will be moved back to its original list.",
       icon: "question",
       showCancelButton: true,
-      confirmButtonColor: "#059669",
+      confirmButtonColor: "#10A879",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, restore it!",
     }).then(async (result) => {
@@ -146,20 +147,16 @@ const RecycleBin = () => {
           </div>
 
           <div className="type-filter">
-            <i className="bi bi-funnel filter-icon" aria-hidden="true"></i>
-            <select
+            <AppSelect
+              icon="bi-funnel"
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
               aria-label="Filter by type"
-            >
-              <option value="">All types</option>
-              {typeOptions.map((type) => (
-                <option key={type} value={type}>
-                  {type}
-                </option>
-              ))}
-            </select>
-            <i className="bi bi-chevron-down filter-chevron" aria-hidden="true"></i>
+              options={[
+                { value: "", label: "All types" },
+                ...typeOptions.map((type) => ({ value: type, label: type })),
+              ]}
+            />
             {typeFilter && (
               <button
                 type="button"
@@ -168,7 +165,7 @@ const RecycleBin = () => {
                 title="Clear filter"
                 aria-label="Clear type filter"
               >
-                <i className="bi bi-x" aria-hidden="true"></i>
+                <i className="bi bi-x" aria-hidden="true" />
               </button>
             )}
           </div>

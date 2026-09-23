@@ -6,7 +6,7 @@
   display: flex;
   width: 100%;
   min-height: 100vh;
-  background: var(--admin-bg);
+  background: var(--color-bg);
 }
 
 .content {
@@ -17,7 +17,7 @@
   overflow-x: hidden;
   overflow-y: auto;
   min-height: 100vh;
-  background: var(--admin-bg);
+  background: var(--color-bg);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -67,7 +67,7 @@
     box-shadow 0.2s ease;
 }
 
-.layout button:not(:disabled):hover,
+.layout .content button:not(:disabled):hover,
 .layout a.icon-action:hover,
 .layout .as-btn:not(.as-btn-primary):not(.as-btn-danger):hover,
 .layout .or-btn:not(.or-btn-primary):hover,
@@ -106,7 +106,7 @@
 .layout .as-nav-item:hover,
 .layout .as-choice-card:hover,
 .layout .as-segment button:hover,
-.layout .menu-item:hover {
+.layout .content .menu-item:hover {
   background: var(--color-primary-light);
   color: var(--color-primary);
 }

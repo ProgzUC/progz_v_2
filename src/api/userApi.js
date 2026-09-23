@@ -71,6 +71,13 @@ export const registerUser = (payload) =>
 export const adminCreateUser = (payload) =>
     axiosInstance.post("/users/admin-create", payload).then((res) => res.data);
 
+/**
+ * Bulk create/assign students to a batch and send welcome magic-login emails.
+ * payload: { batchId, students: [{ name?, email }], sendWelcomeEmails? }
+ */
+export const bulkImportStudents = (payload) =>
+    axiosInstance.post("/users/bulk-import", payload).then((res) => res.data);
+
 /* Recycle Bin APIs */
 export const fetchBinItems = () =>
     axiosInstance.get("/bin").then((res) => res.data);

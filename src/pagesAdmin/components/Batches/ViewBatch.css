@@ -388,7 +388,7 @@
 
 .view-batch-page .status-completed {
     background: var(--color-primary-soft);
-    color: #6B7280;
+    color: #718096;
 }
 
 .view-batch-page .status-completed .dot {

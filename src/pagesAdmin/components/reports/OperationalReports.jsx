@@ -28,7 +28,7 @@ import {
 
 function useAccentPaint() {
   const { accentSwatch } = useAdminTheme();
-  const swatch = accentSwatch || ["#064E3B", "#10B981"];
+  const swatch = accentSwatch || ["#0B3D2E", "#10A879"];
   return {
     primary: swatch[0],
     bright: swatch[1],

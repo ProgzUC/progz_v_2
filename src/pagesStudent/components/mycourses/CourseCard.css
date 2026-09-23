@@ -149,7 +149,7 @@
     font-weight: 700;
     line-height: 1;
     background: #edf1ef;
-    color: #6b7280;
+    color: #718096;
 }
 
 .student-mycourses-page .rail-item.active .rail-icon {
@@ -231,7 +231,7 @@
 }
 
 .student-mycourses-page .courses-heading {
-    font-family: Inter, system-ui, -apple-system, sans-serif;
+    font-family: Lato, system-ui, -apple-system, sans-serif;
     font-weight: 700;
     font-size: 26px;
     color: #0f172a;
@@ -399,7 +399,7 @@
     background: #ffffff;
     border-radius: 20px;
     border: none;
-    box-shadow: 0 8px 28px rgba(6, 78, 59, 0.06);
+    box-shadow: 0 8px 28px rgba(11, 61, 46, 0.06);
     display: flex;
     gap: 24px;
     padding: 20px;
@@ -436,8 +436,8 @@
 
 .student-mycourses-page .fullstack-thumb {
     background:
-        radial-gradient(circle at 18% 80%, rgba(16, 185, 129, 0.28), transparent 42%),
-        radial-gradient(circle at 88% 18%, rgba(6, 78, 59, 0.7), transparent 46%),
+        radial-gradient(circle at 18% 80%, rgba(16, 168, 121, 0.28), transparent 42%),
+        radial-gradient(circle at 88% 18%, rgba(11, 61, 46, 0.7), transparent 46%),
         linear-gradient(160deg, #071410 0%, #0b1f18 48%, #05080c 100%);
 }
 
@@ -519,7 +519,7 @@
 .student-mycourses-page .large-title {
     font-size: 26px;
     font-weight: 800;
-    color: #111827;
+    color: #073B32;
     margin: 0 0 10px;
     line-height: 1.2;
     letter-spacing: -0.4px;
@@ -571,7 +571,7 @@
     flex-shrink: 0;
     padding: 10px 16px;
     border-radius: 10px;
-    background: var(--color-primary, #059669);
+    background: var(--color-primary, #10A879);
     color: #fff;
     text-decoration: none;
     font-size: 13px;
@@ -601,7 +601,7 @@
     gap: 6px;
     margin: 0 0 14px;
     font-size: 12px;
-    color: #6b7280;
+    color: #718096;
     line-height: 1.3;
 }
 
@@ -624,7 +624,7 @@
 .student-mycourses-page .progress-label {
     font-size: 14px;
     font-weight: 700;
-    color: #111827;
+    color: #073B32;
     line-height: 1;
 }
 
@@ -654,7 +654,7 @@
     display: block;
     margin: 10px 0 0;
     font-size: 13px;
-    color: #9ca3af;
+    color: #8B9AAB;
     font-weight: 500;
 }
 
@@ -675,7 +675,7 @@
 .student-mycourses-page .curriculum-main-title {
     font-size: 20px;
     font-weight: 700;
-    color: #111827;
+    color: #073B32;
     margin: 0;
     line-height: 1.2;
 }
@@ -683,7 +683,7 @@
 .student-mycourses-page .curriculum-stats {
     font-size: 13px;
     font-weight: 500;
-    color: #9ca3af;
+    color: #8B9AAB;
     line-height: 1.2;
     white-space: nowrap;
 }
@@ -699,12 +699,12 @@
     border: none;
     border-radius: 16px;
     overflow: hidden;
-    box-shadow: 0 6px 20px rgba(6, 78, 59, 0.05);
+    box-shadow: 0 6px 20px rgba(11, 61, 46, 0.05);
     transition: all 0.2s ease;
 }
 
 .student-mycourses-page .module-accordion-item.active {
-    box-shadow: 0 8px 24px rgba(6, 78, 59, 0.08);
+    box-shadow: 0 8px 24px rgba(11, 61, 46, 0.08);
 }
 
 .student-mycourses-page .module-header {
@@ -755,7 +755,7 @@
     width: 100%;
     font-size: 15px;
     font-weight: 700;
-    color: #111827;
+    color: #073B32;
     line-height: 1.3;
     white-space: nowrap;
     overflow: hidden;
@@ -765,7 +765,7 @@
 .student-mycourses-page .module-meta {
     display: block;
     font-size: 12px;
-    color: #9ca3af;
+    color: #8B9AAB;
     font-weight: 500;
     line-height: 1.3;
 }

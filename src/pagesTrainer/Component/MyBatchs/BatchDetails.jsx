@@ -522,7 +522,7 @@ const BatchDetailsContent = ({
                                 icon: 'info',
                                 title: 'Class Schedule',
                                 html: `<p><strong>Days:</strong> ${schedule}</p><p><strong>Time:</strong> ${timing}</p>`,
-                                confirmButtonColor: '#064E3B',
+                                confirmButtonColor: '#0B3D2E',
                             });
                         }}
                     />

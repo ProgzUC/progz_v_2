@@ -2,14 +2,15 @@
 
 .admin-instructors-page {
   background: var(--color-bg);
-  padding: 32px 40px 48px;
+  padding: 20px 40px 48px;
   min-height: 100vh;
   font-family: var(--font-family-base), sans-serif;
   color: var(--color-text);
 }
 
 .admin-instructors-page .page-hero {
-  margin-bottom: 22px;
+  margin-bottom: 18px;
+  padding-right: 280px;
 }
 
 .admin-instructors-page .page-title {
@@ -165,7 +166,7 @@
 }
 
 .admin-instructors-page .data-table tbody tr {
-  border-bottom: 1px solid #F3F4F6;
+  border-bottom: 1px solid #DFF0D8;
   transition: background 0.15s;
 }
 
@@ -213,7 +214,7 @@
 .admin-instructors-page .person-avatar.tone-green { background: var(--color-primary-bright); }
 .admin-instructors-page .person-avatar.tone-blue { background: #5B7C99; }
 .admin-instructors-page .person-avatar.tone-orange { background: #A67C52; }
-.admin-instructors-page .person-avatar.tone-purple { background: #6B7280; }
+.admin-instructors-page .person-avatar.tone-purple { background: #718096; }
 .admin-instructors-page .person-avatar.tone-teal { background: #5F8F86; }
 .admin-instructors-page .person-avatar.tone-rose { background: #8B6B6B; }
 
@@ -251,13 +252,13 @@
   border: none;
   border-radius: 8px;
   background: transparent;
-  color: #9CA3AF;
+  color: #8B9AAB;
   border-right: none;
 }
 
 .admin-instructors-page .admin-action-btn:hover {
   background: var(--color-bg-muted);
-  color: #4B5563;
+  color: #718096;
 }
 
 .admin-instructors-page .admin-action-btn--danger:hover {

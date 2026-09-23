@@ -23,8 +23,8 @@ export const ADMIN_ACCENTS = [
     id: "emerald",
     label: "Emerald",
     description: "Default ProgZ green",
-    gradient: "linear-gradient(135deg, #064E3B 0%, #10B981 100%)",
-    swatch: ["#064E3B", "#10B981"],
+    gradient: "linear-gradient(135deg, #0B3D2E 0%, #10A879 100%)",
+    swatch: ["#0B3D2E", "#10A879"],
   },
   {
     id: "ocean",
@@ -69,8 +69,8 @@ const CORNER_IDS = new Set(["sharp", "rounded", "soft"]);
 const DENSITY_IDS = new Set(["comfortable", "compact"]);
 
 const DEFAULT_CUSTOM = {
-  primary: "#064E3B",
-  bright: "#10B981",
+  primary: "#0B3D2E",
+  bright: "#10A879",
 };
 
 const readJson = (key, fallback) => {

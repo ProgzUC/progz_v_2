@@ -44,15 +44,20 @@
 
 .batch-dropdown {
     min-width: 250px;
-    padding: 10px 16px;
+}
+
+.batch-dropdown.app-select,
+.batch-selector .app-select {
+    min-width: 250px;
+}
+
+.batch-dropdown .app-select-trigger {
+    min-height: 44px;
     border: 2px solid #dee2e6;
     border-radius: var(--radius-sm);
     font-size: 15px;
-    color: #212529;
-    background: var(--color-surface);
-    cursor: pointer;
-    transition: border-color 0.3s ease;
 }
+
 
 .batch-dropdown:focus {
     border-color: var(--color-primary-bright);
@@ -323,7 +328,7 @@
 }
 
 .percentage-bar.average .percentage-fill {
-    background: #9CA3AF;
+    background: #8B9AAB;
 }
 
 .percentage-bar.poor .percentage-fill {

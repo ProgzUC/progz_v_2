@@ -328,6 +328,19 @@ select.glass-input {
   min-width: 150px;
 }
 
+.app-select.glass-input,
+.app-select.monitor-select {
+  width: auto;
+  min-width: 160px;
+}
+
+.app-select.glass-input .app-select-trigger,
+.app-select.monitor-select .app-select-trigger {
+  background: var(--color-bg-muted);
+  min-height: 38px;
+  padding: 8px 32px 8px 12px;
+}
+
 .chart-wrapper {
   margin-top: 8px;
 }

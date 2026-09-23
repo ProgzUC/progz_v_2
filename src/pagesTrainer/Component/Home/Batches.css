@@ -92,7 +92,7 @@
     top: 0;
     bottom: 0;
     width: 4px;
-    background: linear-gradient(180deg, var(--trainer-primary) 0%, #10b981 100%);
+    background: linear-gradient(180deg, var(--trainer-primary) 0%, #10A879 100%);
     transform: scaleY(0);
     transform-origin: center;
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
@@ -135,10 +135,10 @@
 .trainer-home-batches .batches-batch-card:hover {
     background: linear-gradient(165deg, #ffffff 0%, #f0fdf4 100%);
     box-shadow:
-        0 14px 36px rgba(6, 78, 59, 0.14),
+        0 14px 36px rgba(11, 61, 46, 0.14),
         0 4px 12px rgba(15, 23, 42, 0.06);
     transform: translateY(-6px) scale(1.015);
-    border-color: rgba(16, 185, 129, 0.35);
+    border-color: rgba(16, 168, 121, 0.35);
 }
 
 .trainer-home-batches .batches-batch-card:hover::before {
@@ -151,7 +151,7 @@
 
 .trainer-home-batches .batches-batch-card:active {
     transform: translateY(-2px) scale(1.005);
-    box-shadow: 0 8px 22px rgba(6, 78, 59, 0.12);
+    box-shadow: 0 8px 22px rgba(11, 61, 46, 0.12);
 }
 
 .trainer-home-batches .batches-batch-card:focus-visible {
@@ -180,13 +180,13 @@
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.02em;
-    box-shadow: 0 6px 14px rgba(6, 78, 59, 0.22);
+    box-shadow: 0 6px 14px rgba(11, 61, 46, 0.22);
     transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
 }
 
 .trainer-home-batches .batches-batch-card:hover .batches-batch-avatar {
     transform: scale(1.08) rotate(-3deg);
-    box-shadow: 0 10px 20px rgba(6, 78, 59, 0.32);
+    box-shadow: 0 10px 20px rgba(11, 61, 46, 0.32);
 }
 
 .trainer-home-batches .batches-batch-copy {
@@ -232,7 +232,7 @@
 
 .trainer-home-batches .batches-arrow-btn {
     flex-shrink: 0;
-    background: #ecfdf5;
+    background: #E8F5E1;
     border: none;
     color: var(--trainer-primary);
     width: 36px;
@@ -252,7 +252,7 @@
     color: #fff;
     background: var(--trainer-primary);
     transform: translateX(4px);
-    box-shadow: 0 6px 14px rgba(6, 78, 59, 0.28);
+    box-shadow: 0 6px 14px rgba(11, 61, 46, 0.28);
 }
 
 /* Progress Bar */
@@ -266,7 +266,7 @@
 }
 
 .trainer-home-batches .batches-batch-card:hover .batches-progress-container {
-    border-top-color: #d1fae5;
+    border-top-color: #DFF0D8;
 }
 
 .trainer-home-batches .batches-progress-label {
@@ -299,14 +299,14 @@
 
 .trainer-home-batches .batches-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--trainer-primary) 0%, #10b981 100%);
+    background: linear-gradient(90deg, var(--trainer-primary) 0%, #10A879 100%);
     border-radius: 999px;
     transition: width 0.35s ease, filter 0.3s ease;
 }
 
 .trainer-home-batches .batches-batch-card:hover .batches-progress-fill {
     filter: brightness(1.08);
-    box-shadow: 0 0 10px rgba(16, 185, 129, 0.45);
+    box-shadow: 0 0 10px rgba(16, 168, 121, 0.45);
 }
 
 @media (prefers-reduced-motion: reduce) {

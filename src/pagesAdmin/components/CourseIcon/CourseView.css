@@ -336,8 +336,8 @@
 }
 
 .course-view-page .cv-module-toggle:hover {
-  background: #FAFBFC;
-  border-color: #D1D5DB;
+  background: #F9FCF7;
+  border-color: #B5CBA8;
 }
 
 .course-view-page .cv-module-toggle-left {
@@ -390,7 +390,7 @@
 }
 
 .course-view-page .cv-section-card.open {
-  border-color: #A7F3D0;
+  border-color: #DFF0D8;
 }
 
 .course-view-page .cv-section-toggle {
@@ -411,7 +411,7 @@
 }
 
 .course-view-page .cv-section-toggle:hover {
-  background: #FAFBFC;
+  background: #F9FCF7;
 }
 
 .course-view-page .cv-section-toggle.active {
@@ -429,7 +429,7 @@
 
 .course-view-page .cv-list-icon {
   font-size: 20px;
-  color: #9CA3AF;
+  color: #8B9AAB;
   flex-shrink: 0;
 }
 
@@ -444,7 +444,7 @@
 }
 
 .course-view-page .cv-section-details {
-  background-color: #FAFBFC;
+  background-color: #F9FCF7;
   padding: 16px 18px 18px;
   border-top: 1px solid var(--color-border);
 }
@@ -538,8 +538,8 @@
 }
 
 .course-view-page .cv-action-icon.view {
-  color: #4B5563;
-  background: #F3F4F6;
+  color: #718096;
+  background: #DFF0D8;
 }
 
 .course-view-page .cv-action-icon.download {

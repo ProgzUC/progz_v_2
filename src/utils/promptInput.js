@@ -24,7 +24,7 @@ export async function promptInput({
     confirmButtonText: confirmText,
     cancelButtonText: cancelText,
     confirmButtonColor: "#2a7d38",
-    cancelButtonColor: "#6b7280",
+    cancelButtonColor: "#718096",
     reverseButtons: true,
     focusConfirm: false,
     customClass: {

@@ -5,6 +5,7 @@ import "./App.css"
 import SignIn from "./pagesAuth/login/SignIn"
 import StudentSignup from "./pagesAuth/signup/StudentSignup"
 import ResetPassword from "./pagesAuth/login/ResetPassword"
+import MagicLogin from "./pagesAuth/login/MagicLogin"
 import TrainerApp from "./pagesTrainer/TrainerApp"
 import StudentApp from "./pagesStudent/StudentApp"
 import AdminApp from "./pagesAdmin/AdminApp"
@@ -59,6 +60,7 @@ const App = () => {
           <Route path="/login" element={<GuestOnlyRoute><SignIn /></GuestOnlyRoute>} />
           <Route path="/signup" element={<GuestOnlyRoute><StudentSignup /></GuestOnlyRoute>} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/magic-login/:token" element={<MagicLogin />} />
           <Route path="/unauthorized" element={<Unauthorized />} />
 
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />

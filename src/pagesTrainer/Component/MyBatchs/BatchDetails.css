@@ -236,7 +236,7 @@
 
 .curriculum-course-card {
     background: #fff;
-    border: 1px solid #e5e7eb;
+    border: 1px solid #C9DBC0;
     border-radius: 12px;
     padding: 14px 16px;
 }
@@ -245,7 +245,7 @@
     margin: 0 0 10px;
     font-size: 14px;
     font-weight: 700;
-    color: #111827;
+    color: #073B32;
 }
 
 .curriculum-course-card ul {
@@ -266,7 +266,7 @@
 }
 
 .curriculum-course-card .mod-sec-count {
-    color: #9ca3af;
+    color: #8B9AAB;
     font-size: 11px;
     white-space: nowrap;
 }
@@ -344,12 +344,12 @@
 
 .section-module-heading:hover {
     background: var(--color-primary-light, #f0fdf4);
-    border-color: rgba(6, 78, 59, 0.18);
+    border-color: rgba(11, 61, 46, 0.18);
 }
 
 .section-module-group.is-expanded .section-module-heading {
-    border-color: rgba(6, 78, 59, 0.22);
-    color: var(--trainer-primary, #064e3b);
+    border-color: rgba(11, 61, 46, 0.22);
+    color: var(--trainer-primary, #0B3D2E);
 }
 
 .section-module-heading-main {
@@ -668,12 +668,12 @@
 
 .section-item:hover {
     background: var(--color-primary-light);
-    border-color: rgba(6, 78, 59, 0.18);
+    border-color: rgba(11, 61, 46, 0.18);
 }
 
 .section-item.completed {
     background: var(--trainer-primary-light);
-    border-color: rgba(6, 78, 59, 0.22);
+    border-color: rgba(11, 61, 46, 0.22);
 }
 
 .item-radio {
@@ -716,7 +716,7 @@
 }
 
 .section-item-toggling .item-radio-loader {
-    border-color: rgba(6, 78, 59, 0.2);
+    border-color: rgba(11, 61, 46, 0.2);
     border-top-color: var(--trainer-primary);
 }
 

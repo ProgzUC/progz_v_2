@@ -1,63 +1,78 @@
 /* ================================================================
-   DONEZO EMERALD — Centralized Design System
+   PROGZ FOREST + MINT — Centralized Design System
    Single source of truth for the entire application
    ================================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
 
 :root {
-  /* ── Core Palette (Donezo Reference) ── */
-  --color-primary: #064E3B;
-  --color-primary-hover: #053D2E;
-  --color-primary-active: #042F23;
-  --color-primary-soft: #D1FAE5;
-  --color-primary-light: #ECFDF5;
-  --color-primary-muted: #6EE7B7;
-  --color-primary-bright: #10B981;
-  --color-primary-gradient: linear-gradient(135deg, #064E3B 0%, #10B981 100%);
+  /* ── Core Palette (Forest Green + Soft Mint + Sage + Emerald) ── */
+  --color-primary: #0B3D2E;
+  --color-primary-hover: #083028;
+  --color-primary-active: #0B3D2E;
+  --color-primary-soft: #DFF0D8;
+  --color-primary-light: #DFF0D8;
+  --color-primary-muted: #7DCBB0;
+  --color-primary-bright: #10A879;
+  --color-primary-gradient: linear-gradient(135deg, #0B3D2E 0%, #10A879 100%);
 
-  --color-bg: #F9FAFB;
-  --color-bg-muted: #F3F4F6;
-  --color-bg-sidebar: #FFFFFF;
-  --color-surface: #FFFFFF;
-  --color-card-bg: #FFFFFF;
-  --color-surface-dark: #053D2E;
+  /* Form controls / native dropdown highlight */
+  accent-color: var(--color-primary-bright);
 
-  --color-text: #111827;
-  --color-text-secondary: #6B7280;
-  --color-text-muted: #9CA3AF;
+  /* Bootstrap theme → forest / emerald (kills default blue selects/dropdowns) */
+  --bs-primary: #0B3D2E;
+  --bs-primary-rgb: 11, 61, 46;
+  --bs-success: #10A879;
+  --bs-success-rgb: 16, 168, 121;
+  --bs-link-color: #0B3D2E;
+  --bs-link-hover-color: #083028;
+  --bs-focus-ring-color: rgba(11, 61, 46, 0.25);
+  --bs-primary-bg-subtle: #E8F5E1;
+  --bs-primary-border-subtle: #DFF0D8;
+  --bs-primary-text-emphasis: #073B32;
+
+  --color-bg: #E8F5E1;
+  --color-bg-muted: #DFF0D8;
+  --color-bg-sidebar: #0B3D2E;
+  --color-surface: #F9FCF7;
+  --color-card-bg: #F9FCF7;
+  --color-surface-dark: #0B3D2E;
+
+  --color-text: #073B32;
+  --color-text-secondary: #718096;
+  --color-text-muted: #8B9AAB;
   --color-text-on-primary: #FFFFFF;
 
-  --color-border: #E5E7EB;
-  --color-border-strong: #D1D5DB;
-  --color-border-hover: #D1D5DB;
-  --color-focus-ring: rgba(6, 78, 59, 0.22);
+  --color-border: #C9DBC0;
+  --color-border-strong: #B5CBA8;
+  --color-border-hover: #B5CBA8;
+  --color-focus-ring: rgba(11, 61, 46, 0.22);
 
   /* ── Navbar / Footer ── */
-  --color-navbar-bg: #FFFFFF;
-  --color-navbar-border: #E5E7EB;
-  --color-navbar-text: #111827;
-  --color-navbar-text-muted: #6B7280;
-  --color-navbar-hover-bg: #D1FAE5;
-  --color-navbar-hover-text: #064E3B;
-  --color-footer-bg: #064E3B;
-  --color-footer-bg-mid: #053D2E;
-  --color-footer-bar: #042F23;
+  --color-navbar-bg: #F9FCF7;
+  --color-navbar-border: #C9DBC0;
+  --color-navbar-text: #073B32;
+  --color-navbar-text-muted: #718096;
+  --color-navbar-hover-bg: #DFF0D8;
+  --color-navbar-hover-text: #0B3D2E;
+  --color-footer-bg: #0B3D2E;
+  --color-footer-bg-mid: #083028;
+  --color-footer-bar: #062820;
 
   /* ── Status ── */
-  --color-success: #10B981;
-  --color-success-bg: #D1FAE5;
+  --color-success: #10A879;
+  --color-success-bg: #DFF0D8;
   --color-warning: #B45309;
   --color-warning-bg: #FFFBEB;
   --color-error: #DC2626;
   --color-error-bg: #FEE2E2;
-  --color-info: #047857;
-  --color-info-bg: #ECFDF5;
+  --color-info: #0B3D2E;
+  --color-info-bg: #E8F5E1;
   --color-pending: #F87171;
   --color-pending-bg: #FEE2E2;
 
   /* ── Typography ── */
-  --font-family-base: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-family-base: Lato, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -93,14 +108,14 @@
   --radius-full: 9999px;
 
   /* ── Shadows ── */
-  --shadow-xs: 0 1px 2px rgba(6, 78, 59, 0.04);
-  --shadow-sm: 0 2px 8px rgba(6, 78, 59, 0.06);
-  --shadow-md: 0 6px 20px rgba(6, 78, 59, 0.08);
-  --shadow-lg: 0 12px 32px rgba(6, 78, 59, 0.10);
-  --shadow-xl: 0 20px 48px rgba(6, 78, 59, 0.12);
-  --shadow-card-hover: 0 8px 24px rgba(6, 78, 59, 0.12);
-  --shadow-navbar: 0 1px 0 rgba(17, 24, 39, 0.04), 0 8px 24px rgba(17, 24, 39, 0.06);
-  --shadow-btn: 0 4px 14px rgba(6, 78, 59, 0.22);
+  --shadow-xs: 0 1px 2px rgba(11, 61, 46, 0.04);
+  --shadow-sm: 0 2px 8px rgba(11, 61, 46, 0.06);
+  --shadow-md: 0 6px 20px rgba(11, 61, 46, 0.08);
+  --shadow-lg: 0 12px 32px rgba(11, 61, 46, 0.10);
+  --shadow-xl: 0 20px 48px rgba(11, 61, 46, 0.12);
+  --shadow-card-hover: 0 8px 24px rgba(11, 61, 46, 0.12);
+  --shadow-navbar: 0 1px 0 rgba(7, 59, 50, 0.04), 0 8px 24px rgba(7, 59, 50, 0.06);
+  --shadow-btn: 0 4px 14px rgba(16, 168, 121, 0.22);
 
   /* ── Transitions ── */
   --transition-fast: 0.15s ease;
@@ -209,15 +224,22 @@
 [data-theme="dark"],
 html.dark-mode {
   color-scheme: dark;
+  accent-color: var(--color-primary-bright);
+
+  --bs-primary: #10A879;
+  --bs-primary-rgb: 16, 168, 121;
+  --bs-link-color: #34D399;
+  --bs-link-hover-color: #7DCBB0;
+  --bs-focus-ring-color: rgba(16, 168, 121, 0.35);
 
   --color-primary: #34D399;
-  --color-primary-hover: #6EE7B7;
-  --color-primary-active: #10B981;
-  --color-primary-soft: rgba(16, 185, 129, 0.18);
-  --color-primary-light: rgba(16, 185, 129, 0.12);
-  --color-primary-muted: #6EE7B7;
-  --color-primary-bright: #10B981;
-  --color-primary-gradient: linear-gradient(135deg, #064E3B 0%, #10B981 100%);
+  --color-primary-hover: #7DCBB0;
+  --color-primary-active: #0B3D2E;
+  --color-primary-soft: rgba(16, 168, 121, 0.18);
+  --color-primary-light: rgba(16, 168, 121, 0.12);
+  --color-primary-muted: #7DCBB0;
+  --color-primary-bright: #10A879;
+  --color-primary-gradient: linear-gradient(135deg, #0B3D2E 0%, #10A879 100%);
 
   --color-bg: #0B0D14;
   --color-bg-muted: #141824;
@@ -234,26 +256,26 @@ html.dark-mode {
   --color-border: #1F2433;
   --color-border-strong: #2A2F3F;
   --color-border-hover: #334155;
-  --color-focus-ring: rgba(16, 185, 129, 0.35);
+  --color-focus-ring: rgba(16, 168, 121, 0.35);
 
   --color-navbar-bg: #12141D;
   --color-navbar-border: #1F2433;
   --color-navbar-text: #F9FAFB;
   --color-navbar-text-muted: #94A3B8;
-  --color-navbar-hover-bg: rgba(16, 185, 129, 0.12);
+  --color-navbar-hover-bg: rgba(16, 168, 121, 0.12);
   --color-navbar-hover-text: #34D399;
   --color-footer-bg: #0B0D14;
   --color-footer-bg-mid: #12141D;
   --color-footer-bar: #07080C;
 
   --color-success: #34D399;
-  --color-success-bg: rgba(16, 185, 129, 0.15);
+  --color-success-bg: rgba(16, 168, 121, 0.15);
   --color-warning: #FBBF24;
   --color-warning-bg: rgba(251, 191, 36, 0.12);
   --color-error: #F87171;
   --color-error-bg: rgba(248, 113, 113, 0.12);
   --color-info: #34D399;
-  --color-info-bg: rgba(16, 185, 129, 0.12);
+  --color-info-bg: rgba(16, 168, 121, 0.12);
 
   --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.35);
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
@@ -262,7 +284,7 @@ html.dark-mode {
   --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.5);
   --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.45);
   --shadow-navbar: 0 1px 0 rgba(255, 255, 255, 0.04), 0 8px 24px rgba(0, 0, 0, 0.35);
-  --shadow-btn: 0 4px 14px rgba(16, 185, 129, 0.25);
+  --shadow-btn: 0 4px 14px rgba(16, 168, 121, 0.25);
 
   --mc-page-bg: #0B0D14;
   --mc-stat-bg: #141824;

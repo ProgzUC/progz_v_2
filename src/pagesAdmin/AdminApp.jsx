@@ -7,6 +7,7 @@ import Courses from "./components/Courses/Courses.jsx";
 import Students from "./components/Student/Students.jsx";
 import Instructors from "./components/Instructor/Instructors.jsx";
 import EnrollStudents from "./components/EnrollStudent/EnrollStudents.jsx";
+import BulkStudentImport from "./components/BulkImport/BulkStudentImport.jsx";
 import SyncFromZen from "./components/SyncFormZen/SyncFromZen.jsx";
 import ApproveUser from "./components/ApproveUser/ApproveUser.jsx";
 import { CourseBuilder as CreateCourse } from "../features/course-builder";
@@ -70,6 +71,7 @@ export default function AdminApp() {
                   <Route path="students" element={<Students />} />
                   <Route path="instructors" element={<Instructors />} />
                   <Route path="enroll" element={<EnrollStudents />} />
+                  <Route path="bulk-import" element={<BulkStudentImport />} />
                   <Route path="approve-users" element={<ApproveUser />} />
                   <Route path="user-detail-view" element={<UserDetailView />} />
                   <Route path="sync" element={<SyncFromZen />} />

@@ -70,7 +70,7 @@
 
 .metric-icon.success { background: var(--color-primary-light); color: var(--color-primary-bright); }
 .metric-icon.info { background: var(--color-primary-light); color: var(--color-primary-bright); }
-.metric-icon.warning { background: rgba(107, 114, 128, 0.12); color: #6B7280; }
+.metric-icon.warning { background: rgba(107, 114, 128, 0.12); color: #718096; }
 
 .metric-info {
   display: flex;
@@ -154,7 +154,7 @@
 
 .sync-status-badge.success { background: var(--color-primary-light); color: var(--color-primary-bright); }
 .sync-status-badge.failure { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
-.sync-status-badge.in_progress { background: rgba(107, 114, 128, 0.12); color: #6B7280; }
+.sync-status-badge.in_progress { background: rgba(107, 114, 128, 0.12); color: #718096; }
 
 .imports-badge span {
   background: rgba(255, 255, 255, 0.05);

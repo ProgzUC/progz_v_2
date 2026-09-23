@@ -18,6 +18,7 @@ import {
 import { useCourse, useUpdateCourse } from "../../../hooks/useCourses";
 import { useAllUsers } from "../../../hooks/useAdminUsers";
 import Loader from "../../../components/common/Loader/Loader";
+import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import Swal from "sweetalert2";
 
 const getInitials = (name = "") => {
@@ -155,7 +156,7 @@ const CourseTrainers = () => {
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#dc2626",
-      cancelButtonColor: "#6b7280",
+      cancelButtonColor: "#718096",
       confirmButtonText: "Remove",
     }).then((result) => {
       if (result.isConfirmed) {
@@ -289,15 +290,16 @@ const CourseTrainers = () => {
               </span>
               <label className="mi-sort">
                 Sort by:
-                <select
+                <AppSelect
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   aria-label="Sort instructors"
-                >
-                  <option value="latest">Latest added</option>
-                  <option value="oldest">Oldest first</option>
-                  <option value="name">Name A–Z</option>
-                </select>
+                  options={[
+                    { value: "latest", label: "Latest added" },
+                    { value: "oldest", label: "Oldest first" },
+                    { value: "name", label: "Name A–Z" },
+                  ]}
+                />
               </label>
             </div>
 

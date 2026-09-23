@@ -34,7 +34,7 @@
     border: 1px solid var(--color-border);
     border-radius: 24px;
     padding: 28px 32px 10px;
-    box-shadow: 0 10px 32px rgba(6, 78, 59, 0.07);
+    box-shadow: 0 10px 32px rgba(11, 61, 46, 0.07);
 }
 
 .sp-hero-top {
@@ -54,7 +54,7 @@
     padding: 4px;
     border-radius: 50%;
     background: #ffffff;
-    box-shadow: 0 0 0 3px var(--color-primary-muted), 0 8px 24px rgba(6, 78, 59, 0.18);
+    box-shadow: 0 0 0 3px var(--color-primary-muted), 0 8px 24px rgba(11, 61, 46, 0.18);
 }
 
 .sp-avatar-image,
@@ -216,7 +216,7 @@
     border: 1px solid var(--color-border);
     border-radius: 20px;
     padding: 1.4rem 1.5rem 1.5rem;
-    box-shadow: 0 8px 24px rgba(6, 78, 59, 0.04);
+    box-shadow: 0 8px 24px rgba(11, 61, 46, 0.04);
 }
 
 .sp-section-header {
@@ -281,28 +281,28 @@
 }
 
 .sp-detail-icon.tone-green {
-    background: #d1fae5;
-    color: #047857;
+    background: #DFF0D8;
+    color: #0B3D2E;
 }
 
 .sp-detail-icon.tone-purple {
-    background: #F3F4F6;
-    color: #6B7280;
+    background: #DFF0D8;
+    color: #718096;
 }
 
 .sp-detail-icon.tone-blue {
-    background: #ECFDF5;
-    color: #059669;
+    background: #E8F5E1;
+    color: #10A879;
 }
 
 .sp-detail-icon.tone-orange {
-    background: #F3F4F6;
-    color: #6B7280;
+    background: #DFF0D8;
+    color: #718096;
 }
 
 .sp-detail-icon.tone-teal {
-    background: #ECFDF5;
-    color: #047857;
+    background: #E8F5E1;
+    color: #0B3D2E;
 }
 
 .sp-detail-icon.tone-pink {
@@ -383,13 +383,13 @@
     justify-content: center;
     border-radius: 14px;
     background: var(--color-primary-soft) !important;
-    border: 1px solid rgba(6, 78, 59, 0.14) !important;
+    border: 1px solid rgba(11, 61, 46, 0.14) !important;
     color: var(--color-primary) !important;
     font-size: 1.05rem;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 6px 16px rgba(6, 78, 59, 0.12) !important;
+    box-shadow: 0 6px 16px rgba(11, 61, 46, 0.12) !important;
     transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
         background 0.28s ease,
         box-shadow 0.28s ease,
@@ -417,7 +417,7 @@
     border-color: var(--color-primary) !important;
     color: #ffffff !important;
     transform: translateY(-2px);
-    box-shadow: 0 10px 22px rgba(6, 78, 59, 0.28) !important;
+    box-shadow: 0 10px 22px rgba(11, 61, 46, 0.28) !important;
 }
 
 .sp-back-btn:hover svg {
@@ -427,7 +427,7 @@
 
 .sp-back-btn:active {
     transform: translateY(0) scale(0.94);
-    box-shadow: 0 4px 10px rgba(6, 78, 59, 0.18) !important;
+    box-shadow: 0 4px 10px rgba(11, 61, 46, 0.18) !important;
 }
 
 /* ============================================================
@@ -472,7 +472,7 @@
 
 /* Soft icon circle backgrounds */
 .stat-ongoing .stat-icon-wrapper {
-    background-color: rgba(16, 185, 129, 0.12);
+    background-color: rgba(16, 168, 121, 0.12);
     color: var(--color-success);
 }
 
@@ -488,7 +488,7 @@
 
 .stat-progress .stat-icon-wrapper {
     background-color: rgba(5, 150, 105, 0.12);
-    color: #059669;
+    color: #10A879;
 }
 
 .stat-data {
@@ -840,8 +840,8 @@
 
 .profile-course-card-top .fullstack-thumb {
     background:
-        radial-gradient(circle at 18% 80%, rgba(16, 185, 129, 0.28), transparent 42%),
-        radial-gradient(circle at 88% 18%, rgba(6, 78, 59, 0.7), transparent 46%),
+        radial-gradient(circle at 18% 80%, rgba(16, 168, 121, 0.28), transparent 42%),
+        radial-gradient(circle at 88% 18%, rgba(11, 61, 46, 0.7), transparent 46%),
         linear-gradient(160deg, #071410 0%, #0b1f18 48%, #05080c 100%);
 }
 
@@ -908,7 +908,7 @@
 }
 
 .badge-completed {
-    background: #059669;
+    background: #10A879;
     color: #ffffff;
 }
 

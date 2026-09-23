@@ -15,6 +15,7 @@ import {
   useNotificationPrefs,
   useUpdateNotificationPrefs,
 } from "../../../hooks/useNotifications";
+import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import "./Settings.css";
 
 const NAV_GROUPS = [
@@ -605,13 +606,12 @@ function AnnouncementsPanel() {
           </label>
           <label className="as-field">
             <span>Audience</span>
-            <select value={audience} onChange={(e) => setAudience(e.target.value)}>
-              {AUDIENCE_OPTIONS.map((opt) => (
-                <option key={opt.id} value={opt.id}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+            <AppSelect
+              value={audience}
+              onChange={(e) => setAudience(e.target.value)}
+              aria-label="Announcement audience"
+              options={AUDIENCE_OPTIONS.map((opt) => ({ value: opt.id, label: opt.label }))}
+            />
           </label>
           <label className="as-field">
             <span>{audience === "custom" ? "Email" : "Extra email (optional)"}</span>

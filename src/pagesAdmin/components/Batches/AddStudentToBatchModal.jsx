@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useAllUsers } from "../../../hooks/useAdminUsers";
 import { useEnrollStudent } from "../../../hooks/useBatches";
+import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import "../Modal.css";
 
 const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
@@ -59,36 +60,46 @@ const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
                     <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
                         <div className="modal-field">
                             <label className="modal-label">Select Student</label>
-                            <select
+                            <AppSelect
                                 className="modal-input"
                                 value={selectedStudentId}
                                 onChange={(e) => setSelectedStudentId(e.target.value)}
-                            >
-                                <option value="">-- Choose Student --</option>
-                                {studentsList.map((s) => (
-                                    <option key={s._id} value={s._id}>
-                                        {s.name} ({s.email})
-                                    </option>
-                                ))}
-                            </select>
+                                aria-label="Select Student"
+                                icon="bi-person"
+                                options={[
+                                    { value: "", label: "-- Choose Student --" },
+                                    ...studentsList.map((s) => ({
+                                        value: s._id,
+                                        label: `${s.name} (${s.email})`,
+                                    })),
+                                ]}
+                            />
                         </div>
 
-                        <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--color-text-muted, #6b7280)" }}>
-                            Need to enroll many students or Zen CRM leads?{" "}
+                        <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--color-text-muted, #718096)" }}>
+                            Need to create accounts from a college email list?{" "}
+                            <Link
+                                to={`/admin/bulk-import?batchId=${batchId}`}
+                                onClick={onClose}
+                                style={{ color: "#10A879", fontWeight: 600 }}
+                            >
+                                Bulk Import
+                            </Link>
+                            {" · "}
                             <Link
                                 to={`/admin/enroll?tab=bulk&batchId=${batchId}`}
                                 onClick={onClose}
-                                style={{ color: "#059669", fontWeight: 600 }}
+                                style={{ color: "#10A879", fontWeight: 600 }}
                             >
-                                Open bulk enrollment
+                                Bulk enroll existing
                             </Link>
-                            {" "}or{" "}
+                            {" · "}
                             <Link
                                 to={`/admin/enroll?tab=csv&batchId=${batchId}`}
                                 onClick={onClose}
-                                style={{ color: "#059669", fontWeight: 600 }}
+                                style={{ color: "#10A879", fontWeight: 600 }}
                             >
-                                CSV import
+                                CSV enroll
                             </Link>
                             .
                         </p>

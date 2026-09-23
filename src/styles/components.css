@@ -355,6 +355,49 @@
 }
 
 /* ── Bootstrap Overrides ── */
+:root,
+[data-bs-theme="light"] {
+  --bs-primary: var(--color-primary);
+  --bs-primary-rgb: 11, 61, 46;
+  --bs-link-color: var(--color-primary);
+  --bs-link-hover-color: var(--color-primary-hover);
+  --bs-focus-ring-color: var(--color-focus-ring);
+}
+
+.form-select:focus,
+.form-control:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 0.25rem var(--color-focus-ring) !important;
+}
+
+.form-check-input:checked {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.form-check-input:focus {
+  border-color: var(--color-primary-muted) !important;
+  box-shadow: 0 0 0 0.25rem var(--color-focus-ring) !important;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+  background-color: var(--color-primary-light) !important;
+  color: var(--color-primary) !important;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: var(--color-primary) !important;
+  color: #ffffff !important;
+}
+
+.list-group-item.active {
+  background-color: var(--color-primary) !important;
+  border-color: var(--color-primary) !important;
+  color: #ffffff !important;
+}
+
 .btn-primary,
 .btn-success {
   background-color: var(--color-primary) !important;

@@ -11,6 +11,7 @@ import {
     isTrainerRole,
 } from "../../../features/batches/batchFormState";
 import CourseMultiSelect from "./CourseMultiSelect";
+import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import "../Modal.css";
 import "../EnrollStudent/EnrollStudents.css";
 
@@ -266,16 +267,18 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
 
                 <div className="modal-field">
                     <label className="modal-label">Status</label>
-                    <select
+                    <AppSelect
                         name="status"
                         className="modal-input"
                         value={batchData.status}
                         onChange={handleChange}
-                    >
-                        <option value="active">Active</option>
-                        <option value="completed">Completed</option>
-                        <option value="upcoming">Upcoming</option>
-                    </select>
+                        aria-label="Status"
+                        options={[
+                            { value: "active", label: "Active" },
+                            { value: "completed", label: "Completed" },
+                            { value: "upcoming", label: "Upcoming" },
+                        ]}
+                    />
                 </div>
 
                 <div className="modal-field">
@@ -317,14 +320,14 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
                         <h4 style={{ margin: 0 }}>Trainers & Modules</h4>
                         <button
                             onClick={addTrainerRow}
-                            style={{ background: "#ECFDF5", color: "#059669", border: "none", padding: "6px 12px", borderRadius: "6px", cursor: "pointer", fontSize: "13px", fontWeight: "600" }}
+                            style={{ background: "#E8F5E1", color: "#10A879", border: "none", padding: "6px 12px", borderRadius: "6px", cursor: "pointer", fontSize: "13px", fontWeight: "600" }}
                         >
                             + Add Trainer
                         </button>
                     </div>
 
                     {batchData.trainers.map((t, index) => (
-                        <div key={index} style={{ background: "#f9fafb", padding: "15px", borderRadius: "10px", marginBottom: "15px", border: "1px solid #e5e7eb" }}>
+                        <div key={index} style={{ background: "#E8F5E1", padding: "15px", borderRadius: "10px", marginBottom: "15px", border: "1px solid #C9DBC0" }}>
                             <div style={{ display: "flex", justifyContent: "flex-end" }}>
                                 <span onClick={() => removeTrainerRow(index)} style={{ cursor: "pointer", color: "#ef4444", fontSize: "12px" }}>Remove</span>
                             </div>
@@ -332,16 +335,20 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
                             <div className="input-grid-2">
                                 <div className="modal-field">
                                     <label className="modal-label">Trainer</label>
-                                    <select
+                                    <AppSelect
                                         className="modal-input"
                                         value={t.trainer}
                                         onChange={(e) => updateTrainer(index, "trainer", e.target.value)}
-                                    >
-                                        <option value="">Select Trainer</option>
-                                        {instructorsList.map(ins => (
-                                            <option key={ins._id} value={ins._id}>{ins.name}</option>
-                                        ))}
-                                    </select>
+                                        aria-label="Trainer"
+                                        icon="bi-person"
+                                        options={[
+                                            { value: "", label: "Select Trainer" },
+                                            ...instructorsList.map((ins) => ({
+                                                value: ins._id,
+                                                label: ins.name,
+                                            })),
+                                        ]}
+                                    />
                                 </div>
                                 <div className="modal-field">
                                     <label className="modal-label" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
@@ -371,7 +378,7 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
                                     <label className="modal-label">
                                         Assigned Modules
                                         {batchData.courseIds.length > 1 && selectedCourse.courseName && (
-                                            <span style={{ fontWeight: 400, color: "#6b7280", marginLeft: 8 }}>
+                                            <span style={{ fontWeight: 400, color: "#718096", marginLeft: 8 }}>
                                                 (from {selectedCourse.courseName})
                                             </span>
                                         )}
