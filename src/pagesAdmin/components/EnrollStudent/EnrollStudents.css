@@ -632,99 +632,13 @@
   color: var(--color-text);
 }
 
-/* CSV */
-.admin-enroll-students-page .csv-upload-dropzone {
-  border: 2px dashed #DFF0D8;
-  background: var(--color-primary-light);
-  border-radius: 12px;
-  padding: 40px 24px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-
-.admin-enroll-students-page .csv-upload-dropzone i {
-  font-size: 2.5rem;
-  margin-bottom: 4px;
-  color: var(--color-primary-bright);
-}
-
-.admin-enroll-students-page .csv-upload-dropzone h3 {
-  font-size: 16px;
-  color: var(--color-text);
-  margin: 0;
-  font-weight: 600;
-}
-
-.admin-enroll-students-page .csv-upload-dropzone p {
-  margin: 0;
-  max-width: 480px;
+/* Import & invite tab */
+.admin-enroll-students-page .import-tab-hint {
+  margin: 0 0 16px;
   font-size: 13px;
+  line-height: 1.5;
   color: var(--color-text-secondary);
-  line-height: 1.45;
-}
-
-.admin-enroll-students-page .csv-upload-dropzone code {
-  color: var(--color-primary-bright);
-  font-size: 0.9em;
-  background: var(--color-surface);
-  padding: 1px 6px;
-  border-radius: 4px;
-}
-
-.admin-enroll-students-page .csv-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 12px;
-}
-
-.admin-enroll-students-page .file-loaded-badge {
-  background: var(--color-surface);
-  color: var(--color-primary-bright);
-  border: 1px solid #DFF0D8;
-  padding: 8px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  margin-top: 12px;
-}
-
-.admin-enroll-students-page .parsed-emails-preview {
-  margin-top: 20px;
-}
-
-.admin-enroll-students-page .parsed-emails-preview h4 {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-text);
-  margin: 0 0 10px;
-}
-
-.admin-enroll-students-page .email-chips-container {
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 14px;
-  max-height: 200px;
-  overflow-y: auto;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.admin-enroll-students-page .email-chip {
-  background: var(--color-primary-light);
-  border: 1px solid #DFF0D8;
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 12px;
-  color: var(--color-primary-hover);
-  font-weight: 500;
+  max-width: 720px;
 }
 
 @media screen and (max-width: 900px) {

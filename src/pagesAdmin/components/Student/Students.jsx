@@ -122,10 +122,10 @@ const Students = () => {
           <button
             type="button"
             className="create-btn"
-            onClick={() => navigate("/admin/bulk-import")}
+            onClick={() => navigate("/admin/enroll?tab=import")}
             style={{ marginRight: 8 }}
           >
-            Bulk Import
+            Import & invite
           </button>
           <button
             type="button"

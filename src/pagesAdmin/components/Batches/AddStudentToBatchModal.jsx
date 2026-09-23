@@ -77,13 +77,13 @@ const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
                         </div>
 
                         <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--color-text-muted, #718096)" }}>
-                            Need to create accounts from a college email list?{" "}
+                            Need a college email list?{" "}
                             <Link
-                                to={`/admin/bulk-import?batchId=${batchId}`}
+                                to={`/admin/enroll?tab=import&batchId=${batchId}`}
                                 onClick={onClose}
                                 style={{ color: "#10A879", fontWeight: 600 }}
                             >
-                                Bulk Import
+                                Import & invite
                             </Link>
                             {" · "}
                             <Link
@@ -91,15 +91,7 @@ const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
                                 onClick={onClose}
                                 style={{ color: "#10A879", fontWeight: 600 }}
                             >
-                                Bulk enroll existing
-                            </Link>
-                            {" · "}
-                            <Link
-                                to={`/admin/enroll?tab=csv&batchId=${batchId}`}
-                                onClick={onClose}
-                                style={{ color: "#10A879", fontWeight: 600 }}
-                            >
-                                CSV enroll
+                                Bulk select existing
                             </Link>
                             .
                         </p>

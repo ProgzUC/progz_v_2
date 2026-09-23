@@ -1,5 +1,5 @@
 import AdminLayout from "./components/AdminLayout/AdminLayout.jsx";
-import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate, useNavigate, useSearchParams } from "react-router-dom";
 import "./AdminApp.css";
 import "../styles/admin-a11y.css";
 import Overview from "./components/Overview/Overview.jsx";
@@ -7,7 +7,6 @@ import Courses from "./components/Courses/Courses.jsx";
 import Students from "./components/Student/Students.jsx";
 import Instructors from "./components/Instructor/Instructors.jsx";
 import EnrollStudents from "./components/EnrollStudent/EnrollStudents.jsx";
-import BulkStudentImport from "./components/BulkImport/BulkStudentImport.jsx";
 import SyncFromZen from "./components/SyncFormZen/SyncFromZen.jsx";
 import ApproveUser from "./components/ApproveUser/ApproveUser.jsx";
 import { CourseBuilder as CreateCourse } from "../features/course-builder";
@@ -37,6 +36,16 @@ function AdminCreateCourse() {
       onSave={() => navigate("/admin/courses")}
     />
   );
+}
+
+/** Old /admin/bulk-import URL → Enroll Students Import & invite tab */
+function BulkImportRedirect() {
+  const [searchParams] = useSearchParams();
+  const batchId = searchParams.get("batchId");
+  const to = batchId
+    ? `/admin/enroll?tab=import&batchId=${encodeURIComponent(batchId)}`
+    : "/admin/enroll?tab=import";
+  return <Navigate to={to} replace />;
 }
 
 export default function AdminApp() {
@@ -71,7 +80,7 @@ export default function AdminApp() {
                   <Route path="students" element={<Students />} />
                   <Route path="instructors" element={<Instructors />} />
                   <Route path="enroll" element={<EnrollStudents />} />
-                  <Route path="bulk-import" element={<BulkStudentImport />} />
+                  <Route path="bulk-import" element={<BulkImportRedirect />} />
                   <Route path="approve-users" element={<ApproveUser />} />
                   <Route path="user-detail-view" element={<UserDetailView />} />
                   <Route path="sync" element={<SyncFromZen />} />
