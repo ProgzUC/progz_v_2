@@ -20,7 +20,7 @@ const isExcelFile = (file) => {
 };
 
 /**
- * Bulk create/assign students + welcome magic links.
+ * Bulk create/assign students + optional welcome / password-setup emails.
  * @param {{ embedded?: boolean, batchId?: string, onBatchIdChange?: (id: string) => void }} props
  */
 const BulkStudentImport = ({
@@ -163,7 +163,7 @@ const BulkStudentImport = ({
       title: "Import & Assign?",
       html: `<p>Create/assign <b>${students.length}</b> student${students.length === 1 ? "" : "s"} to <b>${
         selectedBatch?.name || "selected batch"
-      }</b>${sendWelcomeEmails ? " and send welcome login emails" : ""}.</p>`,
+      }</b>${sendWelcomeEmails ? " and send password setup emails" : ""}.</p>`,
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Import & Assign",
@@ -299,7 +299,7 @@ const BulkStudentImport = ({
             onChange={(e) => setSendWelcomeEmails(e.target.checked)}
             disabled={isImporting}
           />
-          Send welcome email with passwordless login link to each student
+          Send welcome email with password setup link to each student
         </label>
 
         <div className="action-row">
