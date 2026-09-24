@@ -376,7 +376,7 @@ const BulkStudentImport = ({
               </li>
               <li>
                 <span>Welcome emails sent</span>
-                <strong>{summary.welcomeEmailsSent}</strong>
+                <strong>{summary.welcomeEmailsSent ?? summary.welcomeEmailsQueued ?? 0}</strong>
               </li>
               <li>
                 <span>Failed records</span>
