@@ -98,8 +98,8 @@ const mapWithConcurrency = async (items, limit, worker) => {
 
 /**
  * Reliable path using APIs that are already live:
- * admin-create each new student + batches/:id/bulk-enroll.
- * Welcome emails (password setup links) are sent in parallel and never block assign.
+ * create missing students + batches/:id/bulk-enroll.
+ * Skips admin-create for emails that already exist (avoids noisy 400s).
  */
 const bulkImportStudentsFallback = async ({
     batchId,
@@ -121,15 +121,29 @@ const bulkImportStudentsFallback = async ({
     const errors = [];
     const enrollEmails = [];
 
-    await mapWithConcurrency(students, CREATE_CONCURRENCY, async (row, i) => {
+    let existingEmails = new Set();
+    try {
+        const allUsers = await fetchAllUsers();
+        const list = Array.isArray(allUsers) ? allUsers : [];
+        existingEmails = new Set(
+            list.map((u) => String(u?.email || "").trim().toLowerCase()).filter(Boolean)
+        );
+    } catch {
+        // If lookup fails, fall through and attempt create per row.
+        existingEmails = new Set();
+    }
+
+    const createResults = await mapWithConcurrency(students, CREATE_CONCURRENCY, async (row, i) => {
         const rowNum = i + 1;
         const email = String(row?.email || "").trim().toLowerCase();
         const name = String(row?.name || "").trim() || email.split("@")[0] || "Student";
 
         if (!email) {
-            summary.failedRecords += 1;
-            errors.push({ row: rowNum, email: row?.email || "", reason: "Email is required" });
-            return;
+            return { kind: "failed", row: rowNum, email: row?.email || "", reason: "Email is required" };
+        }
+
+        if (existingEmails.has(email)) {
+            return { kind: "existing", email };
         }
 
         try {
@@ -140,19 +154,37 @@ const bulkImportStudentsFallback = async ({
                 password: randomTempPassword(),
                 source: "bulk_import",
             });
-            summary.successfullyCreated += 1;
-            enrollEmails.push(email);
+            existingEmails.add(email);
+            return { kind: "created", email };
         } catch (err) {
             const msg = String(err?.message || "");
-            if (/already exists/i.test(msg)) {
-                summary.alreadyExisting += 1;
-                enrollEmails.push(email);
-            } else {
-                summary.failedRecords += 1;
-                errors.push({ row: rowNum, email, reason: msg || "Failed to create student" });
+            const status = err?.status ?? err?.response?.status;
+            // Race / already registered since lookup
+            if (status === 400 && /already exists/i.test(msg)) {
+                existingEmails.add(email);
+                return { kind: "existing", email };
             }
+            return { kind: "failed", row: rowNum, email, reason: msg || "Failed to create student" };
         }
     });
+
+    for (const result of createResults) {
+        if (!result) continue;
+        if (result.kind === "created") {
+            summary.successfullyCreated += 1;
+            enrollEmails.push(result.email);
+        } else if (result.kind === "existing") {
+            summary.alreadyExisting += 1;
+            enrollEmails.push(result.email);
+        } else if (result.kind === "failed") {
+            summary.failedRecords += 1;
+            errors.push({
+                row: result.row,
+                email: result.email,
+                reason: result.reason,
+            });
+        }
+    }
 
     if (enrollEmails.length > 0) {
         try {
