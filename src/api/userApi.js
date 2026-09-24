@@ -77,9 +77,29 @@ const randomTempPassword = () => {
     return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("").slice(0, 24);
 };
 
+const CREATE_CONCURRENCY = 5;
+const BULK_IMPORT_TIMEOUT_MS = 180000;
+
+const mapWithConcurrency = async (items, limit, worker) => {
+    const results = new Array(items.length);
+    let nextIndex = 0;
+
+    const runners = Array.from({ length: Math.min(limit, items.length) }, async () => {
+        while (nextIndex < items.length) {
+            const index = nextIndex;
+            nextIndex += 1;
+            results[index] = await worker(items[index], index);
+        }
+    });
+
+    await Promise.all(runners);
+    return results;
+};
+
 /**
- * Fallback when /users/bulk-import is not deployed yet:
- * admin-create each new student + batches/:id/bulk-enroll, optionally email password-reset links.
+ * Reliable path using APIs that are already live:
+ * admin-create each new student + batches/:id/bulk-enroll.
+ * Welcome emails (password setup links) are sent in parallel and never block assign.
  */
 const bulkImportStudentsFallback = async ({
     batchId,
@@ -101,16 +121,15 @@ const bulkImportStudentsFallback = async ({
     const errors = [];
     const enrollEmails = [];
 
-    for (let i = 0; i < students.length; i += 1) {
-        const row = students[i] || {};
+    await mapWithConcurrency(students, CREATE_CONCURRENCY, async (row, i) => {
         const rowNum = i + 1;
-        const email = String(row.email || "").trim().toLowerCase();
-        const name = String(row.name || "").trim() || email.split("@")[0] || "Student";
+        const email = String(row?.email || "").trim().toLowerCase();
+        const name = String(row?.name || "").trim() || email.split("@")[0] || "Student";
 
         if (!email) {
             summary.failedRecords += 1;
-            errors.push({ row: rowNum, email: row.email || "", reason: "Email is required" });
-            continue;
+            errors.push({ row: rowNum, email: row?.email || "", reason: "Email is required" });
+            return;
         }
 
         try {
@@ -133,7 +152,7 @@ const bulkImportStudentsFallback = async ({
                 errors.push({ row: rowNum, email, reason: msg || "Failed to create student" });
             }
         }
-    }
+    });
 
     if (enrollEmails.length > 0) {
         try {
@@ -161,19 +180,23 @@ const bulkImportStudentsFallback = async ({
         }
     }
 
+    // Fire emails after assign so SMTP slowness cannot fail the import UI.
     if (sendWelcomeEmails && enrollEmails.length > 0) {
-        for (const email of enrollEmails) {
-            try {
-                await forgotPassword({ email });
-                summary.welcomeEmailsSent += 1;
-            } catch (mailErr) {
+        const mailResults = await Promise.allSettled(
+            enrollEmails.map((email) => forgotPassword({ email }))
+        );
+        summary.welcomeEmailsSent = mailResults.filter((r) => r.status === "fulfilled").length;
+        mailResults.forEach((result, idx) => {
+            if (result.status === "rejected") {
                 errors.push({
                     row: null,
-                    email,
-                    reason: `Account ready but welcome email failed: ${mailErr?.message || "send failed"}`,
+                    email: enrollEmails[idx],
+                    reason: `Account ready but welcome email failed: ${
+                        result.reason?.message || "send failed"
+                    }`,
                 });
             }
-        }
+        });
     }
 
     return {
@@ -184,17 +207,42 @@ const bulkImportStudentsFallback = async ({
     };
 };
 
+const isRetryableBulkImportError = (err) => {
+    const status = err?.status ?? err?.response?.status;
+    const message = String(err?.message || "").toLowerCase();
+    return (
+        status === 404 ||
+        status === 408 ||
+        status === 502 ||
+        status === 503 ||
+        status === 504 ||
+        message.includes("timeout") ||
+        message.includes("network error")
+    );
+};
+
 /**
  * Bulk create/assign students to a batch and send welcome emails.
- * payload: { batchId, students: [{ name?, email }], sendWelcomeEmails? }
- * Falls back to admin-create + bulk-enroll when /users/bulk-import is not on the server yet.
+ *
+ * Live API historically hangs on /users/bulk-import when SMTP runs in-request,
+ * so we use the proven create+enroll path directly. When the async bulk-import
+ * backend is deployed, set VITE_USE_BULK_IMPORT_API=true to prefer it.
  */
 export const bulkImportStudents = async (payload) => {
+    const preferDedicated =
+        String(import.meta.env.VITE_USE_BULK_IMPORT_API || "").toLowerCase() === "true";
+
+    if (!preferDedicated) {
+        return bulkImportStudentsFallback(payload);
+    }
+
     try {
-        const res = await axiosInstance.post("/users/bulk-import", payload);
+        const res = await axiosInstance.post("/users/bulk-import", payload, {
+            timeout: BULK_IMPORT_TIMEOUT_MS,
+        });
         return res.data;
     } catch (err) {
-        if (err.status !== 404 && err.response?.status !== 404) throw err;
+        if (!isRetryableBulkImportError(err)) throw err;
         return bulkImportStudentsFallback(payload);
     }
 };

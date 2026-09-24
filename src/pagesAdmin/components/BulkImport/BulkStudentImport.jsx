@@ -190,7 +190,7 @@ const BulkStudentImport = ({
             <div>Successfully created: <b>${s.successfullyCreated ?? 0}</b></div>
             <div>Already existing: <b>${s.alreadyExisting ?? 0}</b></div>
             <div>Successfully assigned: <b>${s.successfullyAssigned ?? 0}</b></div>
-            <div>Welcome emails sent: <b>${s.welcomeEmailsSent ?? 0}</b></div>
+            <div>Welcome emails sent: <b>${s.welcomeEmailsSent ?? s.welcomeEmailsQueued ?? 0}</b></div>
             <div>Failed records: <b>${s.failedRecords ?? 0}</b></div>
           </div>
         `,
