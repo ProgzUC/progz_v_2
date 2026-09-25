@@ -6,6 +6,7 @@ import { useJoinClass } from '../../../hooks/useClassSession';
 import Loader from '../../../components/common/Loader/Loader';
 import TrainerAttendancePanel from '../../components/attendance/TrainerAttendancePanel';
 import AttendanceHistory from '../../components/attendance/AttendanceHistory';
+import TrainerAnnouncePanel from './TrainerAnnouncePanel';
 import Swal from 'sweetalert2';
 
 const BatchDetails = ({ batch: initialBatch, onBack }) => {
@@ -286,6 +287,13 @@ const BatchDetailsContent = ({
                     <i className="bi bi-calendar-check"></i>
                     Attendance
                 </button>
+                <button
+                    className={`batch-tab ${activeTab === 'announce' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('announce')}
+                >
+                    <i className="bi bi-megaphone-fill"></i>
+                    Announce
+                </button>
             </div>
 
             <div className="stats-row">
@@ -528,6 +536,10 @@ const BatchDetailsContent = ({
                     />
                     <AttendanceHistory batchId={batchId} />
                 </div>
+            )}
+
+            {activeTab === 'announce' && (
+                <TrainerAnnouncePanel batchId={batchId} students={students} />
             )}
         </div>
     );

@@ -20,3 +20,17 @@ export const fetchTrainerCourses = () =>
 
 export const fetchTrainerAnnouncements = () =>
     axiosInstance.get("/trainer/announcements").then((res) => res.data);
+
+export const fetchTrainerBatchAnnouncements = (batchId) =>
+    axiosInstance.get(`/trainer/batches/${batchId}/announcements`).then((res) => res.data);
+
+export const createTrainerBatchAnnouncement = (batchId, payload) =>
+    axiosInstance
+        .post(`/trainer/batches/${batchId}/announcements`, payload, { timeout: 120000 })
+        .then((res) => res.data);
+
+export const updateTrainerBatchAnnouncement = (id, payload) =>
+    axiosInstance.patch(`/trainer/announcements/${id}`, payload).then((res) => res.data);
+
+export const deleteTrainerBatchAnnouncement = (id) =>
+    axiosInstance.delete(`/trainer/announcements/${id}`).then((res) => res.data);

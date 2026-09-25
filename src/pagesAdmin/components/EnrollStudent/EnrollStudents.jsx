@@ -83,6 +83,7 @@ const EnrollStudents = () => {
   const [bulkBatchId, setBulkBatchId] = useState(batchParam);
   const [selectedActiveIds, setSelectedActiveIds] = useState(() => new Set());
   const [selectedPendingIds, setSelectedPendingIds] = useState(() => new Set());
+  const [bulkSelectMode, setBulkSelectMode] = useState(false);
   const [bulkSearch, setBulkSearch] = useState("");
   const [bulkFilterStatus, setBulkFilterStatus] = useState("all");
   const [hideAlreadyEnrolled, setHideAlreadyEnrolled] = useState(true);
@@ -229,6 +230,7 @@ const EnrollStudents = () => {
 
       setSelectedActiveIds(new Set());
       setSelectedPendingIds(new Set());
+      setBulkSelectMode(false);
       handleRefreshData();
     } catch (err) {
       Swal.fire(
@@ -258,6 +260,27 @@ const EnrollStudents = () => {
       else next.add(id);
       return next;
     });
+  };
+
+  const openBulkSelectMode = (student) => {
+    const id = student._id;
+    let nextActive = selectedActiveIds;
+    let nextPending = selectedPendingIds;
+
+    if (student.isPending) {
+      nextPending = new Set(selectedPendingIds);
+      if (nextPending.has(id)) nextPending.delete(id);
+      else nextPending.add(id);
+      setSelectedPendingIds(nextPending);
+    } else {
+      nextActive = new Set(selectedActiveIds);
+      if (nextActive.has(id)) nextActive.delete(id);
+      else nextActive.add(id);
+      setSelectedActiveIds(nextActive);
+    }
+
+    const hasAny = nextActive.size > 0 || nextPending.size > 0;
+    setBulkSelectMode(hasAny);
   };
 
   const getFilteredBulkList = () => {
@@ -323,6 +346,7 @@ const EnrollStudents = () => {
   const clearBulkSelection = () => {
     setSelectedActiveIds(new Set());
     setSelectedPendingIds(new Set());
+    setBulkSelectMode(false);
   };
 
   const paneTitles = {
@@ -592,16 +616,22 @@ const EnrollStudents = () => {
             </div>
 
             <div className="bulk-list-toolbar">
-              <label className="select-all-label">
-                <input
-                  type="checkbox"
-                  checked={allVisibleSelected}
-                  onChange={toggleSelectAllVisible}
-                  disabled={filteredBulkList.length === 0}
-                />
-                Select all visible ({filteredBulkList.length})
-              </label>
-              {(selectedActiveIds.size > 0 || selectedPendingIds.size > 0) && (
+              {bulkSelectMode ? (
+                <label className="select-all-label">
+                  <input
+                    type="checkbox"
+                    checked={allVisibleSelected}
+                    onChange={toggleSelectAllVisible}
+                    disabled={filteredBulkList.length === 0}
+                  />
+                  Select all visible ({filteredBulkList.length})
+                </label>
+              ) : (
+                <span className="select-hint">
+                  Double-click a name to select. Double-click again to deselect.
+                </span>
+              )}
+              {(selectedActiveIds.size > 0 || selectedPendingIds.size > 0 || bulkSelectMode) && (
                 <button type="button" className="clear-btn" onClick={clearBulkSelection}>
                   Clear selection
                 </button>
@@ -621,15 +651,17 @@ const EnrollStudents = () => {
                       key={`${s.isPending ? "p" : "a"}-${s._id}`}
                       className={`student-select-row ${isChecked ? "selected" : ""}`}
                     >
-                      <input
-                        type="checkbox"
-                        checked={isChecked}
-                        onChange={() =>
-                          s.isPending ? togglePendingSelect(s._id) : toggleActiveSelect(s._id)
-                        }
-                        className="student-checkbox"
-                        aria-label={`Select ${name}`}
-                      />
+                      {bulkSelectMode && (
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() =>
+                            s.isPending ? togglePendingSelect(s._id) : toggleActiveSelect(s._id)
+                          }
+                          className="student-checkbox"
+                          aria-label={`Select ${name}`}
+                        />
+                      )}
                       <span
                         className={`person-avatar tone-${toneForName(name)}`}
                         aria-hidden="true"
@@ -638,16 +670,18 @@ const EnrollStudents = () => {
                       </span>
                       <div
                         className="student-info student-info--selectable"
-                        onDoubleClick={() =>
-                          s.isPending ? togglePendingSelect(s._id) : toggleActiveSelect(s._id)
+                        onDoubleClick={() => openBulkSelectMode(s)}
+                        title={
+                          bulkSelectMode
+                            ? "Double-click again to deselect, or use the checkbox"
+                            : "Double-click name to select"
                         }
-                        title="Double-click name to select"
                         role="button"
                         tabIndex={0}
                         onKeyDown={(e) => {
                           if (e.key === "Enter" || e.key === " ") {
                             e.preventDefault();
-                            s.isPending ? togglePendingSelect(s._id) : toggleActiveSelect(s._id);
+                            openBulkSelectMode(s);
                           }
                         }}
                       >

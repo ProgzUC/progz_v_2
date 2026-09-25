@@ -95,6 +95,15 @@
   overflow-y: auto;
   overflow-x: hidden;
   padding: 12px 0;
+  /* Keep scroll, hide the visible scrollbar rail */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.admin-sidebar .sidebar-menu::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 .admin-sidebar .menu-item {

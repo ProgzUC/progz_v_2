@@ -37,6 +37,7 @@ const ApproveUser = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedIds, setSelectedIds] = useState(() => new Set());
+  const [selectMode, setSelectMode] = useState(false);
   const [isBulkProcessing, setIsBulkProcessing] = useState(false);
   const rowsPerPage = 7;
 
@@ -58,6 +59,7 @@ const ApproveUser = () => {
   useEffect(() => {
     setCurrentPage(1);
     setSelectedIds(new Set());
+    setSelectMode(false);
   }, [searchTerm, activeTab]);
 
   const totalPages = Math.ceil(filteredUsers.length / rowsPerPage);
@@ -76,6 +78,7 @@ const ApproveUser = () => {
   const pageIds = paginatedData.map(getUserId);
   const allPageSelected = pageIds.length > 0 && pageIds.every((id) => selectedIds.has(id));
   const somePageSelected = pageIds.some((id) => selectedIds.has(id));
+  const colSpan = (activeTab === "student" ? 7 : 6) - (selectMode ? 0 : 1);
 
   const toggleSelect = (id) => {
     setSelectedIds((prev) => {
@@ -84,6 +87,15 @@ const ApproveUser = () => {
       else next.add(id);
       return next;
     });
+  };
+
+  const openSelectMode = (id) => {
+    if (isBulkProcessing) return;
+    const next = new Set(selectedIds);
+    if (next.has(id)) next.delete(id);
+    else next.add(id);
+    setSelectedIds(next);
+    setSelectMode(next.size > 0);
   };
 
   const toggleSelectAllPage = () => {
@@ -98,7 +110,10 @@ const ApproveUser = () => {
     });
   };
 
-  const clearSelection = () => setSelectedIds(new Set());
+  const clearSelection = () => {
+    setSelectedIds(new Set());
+    setSelectMode(false);
+  };
 
   const runBulkAction = async (action) => {
     const ids = Array.from(selectedIds);
@@ -131,6 +146,7 @@ const ApproveUser = () => {
     }
 
     setSelectedIds(new Set());
+    setSelectMode(false);
     setIsBulkProcessing(false);
 
     if (failCount === 0) {
@@ -188,8 +204,6 @@ const ApproveUser = () => {
       }
     });
   };
-
-  const colSpan = activeTab === "student" ? 7 : 6;
 
   return (
     <div className="admin-approve-user-page">
@@ -282,7 +296,11 @@ const ApproveUser = () => {
               </div>
             )}
 
-            <p className="admin-table-scroll-hint">Swipe horizontally to view all columns.</p>
+            <p className="admin-table-scroll-hint">
+              {selectMode
+                ? "Double-click a name again to deselect, or use checkboxes."
+                : "Double-click a name to select. Double-click again to deselect."}
+            </p>
             <div
               className="table-responsive admin-table-wrap"
               tabIndex={0}
@@ -292,18 +310,20 @@ const ApproveUser = () => {
                 <caption className="sr-only">Pending {activeTab} registrations</caption>
                 <thead>
                   <tr>
-                    <th className="select-col" scope="col">
-                      <input
-                        type="checkbox"
-                        checked={allPageSelected}
-                        ref={(el) => {
-                          if (el) el.indeterminate = somePageSelected && !allPageSelected;
-                        }}
-                        onChange={toggleSelectAllPage}
-                        disabled={paginatedData.length === 0 || isBulkProcessing}
-                        aria-label="Select all on this page"
-                      />
-                    </th>
+                    {selectMode && (
+                      <th className="select-col" scope="col">
+                        <input
+                          type="checkbox"
+                          checked={allPageSelected}
+                          ref={(el) => {
+                            if (el) el.indeterminate = somePageSelected && !allPageSelected;
+                          }}
+                          onChange={toggleSelectAllPage}
+                          disabled={paginatedData.length === 0 || isBulkProcessing}
+                          aria-label="Select all on this page"
+                        />
+                      </th>
+                    )}
                     <th scope="col">S.No</th>
                     <th scope="col">Name</th>
                     <th scope="col">Source</th>
@@ -327,32 +347,36 @@ const ApproveUser = () => {
 
                       return (
                         <tr key={userId} className={isSelected ? "row-selected" : ""}>
-                          <td className="select-col">
-                            <input
-                              type="checkbox"
-                              checked={isSelected}
-                              onChange={() => toggleSelect(userId)}
-                              disabled={isBulkProcessing}
-                              aria-label={`Select ${name}`}
-                            />
-                          </td>
+                          {selectMode && (
+                            <td className="select-col">
+                              <input
+                                type="checkbox"
+                                checked={isSelected}
+                                onChange={() => toggleSelect(userId)}
+                                disabled={isBulkProcessing}
+                                aria-label={`Select ${name}`}
+                              />
+                            </td>
+                          )}
                           <td className="col-sno">
                             {(currentPage - 1) * rowsPerPage + index + 1}
                           </td>
                           <td>
                             <div
                               className="person-chip person-chip--selectable"
-                              onDoubleClick={() => {
-                                if (!isBulkProcessing) toggleSelect(userId);
-                              }}
-                              title="Double-click name to select"
+                              onDoubleClick={() => openSelectMode(userId)}
+                              title={
+                                selectMode
+                                  ? "Double-click again to deselect, or use the checkbox"
+                                  : "Double-click name to select"
+                              }
                               role="button"
                               tabIndex={0}
                               onKeyDown={(e) => {
                                 if (isBulkProcessing) return;
                                 if (e.key === "Enter" || e.key === " ") {
                                   e.preventDefault();
-                                  toggleSelect(userId);
+                                  openSelectMode(userId);
                                 }
                               }}
                             >

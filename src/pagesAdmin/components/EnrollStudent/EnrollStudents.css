@@ -456,6 +456,12 @@
   flex-wrap: wrap;
 }
 
+.admin-enroll-students-page .select-hint {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
 .admin-enroll-students-page .select-all-label {
   display: flex;
   align-items: center;
