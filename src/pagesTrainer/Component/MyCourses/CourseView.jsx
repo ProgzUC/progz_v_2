@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   FaBook,
   FaCopy,
@@ -24,6 +25,7 @@ import SectionDetails from "../../../components/common/CourseCurriculum/SectionD
 import CoursePreviewModal from "../../../components/common/CoursePreviewModal/CoursePreviewModal";
 import { useCourse } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
+import TrainerStatus from "../../components/TrainerStatus";
 
 const THUMB_SKIP_WORDS = new Set([
   "complete", "course", "courses", "the", "a", "an", "and",
@@ -69,9 +71,10 @@ function getCourseLogo(name) {
   return null;
 }
 
-const CourseView = ({ courseData, onBack, onEdit }) => {
-  const courseId = courseData?._id || courseData?.courseId;
-  const { data: fullCourse, isLoading, isError, error } = useCourse(courseId);
+const CourseView = () => {
+  const { courseId } = useParams();
+  const navigate = useNavigate();
+  const { data: fullCourse, isLoading, isError, refetch } = useCourse(courseId);
 
   const [expandedModules, setExpandedModules] = useState(() => new Set([0]));
   const [expandedSection, setExpandedSection] = useState(null);
@@ -81,13 +84,9 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
   const course = fullCourse;
   const modules = course?.modules || [];
   const lessonsCount = modules.reduce((acc, mod) => acc + (mod.sections?.length || 0), 0);
-  const displayId =
-    course?.courseId ||
-    (course?._id
-      ? `CRS-${(course.courseName || "GEN").substr(0, 3).toUpperCase().replace(/\s/g, "")}-001`
-      : "N/A");
+  const displayId = course?.courseId && course.courseId !== course?._id ? course.courseId : course?._id || "";
   const thumbnailUrl = course?.thumbnail?.url || null;
-  const courseName = course?.courseName || course?.title || "Untitled Course";
+  const courseName = course?.courseName || course?.title || "";
   const category = course?.category || course?.zenCourseType || "";
   const durationLabel = formatDuration(
     course?.courseDuration || course?.duration,
@@ -130,8 +129,16 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
   };
 
   if (isLoading) return <Loader message="Loading course details..." />;
-  if (isError) return <div className="error-state">Error: {error?.message || "Failed to load course"}</div>;
-  if (!course) return <div className="error-state">Course not found</div>;
+  if (isError || !course) {
+    return (
+      <TrainerStatus
+        message="This course could not be loaded."
+        onRetry={() => refetch()}
+        onBack={() => navigate("/trainer-dashboard/courses")}
+        backLabel="Back to courses"
+      />
+    );
+  }
 
   const courseLogo = getCourseLogo(courseName);
   const levelLabel = course.level || course.difficulty || "";
@@ -141,11 +148,16 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
       <div className="cv-page-inner">
         <section className="cv-hero-card">
           <div className="cv-hero-top">
+            <button type="button" className="cv-course-id" onClick={() => navigate("/trainer-dashboard/courses")}>
+              Back to courses
+            </button>
+            {displayId && (
             <button type="button" className="cv-course-id" onClick={copyCourseId} title="Copy course ID">
               <span>Course ID: {displayId}</span>
               <FaCopy />
               {copied && <em>Copied</em>}
             </button>
+            )}
           </div>
 
           <div className="cv-hero-body">
@@ -186,7 +198,7 @@ const CourseView = ({ courseData, onBack, onEdit }) => {
                 <span className="cv-play-circle"><FaPlay /></span>
                 Preview Course
               </button>
-              <button type="button" className="cv-edit-btn" onClick={onEdit}>
+              <button type="button" className="cv-edit-btn" onClick={() => navigate(`/trainer-dashboard/courses/${courseId}/edit`)}>
                 <span className="cv-edit-icon"><FaEdit /></span>
                 Edit Course
               </button>

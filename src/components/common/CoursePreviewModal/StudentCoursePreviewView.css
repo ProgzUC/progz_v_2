@@ -1,6 +1,6 @@
 .student-course-preview-view {
   margin: 0 !important;
-  background: var(--color-bg);
+  background: var(--color-surface);
   border-radius: 0;
   padding: 0 !important;
   min-height: 100%;

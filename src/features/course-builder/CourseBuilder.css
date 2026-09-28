@@ -626,7 +626,7 @@
   width: 34px;
   height: 34px;
   border: 1px solid var(--color-border);
-  background: var(--color-bg);
+  background: var(--color-surface);
   border-radius: var(--radius-sm);
   cursor: pointer;
   padding: 0;

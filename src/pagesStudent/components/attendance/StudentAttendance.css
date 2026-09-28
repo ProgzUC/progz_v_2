@@ -172,7 +172,7 @@
 }
 
 .attendance-table thead tr {
-    background: var(--color-bg);
+    background: var(--color-surface);
 }
 
 .attendance-table th {
@@ -351,4 +351,34 @@
     .attendance-table {
         min-width: 600px;
     }
+}
+
+.attendance-batch-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.attendance-batch-chip {
+    border: 1px solid #dee2e6;
+    background: #fff;
+    color: #212529;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.attendance-batch-chip.active {
+    background: var(--color-primary, #198754);
+    border-color: var(--color-primary, #198754);
+    color: #fff;
+}
+
+.attendance-filter-note {
+    margin: 0 0 12px;
+    color: #6c757d;
+    font-size: 14px;
 }

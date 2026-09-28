@@ -4,6 +4,8 @@
   height: 100vh;
   padding: 20px 0 16px;
   border-right: none;
+  outline: none;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -133,10 +135,10 @@
   z-index: 0;
 }
 
-/* Accent icons — brand bright (emerald / theme accent) */
+/* Icons — pale mint on dark sidebar; active uses dark forest on mint pill */
 .admin-sidebar .menu-item i {
   font-size: 18px;
-  color: var(--color-primary-bright);
+  color: color-mix(in srgb, var(--color-primary-bright) 38%, #ffffff);
   width: 22px;
   height: 22px;
   display: inline-flex;
@@ -159,7 +161,7 @@
 }
 
 .admin-sidebar .menu-item:hover:not(.active) i {
-  color: var(--color-primary-muted);
+  color: #ffffff;
 }
 
 /*
@@ -170,16 +172,18 @@
 .layout .admin-sidebar .menu-item.active,
 .layout .admin-sidebar .menu-item.active:hover {
   background: var(--color-bg) !important;
-  color: var(--color-primary) !important;
+  color: var(--color-primary-active) !important;
   font-weight: var(--font-weight-semibold);
   border: none;
   box-shadow: none;
   z-index: 2;
+  /* Overlap content by 2px so the sidebar edge doesn't show as a hairline */
+  width: calc(100% - 14px + 2px);
 }
 
 .admin-sidebar .menu-item.active i,
 .layout .admin-sidebar .menu-item.active i {
-  color: var(--color-primary) !important;
+  color: var(--color-primary-active) !important;
   filter: none;
 }
 
@@ -244,6 +248,11 @@
   padding: 13px 8px;
   gap: 0;
   border-radius: 14px 0 0 14px;
+}
+
+.admin-sidebar.collapsed:not(.hover-open) .menu-item.active,
+.layout .admin-sidebar.collapsed:not(.hover-open) .menu-item.active {
+  width: calc(100% - 8px + 2px);
 }
 
 .admin-sidebar.collapsed:not(.hover-open) .menu-item.active::before,

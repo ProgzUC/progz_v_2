@@ -1,34 +1,41 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./ActiveBatches.css";
 import { useTrainerBatches } from "../../../hooks/useBatches";
 import { HiOutlineCalendar, HiOutlineClock } from "react-icons/hi";
 import { BsHourglassSplit } from "react-icons/bs";
 import Loader from "../../../components/common/Loader/Loader";
+import TrainerStatus from "../../components/TrainerStatus";
 
-const ActiveBatches = ({ onViewDetails = () => { } }) => {
-  const { data, isLoading, isError } = useTrainerBatches();
+const ActiveBatches = () => {
+  const navigate = useNavigate();
+  const { data, isLoading, isError, refetch } = useTrainerBatches();
 
   if (isLoading) return <Loader message="Loading batches..." />;
-  if (isError) return <div className="trainer-active-batches-page"><p>Error loading batches.</p></div>;
+  if (isError) {
+    return (
+      <TrainerStatus
+        message="Batches could not be loaded."
+        onRetry={() => refetch()}
+      />
+    );
+  }
 
   const activeBatches = data?.activeBatches || [];
   const completedBatches = data?.completedBatches || [];
 
-  const formatClassTiming = (timing) => {
-    if (!timing) return "Not Scheduled";
-    return timing;
-  };
-
   const formatDate = (dateString) => {
-    if (!dateString) return "Not set";
+    if (!dateString) return null;
     const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) return null;
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   };
 
   const calculateDuration = (startDate, endDate) => {
-    if (!startDate || !endDate) return "Duration not set";
+    if (!startDate || !endDate) return null;
     const start = new Date(startDate);
     const end = new Date(endDate);
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return null;
     const diffTime = Math.abs(end - start);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     const weeks = Math.floor(diffDays / 7);
@@ -37,13 +44,13 @@ const ActiveBatches = ({ onViewDetails = () => { } }) => {
 
   const BatchCard = ({ batch }) => {
     const isActive = batch.status === "active";
+    const batchId = batch.batchId || batch._id || batch.id;
 
-    // Map API fields - backend now returns batchName, courseName, timing directly
     const batchNumber = batch.batchName;
     const title = batch.courseName;
     const date = formatDate(batch.startDate);
     const duration = batch.duration || calculateDuration(batch.startDate, batch.endDate);
-    const timing = formatClassTiming(batch.timing);
+    const timing = batch.timing || null;
 
     return (
       <article className="batch-card" aria-label={title}>
@@ -59,25 +66,31 @@ const ActiveBatches = ({ onViewDetails = () => { } }) => {
         <h3 className="batch-card__title">{title}</h3>
 
         <div className="batch-card__details">
-          <div className="batch-card__row">
-            <span className="batch-card__icon"><HiOutlineCalendar /></span>
-            <span>{date}</span>
-          </div>
-          <div className="batch-card__row">
-            <span className="batch-card__icon"><BsHourglassSplit /></span>
-            <span>{duration}</span>
-          </div>
-          <div className="batch-card__row">
-            <span className="batch-card__icon"><HiOutlineClock /></span>
-            <span>{timing}</span>
-          </div>
+          {date && (
+            <div className="batch-card__row">
+              <span className="batch-card__icon"><HiOutlineCalendar /></span>
+              <span>{date}</span>
+            </div>
+          )}
+          {duration && (
+            <div className="batch-card__row">
+              <span className="batch-card__icon"><BsHourglassSplit /></span>
+              <span>{duration}</span>
+            </div>
+          )}
+          {timing && (
+            <div className="batch-card__row">
+              <span className="batch-card__icon"><HiOutlineClock /></span>
+              <span>{timing}</span>
+            </div>
+          )}
         </div>
 
         <div className="batch-card__actions">
           <button
             type="button"
             className="batch-card__btn"
-            onClick={() => onViewDetails(batch)}
+            onClick={() => batchId && navigate(`/trainer-dashboard/batches/${batchId}`)}
           >
             {isActive ? "Open batch" : "View details"}
           </button>

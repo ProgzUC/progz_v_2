@@ -2,7 +2,7 @@ import React from 'react';
 import './MyBatchs.css';
 import ActiveBatches from './ActiveBatches';
 
-const MyBatchs = ({ onViewDetails }) => {
+const MyBatchs = () => {
     return (
         <div className="my-batchs-container">
             <div className="my-batchs-hero">
@@ -14,7 +14,7 @@ const MyBatchs = ({ onViewDetails }) => {
             <div className="batches-content">
                
 
-                <ActiveBatches onViewDetails={onViewDetails} />
+                <ActiveBatches />
             </div>
         </div>
     );

@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useState, useMemo, useRef } from "react";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import "./CourseCard.css";
 import Introduction from "../Introduction/Introduction";
 import { useStudentCourses, useCourseProgress } from "../../../hooks/useStudentCourses";
@@ -8,6 +8,7 @@ import Loader from "../../../components/common/Loader/Loader";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
 import { BiCodeAlt } from "react-icons/bi";
 import { getLessonCompilerMode } from "../../../utils/compilerMode";
+import { formatNextClass } from "../../utils/formatNextClass";
 import { isHtmlEmpty } from "../../../components/common/RichTextEditor/richTextUtils";
 import Swal from "sweetalert2";
 
@@ -53,7 +54,7 @@ function CourseThumb({ courseName }) {
 /* ----------------------------------------------
    LARGE COURSE CARD (RIGHT SIDE)
 ---------------------------------------------- */
-function LargeCourseCard({ course }) {
+function LargeCourseCard({ course, onContinue }) {
     const progress = course.progressPercentage || 0;
     const completed = course.completedLessons || 0;
     const total = course.totalLessons || 0;
@@ -109,7 +110,7 @@ function LargeCourseCard({ course }) {
                 <div className="large-title-row">
                     <div className="large-title-block">
                         <p className="large-title">{course.courseName}</p>
-                        <span className="large-batch-pill">{course.batchName || "Full Stack"}</span>
+                        <span className="large-batch-pill">{course.batchName || "Enrolled"}</span>
                     </div>
                     {meetLink && batchId ? (
                         <button
@@ -143,6 +144,29 @@ function LargeCourseCard({ course }) {
                             : ""}
                     </p>
                 ) : null}
+
+                {course.nextClassAt ? (
+                    <p className="large-class-meta large-next-class">
+                        <i className="bi bi-calendar-event" aria-hidden="true"></i>
+                        Next class: {formatNextClass(course.nextClassAt)}
+                    </p>
+                ) : null}
+
+                <div className="large-course-actions">
+                    <button type="button" className="student-join-class-btn" onClick={onContinue}>
+                        <i className="bi bi-play-fill" aria-hidden="true"></i>
+                        Continue
+                    </button>
+                    {batchId ? (
+                        <Link
+                            className="student-attendance-link"
+                            to={`/student-dashboard/my-attendance?batchId=${batchId}`}
+                        >
+                            <i className="bi bi-calendar-check" aria-hidden="true"></i>
+                            Attendance
+                        </Link>
+                    ) : null}
+                </div>
 
                 <div className="large-progress-section">
                     <div className="progress-info-row">
@@ -312,6 +336,7 @@ export default function MyCourses() {
     const [selectedCourseId, setSelectedCourseId] = useState(null);
     const [showMobileDetails, setShowMobileDetails] = useState(false);
     const [viewLesson, setViewLesson] = useState(null);
+    const openedContinueKey = useRef("");
 
     // Get selected course from the source of truth
     const selectedCourse = courses.find(
@@ -372,10 +397,23 @@ export default function MyCourses() {
             meetLink: courseDetails?.batch?.meetLink || selectedCourse.meetLink || null,
             classTiming: courseDetails?.batch?.classTiming || selectedCourse.classTiming || null,
             daysOfWeek: courseDetails?.batch?.daysOfWeek || selectedCourse.daysOfWeek || [],
-            batchId: courseDetails?.batch?._id || selectedCourse.batchId || null,
+            batchId: courseDetails?.batch?.batchId || courseDetails?.batch?._id || selectedCourse.batchId || null,
+            nextClassAt: courseDetails?.batch?.nextClassAt || selectedCourse.nextClassAt || null,
+            continueLesson: selectedCourse.continueLesson || null,
             batchInfo: courseDetails?.batch || null,
         };
     })() : null;
+
+    React.useEffect(() => {
+        if (!location.state?.openContinue || detailsLoading || !displayCourse) return;
+        if (String(displayCourse.courseId) !== String(location.state.courseId)) return;
+        const courseKey = String(displayCourse.courseId || "");
+        if (openedContinueKey.current === courseKey) return;
+        const target = displayCourse.continueLesson;
+        const section = displayCourse.modules?.[target?.moduleIndex]?.sections?.[target?.sectionIndex];
+        openedContinueKey.current = courseKey;
+        if (section?.isCompleted) setViewLesson(section);
+    }, [location.state, detailsLoading, displayCourse]);
 
     if (listLoading) {
         return <Loader message="Loading your courses..." />;
@@ -396,7 +434,10 @@ export default function MyCourses() {
             <div className="container-fluid student-mycourses-page">
                 <div className="empty-message" style={{ textAlign: 'center', padding: '40px' }}>
                     <p className="h3-style">No courses enrolled yet</p>
-                    <p>Browse available courses and enroll to get started!</p>
+                    <p>Browse the catalog to see the courses your academy offers.</p>
+                    <button type="button" className="student-btn-primary" onClick={() => navigate("/student-dashboard/browse")}>
+                        Browse courses
+                    </button>
                 </div>
             </div>
         );
@@ -554,7 +595,14 @@ export default function MyCourses() {
                                 </button>
                             )}
 
-                            <LargeCourseCard course={displayCourse} />
+                            <LargeCourseCard
+                                course={displayCourse}
+                                onContinue={() => {
+                                    const target = displayCourse.continueLesson;
+                                    const section = displayCourse.modules?.[target?.moduleIndex]?.sections?.[target?.sectionIndex];
+                                    if (section?.isCompleted) setViewLesson(section);
+                                }}
+                            />
 
                             {detailsLoading ? (
                                 <Loader message="Loading curriculum..." />

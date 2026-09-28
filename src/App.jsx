@@ -80,7 +80,7 @@ const App = () => {
 
 
           <Route
-            path="/trainer-dashboard"
+            path="/trainer-dashboard/*"
             element={
               <ProtectedRoute allowedRoles={["trainer", "instructor"]}>
                 <TrainerApp />

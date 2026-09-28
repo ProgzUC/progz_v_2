@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
 import { Link, useLocation } from "react-router-dom";
-import { BiGridAlt, BiBookOpen, BiSearch, BiUserCircle, BiLogOut } from "react-icons/bi";
+import { BiGridAlt, BiBookOpen, BiSearch, BiUserCircle, BiLogOut, BiCalendarCheck } from "react-icons/bi";
 import NotificationBell from "../../../components/common/NotificationBell/NotificationBell";
 
 function HeaderContent({ onLogout }) {
@@ -13,6 +13,7 @@ function HeaderContent({ onLogout }) {
         { name: "Home", href: "/student-dashboard/", icon: <BiGridAlt /> },
         { name: "My Courses", href: "/student-dashboard/my-courses", icon: <BiBookOpen /> },
         { name: "Browse", href: "/student-dashboard/browse", icon: <BiSearch /> },
+        { name: "Attendance", href: "/student-dashboard/my-attendance", icon: <BiCalendarCheck /> },
         { name: "Profile", href: "/student-dashboard/profile", icon: <BiUserCircle /> },
     ];
 
@@ -44,7 +45,14 @@ function HeaderContent({ onLogout }) {
                 <div className={`student-nav-menu ${isMenuOpen ? "active" : ""}`}>
                     <div className="nav-items">
                         {links.map((link, index) => {
-                            const isActive = location.pathname === link.href;
+                            const path = location.pathname.replace(/\/$/, "") || "/";
+                            const target = link.href.replace(/\/$/, "") || "/";
+                            const isHome = target.endsWith("/student-dashboard");
+                            const isActive = isHome
+                                ? path === "/student-dashboard"
+                                : target.endsWith("/browse")
+                                    ? path === target || path.includes("/course-details")
+                                    : path === target;
 
                             return (
                                 <Link

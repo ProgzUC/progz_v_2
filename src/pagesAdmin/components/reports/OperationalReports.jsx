@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./OperationalReports.css";
 import {
   useOperationalSummary,
@@ -162,7 +163,10 @@ function ExecutiveTab() {
             <div><em>Upcoming</em><strong>{summary.upcomingBatches ?? 0}</strong></div>
             <div><em>Completed</em><strong>{summary.completedBatches ?? 0}</strong></div>
             <div><em>Sessions</em><strong>{summary.totalSessionsConducted ?? 0}</strong></div>
-            <div><em>Pending approvals</em><strong>{summary.pendingApprovals ?? 0}</strong></div>
+            <Link to="/admin/approve-users">
+              <em>Pending approvals</em>
+              <strong>{summary.pendingApprovals ?? 0}</strong>
+            </Link>
           </div>
         </section>
 
@@ -240,15 +244,21 @@ function AttendanceTab() {
     <div className="or-stack">
       <div className="or-toolbar">
         <p>Attendance trends and students who need follow-up.</p>
-        <button
-          type="button"
-          className="or-btn or-btn-primary"
-          onClick={handleExport}
-          disabled={exporting || recorded === 0}
-        >
-          <i className="bi bi-download" aria-hidden="true" />
-          {exporting ? "Exporting…" : "Export CSV"}
-        </button>
+        <div className="or-toolbar-actions">
+          <Link to="/admin/reports/attendance" className="or-btn">
+            <i className="bi bi-calendar-check" aria-hidden="true" />
+            Batch attendance report
+          </Link>
+          <button
+            type="button"
+            className="or-btn or-btn-primary"
+            onClick={handleExport}
+            disabled={exporting || recorded === 0}
+          >
+            <i className="bi bi-download" aria-hidden="true" />
+            {exporting ? "Exporting…" : "Export CSV"}
+          </button>
+        </div>
       </div>
 
       <section className="or-card">

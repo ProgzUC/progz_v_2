@@ -139,7 +139,7 @@
 }
 
 .admin-enroll-students-page .section-block {
-  background: var(--color-bg);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 18px;
@@ -494,7 +494,7 @@
 }
 
 .admin-enroll-students-page .bulk-selection-list {
-  background: var(--color-bg);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   max-height: 400px;
@@ -517,7 +517,7 @@
 }
 
 .admin-enroll-students-page .student-select-row:hover {
-  background: #F9FCF7;
+  background: var(--color-surface);
 }
 
 .admin-enroll-students-page .student-select-row.selected {

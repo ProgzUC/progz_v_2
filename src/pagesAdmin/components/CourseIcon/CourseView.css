@@ -336,7 +336,7 @@
 }
 
 .course-view-page .cv-module-toggle:hover {
-  background: #F9FCF7;
+  background: #FFFFFF;
   border-color: #B5CBA8;
 }
 
@@ -411,7 +411,7 @@
 }
 
 .course-view-page .cv-section-toggle:hover {
-  background: #F9FCF7;
+  background: #FFFFFF;
 }
 
 .course-view-page .cv-section-toggle.active {
@@ -444,7 +444,7 @@
 }
 
 .course-view-page .cv-section-details {
-  background-color: #F9FCF7;
+  background-color: #FFFFFF;
   padding: 16px 18px 18px;
   border-top: 1px solid var(--color-border);
 }

@@ -519,6 +519,47 @@
 .browse-all-btn:hover {
   box-shadow: 0 10px 25px rgba(255, 255, 255, 0.5) !important;
   /* White/Bright Glow */
-  background: var(--color-bg);
+  background: var(--color-surface);
   /* Slight dim on hover */
+}
+
+.hero-continue-meta {
+  margin: 14px 0 0;
+  color: #fff;
+  font-size: 14px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.hero-next-class {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  max-width: 520px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--color-text);
+}
+
+.hero-next-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+
+.hero-next-links {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+}
+
+.hero-next-links a {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
 }

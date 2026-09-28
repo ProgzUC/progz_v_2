@@ -84,6 +84,13 @@
   font-size: 0.9rem;
 }
 
+.or-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .or-btn {
   display: inline-flex;
   align-items: center;
@@ -190,11 +197,18 @@
   gap: 10px;
 }
 
-.or-stat-tiles div {
+.or-stat-tiles div,
+.or-stat-tiles a {
   padding: 12px;
   border-radius: 12px;
   background: var(--color-bg-muted);
   border: 1px solid var(--color-border);
+  text-decoration: none;
+  color: inherit;
+}
+
+.or-stat-tiles a:hover {
+  border-color: var(--color-primary-muted);
 }
 
 .or-stat-tiles em {

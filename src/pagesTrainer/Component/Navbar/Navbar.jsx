@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import './Navbar.css';
 import { logout } from '../../../api/authApi';
 import NotificationBell from '../../../components/common/NotificationBell/NotificationBell';
 
-const Navbar = ({ activeTab, setActiveTab }) => {
+const links = [
+    { name: 'Dashboard', to: '/trainer-dashboard', end: true, icon: 'bi-grid-fill' },
+    { name: 'My Batches', to: '/trainer-dashboard/batches', icon: 'bi-people-fill' },
+    { name: 'My Courses', to: '/trainer-dashboard/courses', icon: 'bi-book-half' },
+    { name: 'Profile', to: '/trainer-dashboard/profile', icon: 'bi-person-circle' },
+];
+
+const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
 
@@ -15,8 +23,7 @@ const Navbar = ({ activeTab, setActiveTab }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const handleTabClick = (tab) => {
-        setActiveTab(tab);
+    const closeMenu = () => {
         setIsMenuOpen(false);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -29,43 +36,24 @@ const Navbar = ({ activeTab, setActiveTab }) => {
     return (
         <nav className={`trainer-navbar ${scrolled ? 'scrolled' : ''}`}>
             <div className="trainer-nav-container">
-                <div className="trainer-brand" onClick={() => handleTabClick('home')}>
+                <Link to="/trainer-dashboard" className="trainer-brand" onClick={closeMenu}>
                     <img src="/logo.png" alt="ProgZ" className="brand-logo" />
-                </div>
+                </Link>
 
                 <div className={`trainer-nav-menu ${isMenuOpen ? 'active' : ''}`}>
                     <div className="nav-items">
-                        <button
-                            className={`nav-item ${activeTab === 'home' ? 'active' : ''}`}
-                            onClick={() => handleTabClick('home')}
-                        >
-                            <span className="nav-icon"><i className="bi bi-grid-fill"></i></span>
-                            Dashboard
-                        </button>
-
-                        <button
-                            className={`nav-item ${activeTab === 'batches' ? 'active' : ''}`}
-                            onClick={() => handleTabClick('batches')}
-                        >
-                            <span className="nav-icon"><i className="bi bi-people-fill"></i></span>
-                            My Batches
-                        </button>
-
-                        <button
-                            className={`nav-item ${activeTab === 'courses' ? 'active' : ''}`}
-                            onClick={() => handleTabClick('courses')}
-                        >
-                            <span className="nav-icon"><i className="bi bi-book-half"></i></span>
-                            My Courses
-                        </button>
-
-                        <button
-                            className={`nav-item ${activeTab === 'profile' ? 'active' : ''}`}
-                            onClick={() => handleTabClick('profile')}
-                        >
-                            <span className="nav-icon"><i className="bi bi-person-circle"></i></span>
-                            Profile
-                        </button>
+                        {links.map((link) => (
+                            <NavLink
+                                key={link.to}
+                                to={link.to}
+                                end={link.end}
+                                className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}
+                                onClick={closeMenu}
+                            >
+                                <span className="nav-icon"><i className={`bi ${link.icon}`}></i></span>
+                                {link.name}
+                            </NavLink>
+                        ))}
                     </div>
 
                     <div className="nav-actions">

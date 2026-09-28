@@ -65,7 +65,7 @@
 
 /* COURSE CARD */
 .jc-courses-card {
-    background: var(--color-bg);
+    background: var(--color-surface);
     border-radius: var(--radius-lg);
     border: 1px solid rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -168,6 +168,34 @@
     transform: scale(1.08);
 }
 
+.jc-enrolled-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--color-primary, #198754);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.jc-catalog-status {
+    text-align: center;
+    color: #4a4a4a;
+    padding: 24px 12px 40px;
+}
+
+.jc-catalog-more {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0 28px;
+}
+
+.jc-catalog-more .student-btn-primary {
+    text-decoration: none;
+}
+
 .jc-course-tag {
     position: absolute;
     top: 15px;
@@ -189,7 +217,7 @@
     display: flex;
     flex-direction: column;
     flex: 1;
-    background: var(--color-bg);
+    background: var(--color-surface);
 }
 
 .jc-meta-row {

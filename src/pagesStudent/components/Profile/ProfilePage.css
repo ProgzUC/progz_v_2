@@ -642,7 +642,7 @@
 
 /* DETAILS CARD */
 .profile-details-card {
-    background: var(--color-bg);
+    background: var(--color-surface);
     border-radius: var(--radius-lg);
     padding: 20px;
     display: flex;
@@ -735,7 +735,7 @@
 }
 
 .profile-btn-password:hover {
-    background: var(--color-bg);
+    background: var(--color-surface);
     color: var(--color-text);
     border-color: var(--color-border-hover);
 }
@@ -948,7 +948,7 @@
 
 .profile-card-progress-track {
     height: 6px;
-    background: var(--color-bg);
+    background: var(--color-surface);
     border-radius: var(--radius-md);
     margin-bottom: 6px;
 }
@@ -978,6 +978,15 @@
     font-size: 12px;
     color: var(--color-text-muted);
     font-weight: 500;
+}
+
+.profile-continue-link {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    color: var(--color-primary);
 }
 
 .profile-view-cert {
@@ -1121,7 +1130,7 @@
 }
 
 .profile-cancel-btn:hover:not(:disabled) {
-    background: var(--color-bg);
+    background: var(--color-surface);
     color: var(--color-text);
     border-color: var(--color-border-hover);
 }

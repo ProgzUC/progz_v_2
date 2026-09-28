@@ -223,7 +223,7 @@
 }
 
 .report-table thead tr {
-    background: var(--color-bg);
+    background: var(--color-surface);
 }
 
 .report-table th {

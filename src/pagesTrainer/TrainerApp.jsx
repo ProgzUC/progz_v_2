@@ -1,4 +1,5 @@
 import React from 'react'
+import { Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom'
 import Navbar from './Component/Navbar/Navbar'
 import Home from './Component/Home/Home'
 import Active from './Component/Home/Batches'
@@ -12,124 +13,90 @@ import EditProfile from './Component/Profile/EditProfile'
 import './TrainerGlobal.css'
 import './TrainerApp.css'
 import { useTrainerBootstrap } from '../hooks/useTrainerBootstrap'
+import { useCourse } from '../hooks/useCourses'
 import Loader from '../components/common/Loader/Loader'
+import TrainerStatus from './components/TrainerStatus'
 import AnnouncementBanner from '../components/common/AnnouncementBanner/AnnouncementBanner'
 
-function TrainerApp() {
-  const [activeTab, setActiveTab] = React.useState('home');
-  const [selectedBatch, setSelectedBatch] = React.useState(null);
-  const [isEditingCourse, setIsEditingCourse] = React.useState(false);
-  const [isCreatingCourse, setIsCreatingCourse] = React.useState(false);
-  const [isEditingProfile, setIsEditingProfile] = React.useState(false);
+function Dashboard() {
+  const { data, isLoading, isError, refetch } = useTrainerBootstrap();
 
-  const { data, isLoading, isError, error } = useTrainerBootstrap();
-
-  if (isLoading) return <Loader />;
-  if (isError) {
-    console.error("BOOTSTRAP ERROR:", error);
-    return <p>Failed to load</p>;
+  if (isLoading) return <Loader message="Loading dashboard..." />;
+  if (isError || !data) {
+    return (
+      <TrainerStatus
+        message="The dashboard could not be loaded."
+        onRetry={() => refetch()}
+      />
+    );
   }
 
-  const handleViewDetails = (batch) => {
-    setSelectedBatch(batch);
-  };
+  return (
+    <>
+      <Home trainer={data.trainer} stats={data.stats} />
+      <Active data={data} />
+    </>
+  );
+}
 
-  const handleViewBatchFromHome = (batch) => {
-    setSelectedBatch(batch);
-    setActiveTab('batches');
-  };
+function EditCoursePage() {
+  const { courseId } = useParams();
+  const navigate = useNavigate();
+  const { isLoading, isError, refetch } = useCourse(courseId);
+  const backToCourse = () => navigate(`/trainer-dashboard/courses/${courseId}`);
 
-  const handleBackToList = () => {
-    setSelectedBatch(null);
-    setIsEditingCourse(false);
-    setIsCreatingCourse(false);
-  };
+  if (isLoading) return <Loader message="Loading course..." />;
+  if (isError) {
+    return (
+      <TrainerStatus
+        message="This course could not be loaded."
+        onRetry={() => refetch()}
+        onBack={() => navigate('/trainer-dashboard/courses')}
+        backLabel="Back to courses"
+      />
+    );
+  }
 
   return (
+    <CourseBuilder
+      isEditMode
+      courseIdToEdit={courseId}
+      onBack={backToCourse}
+      onSave={backToCourse}
+    />
+  );
+}
+
+function CreateCoursePage() {
+  const navigate = useNavigate();
+  const backToCourses = () => navigate('/trainer-dashboard/courses');
+
+  return (
+    <CourseBuilder
+      onBack={backToCourses}
+      onSave={backToCourses}
+    />
+  );
+}
+
+function TrainerApp() {
+  return (
     <div className="trainer-app">
-      <Navbar
-        activeTab={activeTab}
-        setActiveTab={(tab) => {
-          setActiveTab(tab);
-          setSelectedBatch(null);
-          setIsEditingCourse(false);
-          setIsCreatingCourse(false);
-          setIsEditingProfile(false);
-        }}
-      />
+      <Navbar />
       <AnnouncementBanner source="trainer" />
       <main className="main-content">
-        {activeTab === 'home' && (
-          <>
-            <Home
-              trainer={data.trainer}
-              stats={data.stats}
-              onNavigateToCreateCourse={() => {
-                setActiveTab('courses');
-                setIsCreatingCourse(true);
-              }}
-              onNavigateToMyCourses={() => setActiveTab('courses')}
-            />
-            <Active data={data} onViewBatch={handleViewBatchFromHome} />
-          </>
-        )}
-        {activeTab === 'batches' && (
-          <>
-            {selectedBatch ? (
-              <BatchDetails batch={selectedBatch} onBack={handleBackToList} />
-            ) : (
-              <MyBatchs onViewDetails={handleViewDetails} />
-            )}
-          </>
-        )}
-        {activeTab === 'courses' && (
-          isCreatingCourse ? (
-            <CourseBuilder
-              onBack={() => setIsCreatingCourse(false)}
-              onSave={() => {
-                setIsCreatingCourse(false);
-                setSelectedBatch(null);
-              }}
-            />
-          ) : selectedBatch ? (
-            isEditingCourse ? (
-              <CourseBuilder
-                initialData={selectedBatch}
-                isEditMode={true}
-                onBack={() => setIsEditingCourse(false)}
-                onSave={() => {
-                  setIsEditingCourse(false);
-                  setSelectedBatch(null);
-                }}
-              />
-            ) : (
-              <CourseView
-                courseData={selectedBatch}
-                onBack={handleBackToList}
-                onEdit={() => setIsEditingCourse(true)}
-              />
-            )
-          ) : (
-            <MyCourses
-              onManageCourse={(course) => setSelectedBatch(course)}
-              onEditCourse={(course) => {
-                setSelectedBatch(course);
-                setIsEditingCourse(true);
-              }}
-              onCreateNew={() => setIsCreatingCourse(true)}
-            />
-          )
-        )}
-        {activeTab === 'profile' && (
-          isEditingProfile ? (
-            <EditProfile onCancel={() => setIsEditingProfile(false)} />
-          ) : (
-            <Profile
-              onEdit={() => setIsEditingProfile(true)}
-              onBack={() => setActiveTab('home')}
-            />
-          )
-        )}
+        <Routes>
+          <Route index element={<Dashboard />} />
+          <Route path="batches" element={<MyBatchs />} />
+          <Route path="batches/:batchId" element={<BatchDetails />} />
+          <Route path="courses" element={<MyCourses />} />
+          <Route path="courses/new" element={<CreateCoursePage />} />
+          <Route path="courses/:courseId/edit" element={<EditCoursePage />} />
+          <Route path="courses/:courseId" element={<CourseView />} />
+          <Route path="profile" element={<Profile />} />
+          <Route path="profile/edit" element={<EditProfile />} />
+          <Route path="*" element={<Navigate to="/trainer-dashboard" replace />} />
+        </Routes>
       </main>
     </div>
   )

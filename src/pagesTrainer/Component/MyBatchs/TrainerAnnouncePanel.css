@@ -110,7 +110,7 @@
   border: 1px solid var(--trainer-border);
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: var(--color-bg);
+  background: var(--color-surface);
 }
 
 .trainer-announce-students-toolbar {
@@ -320,7 +320,7 @@
   padding: 14px 16px;
   border: 1px solid var(--trainer-border);
   border-radius: var(--radius-md);
-  background: var(--color-bg);
+  background: var(--color-surface);
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 

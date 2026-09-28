@@ -63,7 +63,7 @@
   display: inline-flex;
   gap: 4px;
   padding: 4px;
-  background: var(--color-bg);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 10px;
 }
@@ -108,7 +108,7 @@
   min-height: 140px;
   border: 1.5px dashed var(--color-border);
   border-radius: 12px;
-  background: var(--color-bg);
+  background: var(--color-surface);
   cursor: pointer;
   padding: 20px;
   text-align: center;
@@ -142,7 +142,7 @@
   padding: 12px 14px;
   font-size: 13px;
   font-family: inherit;
-  background: var(--color-bg);
+  background: var(--color-surface);
   color: var(--color-text);
   resize: vertical;
   margin-bottom: 10px;
@@ -199,7 +199,7 @@
 }
 
 .secondary-btn {
-  background: var(--color-bg);
+  background: var(--color-surface);
   color: var(--color-text);
   border: 1px solid var(--color-border);
   padding: 10px 16px;
@@ -248,7 +248,7 @@
 }
 
 .preview-table th {
-  background: var(--color-bg);
+  background: var(--color-surface);
   font-weight: 600;
   position: sticky;
   top: 0;
@@ -286,7 +286,7 @@
   justify-content: space-between;
   gap: 8px;
   padding: 10px 12px;
-  background: var(--color-bg);
+  background: var(--color-surface);
   border-radius: 8px;
   font-size: 13px;
 }
@@ -333,7 +333,7 @@
 
 .bulk-import-panel.embedded-panel {
   border: 1px solid var(--color-border);
-  background: var(--color-bg);
+  background: var(--color-surface);
   box-shadow: none;
 }
 

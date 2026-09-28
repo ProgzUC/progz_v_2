@@ -1,30 +1,33 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import './BatchDetails.css';
 import { useTrainerBatchDetails, useToggleSectionCompletion } from '../../../hooks/useBatches';
 import { useJoinClass } from '../../../hooks/useClassSession';
 import Loader from '../../../components/common/Loader/Loader';
+import TrainerStatus from '../../components/TrainerStatus';
 import TrainerAttendancePanel from '../../components/attendance/TrainerAttendancePanel';
 import AttendanceHistory from '../../components/attendance/AttendanceHistory';
 import TrainerAnnouncePanel from './TrainerAnnouncePanel';
 import Swal from 'sweetalert2';
 
-const BatchDetails = ({ batch: initialBatch, onBack }) => {
-    const [activeTab, setActiveTab] = useState('students');
+const BATCH_TABS = ['students', 'sections', 'attendance', 'announce'];
 
-    const batchId = initialBatch?._id || initialBatch?.id || initialBatch?.batchId;
-    const { data: batchDetails, isLoading, isError, error } = useTrainerBatchDetails(batchId);
+const BatchDetails = () => {
+    const { batchId } = useParams();
+    const navigate = useNavigate();
+    const { data: batchDetails, isLoading, isError, refetch } = useTrainerBatchDetails(batchId);
     const { mutate: toggleSection, isPending: isToggling, variables: togglingVariables } = useToggleSectionCompletion();
     const joinClassMutation = useJoinClass();
+    const backToBatches = () => navigate('/trainer-dashboard/batches');
 
     if (!batchId) {
         return (
-            <div className="batch-details-container">
-                <div className="error-message">
-                    <p>No batch ID found.</p>
-                    <p>Received batch object: {JSON.stringify(initialBatch)}</p>
-                </div>
-            </div>
+            <TrainerStatus
+                message="This batch link is missing an id."
+                onBack={backToBatches}
+                backLabel="Back to batches"
+            />
         );
     }
 
@@ -36,26 +39,14 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
         );
     }
 
-    if (isError) {
+    if (isError || !batchDetails) {
         return (
-            <div className="batch-details-container">
-                <div className="error-message">
-                    <p>Error loading batch details.</p>
-                    <p>Batch ID: {batchId}</p>
-                    <p>Error: {error?.message || 'Unknown error'}</p>
-                </div>
-            </div>
-        );
-    }
-
-    if (!batchDetails) {
-        return (
-            <div className="batch-details-container">
-                <div className="error-message">
-                    <p>Batch not found.</p>
-                    <p>Batch ID: {batchId}</p>
-                </div>
-            </div>
+            <TrainerStatus
+                message="This batch could not be loaded."
+                onRetry={() => refetch()}
+                onBack={backToBatches}
+                backLabel="Back to batches"
+            />
         );
     }
 
@@ -63,9 +54,7 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
         <BatchDetailsContent
             batch={batchDetails}
             batchId={batchId}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            onBack={onBack}
+            onBack={backToBatches}
             toggleSection={toggleSection}
             isToggling={isToggling}
             togglingVariables={togglingVariables}
@@ -77,14 +66,18 @@ const BatchDetails = ({ batch: initialBatch, onBack }) => {
 const BatchDetailsContent = ({
     batch,
     batchId,
-    activeTab,
-    setActiveTab,
     onBack,
     toggleSection,
     isToggling,
     togglingVariables,
     joinClassMutation,
 }) => {
+    const [searchParams, setSearchParams] = useSearchParams();
+    const requestedTab = searchParams.get('tab');
+    const activeTab = BATCH_TABS.includes(requestedTab) ? requestedTab : 'students';
+    const setActiveTab = (next) => {
+        setSearchParams(next && next !== 'students' ? { tab: next } : {}, { replace: true });
+    };
     const students = batch.students || [];
     const assignedModules = batch.trainerAssignment?.assignedModules || [];
     const primaryCourseId = String(batch.primaryCourseId || "");
@@ -106,7 +99,7 @@ const BatchDetailsContent = ({
         return curricula
             .map((course) => ({
                 courseId: String(course.courseId || ""),
-                courseName: course.courseName || "Course",
+                courseName: course.courseName || "",
             }))
             .filter((course) => course.courseId);
     }, [curricula]);
@@ -146,7 +139,7 @@ const BatchDetailsContent = ({
 
                     rows.push({
                         courseId,
-                        courseName: course.courseName || "Course",
+                        courseName: course.courseName || "",
                         moduleIndex: modIdx,
                         sectionIndex: secIdx,
                         uniqueId: `${courseId}-m${modIdx}-s${secIdx}`,

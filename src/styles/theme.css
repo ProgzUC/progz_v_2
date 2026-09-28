@@ -34,8 +34,9 @@
   --color-bg: #E8F5E1;
   --color-bg-muted: #DFF0D8;
   --color-bg-sidebar: #0B3D2E;
-  --color-surface: #F9FCF7;
-  --color-card-bg: #F9FCF7;
+  /* Cards, tables, panels — white so mint stays on the page canvas only */
+  --color-surface: #FFFFFF;
+  --color-card-bg: #FFFFFF;
   --color-surface-dark: #0B3D2E;
 
   --color-text: #073B32;
@@ -49,7 +50,7 @@
   --color-focus-ring: rgba(11, 61, 46, 0.22);
 
   /* ── Navbar / Footer ── */
-  --color-navbar-bg: #F9FCF7;
+  --color-navbar-bg: #FFFFFF;
   --color-navbar-border: #C9DBC0;
   --color-navbar-text: #073B32;
   --color-navbar-text-muted: #718096;

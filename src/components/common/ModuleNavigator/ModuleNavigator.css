@@ -34,7 +34,7 @@
   gap: 6px;
   flex-shrink: 0;
   border: 1px solid var(--color-border-strong);
-  background: var(--color-bg);
+  background: var(--color-surface);
   color: var(--color-text);
   border-radius: var(--radius-lg);
   padding: 6px 12px;

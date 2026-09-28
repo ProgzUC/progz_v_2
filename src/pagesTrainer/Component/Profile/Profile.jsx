@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     FaArrowLeft,
     FaEnvelope,
@@ -14,9 +15,11 @@ import { MdPhone } from 'react-icons/md';
 import './Profile.css';
 import { useTrainerProfile } from '../../../hooks/useTrainerProfile';
 import Loader from '../../../components/common/Loader/Loader';
+import TrainerStatus from '../../components/TrainerStatus';
 
-const Profile = ({ onEdit, onBack }) => {
-    const { data: profileData, isLoading, isError, error } = useTrainerProfile();
+const Profile = () => {
+    const navigate = useNavigate();
+    const { data: profileData, isLoading, isError, refetch } = useTrainerProfile();
 
 
     if (isLoading) {
@@ -24,14 +27,21 @@ const Profile = ({ onEdit, onBack }) => {
     }
 
     if (isError || !profileData) {
-        return <div className="error-state">Error: {error?.message || "Failed to load profile"}</div>;
+        return (
+            <TrainerStatus
+                message="Your profile could not be loaded."
+                onRetry={() => refetch()}
+                onBack={() => navigate('/trainer-dashboard')}
+                backLabel="Back to dashboard"
+            />
+        );
     }
 
     return (
         <div className="profile-wrapper">
             <div className="profile-container">
                 <div className="profile-header">
-                    <button className="back-btn" onClick={onBack} aria-label="Back"><FaArrowLeft /></button>
+                    <button className="back-btn" onClick={() => navigate('/trainer-dashboard')} aria-label="Back"><FaArrowLeft /></button>
                 </div>
 
                 <div className="profile-hero-card">
@@ -61,7 +71,7 @@ const Profile = ({ onEdit, onBack }) => {
                             </div>
                         </div>
 
-                        <button className="edit-profile-btn" onClick={onEdit}>
+                        <button className="edit-profile-btn" onClick={() => navigate('/trainer-dashboard/profile/edit')}>
                             Edit Profile <FaEdit />
                         </button>
                     </div>

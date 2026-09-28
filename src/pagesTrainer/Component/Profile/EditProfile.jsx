@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     FaArrowLeft,
     FaCamera,
@@ -14,9 +15,12 @@ import FileDropZone from '../../../components/common/FileDropZone/FileDropZone';
 import AppSelect from '../../../components/common/AppSelect/AppSelect';
 import { uploadToCloudinary } from '../../../utils/cloudinary';
 import { showSuccess, showError } from '../../../utils/toast';
+import TrainerStatus from '../../components/TrainerStatus';
 
-const EditProfile = ({ onCancel }) => {
-    const { data: profileData, isLoading, isError, error } = useTrainerProfile();
+const EditProfile = () => {
+    const navigate = useNavigate();
+    const leaveEditor = () => navigate('/trainer-dashboard/profile');
+    const { data: profileData, isLoading, isError, refetch } = useTrainerProfile();
     const updateProfile = useUpdateTrainerProfile();
     const [formData, setFormData] = useState(profileData || {});
     const [selectedFile, setSelectedFile] = useState(null);
@@ -70,7 +74,7 @@ const EditProfile = ({ onCancel }) => {
             updateProfile.mutate(payload, {
                 onSuccess: () => {
                     showSuccess('Profile updated successfully!');
-                    onCancel();
+                    leaveEditor();
                 },
                 onError: (err) => showError(err?.message || 'Failed to update profile'),
                 onSettled: () => setSaving(false),
@@ -86,14 +90,21 @@ const EditProfile = ({ onCancel }) => {
     }
 
     if (isError) {
-        return <div className="error-state">Error: {error?.message || "Failed to load profile"}</div>;
+        return (
+            <TrainerStatus
+                message="Your profile could not be loaded."
+                onRetry={() => refetch()}
+                onBack={leaveEditor}
+                backLabel="Back to profile"
+            />
+        );
     }
 
     return (
         <div className="profile-wrapper">
             <div className="profile-container">
                 <div className="profile-header">
-                    <button className="back-btn" onClick={onCancel} aria-label="Back"><FaArrowLeft /></button>
+                    <button className="back-btn" onClick={leaveEditor} aria-label="Back"><FaArrowLeft /></button>
                 </div>
 
                 <div className="profile-card">
@@ -303,7 +314,7 @@ const EditProfile = ({ onCancel }) => {
                             </section>
 
                             <div className="form-actions">
-                                <button type="button" className="cancel-btn" onClick={onCancel}>Cancel</button>
+                                <button type="button" className="cancel-btn" onClick={leaveEditor}>Cancel</button>
                                 <button type="submit" className="save-btn" disabled={saving || updateProfile.isPending}>
                                     <FaSave /> {saving || updateProfile.isPending ? "Saving..." : "Save Changes"}
                                 </button>

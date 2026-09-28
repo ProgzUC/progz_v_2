@@ -110,7 +110,7 @@
 }
 
 .view-batch-page .trainer-item {
-    background: var(--color-bg);
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     padding: 16px;
@@ -196,7 +196,7 @@
 }
 
 .view-batch-page .module-header {
-    background: var(--color-bg);
+    background: var(--color-surface);
     padding: 16px;
     cursor: pointer;
     display: flex;
@@ -324,7 +324,7 @@
     align-items: center;
     gap: 12px;
     padding: 12px;
-    background: var(--color-bg);
+    background: var(--color-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
 }

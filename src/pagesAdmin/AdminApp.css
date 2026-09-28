@@ -18,6 +18,7 @@
   overflow-y: auto;
   min-height: 100vh;
   background: var(--color-bg);
+  border-left: none;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -212,8 +213,8 @@
 .layout .as-search input:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--color-text) !important;
   transition: background-color 99999s ease-out 0s;
-  box-shadow: 0 0 0 1000px var(--color-bg-muted) inset !important;
-  -webkit-box-shadow: 0 0 0 1000px var(--color-bg-muted) inset !important;
+  box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
 }
 
 .layout .as-search input:-webkit-autofill,

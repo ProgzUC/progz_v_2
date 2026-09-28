@@ -18,7 +18,7 @@
   bottom: 0;
   left: var(--sidebar-collapsed);
   padding: 0;
-  background: var(--color-bg);
+  background: var(--color-surface);
   z-index: 1100;
   width: auto;
   height: auto;
@@ -52,12 +52,12 @@
   max-height: none;
   max-width: none;
   border-radius: 0;
-  background: var(--color-bg);
+  background: var(--color-surface);
   box-shadow: none;
 }
 
 .course-preview-panel--student .course-preview-scroll {
-  background: var(--color-bg);
+  background: var(--color-surface);
   padding: 0;
   flex: 1;
   min-height: 0;
@@ -213,7 +213,7 @@
 }
 
 .course-preview-modules {
-  background: var(--color-bg);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 12px;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Batches.css';
 
 function getBatchInitials(name = '') {
@@ -8,7 +9,8 @@ function getBatchInitials(name = '') {
     return (parts[0][0] + parts[1][0]).toUpperCase();
 }
 
-const Active = ({ data, onViewBatch }) => {
+const Active = ({ data }) => {
+    const navigate = useNavigate();
     const batches = data.activeBatches || [];
 
     return (
@@ -27,7 +29,10 @@ const Active = ({ data, onViewBatch }) => {
                                     key={batch.batchId}
                                     type="button"
                                     className="batches-batch-card"
-                                    onClick={() => onViewBatch?.(batch)}
+                                    onClick={() => {
+                                        if (!batch.batchId) return;
+                                        navigate(`/trainer-dashboard/batches/${batch.batchId}`);
+                                    }}
                                     aria-label={`View ${batch.batchName}`}
                                 >
                                     <div className="batches-batch-head">

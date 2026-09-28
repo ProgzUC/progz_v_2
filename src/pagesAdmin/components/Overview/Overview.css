@@ -38,7 +38,7 @@
   gap: var(--spacing-sm);
   height: 46px;
   padding: 0 16px;
-  background: var(--color-bg-muted);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 999px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -60,7 +60,7 @@
   color: var(--color-primary);
 }
 
-/* Paint input same gray as bar — kills white inner box + side lines */
+/* Paint input same as bar — kills nested fill + side lines */
 .admin-overview-page .dashboard-search input,
 .admin-overview-page .dashboard-search input:hover,
 .admin-overview-page .dashboard-search input:focus,
@@ -78,16 +78,16 @@
   appearance: none !important;
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
-  background: var(--color-bg-muted) !important;
-  background-color: var(--color-bg-muted) !important;
+  background: var(--color-surface) !important;
+  background-color: var(--color-surface) !important;
   background-image: none !important;
   color: var(--color-text) !important;
   -webkit-text-fill-color: var(--color-text) !important;
   caret-color: var(--color-primary);
   font-family: var(--font-family-base);
   font-size: var(--font-size-sm);
-  box-shadow: 0 0 0 1000px var(--color-bg-muted) inset !important;
-  -webkit-box-shadow: 0 0 0 1000px var(--color-bg-muted) inset !important;
+  box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
 }
 
 .admin-overview-page .dashboard-search input::placeholder {
@@ -103,8 +103,8 @@
   -webkit-text-fill-color: var(--color-text) !important;
   caret-color: var(--color-primary);
   transition: background-color 99999s ease-out 0s;
-  box-shadow: 0 0 0 1000px var(--color-bg-muted) inset !important;
-  -webkit-box-shadow: 0 0 0 1000px var(--color-bg-muted) inset !important;
+  box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
 }
 
 .admin-overview-page .dashboard-search kbd {
@@ -372,6 +372,59 @@
 }
 
 /* ── Stats ── */
+.admin-overview-page .quick-actions {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+.admin-overview-page .quick-action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 14px 16px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  text-decoration: none;
+  color: var(--color-text);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-overview-page .quick-action:hover {
+  border-color: var(--color-primary-muted);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-overview-page .quick-action:focus-visible {
+  outline: 2px solid var(--color-primary-muted);
+  outline-offset: 2px;
+}
+
+.admin-overview-page .quick-action-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.25;
+}
+
+.admin-overview-page .quick-action-hint {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-secondary);
+}
+
+.admin-overview-page .quick-action .icon-box {
+  width: 40px;
+  height: 40px;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
 .admin-overview-page .stats-row {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -388,6 +441,18 @@
   border-radius: var(--radius-lg);
   padding: 18px;
   box-shadow: var(--shadow-xs);
+}
+
+.admin-overview-page a.stats-card.is-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-overview-page a.stats-card.is-link:hover {
+  border-color: var(--color-primary-muted);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-overview-page .icon-box {
@@ -756,6 +821,10 @@
     order: 3;
   }
 
+  .admin-overview-page .quick-actions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .admin-overview-page .stats-row,
   .admin-overview-page .charts-row,
   .admin-overview-page .tables-row {
@@ -769,6 +838,7 @@
   }
 
   .admin-overview-page .dashboard-header,
+  .admin-overview-page .quick-actions,
   .admin-overview-page .stats-row,
   .admin-overview-page .charts-row,
   .admin-overview-page .tables-row {

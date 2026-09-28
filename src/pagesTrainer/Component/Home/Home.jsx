@@ -1,6 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import './Home.css';
 
-const Home = ({ trainer, stats, onNavigateToCreateCourse, onNavigateToMyCourses }) => {
+const Home = ({ trainer, stats }) => {
+    const navigate = useNavigate();
+
     return (
         <section className="trainer-home home-hero">
             <div className='hero-overlay'></div>
@@ -10,11 +13,11 @@ const Home = ({ trainer, stats, onNavigateToCreateCourse, onNavigateToMyCourses 
                     <p>Manage your batches, unlock lessons for students, and keep classes running smoothly.</p>
 
                     <div className="hero-btns">
-                        <button type="button" className="btn-primary" onClick={onNavigateToCreateCourse}>
+                        <button type="button" className="btn-primary" onClick={() => navigate('/trainer-dashboard/courses/new')}>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                             Create New Course
                         </button>
-                        <button type="button" className="btn-secondary" onClick={onNavigateToMyCourses}>
+                        <button type="button" className="btn-secondary" onClick={() => navigate('/trainer-dashboard/courses')}>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                             My Courses
                         </button>

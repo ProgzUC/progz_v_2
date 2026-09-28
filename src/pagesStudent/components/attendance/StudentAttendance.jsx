@@ -1,10 +1,33 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import "./StudentAttendance.css";
 import { useStudentAttendance } from "../../../hooks/useStudentAttendance";
 import Loader from "../../../components/common/Loader/Loader";
 
+function summarize(rows) {
+    const present = rows.filter((row) => row.status === "Present").length;
+    const late = rows.filter((row) => row.status === "Late").length;
+    const absent = rows.filter((row) => row.status === "Absent").length;
+    const totalSessions = rows.length;
+    const attendancePercentage = totalSessions > 0
+        ? Math.round(((present + late) / totalSessions) * 100)
+        : 0;
+    return { totalSessions, present, late, absent, attendancePercentage };
+}
+
 export default function StudentAttendance() {
     const { data, isLoading, isError } = useStudentAttendance();
+    const [searchParams, setSearchParams] = useSearchParams();
+    const selectedBatchId = searchParams.get("batchId") || "";
+    const attendanceHistory = data?.attendanceHistory || [];
+    const batches = useMemo(() => {
+        const map = new Map();
+        attendanceHistory.forEach((row) => {
+            if (!row.batchId) return;
+            map.set(String(row.batchId), row.batchName || "Batch");
+        });
+        return Array.from(map, ([id, name]) => ({ id, name }));
+    }, [attendanceHistory]);
 
     if (isLoading) {
         return <Loader message="Loading your attendance..." />;
@@ -19,8 +42,12 @@ export default function StudentAttendance() {
         );
     }
 
-    const { attendanceHistory = [], summary = {} } = data || {};
+    const visibleHistory = selectedBatchId
+        ? attendanceHistory.filter((row) => String(row.batchId) === String(selectedBatchId))
+        : attendanceHistory;
+    const summary = selectedBatchId ? summarize(visibleHistory) : (data?.summary || summarize(visibleHistory));
     const { totalSessions, present, late, absent, attendancePercentage } = summary;
+    const selectedBatchName = batches.find((batch) => batch.id === String(selectedBatchId))?.name;
 
     // Calculate circular progress
     const circumference = 2 * Math.PI * 70; // radius = 70
@@ -117,7 +144,33 @@ export default function StudentAttendance() {
             <div className="attendance-history-section">
                 <h3>Attendance History</h3>
 
-                {attendanceHistory.length === 0 ? (
+                {batches.length > 0 && (
+                    <div className="attendance-batch-filters" role="tablist" aria-label="Filter attendance by batch">
+                        <button
+                            type="button"
+                            className={`attendance-batch-chip ${selectedBatchId ? "" : "active"}`}
+                            onClick={() => setSearchParams({})}
+                        >
+                            All batches
+                        </button>
+                        {batches.map((batch) => (
+                            <button
+                                key={batch.id}
+                                type="button"
+                                className={`attendance-batch-chip ${selectedBatchId === batch.id ? "active" : ""}`}
+                                onClick={() => setSearchParams({ batchId: batch.id })}
+                            >
+                                {batch.name}
+                            </button>
+                        ))}
+                    </div>
+                )}
+
+                {selectedBatchName && (
+                    <p className="attendance-filter-note">Showing attendance for {selectedBatchName}.</p>
+                )}
+
+                {visibleHistory.length === 0 ? (
                     <div className="empty-history">
                         <i className="bi bi-calendar-x"></i>
                         <p>No attendance records yet</p>
@@ -136,7 +189,7 @@ export default function StudentAttendance() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {attendanceHistory.map((session, index) => {
+                                {visibleHistory.map((session, index) => {
                                     const sessionDate = new Date(session.date);
 
                                     return (

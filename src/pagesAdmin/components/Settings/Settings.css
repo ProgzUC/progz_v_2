@@ -2,7 +2,7 @@
   display: grid;
   grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
   min-height: calc(100vh - var(--page-top-offset, 0px) - 32px);
-  background: var(--color-bg);
+  background: var(--color-surface);
   color: var(--color-text);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -115,7 +115,7 @@
 .as-main {
   padding: 22px 28px 40px;
   overflow: auto;
-  background: var(--color-bg);
+  background: var(--color-surface);
 }
 
 .as-main-top {
@@ -335,7 +335,7 @@
   text-align: left;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-bg);
+  background: var(--color-surface);
   color: var(--color-text);
   cursor: pointer;
   font-family: inherit;
@@ -562,7 +562,7 @@
   width: 100%;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-bg);
+  background: var(--color-surface);
   color: var(--color-text);
   padding: 10px 12px;
   font: inherit;
@@ -754,7 +754,7 @@
   padding: 12px 14px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-bg);
+  background: var(--color-surface);
 }
 
 .as-announce-item.is-off {
@@ -818,7 +818,7 @@
   padding: 14px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  background: var(--color-bg);
+  background: var(--color-surface);
   text-decoration: none;
   color: inherit;
   transition: border-color 0.15s ease, background 0.15s ease;
@@ -881,7 +881,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: var(--color-bg);
+  background: var(--color-surface);
 }
 
 .as-toggle-row {

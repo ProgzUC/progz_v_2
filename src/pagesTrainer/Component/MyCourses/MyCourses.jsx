@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './MyCourses.css';
-import { BsBook, BsPeople, BsLightningCharge, BsArrowRight } from 'react-icons/bs';
+import { BsBook, BsPeople, BsArrowRight } from 'react-icons/bs';
 import {
     BiPlus,
     BiDotsVerticalRounded,
@@ -19,6 +20,7 @@ import { useDeleteCourse } from '../../../hooks/useCourses';
 import { confirmDelete } from '../../../utils/confirmDelete';
 import { showSuccess, showError } from '../../../utils/toast';
 import Loader from '../../../components/common/Loader/Loader';
+import TrainerStatus from '../../components/TrainerStatus';
 
 const COURSE_THEMES = [
     { id: 'emerald', match: /html/, category: 'Web Development' },
@@ -31,7 +33,7 @@ const COURSE_THEMES = [
 const getCourseTheme = (name = '') => {
     const lower = String(name).toLowerCase();
     const found = COURSE_THEMES.find((t) => t.match.test(lower));
-    return found || { id: 'emerald', category: 'Course Curriculum' };
+    return found || { id: 'emerald' };
 };
 
 const getCourseLogo = (name, initial) => {
@@ -62,12 +64,13 @@ const getCourseLogo = (name, initial) => {
 
 const shortDescription = (course) => {
     const raw = String(course.description || course.courseDescription || '').replace(/<[^>]+>/g, '').trim();
-    if (raw) return raw.length > 90 ? `${raw.slice(0, 87)}…` : raw;
-    return `Master ${course.courseName || 'this course'} with structured lessons and hands-on practice.`;
+    if (!raw) return '';
+    return raw.length > 90 ? `${raw.slice(0, 87)}…` : raw;
 };
 
-const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
-    const { data: courses, isLoading, isError } = useTrainerCourses();
+const MyCourses = () => {
+    const navigate = useNavigate();
+    const { data: courses, isLoading, isError, refetch } = useTrainerCourses();
     const { mutate: deleteCourse } = useDeleteCourse();
 
     const [openDropdownId, setOpenDropdownId] = useState(null);
@@ -97,11 +100,8 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
     const handleEditCourse = (e, course) => {
         e.stopPropagation();
         setOpenDropdownId(null);
-        if (onEditCourse) {
-            onEditCourse(course);
-        } else if (onManageCourse) {
-            onManageCourse(course);
-        }
+        const courseId = course.courseId || course._id || course.id;
+        if (courseId) navigate(`/trainer-dashboard/courses/${courseId}/edit`);
     };
 
     const coursesData = useMemo(() => courses || [], [courses]);
@@ -124,7 +124,10 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
     if (isError) {
         return (
             <div className="my-courses-container trainer-myCourses">
-                <p className="courses-error">Error loading courses. Please try again later.</p>
+                <TrainerStatus
+                    message="Courses could not be loaded."
+                    onRetry={() => refetch()}
+                />
             </div>
         );
     }
@@ -162,15 +165,6 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                     </div>
                 </div>
 
-                <div className="stat-card" role="listitem" style={{ '--stat-i': 3 }}>
-                    <div className="stat-icon-box stat-published">
-                        <BsLightningCharge aria-hidden="true" />
-                    </div>
-                    <div className="stat-info">
-                        <span className="stat-value">100%</span>
-                        <span className="stat-label">Published</span>
-                    </div>
-                </div>
             </div>
 
             <div className="trainer-courses-grid">
@@ -242,9 +236,10 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                             </div>
 
                             <div className="trainer-card-body">
-                                <span className="trainer-course-badge">{theme.category}</span>
                                 <h3 className="trainer-course-title">{course.courseName}</h3>
-                                <p className="trainer-course-desc">{shortDescription(course)}</p>
+                                {shortDescription(course) ? (
+                                    <p className="trainer-course-desc">{shortDescription(course)}</p>
+                                ) : null}
 
                                 <div className="trainer-course-meta">
                                     <span className="meta-badge">
@@ -267,7 +262,7 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                                 <button
                                     type="button"
                                     className={`trainer-view-course-btn${isPrimaryCta ? ' is-solid' : ' is-outline'}`}
-                                    onClick={() => onManageCourse(course)}
+                                    onClick={() => navigate(`/trainer-dashboard/courses/${courseId}`)}
                                 >
                                     <span>View Course</span>
                                     <BsArrowRight className="view-course-arrow" aria-hidden="true" />
@@ -281,7 +276,7 @@ const MyCourses = ({ onManageCourse, onEditCourse, onCreateNew }) => {
                     type="button"
                     className="create-new-course-card"
                     style={{ '--card-i': coursesData.length }}
-                    onClick={onCreateNew}
+                    onClick={() => navigate('/trainer-dashboard/courses/new')}
                 >
                     <div className="plus-icon-circle">
                         <BiPlus aria-hidden="true" />

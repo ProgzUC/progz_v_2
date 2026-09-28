@@ -24,6 +24,14 @@ import {
 import { motion } from "framer-motion";
 
 const MotionDiv = motion.div;
+const MotionLink = motion.create(Link);
+
+const QUICK_ACTIONS = [
+  { to: "/admin/enroll", icon: "bi-person-plus", label: "Enroll Students", hint: "Add students to a batch" },
+  { to: "/admin/reports/attendance", icon: "bi-calendar-check", label: "Attendance Reports", hint: "Batch attendance" },
+  { to: "/admin/reports", icon: "bi-pie-chart", label: "Reports", hint: "Academy analytics" },
+  { to: "/admin/sync", icon: "bi-arrow-repeat", label: "Sync", hint: "Sync from Zen" },
+];
 
 const avatarFallback = (name = "User") =>
   `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0B3D2E&color=fff&size=64`;
@@ -328,14 +336,18 @@ const Overview = () => {
   const bottomCards = [
     { key: "enroll-week", label: "Enrollments", value: weeklyEnrollments, icon: "bi-graph-up-arrow", tone: "emerald", trend: enrollTrend },
     { key: "enroll-peak", label: "Peak day enrollments", value: peakDay, icon: "bi-people", tone: "primary", trend: null },
-    { key: "pending", label: "Pending Approvals", value: numbers.pending, icon: "bi-hourglass-split", tone: "rose", trend: null },
+    { key: "pending", label: "Pending Approvals", value: numbers.pending, icon: "bi-hourglass-split", tone: "rose", trend: null, to: "/admin/approve-users" },
     { key: "users", label: "Users joined", value: numbers.users, icon: "bi-person-check", tone: "sky", trend: null },
   ];
 
-  const renderStatCard = (card, i) => (
-    <MotionDiv
+  const renderStatCard = (card, i) => {
+    const Shell = card.to ? MotionLink : MotionDiv;
+    const linkProps = card.to ? { to: card.to } : {};
+    return (
+    <Shell
       key={card.key}
-      className="stats-card"
+      className={`stats-card${card.to ? " is-link" : ""}`}
+      {...linkProps}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: i * 0.05, duration: 0.35 }}
@@ -356,8 +368,9 @@ const Overview = () => {
         </div>
       </div>
       <Sparkline points={sparkPoints} up={card.trend == null || card.trend >= 0} />
-    </MotionDiv>
-  );
+    </Shell>
+    );
+  };
 
   return (
     <div className="admin-overview-page">
@@ -518,6 +531,31 @@ const Overview = () => {
           <AdminAccountMenu />
         </div>
       </div>
+
+      <section className="quick-actions" aria-label="Operational actions">
+        {QUICK_ACTIONS.map((action) => (
+          <Link key={action.to} to={action.to} className="quick-action">
+            <span className="icon-box primary" aria-hidden="true">
+              <i className={`bi ${action.icon}`} />
+            </span>
+            <span>
+              <span className="quick-action-label">{action.label}</span>
+              <span className="quick-action-hint">{action.hint}</span>
+            </span>
+          </Link>
+        ))}
+        <Link to="/admin/approve-users" className="quick-action quick-action-pending">
+          <span className="icon-box rose" aria-hidden="true">
+            <i className="bi bi-hourglass-split" />
+          </span>
+          <span>
+            <span className="quick-action-label">Pending Approvals</span>
+            <span className="quick-action-hint">
+              {numbers.pending} waiting for review
+            </span>
+          </span>
+        </Link>
+      </section>
 
       <div className="stats-row">{topCards.map(renderStatCard)}</div>
 

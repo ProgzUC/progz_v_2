@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./ProfilePage.css";
 import { useStudentProfile, useUpdateStudentProfile, useChangePassword } from "../../../hooks/useStudentProfile";
 import { useStudentCourses } from "../../../hooks/useStudentCourses";
+import { formatNextClass } from "../../utils/formatNextClass";
 import Loader from "../../../components/common/Loader/Loader";
 import FileDropZone from "../../../components/common/FileDropZone/FileDropZone";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
@@ -662,7 +663,9 @@ const CourseGrid = ({ courses, profileName }) => {
             studentName: profileName,
             courseName: course.courseName || course.title,
             completionDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-            startDate: "January 2024" // Derive if available
+            startDate: course.enrolledAt
+                ? new Date(course.enrolledAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+                : ""
         };
         navigate("/student-dashboard/certificate", { state: { certData } });
     };
@@ -722,14 +725,27 @@ const CourseGrid = ({ courses, profileName }) => {
                                                 🎉 View Certificate
                                             </button>
                                         ) : (
-                                            <span className="last-accessed-text">Last accessed recently</span>
+                                            <button
+                                                type="button"
+                                                className="last-accessed-text profile-continue-link"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    navigate("/student-dashboard/my-courses", {
+                                                        state: { courseId: c.courseId || c.id, openContinue: true, fromProfile: true },
+                                                    });
+                                                }}
+                                            >
+                                                {c.nextClassAt
+                                                    ? `Next class ${formatNextClass(c.nextClassAt)}`
+                                                    : "Continue learning"}
+                                            </button>
                                         )}
                                     </div>
                                 </div>
                             </div>
                         );
                     })}
-                    {filteredCourses.length === 0 && <p className="profile-no-courses">No courses found in this category.</p>}
+                    {filteredCourses.length === 0 && <p className="profile-no-courses">No courses in this view.</p>}
                 </div>
             </div>
         </div>

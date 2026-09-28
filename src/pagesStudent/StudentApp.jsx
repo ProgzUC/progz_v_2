@@ -37,6 +37,7 @@ export default function StudentApp() {
           </>
         } />
         <Route path="/browse" element={<CategoryPage />} />
+        <Route path="/course-details/:courseId" element={<CourseDetails />} />
         <Route path="/course-details" element={<CourseDetails />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/certificate" element={<CertificateView />} />

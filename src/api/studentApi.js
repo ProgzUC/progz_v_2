@@ -14,6 +14,12 @@ export const changeStudentPassword = (payload) =>
 export const fetchStudentCourses = () =>
     axiosInstance.get("/student/my-courses").then(res => res.data);
 
+export const fetchStudentCatalog = () =>
+    axiosInstance.get("/student/catalog").then(res => res.data);
+
+export const fetchStudentCatalogCourse = (courseId) =>
+    axiosInstance.get(`/student/catalog/${courseId}`).then(res => res.data);
+
 export const fetchCourseProgress = (courseId) =>
     axiosInstance.get(`/student/course/${courseId}/progress`).then(res => res.data);
 
