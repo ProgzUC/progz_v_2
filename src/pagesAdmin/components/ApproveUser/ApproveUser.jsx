@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePendingUsers, useApproveUser, useRejectUser } from "../../../hooks/useAdminUsers";
 import { approveUser, rejectUser } from "../../../api/userApi";
-import Loader from "../../../components/common/Loader/Loader";
+import { ErrorState, Skeleton } from "../../../components/common/PageState";
+import { getErrorMessage } from "../../../utils/apiError";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import Swal from "sweetalert2";
 import "./ApproveUser.css";
@@ -32,7 +33,7 @@ const ApproveUser = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data: pendingUsers = [], isLoading, isError, error } = usePendingUsers();
+  const { data: pendingUsers = [], isLoading, isError, error, refetch } = usePendingUsers();
   const [activeTab, setActiveTab] = useState("student");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -257,11 +258,13 @@ const ApproveUser = () => {
         </div>
 
         {isLoading ? (
-          <Loader />
+          <Skeleton variant="table" label="Loading registrations" />
         ) : isError ? (
-          <div className="page-error">
-            Error loading users: {error?.message || "Something went wrong"}
-          </div>
+          <ErrorState
+            title="Registrations could not be loaded"
+            message={getErrorMessage(error, "Pending users did not come through.")}
+            onRetry={() => refetch()}
+          />
         ) : (
           <>
             {selectedIds.size > 0 && (

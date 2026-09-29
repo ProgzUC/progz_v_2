@@ -8,6 +8,8 @@ import Loader from "../../../components/common/Loader/Loader";
 import FileDropZone from "../../../components/common/FileDropZone/FileDropZone";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import { uploadToCloudinary } from "../../../utils/cloudinary";
+import { ErrorState } from "../../../components/common/PageState";
+import { getErrorMessage } from "../../../utils/apiError";
 
 import { MdPhone } from "react-icons/md";
 import {
@@ -194,7 +196,7 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                 }, 900);
             },
             onError: (err) => {
-                setError(err?.message || "Failed to update password. Try again.");
+                setError(getErrorMessage(err, "Failed to update password. Try again."));
             }
         });
     };
@@ -257,11 +259,11 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                     });
                 },
                 onError: (err) => {
-                    setError(err?.message || "Failed to update profile.");
+                    setError(getErrorMessage(err, "Failed to update profile."));
                 }
             });
         } catch (uploadErr) {
-            setError(uploadErr?.message || "Image upload failed. Try again.");
+            setError(getErrorMessage(uploadErr, "Image upload failed. Try again."));
         }
     };
 
@@ -685,8 +687,8 @@ const CourseGrid = ({ courses, profileName }) => {
             </div>
 
             <div className="profile-courses-grid-scroll">
-                <div className="profile-courses-grid">
-                    {filteredCourses.map((c) => {
+                <div className="profile-courses-grid" key={filter}>
+                    {filteredCourses.map((c, index) => {
                         const progress = c.progressPercentage || 0;
                         const isCompleted = progress === 100;
 
@@ -695,7 +697,7 @@ const CourseGrid = ({ courses, profileName }) => {
                                 key={c.courseId || c.id}
                                 className="profile-course-card"
                                 onClick={() => navigate('/student-dashboard/my-courses', { state: { courseId: c.courseId || c.id, fromProfile: true } })}
-                                style={{ cursor: "pointer" }}
+                                style={{ cursor: "pointer", animationDelay: `${index * 70}ms` }}
                             >
                                 <div className="profile-course-card-top">
                                     <CourseThumb courseName={c.courseName || c.title} />
@@ -757,7 +759,7 @@ const CourseGrid = ({ courses, profileName }) => {
    ============================ */
 const ProfilePage = () => {
     const navigate = useNavigate();
-    const { data: profile, isLoading: profileLoading, refetch: refetchProfile } = useStudentProfile();
+    const { data: profile, isLoading: profileLoading, isError: profileError, refetch: refetchProfile } = useStudentProfile();
     const { data: coursesData, isLoading: coursesLoading } = useStudentCourses();
 
     const [isModelOpen, setIsModelOpen] = useState(false);
@@ -765,6 +767,18 @@ const ProfilePage = () => {
 
     if (profileLoading || coursesLoading) {
         return <Loader message="Loading profile..." />;
+    }
+
+    if (profileError) {
+        return (
+            <ErrorState
+                title="Profile could not be loaded"
+                message="Your account details did not come through."
+                onRetry={() => refetchProfile()}
+                onBack={() => navigate("/student-dashboard")}
+                backLabel="Back to home"
+            />
+        );
     }
 
     const courses = coursesData?.enrolledCourses || [];

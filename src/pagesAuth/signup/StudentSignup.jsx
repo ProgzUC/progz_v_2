@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { registerUser } from '../../api/userApi';
+import { getErrorMessage } from '../../utils/apiError';
 import LeftSidebar from './LeftSidebar';
 import PersonalDetails from './PersonalDetails';
 import Role from './Role';
@@ -68,12 +69,11 @@ const StudentSignup = () => {
                 }
             });
         } catch (error) {
-            console.error("Registration failed:", error);
             Swal.fire({
                 title: 'Registration Failed',
-                text: error.message || 'Something went wrong. Please try again.',
+                text: getErrorMessage(error, 'Something went wrong. Please try again.'),
                 icon: 'error',
-                confirmButtonColor: '#d33'
+                confirmButtonColor: '#0B3D2E'
             });
         }
     };

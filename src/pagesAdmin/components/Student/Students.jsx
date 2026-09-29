@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import "./Students.css";
-import Loader from "../../../components/common/Loader/Loader";
+import { ErrorState, Skeleton } from "../../../components/common/PageState";
+import { getErrorMessage } from "../../../utils/apiError";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import { useAllUsers, useDeleteUser } from "../../../hooks/useAdminUsers";
 import { LuEye, LuPencil, LuTrash2 } from "react-icons/lu";
@@ -29,7 +30,7 @@ const Students = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const { data: allUsers = [], isLoading, isError, error } = useAllUsers();
+  const { data: allUsers = [], isLoading, isError, error, refetch } = useAllUsers();
   const { mutate: deleteUser } = useDeleteUser();
 
   const students = useMemo(
@@ -144,11 +145,13 @@ const Students = () => {
         </div>
 
         {isLoading ? (
-          <Loader />
+          <Skeleton variant="table" label="Loading students" />
         ) : isError ? (
-          <div className="page-error">
-            Error loading students: {error?.message || "Something went wrong"}
-          </div>
+          <ErrorState
+            title="Students could not be loaded"
+            message={getErrorMessage(error, "The student list did not come through.")}
+            onRetry={() => refetch()}
+          />
         ) : (
           <>
             <p className="admin-table-scroll-hint">Swipe horizontally to view all columns.</p>

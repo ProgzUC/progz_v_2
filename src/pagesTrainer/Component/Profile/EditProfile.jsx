@@ -15,6 +15,7 @@ import FileDropZone from '../../../components/common/FileDropZone/FileDropZone';
 import AppSelect from '../../../components/common/AppSelect/AppSelect';
 import { uploadToCloudinary } from '../../../utils/cloudinary';
 import { showSuccess, showError } from '../../../utils/toast';
+import { getErrorMessage } from '../../../utils/apiError';
 import TrainerStatus from '../../components/TrainerStatus';
 
 const EditProfile = () => {
@@ -81,7 +82,7 @@ const EditProfile = () => {
             });
         } catch (uploadErr) {
             setSaving(false);
-            console.error(uploadErr);
+            showError(getErrorMessage(uploadErr, "The photo could not be uploaded. Try again."));
         }
     };
 

@@ -57,7 +57,8 @@ export const useUnifiedCatalog = () => {
         continueLearning: coursesQuery.data?.continueLearning || null,
         nextClass: coursesQuery.data?.nextClass || null,
         isLoading: catalogQuery.isLoading || coursesQuery.isLoading,
-        isError: catalogQuery.isError,
+        isError: catalogQuery.isError || coursesQuery.isError,
+        refetch: () => Promise.all([catalogQuery.refetch(), coursesQuery.refetch()]),
     };
 };
 

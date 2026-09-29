@@ -3,6 +3,9 @@ import "./AttendanceReport.css";
 import { useBatchAttendanceReport } from "../../../hooks/useClassSession";
 import { useBatches } from "../../../hooks/useBatches";
 import Loader from "../../../components/common/Loader/Loader";
+import { EmptyState, ErrorState } from "../../../components/common/PageState";
+import { showError, showSuccess } from "../../../utils/toast";
+import { getErrorMessage } from "../../../utils/apiError";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import { downloadAttendanceCSV } from "../../../api/reportApi";
 import { Link } from "react-router-dom";
@@ -11,7 +14,7 @@ export default function AttendanceReport() {
     const [selectedBatchId, setSelectedBatchId] = useState("");
 
     const { data: batchesData, isLoading: batchesLoading } = useBatches();
-    const { data, isLoading, isError } = useBatchAttendanceReport(selectedBatchId);
+    const { data, isLoading, isError, refetch } = useBatchAttendanceReport(selectedBatchId);
 
     const batches = batchesData || [];
 
@@ -23,9 +26,9 @@ export default function AttendanceReport() {
         if (!selectedBatchId) return;
         try {
             await downloadAttendanceCSV(selectedBatchId);
+            showSuccess("Attendance file is downloading.");
         } catch (error) {
-            console.error("Export failed", error);
-            alert("Failed to export attendance logs.");
+            showError(getErrorMessage(error, "Attendance could not be exported."));
         }
     };
 
@@ -66,18 +69,19 @@ export default function AttendanceReport() {
             </div>
 
             {!selectedBatchId ? (
-                <div className="no-selection">
-                    <i className="bi bi-cursor"></i>
-                    <h3>Select a Batch to View Report</h3>
-                    <p>Choose a batch from the dropdown above to see detailed attendance statistics</p>
-                </div>
+                <EmptyState
+                    title="Select a batch"
+                    message="Choose a batch from the list above to see attendance."
+                    icon="bi-cursor"
+                />
             ) : isLoading ? (
-                <Loader message="Generating attendance report..." />
+                <Loader message="Generating attendance report..." inline />
             ) : isError ? (
-                <div className="error-state">
-                    <i className="bi bi-exclamation-triangle"></i>
-                    <p>Failed to load attendance report</p>
-                </div>
+                <ErrorState
+                    title="Attendance report could not be loaded"
+                    message="The batch is still there. Try loading the report again."
+                    onRetry={() => refetch()}
+                />
             ) : (
                 <>
                     {/* Report Overview */}

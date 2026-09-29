@@ -4,6 +4,7 @@ import "./Overview.css";
 
 import StudentListModal from "../StudentListModal/StudentListModal";
 import Loader from "../../../components/common/Loader/Loader";
+import { ErrorState } from "../../../components/common/PageState";
 import NotificationBell from "../../../components/common/NotificationBell/NotificationBell";
 import AdminAccountMenu from "../AdminAccountMenu/AdminAccountMenu";
 import { useAdminDashboard } from "../../../hooks/useAdminStats";
@@ -200,6 +201,8 @@ const Overview = () => {
     recentStudents,
     isLoading,
     isFetching,
+    isError,
+    refetch,
   } = useAdminDashboard({ startDate: range.startDate, endDate: range.endDate });
 
   const user = getStoredUser();
@@ -322,6 +325,16 @@ const Overview = () => {
 
   if (isLoading) {
     return <Loader message="Loading dashboard..." />;
+  }
+
+  if (isError) {
+    return (
+      <ErrorState
+        title="Dashboard could not be loaded"
+        message="Stats and recent activity did not come through."
+        onRetry={() => refetch()}
+      />
+    );
   }
 
   const peakDay = sparkPoints.length ? Math.max(...sparkPoints) : 0;

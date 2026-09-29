@@ -1,8 +1,37 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./StudentAttendance.css";
 import { useStudentAttendance } from "../../../hooks/useStudentAttendance";
 import Loader from "../../../components/common/Loader/Loader";
+import { ErrorState } from "../../../components/common/PageState";
+
+function useCountUp(target) {
+    const [value, setValue] = useState(0);
+
+    useEffect(() => {
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduced) {
+            setValue(target);
+            return undefined;
+        }
+
+        let frame = 0;
+        const start = performance.now();
+        const duration = 1100;
+        const tick = (now) => {
+            const progress = Math.min(1, (now - start) / duration);
+            const eased = 1 - (1 - progress) ** 3;
+            setValue(Math.round(target * eased));
+            if (progress < 1) frame = requestAnimationFrame(tick);
+        };
+
+        setValue(0);
+        frame = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(frame);
+    }, [target]);
+
+    return value;
+}
 
 function summarize(rows) {
     const present = rows.filter((row) => row.status === "Present").length;
@@ -16,7 +45,7 @@ function summarize(rows) {
 }
 
 export default function StudentAttendance() {
-    const { data, isLoading, isError } = useStudentAttendance();
+    const { data, isLoading, isError, refetch } = useStudentAttendance();
     const [searchParams, setSearchParams] = useSearchParams();
     const selectedBatchId = searchParams.get("batchId") || "";
     const attendanceHistory = data?.attendanceHistory || [];
@@ -29,59 +58,69 @@ export default function StudentAttendance() {
         return Array.from(map, ([id, name]) => ({ id, name }));
     }, [attendanceHistory]);
 
-    if (isLoading) {
-        return <Loader message="Loading your attendance..." />;
-    }
-
-    if (isError) {
-        return (
-            <div className="error-container">
-                <i className="bi bi-exclamation-triangle"></i>
-                <p>Failed to load attendance data</p>
-            </div>
-        );
-    }
-
     const visibleHistory = selectedBatchId
         ? attendanceHistory.filter((row) => String(row.batchId) === String(selectedBatchId))
         : attendanceHistory;
     const summary = selectedBatchId ? summarize(visibleHistory) : (data?.summary || summarize(visibleHistory));
     const { totalSessions, present, late, absent, attendancePercentage } = summary;
     const selectedBatchName = batches.find((batch) => batch.id === String(selectedBatchId))?.name;
+    const shownPercentage = useCountUp(isLoading ? 0 : attendancePercentage);
+    const [ringReady, setRingReady] = useState(false);
 
-    // Calculate circular progress
-    const circumference = 2 * Math.PI * 70; // radius = 70
-    const offset = circumference - (attendancePercentage / 100) * circumference;
+    useEffect(() => {
+        if (isLoading) return undefined;
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduced) {
+            setRingReady(true);
+            return undefined;
+        }
+        setRingReady(false);
+        const frame = requestAnimationFrame(() => {
+            requestAnimationFrame(() => setRingReady(true));
+        });
+        return () => cancelAnimationFrame(frame);
+    }, [attendancePercentage, isLoading]);
+
+    if (isLoading) {
+        return <Loader message="Loading your attendance..." />;
+    }
+
+    if (isError) {
+        return (
+            <div className="student-attendance-container">
+                <ErrorState
+                    title="Attendance could not be loaded"
+                    message="Your class history is still safe. Try again to refresh it."
+                    onRetry={() => refetch()}
+                />
+            </div>
+        );
+    }
+
+    const circumference = 2 * Math.PI * 70;
+    const offset = ringReady
+        ? circumference - (attendancePercentage / 100) * circumference
+        : circumference;
 
     return (
         <div className="student-attendance-container">
-            {/* Attendance Summary */}
-            <div className="attendance-summary-section">
-                <h2>
-                    <i className="bi bi-calendar-check"></i>
-                    My Attendance
-                </h2>
+            <header className="attendance-page-head">
+                <p className="attendance-kicker">Your classes</p>
+                <h2>My Attendance</h2>
+                <p>Presence, late joins, and absences across your batches.</p>
+            </header>
 
-                <div className="summary-cards">
-                    {/* Circular Progress Card */}
-                    <div className="circular-progress-card">
-                        <svg className="progress-circle" width="180" height="180">
-                            <circle
-                                className="progress-circle-bg"
-                                cx="90"
-                                cy="90"
-                                r="70"
-                                fill="none"
-                                stroke="#e9ecef"
-                                strokeWidth="12"
-                            />
+            <section className="attendance-summary" aria-label="Attendance summary">
+                <div className="attendance-ring-card">
+                    <div className={`circular-progress-card ${ringReady ? "is-drawn" : ""}`}>
+                        <svg className="progress-circle" width="168" height="168" viewBox="0 0 180 180" aria-hidden="true">
+                            <circle className="progress-circle-bg" cx="90" cy="90" r="70" fill="none" strokeWidth="12" />
                             <circle
                                 className="progress-circle-fill"
                                 cx="90"
                                 cy="90"
                                 r="70"
                                 fill="none"
-                                stroke="#198754"
                                 strokeWidth="12"
                                 strokeDasharray={circumference}
                                 strokeDashoffset={offset}
@@ -90,59 +129,49 @@ export default function StudentAttendance() {
                             />
                         </svg>
                         <div className="progress-text">
-                            <h3>{attendancePercentage}%</h3>
+                            <h3>{shownPercentage}%</h3>
                             <p>Attendance</p>
                         </div>
                     </div>
-
-                    {/* Stats Cards */}
-                    <div className="stats-cards">
-                        <div className="stat-card">
-                            <div className="stat-icon total">
-                                <i className="bi bi-calendar3"></i>
-                            </div>
-                            <div className="stat-content">
-                                <h4>{totalSessions}</h4>
-                                <p>Total Classes</p>
-                            </div>
-                        </div>
-
-                        <div className="stat-card">
-                            <div className="stat-icon present">
-                                <i className="bi bi-check-circle-fill"></i>
-                            </div>
-                            <div className="stat-content">
-                                <h4>{present}</h4>
-                                <p>Present</p>
-                            </div>
-                        </div>
-
-                        <div className="stat-card">
-                            <div className="stat-icon late">
-                                <i className="bi bi-clock-fill"></i>
-                            </div>
-                            <div className="stat-content">
-                                <h4>{late}</h4>
-                                <p>Late</p>
-                            </div>
-                        </div>
-
-                        <div className="stat-card">
-                            <div className="stat-icon absent">
-                                <i className="bi bi-x-circle-fill"></i>
-                            </div>
-                            <div className="stat-content">
-                                <h4>{absent}</h4>
-                                <p>Absent</p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-            </div>
 
-            {/* Attendance History */}
-            <div className="attendance-history-section">
-                <h3>Attendance History</h3>
+                <div className="attendance-stats">
+                    <article className="attendance-stat">
+                        <span className="attendance-stat-icon total"><i className="bi bi-calendar3"></i></span>
+                        <div>
+                            <strong>{totalSessions}</strong>
+                            <span>Total classes</span>
+                        </div>
+                    </article>
+                    <article className="attendance-stat">
+                        <span className="attendance-stat-icon present"><i className="bi bi-check-circle-fill"></i></span>
+                        <div>
+                            <strong>{present}</strong>
+                            <span>Present</span>
+                        </div>
+                    </article>
+                    <article className="attendance-stat">
+                        <span className="attendance-stat-icon late"><i className="bi bi-clock-fill"></i></span>
+                        <div>
+                            <strong>{late}</strong>
+                            <span>Late</span>
+                        </div>
+                    </article>
+                    <article className="attendance-stat">
+                        <span className="attendance-stat-icon absent"><i className="bi bi-x-circle-fill"></i></span>
+                        <div>
+                            <strong>{absent}</strong>
+                            <span>Absent</span>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section className="attendance-history-section">
+                <div className="attendance-history-head">
+                    <h3>Attendance history</h3>
+                    {selectedBatchName && <p>Showing {selectedBatchName}</p>}
+                </div>
 
                 {batches.length > 0 && (
                     <div className="attendance-batch-filters" role="tablist" aria-label="Filter attendance by batch">
@@ -164,10 +193,6 @@ export default function StudentAttendance() {
                             </button>
                         ))}
                     </div>
-                )}
-
-                {selectedBatchName && (
-                    <p className="attendance-filter-note">Showing attendance for {selectedBatchName}.</p>
                 )}
 
                 {visibleHistory.length === 0 ? (
@@ -233,7 +258,7 @@ export default function StudentAttendance() {
                         </table>
                     </div>
                 )}
-            </div>
+            </section>
         </div>
     );
 }

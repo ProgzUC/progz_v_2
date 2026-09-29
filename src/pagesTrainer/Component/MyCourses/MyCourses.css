@@ -3,18 +3,156 @@
    ================================================================ */
 
 .my-courses-container.trainer-myCourses {
-  padding: var(--page-top-offset) var(--trainer-spacing-lg) var(--spacing-2xl);
+  padding: calc(var(--navbar-height) + 28px) 24px 72px;
   width: 100%;
-  max-width: var(--container-wide);
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
   background:
-    radial-gradient(ellipse 80% 40% at 50% -10%, rgba(16, 168, 121, 0.07), transparent 60%),
-    var(--mc-page-bg, var(--color-bg));
+    radial-gradient(circle at 8% 6%, color-mix(in srgb, var(--color-primary-muted) 42%, transparent) 0 120px, transparent 121px),
+    radial-gradient(circle at 96% 0%, color-mix(in srgb, var(--color-primary-bright) 16%, transparent) 0 180px, transparent 181px),
+    var(--trainer-page-bg);
   font-family: var(--font-family-base), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
   box-sizing: border-box;
   overflow-x: hidden;
   color: var(--color-text);
+}
+
+.trainer-myCourses .tc-hero,
+.trainer-myCourses .tc-statbar,
+.trainer-myCourses .tc-section-head,
+.trainer-myCourses .trainer-courses-grid {
+  max-width: var(--container-wide);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.trainer-myCourses .tc-hero {
+  padding: 36px 40px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 32px;
+  box-shadow: var(--shadow-lg);
+  animation: mcRiseIn 0.7s ease both;
+}
+
+.trainer-myCourses .tc-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 6px 12px 6px 8px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.trainer-myCourses .tc-kicker-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-primary-bright);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary-bright) 28%, transparent);
+}
+
+.trainer-myCourses .tc-hero h1 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 900;
+  letter-spacing: -1.2px;
+  line-height: 1.05;
+}
+
+.trainer-myCourses .tc-lead {
+  max-width: 560px;
+  margin: 12px 0 0;
+  color: var(--color-text-secondary);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.trainer-myCourses .tc-create {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 22px;
+  min-height: 48px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 14px;
+  background: var(--color-primary-gradient);
+  color: var(--color-text-on-primary);
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: var(--shadow-btn);
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.trainer-myCourses .tc-create:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-primary-bright) 32%, transparent);
+}
+
+.trainer-myCourses .tc-statbar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 22px;
+  padding: 8px;
+  background: var(--color-primary-gradient);
+  border-radius: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.trainer-myCourses .tc-statbar article {
+  padding: 18px 20px;
+  color: var(--color-text-on-primary);
+  animation: mcRiseIn 0.7s ease both;
+}
+
+.trainer-myCourses .tc-statbar article:nth-child(2) { animation-delay: 0.08s; }
+.trainer-myCourses .tc-statbar article:nth-child(3) { animation-delay: 0.16s; }
+
+.trainer-myCourses .tc-statbar strong {
+  display: block;
+  font-size: 32px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.trainer-myCourses .tc-statbar span {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.82;
+}
+
+.trainer-myCourses .tc-section-head {
+  margin-top: 28px;
+  margin-bottom: 16px;
+}
+
+.trainer-myCourses .tc-section-head p {
+  display: inline-flex;
+  margin: 0 0 10px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.trainer-myCourses .tc-section-head h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 26px;
+  letter-spacing: -0.03em;
 }
 
 .trainer-myCourses .courses-error {
@@ -99,8 +237,8 @@
 }
 
 .trainer-myCourses .stat-sections {
-  background: linear-gradient(145deg, #F8FAFC, #E2E8F0);
-  color: #475569;
+  background: linear-gradient(145deg, #E8F5E1, #DFF0D8);
+  color: #0B3D2E;
 }
 
 .trainer-myCourses .stat-students {
@@ -155,9 +293,9 @@
   --tone-ink: #0B3D2E;
   --tone-icon: #10A879;
   background: var(--mc-card-bg, var(--color-surface));
-  border-radius: 16px;
   border: 1px solid var(--mc-card-border, var(--color-border));
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+  border-radius: 22px;
+  box-shadow: 0 2px 10px rgba(11, 61, 46, 0.05);
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -180,32 +318,14 @@
   --tone-icon: #10A879;
 }
 
-.trainer-myCourses .trainer-course-card.theme-sky {
-  --tone-soft: #EFF6FF;
-  --tone-mid: #DBEAFE;
-  --tone-ink: #1D4ED8;
-  --tone-icon: #3B82F6;
-}
-
-.trainer-myCourses .trainer-course-card.theme-violet {
-  --tone-soft: #F5F3FF;
-  --tone-mid: #EDE9FE;
-  --tone-ink: #6D28D9;
-  --tone-icon: #8B5CF6;
-}
-
-.trainer-myCourses .trainer-course-card.theme-amber {
-  --tone-soft: #FFFBEB;
-  --tone-mid: #FEF3C7;
-  --tone-ink: #B45309;
-  --tone-icon: #F59E0B;
-}
-
+.trainer-myCourses .trainer-course-card.theme-sky,
+.trainer-myCourses .trainer-course-card.theme-violet,
+.trainer-myCourses .trainer-course-card.theme-amber,
 .trainer-myCourses .trainer-course-card.theme-teal {
-  --tone-soft: #F0FDFA;
-  --tone-mid: #CCFBF1;
-  --tone-ink: #0F766E;
-  --tone-icon: #14B8A6;
+  --tone-soft: #E8F5E1;
+  --tone-mid: #DFF0D8;
+  --tone-ink: #0B3D2E;
+  --tone-icon: #10A879;
 }
 
 .trainer-myCourses .trainer-course-card:hover {
@@ -568,8 +688,8 @@
 .trainer-myCourses .create-new-course-card {
   --card-i: 0;
   background: transparent;
-  border: 1.5px dashed rgba(16, 168, 121, 0.35);
-  border-radius: 16px;
+  border: 1.5px dashed color-mix(in srgb, var(--color-primary-bright) 45%, var(--color-border));
+  border-radius: 22px;
   padding: 28px 20px;
   min-height: 300px;
   display: flex;
@@ -660,11 +780,17 @@
 
 /* ========== Reduced motion ========== */
 @media (prefers-reduced-motion: reduce) {
+  .trainer-myCourses .tc-hero,
+  .trainer-myCourses .tc-statbar article,
   .trainer-myCourses .stat-card,
   .trainer-myCourses .trainer-course-card,
   .trainer-myCourses .create-new-course-card {
     animation: none;
     opacity: 1;
+  }
+
+  .trainer-myCourses .tc-create:hover {
+    transform: none;
   }
 
   .trainer-myCourses .stat-card,
@@ -688,7 +814,21 @@
 
 @media (max-width: 768px) {
   .my-courses-container.trainer-myCourses {
-    padding: var(--page-top-offset) var(--spacing-sm) var(--spacing-xl);
+    padding: calc(var(--navbar-height) + 16px) 16px 48px;
+  }
+
+  .trainer-myCourses .tc-hero {
+    padding: 24px 20px;
+    border-radius: 24px;
+  }
+
+  .trainer-myCourses .tc-statbar,
+  .trainer-myCourses .tc-create {
+    width: 100%;
+  }
+
+  .trainer-myCourses .tc-statbar {
+    grid-template-columns: 1fr;
   }
 
   .trainer-myCourses .trainer-stats-row {

@@ -1,73 +1,64 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { BiTimeFive, BiBookOpen, BiUser } from "react-icons/bi";
-import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
-import { formatNextClass } from "../../utils/formatNextClass";
+import { BiTimeFive, BiBookOpen } from "react-icons/bi";
 import "./Courses.css";
 
-export default function CatalogCourseCard({ course }) {
-    const navigate = useNavigate();
-    const title = course.title || course.courseName || "Course";
-    const openCourse = () => {
-        navigate(`/student-dashboard/course-details/${course.id || course.courseId}`);
-    };
+function initials(title) {
+  const parts = String(title || "Course").trim().split(/\s+/).slice(0, 2);
+  return parts.map((part) => part.charAt(0).toUpperCase()).join("") || "C";
+}
 
-    return (
-        <div
-            className="jc-courses-card jc-courses-card--clickable"
-            onClick={openCourse}
-            onKeyDown={(e) => e.key === "Enter" && openCourse()}
-            role="button"
-            tabIndex={0}
-            aria-label={`View details for ${title}`}
-        >
-            <div className="jc-card-main">
-                <div className="jc-image-container">
-                    <ImageWithFallback
-                        src={course.thumbnail}
-                        alt={title}
-                        className="jc-course-img"
-                        fallbackText={title}
-                    />
-                    <div className="jc-course-tag">{course.durationLabel || "Self-paced"}</div>
-                    {course.enrolled && <div className="jc-enrolled-badge">Enrolled</div>}
-                </div>
+export default function CatalogCourseCard({ course, tone = 0 }) {
+  const navigate = useNavigate();
+  const title = course.title || course.courseName || "Course";
+  const openCourse = () => {
+    navigate(`/student-dashboard/course-details/${course.id || course.courseId}`);
+  };
+  const progress = course.enrolled && course.progressPercentage != null
+    ? course.progressPercentage
+    : null;
 
-                <div className="jc-course-content">
-                    <div className="jc-meta-row">
-                        <span className="jc-meta-item">
-                            <BiBookOpen /> {course.moduleCount || 0} modules
-                        </span>
-                        <span className="jc-meta-item">
-                            <BiTimeFive /> {course.lessonCount || course.totalLessons || 0} lessons
-                        </span>
-                    </div>
+  return (
+    <article
+      className={`home-course-card tone-${tone % 4}`}
+      onClick={openCourse}
+      onKeyDown={(event) => event.key === "Enter" && openCourse()}
+      role="button"
+      tabIndex={0}
+      aria-label={`View details for ${title}`}
+      style={{ animationDelay: `${(tone % 8) * 70}ms` }}
+    >
+      <div className="home-course-cover">
+        <span className="home-course-mark">{initials(title)}</span>
+        {course.enrolled && <span className="home-course-badge">Enrolled</span>}
+      </div>
 
-                    <p className="jc-courses-card-title">{title}</p>
-                    {course.description ? <p className="jc-course-desc">{course.description}</p> : null}
-
-                    <div className="jc-info-grid">
-                        {course.instructors?.length > 0 && (
-                            <div className="jc-info-item">
-                                <label><BiUser /> Instructor</label>
-                                <span className="jc-salary-text">{course.instructors.join(", ")}</span>
-                            </div>
-                        )}
-                        {course.enrolled && course.progressPercentage != null && (
-                            <div className="jc-info-item">
-                                <label>Progress</label>
-                                <span className="jc-salary-text">{course.progressPercentage}%</span>
-                            </div>
-                        )}
-                        {course.nextClassAt && (
-                            <div className="jc-info-item">
-                                <label>Next class</label>
-                                <span className="jc-salary-text">{formatNextClass(course.nextClassAt)}</span>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </div>
+      <div className="home-course-body">
+        <div className="home-course-meta">
+          <span>{course.durationLabel || "Self-paced"}</span>
+          <span><BiBookOpen aria-hidden="true" /> {course.moduleCount || 0}</span>
+          <span><BiTimeFive aria-hidden="true" /> {course.lessonCount || course.totalLessons || 0}</span>
         </div>
-    );
+
+        <h3>{title}</h3>
+        {course.instructors?.length > 0 && (
+          <p className="home-course-by">By {course.instructors.join(", ")}</p>
+        )}
+
+        {progress != null && (
+          <div className="home-course-progress">
+            <div className="home-course-track">
+              <span style={{ width: `${progress}%` }} />
+            </div>
+            <small>{progress}% complete</small>
+          </div>
+        )}
+
+        <div className="home-course-foot">
+          <span>{course.enrolled ? "Continue" : "View course"}</span>
+          <span className="home-course-arrow" aria-hidden="true">→</span>
+        </div>
+      </div>
+    </article>
+  );
 }

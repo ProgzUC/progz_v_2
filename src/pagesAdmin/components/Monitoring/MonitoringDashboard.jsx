@@ -22,6 +22,8 @@ import {
 import Swal from "sweetalert2";
 import { motion, AnimatePresence } from "framer-motion";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
+import { ErrorState } from "../../../components/common/PageState";
+import { getErrorMessage } from "../../../utils/apiError";
 import "./MonitoringDashboard.css";
 
 const COLORS = ["#10A879", "#0B3D2E", "#718096", "#8B9AAB"];
@@ -47,6 +49,7 @@ export default function MonitoringDashboard() {
   const [historical, setHistorical] = useState([]);
   const [historyHours, setHistoryHours] = useState(24);
   const [metricsLoading, setMetricsLoading] = useState(true);
+  const [metricsError, setMetricsError] = useState("");
 
   // Audit Logs Tab State
   const [auditLogs, setAuditLogs] = useState([]);
@@ -59,6 +62,7 @@ export default function MonitoringDashboard() {
   const [auditEmail, setAuditEmail] = useState("");
   const [selectedAudit, setSelectedAudit] = useState(null);
   const [auditLoading, setAuditLoading] = useState(false);
+  const [auditError, setAuditError] = useState("");
 
   // Error Logs Tab State
   const [errorLogs, setErrorLogs] = useState([]);
@@ -69,6 +73,7 @@ export default function MonitoringDashboard() {
   const [errorResolved, setErrorResolved] = useState("all");
   const [expandedErrorId, setExpandedErrorId] = useState(null);
   const [errorLoading, setErrorLoading] = useState(false);
+  const [errorLogError, setErrorLogError] = useState("");
 
   // Auto-refresh interval reference
   useEffect(() => {
@@ -103,8 +108,9 @@ export default function MonitoringDashboard() {
       setMetrics(liveStats);
       const history = await fetchHistoricalMetrics(historyHours);
       setHistorical(history);
+      setMetricsError("");
     } catch (err) {
-      console.error("Error fetching performance metrics:", err);
+      setMetricsError(getErrorMessage(err, "Performance metrics could not be loaded."));
     } finally {
       setMetricsLoading(false);
     }
@@ -123,8 +129,9 @@ export default function MonitoringDashboard() {
       });
       setAuditLogs(data.logs);
       setAuditTotal(data.totalLogs);
+      setAuditError("");
     } catch (err) {
-      console.error("Error fetching audit logs:", err);
+      setAuditError(getErrorMessage(err, "Audit logs could not be loaded."));
     } finally {
       setAuditLoading(false);
     }
@@ -141,8 +148,9 @@ export default function MonitoringDashboard() {
       });
       setErrorLogs(data.logs);
       setErrorTotal(data.totalErrors);
+      setErrorLogError("");
     } catch (err) {
-      console.error("Error fetching error logs:", err);
+      setErrorLogError(getErrorMessage(err, "Error logs could not be loaded."));
     } finally {
       setErrorLoading(false);
     }
@@ -276,6 +284,12 @@ export default function MonitoringDashboard() {
                 <div className="spinner-border text-emerald" role="status"></div>
                 <span>Gathering telemetry...</span>
               </div>
+            ) : metricsError ? (
+              <ErrorState
+                title="Metrics could not be loaded"
+                message={metricsError}
+                onRetry={loadPerformanceData}
+              />
             ) : (
               <>
                 {/* Stats Cards Row */}
@@ -599,6 +613,12 @@ export default function MonitoringDashboard() {
                           <div className="spinner-border text-emerald" role="status"></div>
                         </td>
                       </tr>
+                    ) : auditError ? (
+                      <tr>
+                        <td colSpan="7">
+                          <ErrorState compact title="Audit logs could not be loaded" message={auditError} onRetry={loadAuditLogs} />
+                        </td>
+                      </tr>
                     ) : auditLogs.length > 0 ? (
                       auditLogs.map((log) => (
                         <tr key={log._id}>
@@ -735,6 +755,12 @@ export default function MonitoringDashboard() {
                       <tr>
                         <td colSpan="7" className="text-center py-5">
                           <div className="spinner-border text-emerald" role="status"></div>
+                        </td>
+                      </tr>
+                    ) : errorLogError ? (
+                      <tr>
+                        <td colSpan="7">
+                          <ErrorState compact title="Error logs could not be loaded" message={errorLogError} onRetry={loadErrorLogs} />
                         </td>
                       </tr>
                     ) : errorLogs.length > 0 ? (

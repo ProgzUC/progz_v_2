@@ -11,6 +11,36 @@
   min-height: 100vh;
 }
 
+.jc-header-content {
+  max-width: 1200px;
+  margin: 0 auto 20px;
+  padding: 8px 20px 0;
+}
+
+.jc-course-title {
+  margin: 0 0 8px;
+  font-size: 40px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+  color: var(--color-text);
+}
+
+.jc-course-title span {
+  color: var(--color-primary-bright);
+}
+
+.jc-course-subtitle,
+.jc-catalog-status {
+  margin: 0;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.jc-catalog-status {
+  text-align: center;
+  padding: 28px 20px;
+}
+
 .catalog-toolbar {
   max-width: 1200px;
   margin: 0 auto 12px;
@@ -242,11 +272,11 @@
 
 .jc-course-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 30px;
-  justify-items: center;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 18px;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0 20px 20px;
 }
 
 .jc-courses-card {

@@ -15,11 +15,20 @@ const Active = ({ data }) => {
 
     return (
         <section className="trainer-home-batches">
-            <h2 className="batches-section-title">Active Batches</h2>
+            <div className="batches-head">
+                <div>
+                    <p>In progress</p>
+                    <h2>Active batches</h2>
+                </div>
+                <button type="button" className="batches-view-all" onClick={() => navigate('/trainer-dashboard/batches')}>
+                    View all
+                </button>
+            </div>
 
-            <div className="container">
-                <div className="batches-dashboard-layout">
-                    <div className="batches-batch-grid">
+            {batches.length === 0 ? (
+                <p className="batches-empty">No active batch yet. They will appear here once a class is assigned to you.</p>
+            ) : (
+                <div className="batches-batch-grid">
                         {batches.map((batch) => {
                             const pct = Number(batch.completionPercentage) || 0;
                             const students = Number(batch.studentsCount) || 0;
@@ -41,6 +50,9 @@ const Active = ({ data }) => {
                                         </span>
                                         <div className="batches-batch-copy">
                                             <h3 className="batches-batch-title">{batch.batchName}</h3>
+                                            {batch.courseName ? (
+                                                <p className="batches-course-name">{batch.courseName}</p>
+                                            ) : null}
                                             <div className="batches-batch-info-item">
                                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                                                     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -71,9 +83,8 @@ const Active = ({ data }) => {
                                 </button>
                             );
                         })}
-                    </div>
                 </div>
-            </div>
+            )}
         </section>
     );
 };

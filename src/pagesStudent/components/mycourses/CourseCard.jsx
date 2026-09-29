@@ -5,6 +5,7 @@ import Introduction from "../Introduction/Introduction";
 import { useStudentCourses, useCourseProgress } from "../../../hooks/useStudentCourses";
 import { useJoinClass } from "../../../hooks/useClassSession";
 import Loader from "../../../components/common/Loader/Loader";
+import { EmptyState, ErrorState, Skeleton } from "../../../components/common/PageState";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
 import { BiCodeAlt } from "react-icons/bi";
 import { getLessonCompilerMode } from "../../../utils/compilerMode";
@@ -322,7 +323,7 @@ function CourseCurriculum({ modules, setViewLesson }) {
 }
 
 export default function MyCourses() {
-    const { data: coursesData, isLoading: listLoading, isError } = useStudentCourses();
+    const { data: coursesData, isLoading: listLoading, isError, refetch } = useStudentCourses();
     const courses = useMemo(() => {
         const list = coursesData?.enrolledCourses || [];
         return [...list].sort((a, b) =>
@@ -416,15 +417,21 @@ export default function MyCourses() {
     }, [location.state, detailsLoading, displayCourse]);
 
     if (listLoading) {
-        return <Loader message="Loading your courses..." />;
+        return (
+            <div className="container-fluid student-mycourses-page">
+                <Skeleton variant="cards" label="Loading your courses" />
+            </div>
+        );
     }
 
     if (isError) {
         return (
             <div className="container-fluid student-mycourses-page">
-                <div className="error-message" style={{ textAlign: 'center', padding: '40px', color: '#dc3545' }}>
-                    Error loading courses. Please try again later.
-                </div>
+                <ErrorState
+                    title="Your courses could not be loaded"
+                    message="Enrollment is still saved. Try again to refresh the list."
+                    onRetry={() => refetch()}
+                />
             </div>
         );
     }
@@ -432,13 +439,12 @@ export default function MyCourses() {
     if (courses.length === 0) {
         return (
             <div className="container-fluid student-mycourses-page">
-                <div className="empty-message" style={{ textAlign: 'center', padding: '40px' }}>
-                    <p className="h3-style">No courses enrolled yet</p>
-                    <p>Browse the catalog to see the courses your academy offers.</p>
-                    <button type="button" className="student-btn-primary" onClick={() => navigate("/student-dashboard/browse")}>
-                        Browse courses
-                    </button>
-                </div>
+                <EmptyState
+                    title="No courses enrolled yet"
+                    message="Browse the catalog to see the courses your academy offers."
+                    actionLabel="Browse courses"
+                    onAction={() => navigate("/student-dashboard/browse")}
+                />
             </div>
         );
     }

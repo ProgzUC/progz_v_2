@@ -11,6 +11,7 @@ import {
 import { exportToCSV } from "../../../utils/csvExport";
 import { downloadAttendanceCSV } from "../../../api/reportApi";
 import Loader from "../../../components/common/Loader/Loader";
+import { EmptyState, ErrorState } from "../../../components/common/PageState";
 import { useAdminTheme } from "../../context/AdminThemeContext";
 import {
   AreaChart,
@@ -46,26 +47,16 @@ const TABS = [
 ];
 
 function EmptyBlock({ title, hint }) {
-  return (
-    <div className="or-empty">
-      <i className="bi bi-inbox" aria-hidden="true" />
-      <strong>{title}</strong>
-      {hint ? <p>{hint}</p> : null}
-    </div>
-  );
+  return <EmptyState title={title} message={hint} />;
 }
 
 function ErrorBlock({ message, onRetry }) {
   return (
-    <div className="or-empty or-error">
-      <i className="bi bi-exclamation-triangle" aria-hidden="true" />
-      <strong>{message || "Could not load this report"}</strong>
-      {onRetry ? (
-        <button type="button" className="or-btn" onClick={onRetry}>
-          Try again
-        </button>
-      ) : null}
-    </div>
+    <ErrorState
+      title="Report could not be loaded"
+      message={message || "This report did not come through."}
+      onRetry={onRetry}
+    />
   );
 }
 

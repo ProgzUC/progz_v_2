@@ -44,5 +44,11 @@ export const useAdminDashboard = (range = {}) => {
         isLoading: statsQuery.isLoading || trendsQuery.isLoading || distributionQuery.isLoading || activityQuery.isLoading,
         isFetching: statsQuery.isFetching || trendsQuery.isFetching || distributionQuery.isFetching || activityQuery.isFetching,
         isError: statsQuery.isError || trendsQuery.isError || distributionQuery.isError || activityQuery.isError,
+        refetch: () => Promise.all([
+            statsQuery.refetch(),
+            trendsQuery.refetch(),
+            distributionQuery.refetch(),
+            activityQuery.refetch(),
+        ]),
     };
 };

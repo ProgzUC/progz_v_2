@@ -3,7 +3,7 @@ import "./CategoryPage.css";
 import CourseBanner from "../CourseBanner/CourseBanner";
 import CatalogCourseCard from "../Courses/CatalogCourseCard";
 import { useUnifiedCatalog } from "../../../hooks/useStudentCourses";
-import Loader from "../../../components/common/Loader/Loader";
+import { EmptyState, ErrorState, Skeleton } from "../../../components/common/PageState";
 
 const FILTERS = [
   { id: "all", label: "All courses" },
@@ -12,7 +12,7 @@ const FILTERS = [
 ];
 
 function CategoryPage() {
-  const { courses, isLoading, isError } = useUnifiedCatalog();
+  const { courses, isLoading, isError, refetch } = useUnifiedCatalog();
   const [query, setQuery] = useState("");
   const [scope, setScope] = useState("all");
 
@@ -62,11 +62,19 @@ function CategoryPage() {
       </div>
 
       {isLoading ? (
-        <Loader message="Loading courses..." />
+        <Skeleton variant="cards" label="Loading courses" />
       ) : isError ? (
-        <p className="jc-catalog-status">The course catalog could not be loaded. Try again in a moment.</p>
+        <ErrorState
+          title="Catalog could not be loaded"
+          message="Search will work again once the course list loads."
+          onRetry={() => refetch()}
+        />
       ) : visibleCourses.length === 0 ? (
-        <p className="jc-catalog-status">No courses match this search.</p>
+        <EmptyState
+          title="No courses match"
+          message="Try a different search or filter."
+          icon="bi-search"
+        />
       ) : (
         <div className="jc-course-grid">
           {visibleCourses.map((course) => (

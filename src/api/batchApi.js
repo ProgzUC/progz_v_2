@@ -9,7 +9,6 @@ export const fetchBatches = async () => {
             console.warn("Batches endpoint returned 404, returning empty list.");
             return [];
         }
-        console.error("Error fetching batches:", error);
         throw error;
     }
 };
@@ -85,7 +84,6 @@ export const fetchTrainerBatches = async () => {
             console.warn("Trainer summary endpoint returned 404, returning empty list.");
             return { activeBatches: [], completedBatches: [] };
         }
-        console.error("Error fetching trainer batches:", error);
         throw error;
     }
 };

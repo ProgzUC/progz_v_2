@@ -1578,3 +1578,203 @@
         display: none !important;
     }
 }
+
+/* ================================================================
+   PROFILE POLISH — forest + mint motion, layout unchanged
+   ================================================================ */
+
+.profile-root {
+    background:
+        radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--color-primary-muted) 42%, transparent) 0 140px, transparent 141px),
+        radial-gradient(circle at 100% 12%, color-mix(in srgb, var(--color-primary-bright) 16%, transparent) 0 160px, transparent 161px),
+        var(--color-bg);
+}
+
+.sp-hero-card,
+.profile-stats-row,
+.profile-courses-main {
+    animation: profileRise 0.55s ease both;
+}
+
+.profile-stats-row { animation-delay: 0.08s; }
+.profile-courses-main { animation-delay: 0.16s; }
+
+.sp-avatar-wrapper {
+    animation: profilePop 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.sp-avatar-wrapper::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 2px solid color-mix(in srgb, var(--color-primary-bright) 55%, transparent);
+    animation: profileRing 2.8s ease-out infinite;
+    pointer-events: none;
+}
+
+.sp-edit-btn,
+.sp-security-btn {
+    transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.sp-edit-btn:hover,
+.sp-security-btn:hover {
+    transform: translateY(-2px);
+}
+
+.profile-stat-card {
+    animation: profileRise 0.5s ease both;
+}
+
+.profile-stat-card:nth-child(2) { animation-delay: 0.06s; }
+.profile-stat-card:nth-child(3) { animation-delay: 0.12s; }
+.profile-stat-card:nth-child(4) { animation-delay: 0.18s; }
+
+.stat-completed .stat-icon-wrapper,
+.stat-lessons .stat-icon-wrapper,
+.stat-progress .stat-icon-wrapper,
+.stat-ongoing .stat-icon-wrapper {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+.stat-completed .stat-icon-wrapper { color: var(--color-primary-bright); }
+.stat-progress .stat-icon-wrapper { background: var(--color-primary); color: var(--color-text-on-primary); }
+
+.profile-stat-card:hover .stat-icon-wrapper {
+    transform: scale(1.06);
+}
+
+.stat-icon-wrapper {
+    transition: transform 0.25s ease;
+}
+
+.sp-detail-icon.tone-pink,
+.sp-detail-icon.tone-purple,
+.sp-detail-icon.tone-orange,
+.sp-detail-icon.tone-blue,
+.sp-detail-icon.tone-teal,
+.sp-detail-icon.tone-green {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+.sp-detail-box {
+    background: var(--color-bg);
+    border-color: var(--color-border);
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    animation: profileRise 0.45s ease both;
+}
+
+.sp-details-grid .sp-detail-box:nth-child(2) { animation-delay: 0.04s; }
+.sp-details-grid .sp-detail-box:nth-child(3) { animation-delay: 0.08s; }
+.sp-details-grid .sp-detail-box:nth-child(4) { animation-delay: 0.12s; }
+.sp-details-grid .sp-detail-box:nth-child(5) { animation-delay: 0.16s; }
+.sp-details-grid .sp-detail-box:nth-child(n + 6) { animation-delay: 0.2s; }
+
+.sp-detail-box:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-primary-muted);
+    box-shadow: var(--shadow-sm);
+}
+
+.profile-course-card {
+    animation: profileRise 0.5s ease both;
+}
+
+.profile-course-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.profile-course-card-top .fullstack-code {
+    animation: profileFloat 4.5s ease-in-out infinite;
+}
+
+.profile-card-progress-fill {
+    background: var(--color-primary-gradient);
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-card-progress-fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, color-mix(in srgb, white 50%, transparent), transparent);
+    transform: translateX(-120%);
+    animation: profileShine 2.6s ease infinite;
+}
+
+.profile-tab {
+    transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.profile-tab.active {
+    transform: translateY(-1px);
+}
+
+.profile-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: color-mix(in srgb, var(--color-primary) 42%, transparent);
+    backdrop-filter: blur(6px);
+    animation: profileFade 0.25s ease;
+}
+
+.profile-modal-animate {
+    animation: profilePop 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes profileRise {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes profilePop {
+    from { opacity: 0; transform: scale(0.94); }
+    to { opacity: 1; transform: none; }
+}
+
+@keyframes profileFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes profileRing {
+    0% { transform: scale(0.92); opacity: 0.7; }
+    100% { transform: scale(1.12); opacity: 0; }
+}
+
+@keyframes profileFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+@keyframes profileShine {
+    0% { transform: translateX(-120%); }
+    40%, 100% { transform: translateX(160%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sp-hero-card,
+    .profile-stats-row,
+    .profile-courses-main,
+    .sp-avatar-wrapper,
+    .sp-avatar-wrapper::after,
+    .profile-stat-card,
+    .sp-detail-box,
+    .profile-course-card,
+    .profile-course-card-top .fullstack-code,
+    .profile-card-progress-fill::after,
+    .profile-modal-overlay,
+    .profile-modal-animate {
+        animation: none;
+    }
+}

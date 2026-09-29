@@ -6,13 +6,14 @@ import { useStudentCatalogCourse, useStudentCourses } from "../../../hooks/useSt
 import { formatNextClass } from "../../utils/formatNextClass";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
 import Loader from "../../../components/common/Loader/Loader";
+import { EmptyState, ErrorState } from "../../../components/common/PageState";
 
 export default function CourseDetails() {
   const navigate = useNavigate();
   const location = useLocation();
   const { courseId: paramId } = useParams();
   const courseId = paramId || location.state?.course?.id || location.state?.course?.courseId;
-  const { data, isLoading, isError } = useStudentCatalogCourse(courseId);
+  const { data, isLoading, isError, refetch } = useStudentCatalogCourse(courseId);
   const { data: learning } = useStudentCourses();
 
   if (!courseId) {
@@ -21,13 +22,12 @@ export default function CourseDetails() {
         <button className="course-details-back" type="button" onClick={() => navigate("/student-dashboard/browse")}>
           <BiArrowBack /> Back
         </button>
-        <div className="course-details-empty">
-          <h2>Course not found</h2>
-          <p>Choose a course from the catalog to see its outline.</p>
-          <button type="button" className="student-btn-primary" onClick={() => navigate("/student-dashboard/browse")}>
-            Browse courses
-          </button>
-        </div>
+        <EmptyState
+          title="Course not found"
+          message="Choose a course from the catalog to see its outline."
+          actionLabel="Browse courses"
+          onAction={() => navigate("/student-dashboard/browse")}
+        />
       </div>
     );
   }
@@ -35,19 +35,29 @@ export default function CourseDetails() {
   if (isLoading) return <Loader message="Loading course..." />;
 
   const course = data?.course;
-  if (isError || !course) {
+  if (isError) {
     return (
       <div className="course-details-page student-container">
-        <button className="course-details-back" type="button" onClick={() => navigate(-1)}>
-          <BiArrowBack /> Back
-        </button>
-        <div className="course-details-empty">
-          <h2>Course not found</h2>
-          <p>This course is no longer in the catalog.</p>
-          <button type="button" className="student-btn-primary" onClick={() => navigate("/student-dashboard/browse")}>
-            Browse courses
-          </button>
-        </div>
+        <ErrorState
+          title="Course could not be loaded"
+          message="This outline did not come through. You can try again or go back to the catalog."
+          onRetry={() => refetch()}
+          onBack={() => navigate("/student-dashboard/browse")}
+          backLabel="Browse courses"
+        />
+      </div>
+    );
+  }
+
+  if (!course) {
+    return (
+      <div className="course-details-page student-container">
+        <EmptyState
+          title="Course not found"
+          message="This course is no longer in the catalog."
+          actionLabel="Browse courses"
+          onAction={() => navigate("/student-dashboard/browse")}
+        />
       </div>
     );
   }

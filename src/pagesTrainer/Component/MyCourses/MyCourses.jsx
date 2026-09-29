@@ -7,8 +7,6 @@ import {
     BiDotsVerticalRounded,
     BiPencil,
     BiTrash,
-    BiCheckSquare,
-    BiUser,
     BiLogoHtml5,
     BiLogoCss3,
     BiLogoBootstrap,
@@ -134,37 +132,37 @@ const MyCourses = () => {
 
     return (
         <div className="my-courses-container trainer-myCourses">
-            <div className="trainer-stats-row" role="list">
-                <div className="stat-card" role="listitem" style={{ '--stat-i': 0 }}>
-                    <div className="stat-icon-box stat-courses">
-                        <BsBook aria-hidden="true" />
-                    </div>
-                    <div className="stat-info">
-                        <span className="stat-value">{stats.totalCourses}</span>
-                        <span className="stat-label">Total Courses</span>
-                    </div>
-                </div>
+            <section className="tc-hero">
+                <p className="tc-kicker">
+                    <span className="tc-kicker-dot" aria-hidden="true" />
+                    Course studio
+                </p>
+                <h1>Courses you can shape.</h1>
+                <p className="tc-lead">Build a curriculum, open a lesson, or start something new for the next batch.</p>
+                <button type="button" className="tc-create" onClick={() => navigate('/trainer-dashboard/courses/new')}>
+                    <BiPlus aria-hidden="true" />
+                    Create course
+                </button>
+            </section>
 
-                <div className="stat-card" role="listitem" style={{ '--stat-i': 1 }}>
-                    <div className="stat-icon-box stat-sections">
-                        <BiCheckSquare aria-hidden="true" />
-                    </div>
-                    <div className="stat-info">
-                        <span className="stat-value">{stats.totalSections}</span>
-                        <span className="stat-label">Total Sections</span>
-                    </div>
-                </div>
+            <section className="tc-statbar" aria-label="Course totals">
+                <article>
+                    <strong>{stats.totalCourses}</strong>
+                    <span>Courses</span>
+                </article>
+                <article>
+                    <strong>{stats.totalSections}</strong>
+                    <span>Sections</span>
+                </article>
+                <article>
+                    <strong>{stats.totalStudents}</strong>
+                    <span>Enrolled students</span>
+                </article>
+            </section>
 
-                <div className="stat-card" role="listitem" style={{ '--stat-i': 2 }}>
-                    <div className="stat-icon-box stat-students">
-                        <BiUser aria-hidden="true" />
-                    </div>
-                    <div className="stat-info">
-                        <span className="stat-value">{stats.totalStudents}</span>
-                        <span className="stat-label">Enrolled Students</span>
-                    </div>
-                </div>
-
+            <div className="tc-section-head">
+                <p>Library</p>
+                <h2>Your courses</h2>
             </div>
 
             <div className="trainer-courses-grid">
@@ -175,7 +173,6 @@ const MyCourses = () => {
                     const sections = course.totalSections || 0;
                     const students = course.totalStudents || 0;
                     const theme = getCourseTheme(course.courseName);
-                    const isPrimaryCta = index === 0;
 
                     return (
                         <article
@@ -261,7 +258,7 @@ const MyCourses = () => {
                             <div className="trainer-card-footer">
                                 <button
                                     type="button"
-                                    className={`trainer-view-course-btn${isPrimaryCta ? ' is-solid' : ' is-outline'}`}
+                                    className="trainer-view-course-btn is-solid"
                                     onClick={() => navigate(`/trainer-dashboard/courses/${courseId}`)}
                                 >
                                     <span>View Course</span>

@@ -2,7 +2,6 @@ import React from 'react'
 import { Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom'
 import Navbar from './Component/Navbar/Navbar'
 import Home from './Component/Home/Home'
-import Active from './Component/Home/Batches'
 import MyCourses from './Component/MyCourses/MyCourses'
 import CourseView from './Component/MyCourses/CourseView'
 import { CourseBuilder } from '../features/course-builder'
@@ -33,8 +32,7 @@ function Dashboard() {
 
   return (
     <>
-      <Home trainer={data.trainer} stats={data.stats} />
-      <Active data={data} />
+      <Home trainer={data.trainer} stats={data.stats} data={data} />
     </>
   );
 }

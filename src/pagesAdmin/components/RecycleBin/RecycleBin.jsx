@@ -2,7 +2,8 @@ import React, { useEffect, useState, useMemo } from "react";
 import { LuRotateCcw, LuTrash2 } from "react-icons/lu";
 import Swal from "sweetalert2";
 import { fetchBinItems, restoreBinItem, permanentlyDeleteBinItem } from "../../../api/userApi";
-import Loader from "../../../components/common/Loader/Loader";
+import { ErrorState, Skeleton } from "../../../components/common/PageState";
+import { getErrorMessage } from "../../../utils/apiError";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import "./RecycleBin.css";
@@ -44,8 +45,7 @@ const RecycleBin = () => {
       setBinItems(Array.isArray(data) ? data : data.items || []);
       setError(null);
     } catch (err) {
-      console.error("Error fetching bin items:", err);
-      setError("Failed to load deleted items.");
+      setError(getErrorMessage(err, "Deleted items could not be loaded."));
     } finally {
       setLoading(false);
     }
@@ -179,14 +179,13 @@ const RecycleBin = () => {
         </div>
 
         {loading ? (
-          <Loader />
+          <Skeleton variant="table" label="Loading deleted items" />
         ) : error ? (
-          <div className="page-error">
-            <p>{error}</p>
-            <button type="button" className="retry-btn" onClick={loadBinItems}>
-              Retry
-            </button>
-          </div>
+          <ErrorState
+            title="Recycle bin could not be loaded"
+            message={error}
+            onRetry={loadBinItems}
+          />
         ) : (
           <>
             <p className="admin-table-scroll-hint">Swipe horizontally to view all columns.</p>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { runManualSyncAndWait, fetchSyncStatus, fetchSyncLogs } from "../../../api/userApi";
 import Swal from "sweetalert2";
+import { ErrorState } from "../../../components/common/PageState";
+import { getErrorMessage } from "../../../utils/apiError";
 import "./SyncFromZen.css";
 
 const SyncFromZen = () => {
@@ -8,6 +10,7 @@ const SyncFromZen = () => {
   const [syncLogs, setSyncLogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [loadError, setLoadError] = useState("");
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [selectedLog, setSelectedLog] = useState(null);
@@ -25,8 +28,9 @@ const SyncFromZen = () => {
       const logsData = await fetchSyncLogs({ page, limit: 10 });
       setSyncLogs(logsData.logs || []);
       setTotalPages(logsData.totalPages || 1);
+      setLoadError("");
     } catch (err) {
-      console.error("Failed to load sync dashboard:", err);
+      setLoadError(getErrorMessage(err, "Sync history could not be loaded."));
     } finally {
       setFetching(false);
     }
@@ -58,10 +62,9 @@ const SyncFromZen = () => {
       });
       loadSyncDashboard();
     } catch (err) {
-      console.error("Manual sync failed:", err);
       Swal.fire({
         title: "Sync Failed",
-        text: err.message || "External Zen API endpoint timeout or connection issue.",
+        text: getErrorMessage(err, "The Zen connection timed out. Try the sync again."),
         icon: "error"
       });
     } finally {
@@ -96,6 +99,12 @@ const SyncFromZen = () => {
           <div className="spinner-border text-emerald" role="status"></div>
           <p className="mt-2 text-secondary">Loading sync metrics...</p>
         </div>
+      ) : loadError ? (
+        <ErrorState
+          title="Sync history could not be loaded"
+          message={loadError}
+          onRetry={loadSyncDashboard}
+        />
       ) : (
         <>
           {/* Latest Sync Status Dashboard */}

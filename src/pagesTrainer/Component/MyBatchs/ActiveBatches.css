@@ -1,117 +1,251 @@
 .trainer-active-batches-page {
-  padding: var(--trainer-spacing-xl) 0;
+  padding-top: 22px;
 }
 
-.trainer-active-batches-page .batches-title {
-  margin: 0 0 var(--trainer-spacing-lg) 0;
-  font-size: 28px;
-  font-weight: 600;
-  color: var(--trainer-text);
+@keyframes tbRise {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
 }
 
-.trainer-active-batches-page .batches-title--spaced {
-  margin-top: var(--trainer-spacing-xl);
+.tb-statbar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 28px;
+  padding: 8px;
+  background: var(--color-primary-gradient);
+  border-radius: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.tb-statbar article {
+  padding: 18px 20px;
+  border-radius: 18px;
+  color: var(--color-text-on-primary);
+  animation: tbRise 0.7s ease both;
+}
+
+.tb-statbar article:nth-child(2) { animation-delay: 0.08s; }
+.tb-statbar article:nth-child(3) { animation-delay: 0.16s; }
+.tb-statbar article:nth-child(4) { animation-delay: 0.24s; }
+
+.tb-statbar strong {
+  display: block;
+  font-size: 32px;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.tb-statbar span {
+  display: block;
+  margin-top: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.82;
+}
+
+.tb-section-head {
+  margin-bottom: 16px;
+}
+
+.tb-section-head--spaced {
+  margin-top: 36px;
+}
+
+.tb-section-head p {
+  display: inline-flex;
+  margin: 0 0 10px;
+  padding: 6px 12px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tb-section-head h2 {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 26px;
+  letter-spacing: -0.03em;
 }
 
 .trainer-active-batches-page .batches-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: var(--trainer-spacing-lg);
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
 }
 
 .trainer-active-batches-page .batches-empty-state {
   grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  padding: 36px 20px;
   text-align: center;
-  padding: var(--trainer-spacing-xl) var(--trainer-spacing-lg);
-  background: linear-gradient(135deg, rgba(25, 135, 84, 0.06) 0%, rgba(25, 135, 84, 0.02) 100%);
-  border: 1px dashed rgba(25, 135, 84, 0.25);
-  border-radius: var(--trainer-radius-lg);
-  min-height: 200px;
-}
-
-.trainer-active-batches-page .batches-empty-state-icon {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: var(--trainer-primary-light);
-  color: var(--trainer-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: var(--trainer-spacing-md);
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border-strong);
+  border-radius: 24px;
 }
 
 .trainer-active-batches-page .batches-empty-state-title {
+  margin: 0 0 8px;
+  color: var(--color-text);
   font-size: 18px;
-  font-weight: 600;
-  color: var(--trainer-text);
-  margin: 0 0 8px 0;
 }
 
 .trainer-active-batches-page .batches-empty-state-text {
+  margin: 0 auto;
+  max-width: 360px;
+  color: var(--color-text-secondary);
   font-size: 14px;
-  color: var(--trainer-text-muted);
-  margin: 0;
-  max-width: 320px;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .trainer-active-batches-page .batch-card {
-  background: var(--trainer-card-bg);
-  border-radius: var(--trainer-radius-lg);
-  padding: var(--trainer-spacing-lg);
   position: relative;
-  box-shadow: var(--trainer-shadow-md);
-  border: 1px solid var(--trainer-border);
-  transition: var(--trainer-transition);
+  isolation: isolate;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  min-height: 280px;
+  gap: 14px;
+  width: 100%;
+  padding: 18px;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  box-shadow: var(--shadow-sm);
+  animation: tbRise 0.55s ease both;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.trainer-active-batches-page .batches-grid .batch-card:nth-child(2) { animation-delay: 0.06s; }
+.trainer-active-batches-page .batches-grid .batch-card:nth-child(3) { animation-delay: 0.12s; }
+.trainer-active-batches-page .batches-grid .batch-card:nth-child(4) { animation-delay: 0.18s; }
+
+.trainer-active-batches-page .batch-card::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--color-primary-gradient);
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.trainer-active-batches-page .batch-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.55) 48%, transparent 62%);
+  transform: translateX(-120%);
+  transition: transform 0.65s ease;
+  pointer-events: none;
 }
 
 .trainer-active-batches-page .batch-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--trainer-shadow-lg);
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--color-primary-bright) 45%, var(--color-border));
+  box-shadow: var(--shadow-card-hover);
 }
 
-.trainer-active-batches-page .batch-card__top {
+.trainer-active-batches-page .batch-card:hover::before {
+  transform: scaleY(1);
+}
+
+.trainer-active-batches-page .batch-card:hover::after {
+  transform: translateX(120%);
+}
+
+.trainer-active-batches-page .batch-card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.trainer-active-batches-page .batch-card__head,
+.trainer-active-batches-page .batch-card__details,
+.trainer-active-batches-page .batch-card__progress,
+.trainer-active-batches-page .batch-card__go {
+  position: relative;
+  z-index: 1;
+}
+
+.trainer-active-batches-page .batch-card__head {
   display: flex;
-  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.trainer-active-batches-page .batch-card__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: inline-flex;
   align-items: center;
-  margin-bottom: var(--trainer-spacing-md);
+  justify-content: center;
+  flex-shrink: 0;
+  background: var(--color-primary-gradient);
+  color: var(--color-text-on-primary);
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 8px 16px color-mix(in srgb, var(--color-primary) 28%, transparent);
+  transition: transform 0.35s ease;
+}
+
+.trainer-active-batches-page .batch-card:hover .batch-card__avatar {
+  transform: scale(1.06) rotate(-4deg);
+}
+
+.trainer-active-batches-page .batch-card__copy {
+  flex: 1;
+  min-width: 0;
 }
 
 .trainer-active-batches-page .batch-card__batch {
+  display: block;
+  color: var(--color-primary);
   font-size: 12px;
-  font-weight: 700;
-  color: var(--trainer-primary);
+  font-weight: 800;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+}
+
+.trainer-active-batches-page .batch-card__title {
+  margin: 4px 0 0;
+  color: var(--color-text);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.02em;
 }
 
 .trainer-active-batches-page .batch-card__status {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
-  border-radius: 999px;
+  padding: 6px 10px;
+  border-radius: var(--radius-full);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
+  letter-spacing: 0.03em;
+  flex-shrink: 0;
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
 }
 
 .trainer-active-batches-page .batch-card__status.active {
-  background: var(--trainer-primary-light);
-  color: var(--trainer-primary);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 .trainer-active-batches-page .batch-card__status.completed {
-  background: var(--color-error-bg);
-  color: var(--trainer-error);
+  background: var(--color-bg);
+  color: var(--color-text-secondary);
 }
 
 .trainer-active-batches-page .batch-card__dot {
@@ -121,95 +255,103 @@
   background: currentColor;
 }
 
-.trainer-active-batches-page .batch-card__title {
-  margin-bottom: var(--trainer-spacing-md);
-  font-size: 18px;
-  font-weight: 600;
-  color: var(--trainer-text);
-  line-height: 1.4;
+.trainer-active-batches-page .batch-card__status.active .batch-card__dot {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary-bright) 28%, transparent);
 }
 
 .trainer-active-batches-page .batch-card__details {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
 }
 
 .trainer-active-batches-page .batch-card__row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: var(--trainer-text-muted);
-  font-weight: 500;
+  gap: 8px;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .trainer-active-batches-page .batch-card__icon {
-  width: 20px;
+  width: 18px;
   display: inline-flex;
   justify-content: center;
-  color: var(--trainer-primary);
-  font-size: 16px;
+  color: var(--color-primary);
 }
 
-.trainer-active-batches-page .batch-card__actions {
-  margin-top: auto;
-  padding-top: var(--trainer-spacing-lg);
+.trainer-active-batches-page .batch-card__progress-label {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.trainer-active-batches-page .batch-card__progress-label strong {
+  color: var(--color-text);
+}
+
+.trainer-active-batches-page .batch-card__bar {
+  height: 7px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-light);
+  overflow: hidden;
+}
+
+.trainer-active-batches-page .batch-card__bar span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-primary-gradient);
+  transition: width 0.6s ease;
+}
+
+.trainer-active-batches-page .batch-card__go {
+  margin-top: auto;
+  display: inline-flex;
   align-items: center;
-}
-
-.trainer-active-batches-page .batch-card__btn {
-  border: none;
-  cursor: pointer;
-  background: var(--trainer-primary);
-  color: var(--color-surface);
-  font-weight: 700;
+  justify-content: center;
+  min-height: 42px;
+  border-radius: 14px;
+  background: var(--color-primary-gradient);
+  color: var(--color-text-on-primary);
   font-size: 14px;
-  min-height: 44px;
-  padding: 12px 22px;
-  border-radius: var(--trainer-radius-md);
-  transition: var(--trainer-transition);
-  width: 100%;
+  font-weight: 700;
+  box-shadow: var(--shadow-btn);
 }
 
-.trainer-active-batches-page .batch-card__btn:hover {
-  background: var(--trainer-primary-hover);
-  transform: translateY(-1px);
-}
-
-/* RESPONSIVE */
-@media (max-width: 1024px) {
-  .trainer-active-batches-page .batches-grid {
-    gap: var(--trainer-spacing-md);
+@media (max-width: 900px) {
+  .tb-statbar {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
 @media (max-width: 768px) {
-  .trainer-active-batches-page .batches-title {
-    font-size: 24px;
-    text-align: center;
-  }
-
-  .trainer-active-batches-page .batches-grid {
+  .trainer-active-batches-page .batches-grid,
+  .tb-statbar {
     grid-template-columns: 1fr;
   }
 
-  .trainer-active-batches-page .batch-card {
-    min-height: auto;
+  .trainer-active-batches-page .batch-card__head {
+    flex-wrap: wrap;
   }
 }
 
-@media (max-width: 480px) {
-  .trainer-active-batches-page .batch-card__actions {
-    flex-direction: column;
-    gap: 16px;
-    align-items: stretch;
+@media (prefers-reduced-motion: reduce) {
+  .tb-statbar article,
+  .trainer-active-batches-page .batch-card,
+  .trainer-active-batches-page .batch-card::before,
+  .trainer-active-batches-page .batch-card::after,
+  .trainer-active-batches-page .batch-card__avatar,
+  .trainer-active-batches-page .batch-card__bar span {
+    animation: none;
+    transition: none;
   }
 
-  .trainer-active-batches-page .batch-card__btn {
-    width: 100%;
-    text-align: center;
+  .trainer-active-batches-page .batch-card:hover {
+    transform: none;
   }
 }

@@ -1,10 +1,68 @@
 .trainer-home-batches {
-    padding: var(--trainer-spacing-xl) 0;
+    padding: 22px;
     margin-top: 0;
     animation: trainerSectionFade 0.6s ease-out;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 28px;
+    box-shadow: var(--shadow-sm);
+}
+
+.trainer-home-batches .batches-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.trainer-home-batches .batches-head p {
+    margin-bottom: 10px;
+}
+
+.trainer-home-batches .batches-head h2 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--trainer-text);
+}
+
+.trainer-home-batches .batches-view-all {
+    border: none;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    border-radius: var(--radius-full);
+    padding: 8px 14px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.trainer-home-batches .batches-view-all:hover {
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+    transform: translateY(-1px);
+}
+
+.trainer-home-batches .batches-empty {
+    margin: 8px 0 0;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.trainer-home-batches .batches-course-name {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .trainer-home-batches .container {
@@ -52,8 +110,8 @@
 .trainer-home-batches .batches-batch-grid {
     flex: 1;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: var(--trainer-spacing-lg);
+    grid-template-columns: 1fr;
+    gap: 14px;
 }
 
 /* COURSE CARD */
@@ -202,7 +260,7 @@
     font-size: 18px;
     font-weight: 700;
     margin: 0;
-    color: #0f172a;
+    color: var(--trainer-text);
     line-height: 1.3;
     letter-spacing: -0.02em;
     white-space: nowrap;
@@ -220,7 +278,7 @@
     align-items: center;
     gap: 6px;
     font-size: 13px;
-    color: #64748b;
+    color: var(--trainer-text-muted);
     margin: 0;
     font-weight: 500;
 }
@@ -232,7 +290,7 @@
 
 .trainer-home-batches .batches-arrow-btn {
     flex-shrink: 0;
-    background: #E8F5E1;
+    background: var(--color-primary-light);
     border: none;
     color: var(--trainer-primary);
     width: 36px;
@@ -261,7 +319,7 @@
     z-index: 1;
     margin: 0;
     padding-top: 14px;
-    border-top: 1px solid #f1f5f9;
+    border-top: 1px solid var(--color-border);
     transition: border-color 0.3s ease;
 }
 
@@ -275,13 +333,13 @@
     align-items: center;
     font-size: 12px;
     margin-bottom: 8px;
-    color: #64748b;
+    color: var(--trainer-text-muted);
     font-weight: 500;
 }
 
 .trainer-home-batches .batches-progress-value {
     font-weight: 700;
-    color: #0f172a;
+    color: var(--trainer-text);
     font-variant-numeric: tabular-nums;
     transition: color 0.25s ease;
 }
@@ -292,7 +350,7 @@
 
 .trainer-home-batches .batches-progress-bar {
     height: 7px;
-    background: #e2e8f0;
+    background: var(--color-border);
     border-radius: 999px;
     overflow: hidden;
 }
@@ -484,8 +542,8 @@
         gap: var(--trainer-spacing-md);
     }
 
-    .trainer-home-batches .batches-section-title {
-        font-size: 24px;
+    .trainer-home-batches .batches-head h2 {
+        font-size: 22px;
     }
 
     .trainer-home-batches .batches-batch-card {
@@ -512,9 +570,13 @@
         padding: 0 var(--trainer-spacing-sm);
     }
 
-    .trainer-home-batches .batches-section-title {
+    .trainer-home-batches .batches-head {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .trainer-home-batches .batches-head h2 {
         font-size: 20px;
-        margin-bottom: var(--trainer-spacing-md);
     }
 
     .trainer-home-batches .batches-batch-card {
