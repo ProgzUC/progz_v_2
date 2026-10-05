@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { logout } from "../../../api/authApi";
 import { getStoredUser } from "../../../utils/authStorage";
+import { toast } from "react-toastify";
 import "./AdminAccountMenu.css";
 
 const getInitials = (name = "") => {
@@ -61,6 +62,7 @@ const AdminAccountMenu = ({ compact = false, className = "" }) => {
     }).then(async (result) => {
       if (!result.isConfirmed) return;
       await logout();
+      toast.success("Logged out successfully");
       navigate("/", { replace: true });
     });
   };

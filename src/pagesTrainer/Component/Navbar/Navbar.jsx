@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import { logout } from '../../../api/authApi';
 import NotificationBell from '../../../components/common/NotificationBell/NotificationBell';
+import { toast } from 'react-toastify';
 
 const links = [
     { name: 'Dashboard', to: '/trainer-dashboard', end: true, icon: 'bi-grid-fill' },
@@ -14,6 +15,7 @@ const links = [
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -30,7 +32,8 @@ const Navbar = () => {
 
     const handleLogout = async () => {
         await logout();
-        window.location.href = '/';
+        toast.success("Logged out successfully");
+        navigate('/');
     };
 
     return (

@@ -1,6 +1,7 @@
 import React from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { logout } from "../api/authApi";
+import { toast } from "react-toastify";
 import Hero from "./components/Hero";
 import Courses from "./components/Courses/Courses";
 import CategoryPage from "./components/Category/CategoryPage";
@@ -21,6 +22,7 @@ export default function StudentApp() {
 
   const handleLogout = async () => {
     await logout();
+    toast.success("Logged out successfully");
     navigate('/');
   };
 
