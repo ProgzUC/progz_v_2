@@ -13,6 +13,7 @@
   margin-bottom: var(--spacing-lg);
   flex-wrap: wrap;
   gap: var(--spacing-md);
+  padding-right: 280px; /* clear floating notify + account menu */
 }
 
 .monitoring-header h1 {
@@ -1150,6 +1151,10 @@ select.glass-input {
 @media (max-width: 768px) {
   .monitoring-container {
     padding: var(--spacing-md);
+  }
+
+  .monitoring-header {
+    padding-right: 0;
   }
 
   .tab-buttons {

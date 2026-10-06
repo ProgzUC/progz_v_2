@@ -33,38 +33,39 @@ export default function AttendanceReport() {
     };
 
     return (
-        <div className="attendance-report-container">
-            <div className="report-header">
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                    <h2>
-                        <i className="bi bi-graph-up"></i>
-                        Attendance Reports
-                    </h2>
-                    <Link to="/admin/reports" style={{ fontSize: '14px', color: 'var(--admin-primary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <i className="bi bi-arrow-left"></i> Back to Operational Analytics
-                    </Link>
-                </div>
+        <div className="admin-attendance-page">
+            <header className="page-hero">
+                <h1 className="page-title">
+                    Attendance Reports
+                </h1>
+                <Link to="/admin/reports" className="page-subtitle back-link">
+                    <i className="bi bi-arrow-left"></i> Back to Operational Analytics
+                </Link>
+            </header>
 
-                <div className="batch-selector">
-                    <label htmlFor="batch-select">Select Batch:</label>
-                    <AppSelect
-                        id="batch-select"
-                        className="batch-dropdown"
-                        value={selectedBatchId}
-                        onChange={handleBatchChange}
-                        disabled={batchesLoading}
-                        aria-label="Select batch"
-                        options={[
-                            {
-                                value: "",
-                                label: batchesLoading ? "Loading batches..." : "-- Select a Batch --",
-                            },
-                            ...(batches || []).map((batch) => ({
-                                value: batch._id,
-                                label: batch.name,
-                            })),
-                        ]}
-                    />
+            <div className="top-row">
+                <div className="search-actions">
+                    <div className="batch-selector">
+                        <label htmlFor="batch-select">Select Batch:</label>
+                        <AppSelect
+                            id="batch-select"
+                            className="batch-dropdown"
+                            value={selectedBatchId}
+                            onChange={handleBatchChange}
+                            disabled={batchesLoading}
+                            aria-label="Select batch"
+                            options={[
+                                {
+                                    value: "",
+                                    label: batchesLoading ? "Loading batches..." : "-- Select a Batch --",
+                                },
+                                ...(batches || []).map((batch) => ({
+                                    value: batch._id,
+                                    label: batch.name,
+                                })),
+                            ]}
+                        />
+                    </div>
                 </div>
             </div>
 

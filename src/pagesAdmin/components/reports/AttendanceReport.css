@@ -1,32 +1,59 @@
 /* Container */
-.attendance-report-container {
-    padding: 30px;
-    max-width: 1400px;
-    margin: 0 auto;
+.admin-attendance-page {
+  background: var(--color-bg);
+  padding: 20px 40px 48px;
+  min-height: 100vh;
+  font-family: var(--font-family-base), sans-serif;
+  color: var(--color-text);
 }
 
 /* Report Header */
-.report-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-    gap: 20px;
+.admin-attendance-page .page-hero {
+  margin-bottom: 18px;
+  padding-right: 280px; /* clear floating notify + account menu */
 }
 
-.report-header h2 {
-    font-size: 28px;
-    font-weight: 700;
-    color: #212529;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+.admin-attendance-page .page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
 }
 
-.report-header h2 i {
-    color: var(--color-primary-bright);
+.admin-attendance-page .page-subtitle.back-link {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--admin-primary);
+  line-height: 1.45;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s;
+}
+
+.admin-attendance-page .page-subtitle.back-link:hover {
+    color: var(--admin-primary-hover);
+}
+
+.admin-attendance-page .top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.admin-attendance-page .search-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 /* Batch Selector */
@@ -351,17 +378,21 @@
 }
 
 @media (max-width: 768px) {
-    .attendance-report-container {
-        padding: 20px 15px;
+    .admin-attendance-page {
+        padding: 20px 16px 32px;
     }
 
-    .report-header {
-        flex-direction: column;
-        align-items: flex-start;
+    .admin-attendance-page .page-hero {
+        padding-right: 0;
     }
 
-    .report-header h2 {
+    .admin-attendance-page .page-title {
         font-size: 24px;
+    }
+
+    .admin-attendance-page .search-actions {
+        flex-direction: column;
+        align-items: stretch;
     }
 
     .batch-selector {
