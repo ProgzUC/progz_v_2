@@ -58,11 +58,10 @@
 
 .student-brand .brand-logo {
   height: 40px;
-  width: 40px;
+  width: auto;
+  max-width: 140px;
   display: block;
   object-fit: contain;
-  border-radius: var(--radius-sm);
-  background: var(--color-primary);
 }
 
 .student-brand .brand-badge {
