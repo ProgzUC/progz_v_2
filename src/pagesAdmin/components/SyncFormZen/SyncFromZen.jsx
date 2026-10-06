@@ -79,11 +79,14 @@ const SyncFromZen = () => {
 
   return (
     <div className="sync-dashboard-container p-4">
-      <div className="sync-header d-flex justify-content-between align-items-center mb-4">
+      <div className="sync-header">
         <div>
           <h2>Zen CRM Data Synchronization</h2>
           <p className="text-secondary">Manage integrations, view pipeline history, and resolve sync errors</p>
         </div>
+      </div>
+      
+      <div className="d-flex justify-content-end mb-4">
         <button
           onClick={handleManualSync}
           disabled={loading}
