@@ -4,6 +4,10 @@
   margin: 0 auto;
 }
 
+.sync-header {
+  padding-right: 280px; /* clear floating admin notify dock */
+}
+
 .sync-header h2 {
   font-weight: 700;
   background: linear-gradient(135deg, var(--color-primary-bright) 0%, var(--color-primary-hover) 100%);
@@ -303,4 +307,10 @@
   line-height: 1.5;
   white-space: pre-wrap;
   word-break: break-all;
+}
+
+@media (max-width: 768px) {
+  .sync-header {
+    padding-right: 0;
+  }
 }
