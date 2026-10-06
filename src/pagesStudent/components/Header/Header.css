@@ -62,6 +62,7 @@
   max-width: 140px;
   display: block;
   object-fit: contain;
+  mix-blend-mode: darken;
 }
 
 .student-brand .brand-badge {
