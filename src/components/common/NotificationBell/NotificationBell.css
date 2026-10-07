@@ -27,7 +27,7 @@
 .notify-bell-btn[aria-expanded="true"] {
   border-color: var(--color-primary-muted, #7DCBB0);
   color: var(--color-primary, #0B3D2E);
-  background: var(--color-primary-light, #E8F5E1);
+  background: var(--color-primary-light, #f8fafc);
 }
 
 .notify-bell-btn:focus-visible {
@@ -169,7 +169,7 @@
 }
 
 .notify-item.is-unread {
-  background: var(--color-primary-light, #E8F5E1);
+  background: var(--color-primary-light, #f8fafc);
 }
 
 .notify-prefs {

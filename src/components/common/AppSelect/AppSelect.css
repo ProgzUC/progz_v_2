@@ -49,7 +49,7 @@
   width: 100%;
   min-height: 44px;
   padding: 10px 40px 10px 16px;
-  border: 1px solid var(--color-border, #C9DBC0);
+  border: 1px solid var(--color-border, #e2e8f0);
   border-radius: 12px;
   background: var(--color-surface, #FFFFFF);
   color: var(--color-text, #073B32);
@@ -108,7 +108,7 @@
   max-height: 280px;
   overflow-y: auto;
   background: var(--color-surface, #FFFFFF);
-  border: 1px solid var(--color-border, #C9DBC0);
+  border: 1px solid var(--color-border, #e2e8f0);
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(11, 61, 46, 0.1);
 }
@@ -132,7 +132,7 @@
 .app-select-option:hover,
 .app-select-option:focus-visible {
   outline: none;
-  background: var(--color-primary-light, #DFF0D8);
+  background: var(--color-primary-light, #f1f5f9);
   color: var(--color-primary, #0B3D2E);
 }
 

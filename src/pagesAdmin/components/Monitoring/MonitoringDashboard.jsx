@@ -35,7 +35,7 @@ const PIE_COLORS = {
 };
 const CHART_TOOLTIP_STYLE = {
   backgroundColor: "#FFFFFF",
-  borderColor: "#C9DBC0",
+  borderColor: "#e2e8f0",
   color: "#073B32",
   borderRadius: 12,
   boxShadow: "0 6px 20px rgba(11, 61, 46, 0.08)"
@@ -448,7 +448,7 @@ export default function MonitoringDashboard() {
                                 <stop offset="95%" stopColor="#D97706" stopOpacity={0}/>
                               </linearGradient>
                             </defs>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#C9DBC0" />
+                            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
                             <XAxis dataKey="timestamp" tickFormatter={formatHistoricalDate} stroke="#718096" fontSize={11} />
                             <YAxis yAxisId="left" stroke="#10A879" fontSize={11} label={{ value: "Requests", angle: -90, position: "insideLeft", fill: "#10A879", fontSize: 11 }} />
                             <YAxis yAxisId="right" orientation="right" stroke="#D97706" fontSize={11} label={{ value: "Latency (ms)", angle: 90, position: "insideRight", fill: "#D97706", fontSize: 11 }} />

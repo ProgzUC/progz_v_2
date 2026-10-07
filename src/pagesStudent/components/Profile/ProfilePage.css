@@ -281,28 +281,28 @@
 }
 
 .sp-detail-icon.tone-green {
-    background: #DFF0D8;
-    color: #0B3D2E;
+    background: #f1f5f9;
+    color: #334155;
 }
 
 .sp-detail-icon.tone-purple {
-    background: #DFF0D8;
+    background: #f1f5f9;
     color: #718096;
 }
 
 .sp-detail-icon.tone-blue {
-    background: #E8F5E1;
-    color: #10A879;
+    background: #e2e8f0;
+    color: #475569;
 }
 
 .sp-detail-icon.tone-orange {
-    background: #DFF0D8;
+    background: #f1f5f9;
     color: #718096;
 }
 
 .sp-detail-icon.tone-teal {
-    background: #E8F5E1;
-    color: #0B3D2E;
+    background: #e2e8f0;
+    color: #334155;
 }
 
 .sp-detail-icon.tone-pink {
@@ -488,7 +488,7 @@
 
 .stat-progress .stat-icon-wrapper {
     background-color: rgba(5, 150, 105, 0.12);
-    color: #10A879;
+    color: #475569;
 }
 
 .stat-data {
@@ -908,7 +908,7 @@
 }
 
 .badge-completed {
-    background: #10A879;
+    background: #475569;
     color: #ffffff;
 }
 

@@ -90,7 +90,7 @@
   gap: 12px;
   padding: 14px 18px;
   margin-bottom: 16px;
-  background: #DFF0D8;
+  background: #f1f5f9;
   border: 1px solid var(--color-border);
   border-radius: 12px;
   color: var(--color-text);
@@ -508,7 +508,7 @@
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  border-bottom: 1px solid #DFF0D8;
+  border-bottom: 1px solid #f1f5f9;
   transition: background 0.15s;
 }
 
@@ -609,7 +609,7 @@
 }
 
 .admin-enroll-students-page .status-pill.pending {
-  background: #DFF0D8;
+  background: #f1f5f9;
   color: #718096;
 }
 

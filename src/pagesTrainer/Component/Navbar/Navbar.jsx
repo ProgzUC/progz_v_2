@@ -4,6 +4,7 @@ import './Navbar.css';
 import { logout } from '../../../api/authApi';
 import NotificationBell from '../../../components/common/NotificationBell/NotificationBell';
 import { toast } from 'react-toastify';
+import { useTrainerBootstrap } from '../../../hooks/useTrainerBootstrap';
 
 const links = [
     { name: 'Dashboard', to: '/trainer-dashboard', end: true, icon: 'bi-grid-fill' },
@@ -13,6 +14,7 @@ const links = [
 ];
 
 const Navbar = () => {
+    const { data } = useTrainerBootstrap();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const navigate = useNavigate();
@@ -40,7 +42,7 @@ const Navbar = () => {
         <nav className={`trainer-navbar ${scrolled ? 'scrolled' : ''}`}>
             <div className="trainer-nav-container">
                 <Link to="/trainer-dashboard" className="trainer-brand" onClick={closeMenu}>
-                    <img src="/logo.png" alt="ProgZ" className="brand-logo" />
+                    <img src="/rbg-logo.png" alt="ProgZ" className="brand-logo" />
                 </Link>
 
                 <div className={`trainer-nav-menu ${isMenuOpen ? 'active' : ''}`}>
@@ -60,7 +62,16 @@ const Navbar = () => {
                     </div>
 
                     <div className="nav-actions">
-                        <span className="brand-badge">Trainer</span>
+                        <div className="trainer-profile-badge">
+                            <div className="trainer-avatar">
+                                {data?.trainer?.name?.charAt(0)?.toUpperCase() || 'T'}
+                                <span className="trainer-status-dot"></span>
+                            </div>
+                            <div className="trainer-info">
+                                <span className="trainer-name">{data?.trainer?.name || 'Trainer'}</span>
+                                <span className="trainer-role-pill">Trainer</span>
+                            </div>
+                        </div>
                         <button className="trainer-logout-btn" onClick={handleLogout}>
                             <span className="nav-icon"><i className="bi bi-box-arrow-right"></i></span>
                             <span>Log Out</span>

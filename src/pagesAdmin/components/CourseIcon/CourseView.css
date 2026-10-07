@@ -337,7 +337,7 @@
 
 .course-view-page .cv-module-toggle:hover {
   background: #FFFFFF;
-  border-color: #B5CBA8;
+  border-color: #cbd5e1;
 }
 
 .course-view-page .cv-module-toggle-left {
@@ -390,7 +390,7 @@
 }
 
 .course-view-page .cv-section-card.open {
-  border-color: #DFF0D8;
+  border-color: #f1f5f9;
 }
 
 .course-view-page .cv-section-toggle {
@@ -539,7 +539,7 @@
 
 .course-view-page .cv-action-icon.view {
   color: #718096;
-  background: #DFF0D8;
+  background: #f1f5f9;
 }
 
 .course-view-page .cv-action-icon.download {

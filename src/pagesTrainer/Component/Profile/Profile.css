@@ -478,28 +478,28 @@
 }
 
 .detail-icon.tone-green {
-    background: #DFF0D8;
-    color: #0B3D2E;
+    background: #f1f5f9;
+    color: #334155;
 }
 
 .detail-icon.tone-purple {
-    background: #DFF0D8;
+    background: #f1f5f9;
     color: #718096;
 }
 
 .detail-icon.tone-blue {
-    background: #E8F5E1;
-    color: #10A879;
+    background: #e2e8f0;
+    color: #475569;
 }
 
 .detail-icon.tone-orange {
-    background: #DFF0D8;
+    background: #f1f5f9;
     color: #718096;
 }
 
 .detail-icon.tone-teal {
-    background: #E8F5E1;
-    color: #0B3D2E;
+    background: #e2e8f0;
+    color: #334155;
 }
 
 .detail-icon.tone-pink {

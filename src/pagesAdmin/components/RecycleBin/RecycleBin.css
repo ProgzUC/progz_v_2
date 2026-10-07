@@ -195,7 +195,7 @@
 }
 
 .admin-recycle-bin-page .data-table tbody tr {
-  border-bottom: 1px solid #DFF0D8;
+  border-bottom: 1px solid #f1f5f9;
   transition: background 0.15s;
 }
 
@@ -228,7 +228,7 @@
   font-size: 12px;
   font-weight: 500;
   text-transform: capitalize;
-  background: #DFF0D8;
+  background: #f1f5f9;
   color: #718096;
   white-space: nowrap;
 }
@@ -242,12 +242,12 @@
 }
 
 .admin-recycle-bin-page .type-badge.type-course {
-  background: #DFF0D8;
+  background: #f1f5f9;
   color: #718096;
 }
 
 .admin-recycle-bin-page .type-badge.type-batch {
-  background: #DFF0D8;
+  background: #f1f5f9;
   color: #718096;
 }
 

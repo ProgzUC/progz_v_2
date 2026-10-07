@@ -364,9 +364,9 @@
 }
 
 .as-choice-icon[data-mode="light"] {
-  background: #DFF0D8;
+  background: #f1f5f9;
   color: #b45309;
-  border: 1px solid #C9DBC0;
+  border: 1px solid #e2e8f0;
 }
 
 .as-choice-icon[data-mode="dark"] {

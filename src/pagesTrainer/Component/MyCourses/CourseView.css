@@ -3,7 +3,7 @@
 .course-view-page,
 .trainer-course-view-page {
   font-family: var(--font-family-base), sans-serif;
-  background: #f4f7f6;
+  background: #f8fafc;
   min-height: 100vh;
   padding: var(--page-top-offset) 28px 56px;
   box-sizing: border-box;
@@ -143,7 +143,7 @@
 
 .cv-category-pill {
   display: inline-block;
-  background: #DFF0D8;
+  background: #f1f5f9;
   color: #065f46;
   font-size: 11px;
   font-weight: 800;
@@ -284,7 +284,7 @@
 }
 
 .course-view-page .cv-hero-actions .cv-edit-btn:hover {
-  background: #E8F5E1 !important;
+  background: #e2e8f0 !important;
 }
 
 .cv-hero-art {
@@ -337,7 +337,7 @@
   width: 46px;
   height: 36px;
   border-radius: 8px;
-  background: #E8F5E1;
+  background: #e2e8f0;
   color: #10A879;
   display: inline-flex;
   align-items: center;
@@ -572,7 +572,7 @@
 
 .cv-section-toggle:hover,
 .cv-section-toggle.active {
-  background: #E8F5E1;
+  background: #e2e8f0;
   color: #0B3D2E;
 }
 

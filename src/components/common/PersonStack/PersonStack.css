@@ -44,7 +44,7 @@
 .person-stack-avatar.tone-rose { background: #8B6B6B; }
 
 .person-stack-avatar-more {
-  background: #C9DBC0;
+  background: #e2e8f0;
   color: #718096;
   font-size: 10px;
   font-weight: 600;
@@ -63,7 +63,7 @@
   padding: 10px 12px;
   border-radius: 10px;
   background: #073B32;
-  color: #E8F5E1;
+  color: #f8fafc;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
   pointer-events: none;
 }

@@ -18,6 +18,7 @@ import TrainerStatus from './components/TrainerStatus'
 import AnnouncementBanner from '../components/common/AnnouncementBanner/AnnouncementBanner'
 
 function Dashboard() {
+  const navigate = useNavigate();
   const { data, isLoading, isError, refetch } = useTrainerBootstrap();
 
   if (isLoading) return <Loader message="Loading dashboard..." />;
@@ -32,7 +33,13 @@ function Dashboard() {
 
   return (
     <>
-      <Home trainer={data.trainer} stats={data.stats} data={data} />
+      <Home 
+        trainer={data.trainer} 
+        stats={data.stats} 
+        data={data} 
+        onNavigateToCreateCourse={() => navigate('/trainer-dashboard/courses/new')}
+        onNavigateToMyCourses={() => navigate('/trainer-dashboard/courses')}
+      />
     </>
   );
 }

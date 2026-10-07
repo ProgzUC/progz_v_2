@@ -11,7 +11,7 @@
 }
 
 .student-mycourses-page {
-    background-color: #f4f7f6 !important;
+    background-color: #f8fafc !important;
     min-height: calc(100vh - var(--navbar-height));
     overflow-x: visible !important;
 }
@@ -148,7 +148,7 @@
     font-size: 15px;
     font-weight: 700;
     line-height: 1;
-    background: #edf1ef;
+    background: #e2e8f0;
     color: #718096;
 }
 
@@ -661,7 +661,7 @@
 .student-mycourses-page .large-progress-bar {
     width: 100%;
     height: 8px;
-    background: #e8eeea;
+    background: #f1f5f9;
     border-radius: 50px;
     overflow: hidden;
 }

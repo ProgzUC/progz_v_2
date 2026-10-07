@@ -10,8 +10,8 @@
   --color-primary: #0B3D2E;
   --color-primary-hover: #083028;
   --color-primary-active: #0B3D2E;
-  --color-primary-soft: #DFF0D8;
-  --color-primary-light: #DFF0D8;
+  --color-primary-soft: #f1f5f9;
+  --color-primary-light: #f1f5f9;
   --color-primary-muted: #7DCBB0;
   --color-primary-bright: #10A879;
   --color-primary-gradient: linear-gradient(135deg, #0B3D2E 0%, #10A879 100%);
@@ -27,12 +27,12 @@
   --bs-link-color: #0B3D2E;
   --bs-link-hover-color: #083028;
   --bs-focus-ring-color: rgba(11, 61, 46, 0.25);
-  --bs-primary-bg-subtle: #E8F5E1;
-  --bs-primary-border-subtle: #DFF0D8;
+  --bs-primary-bg-subtle: #f8fafc;
+  --bs-primary-border-subtle: #f1f5f9;
   --bs-primary-text-emphasis: #073B32;
 
-  --color-bg: #E8F5E1;
-  --color-bg-muted: #DFF0D8;
+  --color-bg: #F8FAFC;
+  --color-bg-muted: #F1F5F9;
   --color-bg-sidebar: #0B3D2E;
   /* Cards, tables, panels — white so mint stays on the page canvas only */
   --color-surface: #FFFFFF;
@@ -44,17 +44,17 @@
   --color-text-muted: #8B9AAB;
   --color-text-on-primary: #FFFFFF;
 
-  --color-border: #C9DBC0;
-  --color-border-strong: #B5CBA8;
-  --color-border-hover: #B5CBA8;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-border-hover: #cbd5e1;
   --color-focus-ring: rgba(11, 61, 46, 0.22);
 
   /* ── Navbar / Footer ── */
   --color-navbar-bg: #FFFFFF;
-  --color-navbar-border: #C9DBC0;
+  --color-navbar-border: #e2e8f0;
   --color-navbar-text: #073B32;
   --color-navbar-text-muted: #718096;
-  --color-navbar-hover-bg: #DFF0D8;
+  --color-navbar-hover-bg: #f1f5f9;
   --color-navbar-hover-text: #0B3D2E;
   --color-footer-bg: #0B3D2E;
   --color-footer-bg-mid: #083028;
@@ -62,13 +62,13 @@
 
   /* ── Status ── */
   --color-success: #10A879;
-  --color-success-bg: #DFF0D8;
+  --color-success-bg: #f1f5f9;
   --color-warning: #B45309;
   --color-warning-bg: #FFFBEB;
   --color-error: #DC2626;
   --color-error-bg: #FEE2E2;
   --color-info: #0B3D2E;
-  --color-info-bg: #E8F5E1;
+  --color-info-bg: #f8fafc;
   --color-pending: #F87171;
   --color-pending-bg: #FEE2E2;
 

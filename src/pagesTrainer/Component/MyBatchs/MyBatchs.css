@@ -1,10 +1,7 @@
 .tb-page {
     min-height: 100vh;
     padding: calc(var(--navbar-height) + 28px) 24px 72px;
-    background:
-        radial-gradient(circle at 8% 6%, color-mix(in srgb, var(--color-primary-muted) 42%, transparent) 0 120px, transparent 121px),
-        radial-gradient(circle at 96% 0%, color-mix(in srgb, var(--color-primary-bright) 16%, transparent) 0 180px, transparent 181px),
-        var(--trainer-page-bg);
+    background: var(--color-bg);
     box-sizing: border-box;
 }
 

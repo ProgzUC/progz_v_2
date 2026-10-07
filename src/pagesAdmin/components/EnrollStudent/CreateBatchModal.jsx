@@ -306,14 +306,14 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
                         <h4 style={{ margin: 0 }}>Trainers & Modules</h4>
                         <button
                             onClick={addTrainerRow}
-                            style={{ background: "#E8F5E1", color: "#10A879", border: "none", padding: "6px 12px", borderRadius: "6px", cursor: "pointer", fontSize: "13px", fontWeight: "600" }}
+                            style={{ background: "#f8fafc", color: "#10A879", border: "none", padding: "6px 12px", borderRadius: "6px", cursor: "pointer", fontSize: "13px", fontWeight: "600" }}
                         >
                             + Add Trainer
                         </button>
                     </div>
 
                     {batchData.trainers.map((t, index) => (
-                        <div key={index} style={{ background: "#E8F5E1", padding: "15px", borderRadius: "10px", marginBottom: "15px", border: "1px solid #C9DBC0" }}>
+                        <div key={index} style={{ background: "#f8fafc", padding: "15px", borderRadius: "10px", marginBottom: "15px", border: "1px solid #e2e8f0" }}>
                             <div style={{ display: "flex", justifyContent: "flex-end" }}>
                                 <span onClick={() => removeTrainerRow(index)} style={{ cursor: "pointer", color: "#ef4444", fontSize: "12px" }}>Remove</span>
                             </div>

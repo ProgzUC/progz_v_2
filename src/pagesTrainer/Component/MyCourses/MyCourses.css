@@ -7,10 +7,7 @@
   width: 100%;
   max-width: none;
   margin: 0;
-  background:
-    radial-gradient(circle at 8% 6%, color-mix(in srgb, var(--color-primary-muted) 42%, transparent) 0 120px, transparent 121px),
-    radial-gradient(circle at 96% 0%, color-mix(in srgb, var(--color-primary-bright) 16%, transparent) 0 180px, transparent 181px),
-    var(--trainer-page-bg);
+  background: var(--color-bg);
   font-family: var(--font-family-base), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
   box-sizing: border-box;
@@ -232,22 +229,22 @@
 }
 
 .trainer-myCourses .stat-courses {
-  background: linear-gradient(145deg, #E8F5E1, #DFF0D8);
+  background: linear-gradient(145deg, #f8fafc, #f1f5f9);
   color: #0B3D2E;
 }
 
 .trainer-myCourses .stat-sections {
-  background: linear-gradient(145deg, #E8F5E1, #DFF0D8);
+  background: linear-gradient(145deg, #f8fafc, #f1f5f9);
   color: #0B3D2E;
 }
 
 .trainer-myCourses .stat-students {
-  background: linear-gradient(145deg, #E8F5E1, #DFF0D8);
+  background: linear-gradient(145deg, #f8fafc, #f1f5f9);
   color: #065F46;
 }
 
 .trainer-myCourses .stat-published {
-  background: linear-gradient(145deg, #E8F5E1, #7DCBB0);
+  background: linear-gradient(145deg, #f8fafc, #7DCBB0);
   color: #0B3D2E;
 }
 
@@ -288,8 +285,8 @@
 /* ========== Course card (reference layout) ========== */
 .trainer-myCourses .trainer-course-card {
   --card-i: 0;
-  --tone-soft: #E8F5E1;
-  --tone-mid: #DFF0D8;
+  --tone-soft: #f8fafc;
+  --tone-mid: #f1f5f9;
   --tone-ink: #0B3D2E;
   --tone-icon: #10A879;
   background: var(--mc-card-bg, var(--color-surface));
@@ -312,8 +309,8 @@
 }
 
 .trainer-myCourses .trainer-course-card.theme-emerald {
-  --tone-soft: #E8F5E1;
-  --tone-mid: #DFF0D8;
+  --tone-soft: #f8fafc;
+  --tone-mid: #f1f5f9;
   --tone-ink: #0B3D2E;
   --tone-icon: #10A879;
 }
@@ -322,8 +319,8 @@
 .trainer-myCourses .trainer-course-card.theme-violet,
 .trainer-myCourses .trainer-course-card.theme-amber,
 .trainer-myCourses .trainer-course-card.theme-teal {
-  --tone-soft: #E8F5E1;
-  --tone-mid: #DFF0D8;
+  --tone-soft: #f8fafc;
+  --tone-mid: #f1f5f9;
   --tone-ink: #0B3D2E;
   --tone-icon: #10A879;
 }

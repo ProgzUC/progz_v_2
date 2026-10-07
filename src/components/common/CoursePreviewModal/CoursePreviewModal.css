@@ -242,7 +242,7 @@
 }
 
 .course-preview-module-btn.active {
-  background: #E8F5E1;
+  background: #f8fafc;
   border-color: #86efac;
 }
 
@@ -330,7 +330,7 @@
 
 .course-preview-edit-btn {
   background: var(--color-surface);
-  border: 1px solid #B5CBA8;
+  border: 1px solid #cbd5e1;
   color: var(--color-text);
 }
 

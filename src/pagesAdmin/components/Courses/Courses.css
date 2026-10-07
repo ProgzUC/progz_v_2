@@ -203,7 +203,7 @@
 }
 
 .admin-courses-page .course-table tbody tr {
-  border-bottom: 1px solid #DFF0D8;
+  border-bottom: 1px solid #f1f5f9;
   transition: background 0.15s;
 }
 
@@ -236,7 +236,7 @@
 .admin-courses-page .enrolled-badge {
   display: inline-flex;
   align-items: center;
-  background: #DFF0D8;
+  background: #f1f5f9;
   color: #718096;
   font-size: 12px;
   font-weight: 500;
