@@ -31,22 +31,22 @@ export default function StudentApp() {
       <Header onLogout={handleLogout} />
       <AnnouncementBanner source="student" />
       <main className="student-main-content">
-      <Routes>
-        <Route path="/" element={
-          <>
-            <Hero />
-            <Courses />
-          </>
-        } />
-        <Route path="/browse" element={<CategoryPage />} />
-        <Route path="/course-details/:courseId" element={<CourseDetails />} />
-        <Route path="/course-details" element={<CourseDetails />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/certificate" element={<CertificateView />} />
-        <Route path="/my-courses" element={<Dashboard />} />
-        <Route path="/compiler" element={<CompilerPage />} />
-        <Route path="/my-attendance" element={<StudentAttendance />} />
-      </Routes>
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Hero />
+              <Courses />
+            </>
+          } />
+          <Route path="/browse" element={<CategoryPage />} />
+          <Route path="/course-details/:courseId" element={<CourseDetails />} />
+          <Route path="/course-details" element={<CourseDetails />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/certificate" element={<CertificateView />} />
+          <Route path="/my-courses" element={<Dashboard />} />
+          <Route path="/compiler" element={<CompilerPage />} />
+          <Route path="/my-attendance" element={<StudentAttendance />} />
+        </Routes>
       </main>
     </div>
   );

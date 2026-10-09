@@ -39,7 +39,7 @@ function HeaderContent({ onLogout }) {
         <nav className={`student-navbar ${scrolled ? "scrolled" : ""}`}>
             <div className="student-nav-container">
                 <Link to="/student-dashboard/" className="student-brand">
-                    <img src="/rbg-logo.png" alt="ProgZ" className="brand-logo" />
+                    <span className="brand-text">ProgZ</span>
                 </Link>
 
                 <div className={`student-nav-menu ${isMenuOpen ? "active" : ""}`}>

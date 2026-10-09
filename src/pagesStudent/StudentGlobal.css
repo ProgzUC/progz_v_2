@@ -111,13 +111,13 @@
     background: var(--color-primary-light);
 }
 
-.student-app-layout table tbody tr:hover > td,
-.student-app-layout .attendance-table tbody tr:hover > td {
+.student-app-layout table tbody tr:hover>td,
+.student-app-layout .attendance-table tbody tr:hover>td {
     color: var(--color-text);
 }
 
-.student-app-layout table tbody tr:hover > td:first-child,
-.student-app-layout .attendance-table tbody tr:hover > td:first-child {
+.student-app-layout table tbody tr:hover>td:first-child,
+.student-app-layout .attendance-table tbody tr:hover>td:first-child {
     box-shadow: inset 3px 0 0 var(--color-primary-muted);
 }
 
@@ -126,8 +126,8 @@
     background: transparent;
 }
 
-.student-app-layout table tbody tr:has(.empty-cell):hover > td:first-child,
-.student-app-layout table tbody tr:has(td[colspan]):hover > td:first-child {
+.student-app-layout table tbody tr:has(.empty-cell):hover>td:first-child,
+.student-app-layout table tbody tr:has(td[colspan]):hover>td:first-child {
     box-shadow: none;
 }
 

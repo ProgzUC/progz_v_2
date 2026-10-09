@@ -63,9 +63,16 @@
     object-fit: contain;
 }
 
+.brand-text {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-navbar-text, #1e293b);
+    letter-spacing: -0.5px;
+}
+
 .brand-badge {
     padding: 2px 8px;
-    background: rgba(16, 168, 121, 0.25);
+    background: transparent;
     color: var(--color-primary-bright);
     font-size: 11px;
     text-transform: uppercase;

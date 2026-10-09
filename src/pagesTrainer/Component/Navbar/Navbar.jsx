@@ -42,7 +42,7 @@ const Navbar = () => {
         <nav className={`trainer-navbar ${scrolled ? 'scrolled' : ''}`}>
             <div className="trainer-nav-container">
                 <Link to="/trainer-dashboard" className="trainer-brand" onClick={closeMenu}>
-                    <img src="/rbg-logo.png" alt="ProgZ" className="brand-logo" />
+                    <span className="brand-text">ProgZ</span>
                 </Link>
 
                 <div className={`trainer-nav-menu ${isMenuOpen ? 'active' : ''}`}>

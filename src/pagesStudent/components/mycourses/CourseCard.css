@@ -464,13 +464,16 @@
 
 .student-mycourses-page .large-thumb-serif {
     font-family: "Playfair Display", Georgia, serif;
-    font-size: 28px;
+    font-size: 22px;
     font-weight: 700;
     color: #ffffff;
     text-align: center;
-    line-height: 1.05;
+    line-height: 1.1;
     padding: 0 10px;
     z-index: 1;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
 }
 
 .student-mycourses-page .fullstack-title {
