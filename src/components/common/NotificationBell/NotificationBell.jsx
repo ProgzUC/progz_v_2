@@ -258,6 +258,7 @@ export default function NotificationBell({
                         navigate(settingsHref);
                       }}
                     >
+                      <i className="bi bi-gear" style={{ marginRight: "6px" }}></i>
                       Manage alert preferences
                     </button>
                   ) : (

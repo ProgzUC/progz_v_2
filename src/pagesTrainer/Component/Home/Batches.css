@@ -1,185 +1,21 @@
-.trainer-home-batches {
-    padding: 22px;
-    margin-top: 0;
-    animation: trainerSectionFade 0.6s ease-out;
+/* ==========================================================================
+   TRAINER DASHBOARD 2-COLUMN SPLIT LAYOUT (Desktop Balance)
+   Left Side (65%): Active Batches + Recent Course Overview
+   Right Side (35%): Trainer Sidebar Widgets (Next Live Class + Quick Actions)
+   ========================================================================== */
+
+.trainer-dashboard-split-layout {
+    display: grid;
+    grid-template-columns: calc(65% - 14px) calc(35% - 14px);
+    gap: 28px;
+    align-items: flex-start;
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: 28px;
-    box-shadow: var(--shadow-sm);
-}
-
-.trainer-home-batches .batches-head {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.trainer-home-batches .batches-head p {
-    margin-bottom: 10px;
-}
-
-.trainer-home-batches .batches-head h2 {
-    font-size: 26px;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    color: var(--trainer-text);
-}
-
-.trainer-home-batches .batches-view-all {
-    border: none;
-    background: var(--color-primary-light);
-    color: var(--color-primary);
-    border-radius: var(--radius-full);
-    padding: 8px 14px;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.trainer-home-batches .batches-view-all:hover {
-    background: var(--color-primary);
-    color: var(--color-text-on-primary);
-    transform: translateY(-1px);
-}
-
-.trainer-home-batches .batches-empty {
-    margin: 8px 0 0;
-    color: var(--color-text-secondary);
-    font-size: 14px;
-    line-height: 1.55;
-}
-
-.trainer-home-batches .batches-course-name {
-    margin: 0;
-    color: var(--color-text-secondary);
-    font-size: 13px;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.trainer-home-batches .container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 var(--trainer-spacing-lg);
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Clear gap below hero so "Scroll for more" isn't on top of this section */
-@media (max-width: 768px) {
-    .trainer-home-batches {
-        padding-top: 32px;
-    }
+    animation: trainerSectionFade 0.6s ease-out;
 }
 
 @keyframes trainerSectionFade {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.trainer-home-batches .batches-section-title {
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: var(--trainer-spacing-lg);
-    text-align: center;
-    color: var(--trainer-text);
-}
-
-/* MAIN LAYOUT */
-.trainer-home-batches .batches-dashboard-layout {
-    display: flex;
-    gap: var(--trainer-spacing-lg);
-    align-items: flex-start;
-}
-
-/* LEFT SIDE - GRID */
-.trainer-home-batches .batches-batch-grid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
-}
-
-/* COURSE CARD */
-.trainer-home-batches .batches-batch-card {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    background: var(--trainer-card-bg);
-    border-radius: 18px;
-    padding: 18px 18px 16px;
-    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
-    transition:
-        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-        box-shadow 0.35s ease,
-        border-color 0.35s ease,
-        background 0.35s ease;
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    animation: trainerBatchCardEntrance 0.5s ease-out forwards;
-    opacity: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    min-height: 0;
-    width: 100%;
-    text-align: left;
-    cursor: pointer;
-    font: inherit;
-    color: inherit;
-    appearance: none;
-}
-
-.trainer-home-batches .batches-batch-card::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: linear-gradient(180deg, var(--trainer-primary) 0%, #10A879 100%);
-    transform: scaleY(0);
-    transform-origin: center;
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
-    border-radius: 4px 0 0 4px;
-    z-index: 1;
-}
-
-.trainer-home-batches .batches-batch-card::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        115deg,
-        transparent 35%,
-        rgba(255, 255, 255, 0.55) 48%,
-        transparent 62%
-    );
-    transform: translateX(-120%);
-    transition: transform 0.65s ease;
-    pointer-events: none;
-    z-index: 0;
-}
-
-.trainer-home-batches .batches-batch-card:nth-child(1) { animation-delay: 0.05s; }
-.trainer-home-batches .batches-batch-card:nth-child(2) { animation-delay: 0.1s; }
-.trainer-home-batches .batches-batch-card:nth-child(3) { animation-delay: 0.15s; }
-.trainer-home-batches .batches-batch-card:nth-child(4) { animation-delay: 0.2s; }
-
-@keyframes trainerBatchCardEntrance {
     from {
         opacity: 0;
         transform: translateY(16px);
@@ -190,42 +26,148 @@
     }
 }
 
-.trainer-home-batches .batches-batch-card:hover {
-    background: linear-gradient(165deg, #ffffff 0%, #f0fdf4 100%);
-    box-shadow:
-        0 14px 36px rgba(11, 61, 46, 0.14),
-        0 4px 12px rgba(15, 23, 42, 0.06);
-    transform: translateY(-6px) scale(1.015);
+/* ==========================================================================
+   LEFT COLUMN (65%)
+   ========================================================================== */
+
+.trainer-split-main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Base Card for Left Column Sections */
+.trainer-home-batches-card,
+.trainer-overview-card {
+    background: var(--color-surface, #ffffff);
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+    box-sizing: border-box;
+    width: 100%;
+}
+
+/* Section Header Styles */
+.batches-head,
+.overview-card-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.batches-kicker,
+.overview-kicker {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--trainer-primary, #10a879);
+    margin: 0 0 4px;
+}
+
+.batches-title,
+.overview-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--trainer-text, #0f172a);
+    margin: 0;
+    letter-spacing: -0.02em;
+}
+
+.batches-view-all,
+.overview-link-btn {
+    border: none;
+    background: #ecfdf5;
+    color: #047857;
+    border-radius: 999px;
+    padding: 7px 16px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.batches-view-all:hover,
+.overview-link-btn:hover {
+    background: #10a879;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 168, 121, 0.25);
+}
+
+.batches-empty {
+    margin: 12px 0 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+/* ==========================================================================
+   ACTIVE BATCHES CARDS
+   ========================================================================== */
+
+.batches-batch-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+.batches-batch-card {
+    position: relative;
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    border-radius: 18px;
+    padding: 18px 20px 16px;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.3s ease,
+                border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+}
+
+/* Completely remove left-side green line on hover */
+.batches-batch-card::before {
+    display: none !important;
+}
+
+.batches-batch-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(16, 168, 121, 0.12),
+                0 4px 12px rgba(15, 23, 42, 0.04);
     border-color: rgba(16, 168, 121, 0.35);
 }
 
-.trainer-home-batches .batches-batch-card:hover::before {
-    transform: scaleY(1);
-}
-
-.trainer-home-batches .batches-batch-card:hover::after {
-    transform: translateX(120%);
-}
-
-.trainer-home-batches .batches-batch-card:active {
-    transform: translateY(-2px) scale(1.005);
-    box-shadow: 0 8px 22px rgba(11, 61, 46, 0.12);
-}
-
-.trainer-home-batches .batches-batch-card:focus-visible {
-    outline: 2px solid var(--trainer-primary);
+.batches-batch-card:focus-visible {
+    outline: 2px solid #10a879;
     outline-offset: 2px;
 }
 
-.trainer-home-batches .batches-batch-head {
-    position: relative;
-    z-index: 1;
+.batches-batch-head {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
+    gap: 14px;
 }
 
-.trainer-home-batches .batches-batch-avatar {
+/* Static avatar with NO shake animation */
+.batches-batch-avatar {
     flex-shrink: 0;
     width: 44px;
     height: 44px;
@@ -233,34 +175,38 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(145deg, var(--trainer-primary) 0%, #0f766e 100%);
-    color: #fff;
+    background: linear-gradient(145deg, #0b3d2e 0%, #10a879 100%);
+    color: #ffffff;
     font-size: 13px;
     font-weight: 700;
     letter-spacing: 0.02em;
-    box-shadow: 0 6px 14px rgba(11, 61, 46, 0.22);
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+    box-shadow: 0 4px 12px rgba(11, 61, 46, 0.2);
+    transform: none !important;
+    transition: none !important;
+    animation: none !important;
 }
 
-.trainer-home-batches .batches-batch-card:hover .batches-batch-avatar {
-    transform: scale(1.08) rotate(-3deg);
-    box-shadow: 0 10px 20px rgba(11, 61, 46, 0.32);
-}
-
-.trainer-home-batches .batches-batch-copy {
+.batches-batch-copy {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding-top: 2px;
+    gap: 5px;
 }
 
-.trainer-home-batches .batches-batch-title {
+.batches-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* Bold batch name */
+.batches-batch-title {
     font-size: 18px;
     font-weight: 700;
     margin: 0;
-    color: var(--trainer-text);
+    color: #0f172a;
     line-height: 1.3;
     letter-spacing: -0.02em;
     white-space: nowrap;
@@ -269,348 +215,768 @@
     transition: color 0.25s ease;
 }
 
-.trainer-home-batches .batches-batch-card:hover .batches-batch-title {
-    color: var(--trainer-primary);
+.batches-batch-card:hover .batches-batch-title {
+    color: #10a879;
 }
 
-.trainer-home-batches .batches-batch-info-item {
+/* Bold ACTIVE status pill */
+.batches-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: #ecfdf5;
+    color: #047857;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1;
+}
+
+.batches-status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #10a879;
+}
+
+/* Course details: normal font weight and black/dark text */
+.batches-course-name {
+    margin: 0;
+    color: #0f172a;
+    font-size: 13.5px;
+    font-weight: 400;
+    line-height: 1.45;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Batch stats row */
+.batches-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 2px;
+}
+
+.batches-batch-info-item {
     display: flex;
     align-items: center;
     gap: 6px;
     font-size: 13px;
-    color: var(--trainer-text-muted);
-    margin: 0;
+    color: #64748b;
     font-weight: 500;
 }
 
-.trainer-home-batches .batches-batch-info-item svg {
+.batches-batch-info-item .meta-icon {
+    font-size: 15px;
+    color: #10a879;
     flex-shrink: 0;
-    opacity: 0.85;
 }
 
-.trainer-home-batches .batches-arrow-btn {
-    flex-shrink: 0;
-    background: var(--color-primary-light);
-    border: none;
-    color: var(--trainer-primary);
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    border-radius: 999px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
-    transition: background 0.3s ease, color 0.3s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
-    margin-top: 2px;
-    pointer-events: none;
-}
-
-.trainer-home-batches .batches-batch-card:hover .batches-arrow-btn {
-    color: #fff;
-    background: var(--trainer-primary);
-    transform: translateX(4px);
-    box-shadow: 0 6px 14px rgba(11, 61, 46, 0.28);
-}
-
-/* Progress Bar */
-.trainer-home-batches .batches-progress-container {
-    position: relative;
-    z-index: 1;
+/* Progress bar */
+.batches-progress-container {
     margin: 0;
-    padding-top: 14px;
-    border-top: 1px solid var(--color-border);
-    transition: border-color 0.3s ease;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
 }
 
-.trainer-home-batches .batches-batch-card:hover .batches-progress-container {
-    border-top-color: #f1f5f9;
-}
-
-.trainer-home-batches .batches-progress-label {
+.batches-progress-label {
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 12px;
-    margin-bottom: 8px;
-    color: var(--trainer-text-muted);
+    margin-bottom: 6px;
+    color: #64748b;
     font-weight: 500;
 }
 
-.trainer-home-batches .batches-progress-value {
+.batches-progress-value {
     font-weight: 700;
-    color: var(--trainer-text);
+    color: #0f172a;
     font-variant-numeric: tabular-nums;
-    transition: color 0.25s ease;
 }
 
-.trainer-home-batches .batches-batch-card:hover .batches-progress-value {
-    color: var(--trainer-primary);
-}
-
-.trainer-home-batches .batches-progress-bar {
+.batches-progress-bar {
     height: 7px;
-    background: var(--color-border);
+    background: #e2e8f0;
     border-radius: 999px;
     overflow: hidden;
 }
 
-.trainer-home-batches .batches-progress-fill {
+.batches-progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--trainer-primary) 0%, #10A879 100%);
+    background: linear-gradient(90deg, #0b3d2e 0%, #10a879 100%);
     border-radius: 999px;
-    transition: width 0.35s ease, filter 0.3s ease;
+    transition: width 0.35s ease;
 }
 
-.trainer-home-batches .batches-batch-card:hover .batches-progress-fill {
+.batches-batch-card:hover .batches-progress-fill {
     filter: brightness(1.08);
-    box-shadow: 0 0 10px rgba(16, 168, 121, 0.45);
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .trainer-home-batches .batches-batch-card,
-    .trainer-home-batches .batches-batch-card::before,
-    .trainer-home-batches .batches-batch-card::after,
-    .trainer-home-batches .batches-batch-avatar,
-    .trainer-home-batches .batches-arrow-btn,
-    .trainer-home-batches .batches-progress-fill {
-        transition: none;
-        animation: none;
-    }
-
-    .trainer-home-batches .batches-batch-card {
-        opacity: 1;
-    }
-
-    .trainer-home-batches .batches-batch-card:hover {
-        transform: none;
-    }
-}
-
-/* RIGHT SIDEBAR */
-.trainer-home-batches .batches-sidebar {
-    width: 360px;
-    flex-shrink: 0;
-    position: sticky;
-    top: 20px;
-}
-
-.trainer-home-batches .batches-sidebar-card {
-    background: var(--trainer-card-bg);
-    border-radius: var(--trainer-radius-lg);
-    padding: var(--trainer-spacing-lg);
-    box-shadow: var(--trainer-shadow-md);
-    border: 1px solid var(--trainer-border);
-}
-
-.trainer-home-batches .batches-sidebar-title {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: var(--trainer-spacing-lg);
-    color: var(--trainer-text);
-    text-align: left;
-}
-
-/* Sidebar Item */
-.trainer-home-batches .batches-class-card {
-    margin-bottom: var(--trainer-spacing-md);
-    padding: var(--trainer-spacing-md);
-    border-radius: var(--trainer-radius-md);
-    background: var(--trainer-card-bg);
-    border: 1px solid var(--trainer-border);
-    transition: var(--trainer-transition);
-}
-
-.trainer-home-batches .batches-class-card.live {
-    border-color: rgba(25, 135, 84, 0.25);
-}
-
-.trainer-home-batches .batches-class-header {
+/* Card footer with Open Batch button */
+.batches-card-footer {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 2px;
 }
 
-.trainer-home-batches .batches-status-tag {
+.batches-open-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #10a879;
+    background: #f0fdf4;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(16, 168, 121, 0.2);
+    transition: all 0.25s ease;
+}
+
+.batches-batch-card:hover .batches-open-btn {
+    background: #10a879;
+    color: #ffffff;
+    border-color: #10a879;
+    transform: translateX(2px);
+    box-shadow: 0 4px 10px rgba(16, 168, 121, 0.25);
+}
+
+/* ==========================================================================
+   RECENT COURSE OVERVIEW (Left Side)
+   ========================================================================== */
+
+.recent-course-body {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: all 0.25s ease;
+}
+
+.recent-course-body:hover {
+    background: #ffffff;
+    border-color: rgba(16, 168, 121, 0.35);
+    box-shadow: 0 10px 24px rgba(16, 168, 121, 0.08);
+}
+
+.recent-course-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.recent-course-icon-box {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: #ecfdf5;
+    color: #10a879;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(16, 168, 121, 0.15);
+}
+
+.recent-course-details {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.recent-course-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.recent-course-tag {
+    display: inline-flex;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #047857;
+    background: #ecfdf5;
+    padding: 2px 8px;
+    border-radius: 6px;
+}
+
+.recent-course-cat {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.recent-course-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.recent-course-desc {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.recent-course-stats-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+    color: #475569;
+    margin-top: 4px;
+}
+
+.rc-stat-num {
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.rc-stat-dot {
+    color: #cbd5e1;
+}
+
+.recent-course-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px solid #eef2f6;
+}
+
+.rc-action-btn {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.trainer-home-batches .batches-status-tag.live {
-    color: var(--trainer-primary);
-}
-
-.trainer-home-batches .batches-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--trainer-primary);
-    flex-shrink: 0;
-}
-
-.trainer-home-batches .batches-status-tag.upcoming {
-    background: var(--trainer-primary-light);
-    color: var(--trainer-primary);
-    padding: 4px 10px;
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.trainer-home-batches .batches-student-count {
-    font-size: 12px;
-    color: var(--trainer-text-muted);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-weight: 500;
-}
-
-.trainer-home-batches .batches-class-title {
-    font-size: 17px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: var(--color-text);
-    line-height: 1.35;
-}
-
-.trainer-home-batches .batches-class-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.trainer-home-batches .batches-class-time {
-    font-size: 12px;
-    color: var(--trainer-text-muted);
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.trainer-home-batches .batches-join-btn {
-    min-height: 40px;
-    padding: 10px 16px;
-    border-radius: var(--trainer-radius-md);
     font-size: 13px;
-    font-weight: 600;
-    border: none;
+    font-weight: 700;
+    padding: 8px 16px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: var(--trainer-transition);
+    transition: all 0.2s ease;
+    border: none;
+    font-family: inherit;
 }
 
-.trainer-home-batches .batches-join-btn.active {
-    background: var(--trainer-primary);
-    color: var(--color-text-on-primary);
+.rc-action-btn.primary {
+    background: #10a879;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(16, 168, 121, 0.25);
 }
 
-.trainer-home-batches .batches-join-btn.active:hover {
-    background: var(--trainer-primary-hover);
+.rc-action-btn.primary:hover {
+    background: #0b3d2e;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(11, 61, 46, 0.2);
+}
+
+.rc-action-btn.secondary {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #334155;
+}
+
+.rc-action-btn.secondary:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+}
+
+/* Empty State for Recent Course */
+.recent-course-empty {
+    padding: 24px 18px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 16px;
+}
+
+.rc-empty-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: #ecfdf5;
+    color: #10a879;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.rc-empty-copy h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 4px;
+}
+
+.rc-empty-copy p {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0;
+}
+
+.rc-create-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    background: #10a879;
+    color: #ffffff;
+    border: none;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.rc-create-btn:hover {
+    background: #0b3d2e;
     transform: translateY(-1px);
 }
 
-.trainer-home-batches .batches-join-btn.disabled {
-    background: var(--trainer-divider);
-    color: var(--trainer-text-light);
+/* ==========================================================================
+   RIGHT SIDEBAR (35%) - Trainer Sidebar Widgets
+   ========================================================================== */
+
+.trainer-split-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: sticky;
+    top: 24px;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.trainer-sidebar-widget {
+    background: var(--color-surface, #ffffff);
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: 24px;
+    padding: 22px;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.widget-header-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.widget-icon-pill {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.widget-icon-pill.video-pill {
+    background: #ecfdf5;
+    color: #10a879;
+    font-size: 20px;
+}
+
+.widget-icon-pill.lightning-pill {
+    background: #fef3c7;
+    color: #d97706;
+    font-size: 18px;
+}
+
+.widget-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    display: block;
+    line-height: 1.2;
+}
+
+.widget-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 2px 0 0;
+    letter-spacing: -0.01em;
+}
+
+.live-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #047857;
+    background: #ecfdf5;
+    padding: 4px 10px;
+    border-radius: 999px;
+}
+
+@keyframes livePulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.4;
+        transform: scale(1.3);
+    }
+}
+
+.live-pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10a879;
+    animation: livePulse 1.8s ease-in-out infinite;
+}
+
+/* Next Live Class Widget Content */
+.next-class-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.next-class-batch-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.next-class-topic {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.next-class-time-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.next-class-time-box .time-box-icon {
+    font-size: 22px;
+    color: #10a879;
+    flex-shrink: 0;
+}
+
+.time-box-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.time-box-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #64748b;
+}
+
+.time-box-value {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.join-meet-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 44px;
+    padding: 11px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.join-meet-btn .btn-icon {
+    font-size: 19px;
+}
+
+.join-meet-btn.active {
+    background: linear-gradient(135deg, #10a879 0%, #059669 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(16, 168, 121, 0.35);
+}
+
+.join-meet-btn.active:hover {
+    background: linear-gradient(135deg, #0b3d2e 0%, #047857 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(11, 61, 46, 0.28);
+    color: #ffffff;
+}
+
+.join-meet-btn.disabled {
+    background: #f1f5f9;
+    color: #94a3b8;
     cursor: not-allowed;
 }
 
-/* RESPONSIVENESS */
+.next-class-empty {
+    padding: 20px 14px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 14px;
+}
 
-@media (max-width: 1200px) {
-    .trainer-home-batches .batches-dashboard-layout {
-        flex-direction: column;
-        align-items: stretch;
+.empty-calendar-icon {
+    font-size: 28px;
+    color: #94a3b8;
+}
+
+.empty-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+}
+
+.empty-sub {
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* Quick Actions Widget Content */
+.quick-actions-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.quick-action-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 11px 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.quick-action-item:hover {
+    background: #ffffff;
+    border-color: rgba(16, 168, 121, 0.4);
+    transform: translateX(3px);
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+}
+
+.action-icon-wrap {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.action-icon-wrap.emerald {
+    background: #ecfdf5;
+    color: #10a879;
+}
+
+.action-icon-wrap.violet {
+    background: #f5f3ff;
+    color: #7c3aed;
+}
+
+.action-icon-wrap.sky {
+    background: #f0f9ff;
+    color: #0284c7;
+}
+
+.action-icon-wrap.teal {
+    background: #f0fdfa;
+    color: #0d9488;
+}
+
+.action-copy {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.action-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.3;
+}
+
+.action-desc {
+    font-size: 11.5px;
+    color: #64748b;
+    line-height: 1.2;
+}
+
+.action-arrow {
+    margin-left: auto;
+    color: #94a3b8;
+    font-size: 14px;
+    transition: transform 0.2s ease, color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.quick-action-item:hover .action-arrow {
+    color: #10a879;
+    transform: translateX(3px);
+}
+
+/* ==========================================================================
+   RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .trainer-dashboard-split-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
     }
 
-    .trainer-home-batches .batches-sidebar {
-        width: 100%;
+    .trainer-split-sidebar {
         position: static;
     }
 }
 
 @media (max-width: 768px) {
-    .trainer-home-batches .container {
-        padding: 0 var(--trainer-spacing-md);
+    .trainer-home-batches-card,
+    .trainer-overview-card,
+    .trainer-sidebar-widget {
+        padding: 18px;
+        border-radius: 20px;
     }
 
-    .trainer-home-batches .batches-batch-grid {
-        grid-template-columns: 1fr;
-        gap: var(--trainer-spacing-md);
+    .batches-title,
+    .overview-title {
+        font-size: 20px;
     }
 
-    .trainer-home-batches .batches-head h2 {
-        font-size: 22px;
-    }
-
-    .trainer-home-batches .batches-batch-card {
+    .batches-batch-card {
         padding: 16px;
     }
 
-    .trainer-home-batches .batches-batch-title {
-        font-size: 17px;
-        font-weight: 700;
-    }
-
-    .trainer-home-batches .batches-sidebar-card {
-        padding: var(--trainer-spacing-md);
-    }
-
-    .trainer-home-batches .batches-class-title {
+    .batches-batch-title {
         font-size: 16px;
-        font-weight: 700;
+    }
+
+    .recent-course-main {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .recent-course-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .rc-action-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
 
 @media (max-width: 480px) {
-    .trainer-home-batches .container {
-        padding: 0 var(--trainer-spacing-sm);
-    }
-
-    .trainer-home-batches .batches-head {
+    .batches-head,
+    .overview-card-head {
+        flex-direction: column;
         align-items: flex-start;
-        flex-direction: column;
+        gap: 10px;
     }
 
-    .trainer-home-batches .batches-head h2 {
-        font-size: 20px;
-    }
-
-    .trainer-home-batches .batches-batch-card {
-        padding: 14px;
-    }
-
-    .trainer-home-batches .batches-batch-title {
-        font-size: 16px;
-        font-weight: 700;
-    }
-
-    .trainer-home-batches .batches-batch-info-item {
-        font-size: 12px;
-    }
-
-    .trainer-home-batches .batches-arrow-btn {
-        width: 34px;
-        height: 34px;
-        min-width: 34px;
-    }
-
-    .trainer-home-batches .batches-class-footer {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px;
-    }
-
-    .trainer-home-batches .batches-join-btn {
+    .batches-view-all,
+    .overview-link-btn {
         width: 100%;
-        text-align: center;
-        padding: 10px 16px;
+        justify-content: center;
     }
 
-    .trainer-home-batches .batches-class-card {
-        padding: var(--trainer-spacing-sm);
+    .batches-batch-head {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .batches-meta-row {
+        gap: 10px;
+    }
+
+    .quick-action-item {
+        padding: 10px 12px;
     }
 }

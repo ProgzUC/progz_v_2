@@ -31,6 +31,11 @@
   width: 100%;
 }
 
+.trainer-dashboard-batches-wrap {
+  padding-top: 40px;
+  padding-bottom: 80px;
+}
+
 @media (max-width: 1200px) {
   .trainer-app .container {
     padding: 0 var(--trainer-spacing-md);

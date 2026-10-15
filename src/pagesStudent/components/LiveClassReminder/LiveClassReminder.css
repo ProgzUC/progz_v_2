@@ -1,0 +1,458 @@
+/* ================================================================
+   LIVE CLASS COUNTDOWN & REMINDER POPUP — ProgZ Forest & Mint Theme
+   Floating widget that detects active & upcoming classes in real-time
+   ================================================================ */
+
+/* ── FLOATING EXPANDED CARD ── */
+.live-class-popup-card {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 260px;
+  max-width: calc(100vw - 32px);
+  background: color-mix(in srgb, var(--color-surface, #ffffff) 52%, transparent);
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  border: 1px solid color-mix(in srgb, #ffffff 70%, transparent);
+  border-radius: 14px;
+  padding: 0.65rem 0.7rem;
+  box-shadow: 0 10px 28px rgba(11, 61, 46, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  color: var(--color-text, #073b32);
+  z-index: 1060;
+  box-sizing: border-box;
+  animation: slideUpFade 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--font-family-base, "Lato", sans-serif);
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* State highlights */
+.live-class-popup-card.card-live-now {
+  border-color: rgba(239, 68, 68, 0.4);
+  box-shadow: 0 10px 28px rgba(239, 68, 68, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.live-class-popup-card.card-starting-soon {
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 10px 28px rgba(245, 158, 11, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+/* ── TOP HEADER BAR ── */
+.popup-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.popup-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.45rem;
+  border-radius: 999px;
+  background: rgba(16, 168, 121, 0.12);
+  color: var(--color-primary, #0b3d2e);
+  border: 1px solid rgba(16, 168, 121, 0.22);
+}
+
+.card-live-now .popup-status-badge {
+  background: rgba(239, 68, 68, 0.2);
+  color: #fca5a5;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.card-starting-soon .popup-status-badge {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fcd34d;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+/* Pulsing radar dots */
+.badge-pulse-live {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #ef4444;
+  box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  animation: pulseRed 1.6s infinite;
+}
+
+@keyframes pulseRed {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.8);
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.badge-pulse-soon {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #f59e0b;
+  box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+  animation: pulseAmber 1.6s infinite;
+}
+
+@keyframes pulseAmber {
+  0% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.8);
+  }
+
+  70% {
+    box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0);
+  }
+}
+
+.badge-dot-upcoming {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #34d399;
+}
+
+/* Control buttons (minimize, dismiss) */
+.popup-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.popup-btn-icon {
+  background: color-mix(in srgb, var(--color-surface, #ffffff) 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border, #e2e8f0) 80%, transparent);
+  color: var(--color-text-secondary, #475569);
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.popup-btn-icon:hover {
+  background: rgba(16, 168, 121, 0.12);
+  color: var(--color-primary, #0b3d2e);
+}
+
+/* ── CARD BODY ── */
+.popup-body {
+  margin-bottom: 0.65rem;
+}
+
+.popup-course-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 0 0.15rem 0;
+  color: var(--color-text, #073b32);
+  letter-spacing: -0.01em;
+}
+
+.popup-batch-name {
+  font-size: 0.72rem;
+  color: var(--color-primary, #0b7a58);
+  margin: 0 0 0.35rem 0;
+  font-weight: 600;
+}
+
+.popup-time-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.7rem;
+  color: var(--color-text-secondary, #475569);
+  margin-bottom: 0.55rem;
+}
+
+/* ── COUNTDOWN TILES GRID ── */
+.popup-countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(46px, 1fr));
+  gap: 0.3rem;
+  margin-top: 0.35rem;
+}
+
+.countdown-tile {
+  background: color-mix(in srgb, var(--color-surface, #ffffff) 35%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border, #e2e8f0) 70%, transparent);
+  border-radius: 8px;
+  padding: 0.28rem 0.15rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.countdown-digit {
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--color-text, #073b32);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.countdown-digit.digit-active {
+  color: #34d399;
+}
+
+.countdown-unit {
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted, #64748b);
+  margin-top: 1px;
+}
+
+/* Live Session Banner */
+.popup-live-banner {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.28);
+  border-radius: 8px;
+  padding: 0.45rem 0.55rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.2rem;
+}
+
+.live-banner-ring {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+  flex-shrink: 0;
+}
+
+.live-banner-text {
+  font-size: 0.7rem;
+  color: #b91c1c;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* ── CARD FOOTER & ACTIONS ── */
+.popup-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.popup-btn-join {
+  flex: 1;
+  height: 32px;
+  background: linear-gradient(135deg, #10a879 0%, #059669 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(16, 168, 121, 0.28);
+  transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease;
+}
+
+.popup-btn-join:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(16, 168, 121, 0.45);
+  filter: brightness(1.08);
+}
+
+.popup-btn-join.btn-glow-pulse {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  box-shadow: 0 4px 18px rgba(239, 68, 68, 0.45);
+  animation: pulseBtn 1.8s infinite;
+}
+
+@keyframes pulseBtn {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.join-btn-icon {
+  font-size: 1rem;
+}
+
+.join-btn-ext {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.popup-btn-copy {
+  width: 32px;
+  height: 32px;
+  background: color-mix(in srgb, var(--color-surface, #ffffff) 40%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-border, #e2e8f0) 80%, transparent);
+  color: var(--color-text, #073b32);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.popup-btn-copy:hover {
+  background: rgba(16, 168, 121, 0.12);
+  border-color: rgba(16, 168, 121, 0.35);
+  color: var(--color-primary, #0b3d2e);
+}
+
+.copy-ok {
+  color: #34d399;
+}
+
+/* ── MINIMIZED DOCKED PILL VIEW ── */
+.live-reminder-pill {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: color-mix(in srgb, var(--color-surface, #ffffff) 52%, transparent);
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  border: 1px solid color-mix(in srgb, #ffffff 70%, transparent);
+  color: var(--color-text, #073b32);
+  padding: 0.4rem 0.7rem 0.4rem 0.6rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  box-shadow: 0 8px 22px rgba(11, 61, 46, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  z-index: 1060;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+  font-family: var(--font-family-base, "Lato", sans-serif);
+}
+
+.live-reminder-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45);
+  border-color: #34d399;
+}
+
+.reminder-pill-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 8px #34d399;
+  flex-shrink: 0;
+}
+
+.live-reminder-pill.is-live {
+  border-color: rgba(239, 68, 68, 0.6);
+  box-shadow: 0 10px 28px rgba(239, 68, 68, 0.3);
+}
+
+.live-reminder-pill.is-live .reminder-pill-dot {
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+  animation: pulseRed 1.6s infinite;
+}
+
+.live-reminder-pill.is-soon .reminder-pill-dot {
+  background: #f59e0b;
+  box-shadow: 0 0 10px #f59e0b;
+  animation: pulseAmber 1.6s infinite;
+}
+
+.reminder-pill-title {
+  font-size: 0.72rem;
+  color: var(--color-text-secondary, #475569);
+}
+
+.reminder-pill-title strong {
+  color: var(--color-primary, #0b3d2e);
+}
+
+.live-reminder-pill.is-live .reminder-pill-title strong {
+  color: #fca5a5;
+}
+
+.pill-expand-btn {
+  background: rgba(16, 168, 121, 0.1);
+  border: none;
+  color: var(--color-primary, #0b3d2e);
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  margin-left: 0.15rem;
+}
+
+[data-theme="dark"] .live-class-popup-card,
+html.dark-mode .live-class-popup-card,
+[data-theme="dark"] .live-reminder-pill,
+html.dark-mode .live-reminder-pill {
+  background: color-mix(in srgb, var(--color-surface, #12141d) 48%, transparent);
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 480px) {
+  .live-class-popup-card {
+    bottom: 16px;
+    right: 16px;
+    left: 16px;
+    width: auto;
+    padding: 0.65rem 0.7rem;
+  }
+
+  .live-reminder-pill {
+    bottom: 16px;
+    right: 16px;
+  }
+}

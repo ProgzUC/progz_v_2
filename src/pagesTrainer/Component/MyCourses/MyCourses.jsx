@@ -133,15 +133,23 @@ const MyCourses = () => {
     return (
         <div className="my-courses-container trainer-myCourses">
             <section className="tc-hero">
-                <p className="tc-kicker">
-                    <span className="tc-kicker-dot" aria-hidden="true" />
-                    Course studio
-                </p>
-                <h1>Courses you can shape.</h1>
-                <p className="tc-lead">Build a curriculum, open a lesson, or start something new for the next batch.</p>
-                <button type="button" className="tc-create" onClick={() => navigate('/trainer-dashboard/courses/new')}>
+                <div className="tc-hero-left">
+                    <p className="tc-kicker">
+                        <span className="tc-kicker-dot" aria-hidden="true" />
+                        Course studio
+                    </p>
+                    <h1>Build and Manage Your Courses</h1>
+                    <p className="tc-lead">
+                        Create courses, organize curriculum, and manage learning content for every batch — all in one place.
+                    </p>
+                </div>
+                <button
+                    type="button"
+                    className="tc-create"
+                    onClick={() => navigate('/trainer-dashboard/courses/new')}
+                >
                     <BiPlus aria-hidden="true" />
-                    Create course
+                    <span>Create Course</span>
                 </button>
             </section>
 

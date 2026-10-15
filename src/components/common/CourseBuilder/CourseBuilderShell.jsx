@@ -16,11 +16,9 @@ export default function CourseBuilderShell({
     <div className="course-builder-page">
       <div className="course-builder-layout">
         <aside className="course-builder-sidebar" aria-label="Course builder steps">
-          {courseName && (
-            <div className="sidebar-course-title" title={courseName}>
-              {courseName}
-            </div>
-          )}
+          <div className="sidebar-course-title" title={courseName ? `${courseName} • Course Editor` : "Course Editor"}>
+            Course Editor
+          </div>
 
           <nav className="course-builder-rail-nav">
             {COURSE_BUILDER_STEPS.map((step) => (

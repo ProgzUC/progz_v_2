@@ -1,524 +1,585 @@
-.hero-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  /* Set to 100% of viewport height */
-  display: flex;
-  align-items: center;
-  color: #ffffff;
-  overflow: hidden;
-  background: #000;
-  /* Fallback */
-}
+/* ================================================================
+   STUDENT LANDING HERO — Deep Forest & Mint Theme
+   Matching reference UI: Left typography + Right dual-capsule collage
+   ================================================================ */
 
-/* Background Image with Entrance Animation */
-.hero-container::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image: var(--hero-bg);
-  background-size: cover;
-  background-position: center;
-  z-index: 0;
-  transform-origin: center center;
-  animation: heroBgZoom 20s ease-out forwards;
-}
-
-@keyframes heroBgZoom {
-  0% {
-    transform: scale(1.1);
-    filter: blur(2px);
-  }
-
-  100% {
-    transform: scale(1.0);
-    filter: blur(0px);
-  }
-}
-
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg,
-      rgba(10, 11, 13, 0.75) 0%,
-      rgba(16, 24, 40, 0.4) 55%,
-      rgba(255, 255, 255, 0) 100%);
-  z-index: 1;
-}
-
-/* --- VECTOR FIX --- */
-.vector {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  background-repeat: no-repeat;
-  background-size: contain;
-  pointer-events: none;
-  max-width: 100%;
-}
-
-.vector-1 {
-  right: 0;
-  width: 30%;
-  top: -5%;
-  z-index: 3;
-  opacity: 0.5;
-}
-
-.vector-2 {
-  right: 0;
-  width: 90%;
-  top: 5%;
-  z-index: 2;
-  opacity: 0.4;
-}
-
-.vector-3 {
-  right: 0;
-  width: 10%;
-  bottom: 10px;
-  z-index: 4;
-}
-
-/* Hero content */
-.student-hero-section .hero-content {
-  position: relative;
-  z-index: 5;
-  max-width: 800px;
-  padding-left: 60px;
-  margin-top: -20px;
-  /* Slight offset for better optical balance */
-}
-
-.student-hero-section .hero-content .hero-title {
-  font-size: clamp(28px, 4vw, 48px);
-  /* Fluid typography */
-  line-height: 1.1;
-  margin: 0 0 20px;
-  font-weight: 600;
-  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-}
-
-.hero-sub {
-  font-size: clamp(14px, 1.5vw, 16px);
-  color: #f0f0f0;
-  margin: 0 0 40px;
-  max-width: 600px;
-  font-weight: 400;
-  line-height: 1.6;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 20px;
-}
-
-.hero-bottom-fade {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 250px;
-  background: linear-gradient(180deg, rgba(228, 228, 228, 0) 0%, #E4E4E4 100%);
-  z-index: 6;
-  pointer-events: none;
-}
-
-/* --- Scroll Indicator --- */
-.scroll-indicator {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  color: white;
-  opacity: 0.8;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-
-  0%,
-  20%,
-  50%,
-  80%,
-  100% {
-    transform: translateX(-50%) translateY(0);
-  }
-
-  40% {
-    transform: translateX(-50%) translateY(-10px);
-  }
-
-  60% {
-    transform: translateX(-50%) translateY(-5px);
-  }
-}
-
-.scroll-text {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-weight: 500;
-}
-
-.mouse-wheel {
-  width: 22px;
-  height: 36px;
-  border: 2px solid white;
-  border-radius: 20px;
-  position: relative;
-}
-
-.mouse-wheel::before {
-  content: '';
-  width: 4px;
-  height: 4px;
-  background: white;
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 50%;
-  animation: scrollAnim 1.5s infinite;
-}
-
-@keyframes scrollAnim {
-  0% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(15px);
-  }
-}
-
-/* -------------------------------------------------- */
-/* RESPONSIVE HERO SECTION */
-/* -------------------------------------------------- */
-
-/* Tablet View */
-@media (max-width: 1024px) {
-  .hero-container {
-    height: 100vh;
-    min-height: 500px;
-  }
-
-  .student-hero-section .hero-content {
-    padding-left: 40px;
-    max-width: 90%;
-  }
-}
-
-/* Mobile View */
-@media (max-width: 768px) {
-  .hero-container {
+.student-hero.landing-hero {
+    position: relative;
     min-height: 100vh;
-    padding: 0;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .student-hero-section .hero-content {
-    padding: 0 20px;
-    text-align: center;
+    background: radial-gradient(circle at 85% 20%, #0d4635 0%, #072a20 60%, #052119 100%);
+    background-color: #072a20;
+    color: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
-    max-width: 100%;
-    margin-top: -60px;
-    /* Optical adjustment for mobile */
-  }
-
-  .student-hero-section .hero-content .hero-title {
-    font-size: 30px;
-    margin-bottom: 20px;
-  }
-
-  .hero-sub {
-    font-size: 14px;
-    margin-bottom: 40px;
-    padding: 0 10px;
-    line-height: 1.5;
-  }
-
-  .hero-buttons {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
     justify-content: center;
+    padding: calc(var(--navbar-height, 70px) + 2rem) 1.5rem 6.5rem;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Subtle ambient backdrop glows */
+.student-hero .hero-ambient-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.student-hero .hero-ambient-glow.glow-top {
+    width: 480px;
+    height: 480px;
+    background: rgba(16, 168, 121, 0.16);
+    top: -100px;
+    right: -50px;
+}
+
+.student-hero .hero-ambient-glow.glow-bottom {
+    width: 420px;
+    height: 420px;
+    background: rgba(167, 243, 208, 0.08);
+    bottom: -80px;
+    left: -60px;
+}
+
+/* Container */
+.student-hero .landing-hero-container {
+    position: relative;
+    z-index: 2;
+    max-width: 1240px;
     width: 100%;
-    gap: 15px;
-  }
-
-  .student-hero-btn {
-    position: relative !important;
-    left: auto !important;
-    top: auto !important;
-    width: calc(100% - 40px) !important;
-    max-width: 320px !important;
-    margin: 0 auto !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
-  .hero-bottom-fade {
-    height: 150px;
-  }
-
-  .scroll-indicator {
-    bottom: 20px;
-    transform: translateX(-50%) scale(0.8);
-  }
-
-  .vector {
-    display: none;
-  }
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 3.5rem;
 }
 
-/* Landscape / Small Height fix */
-@media (max-height: 500px) {
-  .hero-container {
-    height: auto;
-    min-height: 600px;
-    padding: 100px 0;
-  }
-
-  .scroll-indicator {
-    display: none;
-  }
+/* ── LEFT COLUMN ── */
+.student-hero .landing-hero-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 640px;
 }
 
-/* Floating Animation Keyframes */
-@keyframes floatY {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-15px);
-  }
+.student-hero .landing-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    background: rgba(167, 243, 208, 0.12);
+    border: 1px solid rgba(167, 243, 208, 0.25);
+    color: #a7f3d0;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(6px);
 }
 
-/* Apply Floating to Vectors (Desktop) */
-@media (min-width: 1025px) {
-  .vector-1 {
-    animation: floatY 7s ease-in-out infinite;
-  }
-
-  .vector-2 {
-    animation: floatY 9s ease-in-out 1s infinite;
-  }
-
-  .vector-3 {
-    animation: floatY 8s ease-in-out 2s infinite;
-  }
+.student-hero .landing-badge-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #34d399;
+    box-shadow: 0 0 10px #34d399;
+    animation: studentPulseDot 2s infinite ease-in-out;
 }
 
-/* Small Mobile View */
-@media (max-width: 480px) {
-  .hero-content .hero-title {
-    font-size: 24px;
-  }
+@keyframes studentPulseDot {
 
-  .hero-sub {
-    font-size: 13px;
-  }
+    0%,
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 
-  .btn {
-    font-size: 15px;
-  }
+    50% {
+        transform: scale(1.3);
+        opacity: 0.7;
+    }
 }
 
-/* -------------------------------------------------- */
-
-.hero-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  /* Allows wrapping on smaller windows */
-  gap: 16px;
-  margin-top: 10px;
+.student-hero .landing-hero-title {
+    font-size: clamp(2.4rem, 4.4vw, 3.85rem);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+    color: #ffffff;
+    margin: 0 0 1.25rem 0;
 }
 
-.student-hero-btn {
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 0 24px !important;
-  height: 50px;
-  width: auto;
-  /* Dynamic width */
-  min-width: 180px;
-  /* Reduced min-width */
-  max-width: 100%;
-  /* Prevents overflow */
-  border: none !important;
-  cursor: pointer;
-  text-decoration: none;
-  box-sizing: border-box;
-  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
-  border-radius: 12px;
-  position: relative;
-  z-index: 10;
+.student-hero .landing-hero-title .highlight-text {
+    background: linear-gradient(135deg, #a7f3d0 0%, #34d399 50%, #10b981 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline;
 }
 
-/* Button 1: Continue Learning */
-.continue-learning-btn {
-  background: #198754;
-  box-shadow: 0px 4px 15px rgba(25, 135, 84, 0.3);
+.student-hero .landing-hero-subtitle {
+    font-size: clamp(1rem, 1.35vw, 1.18rem);
+    color: rgba(255, 255, 255, 0.82);
+    line-height: 1.6;
+    margin: 0 0 2rem 0;
+    max-width: 540px;
 }
 
-/* Button 2: Browse All Courses */
-.browse-all-btn {
-  background: #FFFFFF;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+.student-hero .landing-hero-subtitle strong {
+    color: #a7f3d0;
+    font-weight: 700;
 }
 
-.student-hero-btn .btn-text {
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 400;
-  font-size: 15px;
-  line-height: 1;
+/* Actions Buttons */
+.student-hero .landing-hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.15rem;
+    margin-bottom: 2.25rem;
+    flex-wrap: wrap;
 }
 
-.continue-learning-btn .btn-text {
-  color: #FFFFFF;
+.student-hero .landing-btn-primary {
+    background: #a7f3d0;
+    color: #06281e;
+    border: none;
+    font-size: 1.02rem;
+    font-weight: 700;
+    padding: 0.9rem 1.85rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 6px 20px rgba(167, 243, 208, 0.28);
 }
 
-.browse-all-btn .btn-text {
-  color: #198754;
+.student-hero .landing-btn-primary:hover {
+    background: #6ee7b7;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(167, 243, 208, 0.42);
+    color: #06281e;
 }
 
-.continue-learning-btn .icon-svg {
-  color: #FFFFFF;
-  font-size: 14px;
+.student-hero .landing-btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    border: 1.5px solid rgba(167, 243, 208, 0.45);
+    font-size: 1.02rem;
+    font-weight: 700;
+    padding: 0.88rem 1.75rem;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    cursor: pointer;
+    text-decoration: none;
+    backdrop-filter: blur(8px);
+    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.browse-all-btn .icon-svg {
-  color: #198754;
-  font-size: 18px;
+.student-hero .landing-btn-secondary:hover {
+    background: rgba(167, 243, 208, 0.16);
+    border-color: #a7f3d0;
+    color: #a7f3d0;
+    transform: translateY(-2px);
 }
 
-/* -------------------------------------------------- */
-/* ATTRACTIVE ANIMATIONS & EFFECTS */
-/* -------------------------------------------------- */
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Social Proof (Avatar Stack + 5 Stars) */
+.student-hero .landing-social-proof {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(4, 25, 19, 0.45);
+    border: 1px solid rgba(167, 243, 208, 0.15);
+    padding: 0.65rem 1.15rem;
+    border-radius: 999px;
+    backdrop-filter: blur(8px);
 }
 
-/* Animate Hero Text */
-.student-hero-section .hero-content .hero-title {
-  opacity: 0;
-  animation: fadeInUp 0.8s ease-out forwards;
-  /* Premium Text Shadow */
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+.student-hero .avatar-stack {
+    display: flex;
+    align-items: center;
 }
 
-.hero-sub {
-  opacity: 0;
-  animation: fadeInUp 0.8s ease-out 0.2s forwards;
+.student-hero .stack-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #072a20;
+    margin-left: -8px;
+    background-color: #0b3d2e;
 }
 
-/* Animate Buttons Entrance */
-.student-hero-btn {
-  opacity: 0;
-  animation: fadeInUp 0.8s ease-out 0.5s forwards;
+.student-hero .stack-avatar:first-child {
+    margin-left: 0;
 }
 
-/* Shine Effect for Primary Button (Continue Learning) */
-.continue-learning-btn {
-  overflow: hidden;
-  /* Mask the shine sliding through */
+.student-hero .social-proof-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-/* The Shine Bar */
-.continue-learning-btn::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(to right,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(255, 255, 255, 0.4) 50%,
-      rgba(255, 255, 255, 0) 100%);
-  transform: skewX(-25deg);
-  animation: btnShine 4s infinite;
-  /* Periodic shine */
-  pointer-events: none;
+.student-hero .stars-row {
+    display: flex;
+    gap: 2px;
+    color: #34d399;
+    font-size: 0.9rem;
+    line-height: 1;
 }
 
-@keyframes btnShine {
-  0% {
-    left: -100%;
-  }
-
-  20% {
-    left: 200%;
-  }
-
-  /* Pass through quickly */
-  100% {
-    left: 200%;
-  }
-
-  /* Wait */
+.student-hero .star-icon {
+    display: inline-block;
 }
 
-/* Subtle Pulse for the Icon in Primary Button */
-.continue-learning-btn .btn-icon {
-  animation: iconPulse 3s infinite ease-in-out;
+.student-hero .social-proof-text {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.85);
 }
 
-@keyframes iconPulse {
-
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.15);
-  }
+.student-hero .social-proof-text strong {
+    color: #a7f3d0;
 }
 
-/* Enhanced Hover for Buttons */
-/* Enhanced Hover for Buttons */
-.student-hero-btn:hover {
-  transform: translateY(-4px) scale(1.02) !important;
-  /* Lift and slight grow */
-  /* Re-assert opacity 1 */
-  opacity: 1;
+/* ── RIGHT COLUMN: DUAL CAPSULE VISUAL COLLAGE ── */
+.student-hero .landing-hero-right {
+    position: relative;
+    width: 100%;
+    height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.continue-learning-btn:hover {
-  box-shadow: 0 10px 25px rgba(25, 135, 84, 0.4) !important;
-  /* Green Glow */
+/* Capsule Frames */
+.student-hero .capsule-frame {
+    position: absolute;
+    overflow: hidden;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    border: 3px solid rgba(167, 243, 208, 0.25);
+    transition: transform 0.4s ease, border-color 0.4s ease;
 }
 
-.browse-all-btn:hover {
-  box-shadow: 0 10px 25px rgba(255, 255, 255, 0.5) !important;
-  /* White/Bright Glow */
-  background: #f8f9fa;
-  /* Slight dim on hover */
+.student-hero .capsule-frame:hover {
+    transform: translateY(-4px);
+    border-color: rgba(167, 243, 208, 0.5);
+}
+
+.student-hero .capsule-frame.frame-top {
+    width: 220px;
+    height: 300px;
+    border-radius: 130px;
+    top: 15px;
+    left: 20px;
+    z-index: 2;
+}
+
+.student-hero .capsule-frame.frame-bottom {
+    width: 240px;
+    height: 330px;
+    border-radius: 140px 140px 40px 40px;
+    bottom: 10px;
+    right: 30px;
+    z-index: 3;
+}
+
+.student-hero .capsule-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(1.08) contrast(1.02);
+}
+
+.student-hero .capsule-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(7, 42, 32, 0) 65%, rgba(7, 42, 32, 0.45) 100%);
+    pointer-events: none;
+}
+
+/* Floating Badges */
+.student-hero .floating-badge {
+    position: absolute;
+    background: rgba(10, 48, 37, 0.85);
+    border: 1px solid rgba(167, 243, 208, 0.3);
+    backdrop-filter: blur(14px);
+    border-radius: 999px;
+    padding: 0.55rem 1.15rem 0.55rem 0.65rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    z-index: 5;
+    animation: studentFloatSlow 4s ease-in-out infinite alternate;
+}
+
+.student-hero .floating-badge.badge-mentors {
+    top: 50px;
+    right: 0px;
+    animation-delay: 0s;
+}
+
+.student-hero .floating-badge.badge-lessons {
+    bottom: 50px;
+    left: 30px;
+    animation-delay: 1.5s;
+}
+
+@keyframes studentFloatSlow {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-8px);
+    }
+}
+
+.student-hero .badge-icon-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.student-hero .badge-icon-circle.mentor-circle {
+    background: #7dd3fc;
+    color: #034f75;
+}
+
+.student-hero .badge-icon-circle.lesson-circle {
+    background: #6ee7b7;
+    color: #064e3b;
+}
+
+.student-hero .badge-text-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.student-hero .badge-label-small {
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.student-hero .badge-label-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.15;
+}
+
+/* Decorative Stars */
+.student-hero .decorative-star {
+    position: absolute;
+    pointer-events: none;
+    z-index: 4;
+}
+
+.student-hero .decorative-star.star-top {
+    top: 25px;
+    right: 170px;
+    animation: studentPulseStar 3s ease-in-out infinite alternate;
+}
+
+.student-hero .decorative-star.star-bottom {
+    bottom: 30px;
+    right: 230px;
+    animation: studentPulseStar 2.6s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes studentPulseStar {
+    0% {
+        transform: scale(0.9) rotate(0deg);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: scale(1.15) rotate(15deg);
+        opacity: 1;
+    }
+}
+
+/* ── BOTTOM STATS BAR ── */
+.student-hero .landing-stats-bar {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    background: rgba(10, 48, 37, 0.75);
+    border: 1px solid rgba(167, 243, 208, 0.25);
+    backdrop-filter: blur(14px);
+    padding: 0.85rem 2rem;
+    border-radius: 999px;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3);
+    margin-top: 2.5rem;
+}
+
+.student-hero .landing-stat-box {
+    display: flex;
+    align-items: baseline;
+    gap: 0.55rem;
+}
+
+.student-hero .landing-stat-num {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #a7f3d0;
+    line-height: 1;
+}
+
+.student-hero .landing-stat-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.85);
+    text-transform: capitalize;
+}
+
+.student-hero .landing-stat-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(167, 243, 208, 0.25);
+}
+
+/* ── SCROLL HINT BUTTON ── */
+.student-hero .hero-scroll-hint {
+    position: relative;
+    z-index: 3;
+    margin-top: 1.75rem;
+    margin-bottom: -1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: rgba(167, 243, 208, 0.85);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    background: rgba(167, 243, 208, 0.08);
+    border: 1px solid rgba(167, 243, 208, 0.2);
+    padding: 0.4rem 1.1rem;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    animation: studentBounce 2s ease-in-out infinite;
+}
+
+.student-hero .hero-scroll-hint:hover {
+    background: rgba(167, 243, 208, 0.2);
+    color: #ffffff;
+    border-color: #a7f3d0;
+    transform: translateY(2px);
+}
+
+.student-hero .hero-scroll-hint svg {
+    width: 16px;
+    height: 16px;
+}
+
+@keyframes studentBounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(4px);
+    }
+}
+
+/* ── RESPONSIVENESS ── */
+@media (max-width: 1080px) {
+    .student-hero .landing-hero-container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        text-align: center;
+    }
+
+    .student-hero .landing-hero-left {
+        align-items: center;
+        max-width: 100%;
+    }
+
+    .student-hero .landing-hero-subtitle {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .student-hero .landing-hero-actions {
+        justify-content: center;
+    }
+
+    .student-hero .landing-hero-right {
+        height: 420px;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .student-hero.landing-hero {
+        padding: calc(var(--navbar-height, 70px) + 1.25rem) 1.2rem 4rem;
+        min-height: auto;
+    }
+
+    .student-hero .landing-hero-title {
+        font-size: 2.2rem;
+    }
+
+    .student-hero .landing-hero-right {
+        height: 360px;
+    }
+
+    .student-hero .capsule-frame.frame-top {
+        width: 160px;
+        height: 220px;
+        left: 10px;
+    }
+
+    .student-hero .capsule-frame.frame-bottom {
+        width: 180px;
+        height: 240px;
+        right: 15px;
+    }
+
+    .student-hero .floating-badge.badge-mentors {
+        top: 20px;
+        right: -10px;
+        padding: 0.4rem 0.85rem 0.4rem 0.5rem;
+    }
+
+    .student-hero .floating-badge.badge-lessons {
+        bottom: 20px;
+        left: 10px;
+        padding: 0.4rem 0.85rem 0.4rem 0.5rem;
+    }
+
+    .student-hero .landing-stats-bar {
+        flex-direction: column;
+        border-radius: 20px;
+        gap: 0.75rem;
+        padding: 1rem 1.5rem;
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .student-hero .landing-stat-divider {
+        display: none;
+    }
 }

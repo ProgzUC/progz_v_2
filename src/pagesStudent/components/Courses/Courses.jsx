@@ -24,7 +24,7 @@ export default function Courses() {
   }, [courses, scope]);
 
   return (
-    <section className="home-catalog">
+    <section className="home-catalog" id="student-courses-section">
       <div className="student-container">
         <div className="home-catalog-head">
           <div>

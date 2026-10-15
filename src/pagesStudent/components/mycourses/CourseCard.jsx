@@ -158,6 +158,17 @@ function LargeCourseCard({ course, onContinue }) {
                         <i className="bi bi-play-fill" aria-hidden="true"></i>
                         Continue
                     </button>
+                    {course.meetLink ? (
+                        <a
+                            href={course.meetLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="student-live-meet-btn"
+                        >
+                            <i className="bi bi-camera-video" aria-hidden="true"></i>
+                            Join Live Class
+                        </a>
+                    ) : null}
                     {batchId ? (
                         <Link
                             className="student-attendance-link"

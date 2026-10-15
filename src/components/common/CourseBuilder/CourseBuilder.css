@@ -18,7 +18,7 @@
   width: 100%;
   max-width: none;
   margin: 0 auto;
-  align-items: stretch;
+  align-items: flex-start;
 }
 
 .course-builder-sidebar {
@@ -31,12 +31,21 @@
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
   position: sticky;
   top: 24px;
-  align-self: stretch;
-  min-height: auto;
-  height: auto;
-  overflow: hidden;
-  z-index: 2;
+  align-self: flex-start;
+  height: fit-content;
+  max-height: calc(100vh - 48px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  z-index: 20;
   transition: width 0.22s ease, flex-basis 0.22s ease, padding 0.22s ease;
+}
+
+.course-builder-sidebar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .course-builder-sidebar:hover,
@@ -47,7 +56,8 @@
 }
 
 .trainer-app .course-builder-sidebar {
-  top: var(--page-top-offset);
+  top: var(--page-top-offset, calc(var(--navbar-height, 70px) + 24px));
+  max-height: calc(100vh - var(--page-top-offset, 94px) - 24px);
 }
 
 .course-builder-rail-nav {
@@ -63,9 +73,10 @@
 }
 
 .sidebar-course-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: #555;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--color-text, #073B32);
+  letter-spacing: -0.01em;
   padding: 0 10px;
   margin: 0 0 8px;
   line-height: 1.4;

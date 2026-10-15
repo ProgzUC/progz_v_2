@@ -2,6 +2,7 @@ import React from 'react'
 import { Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom'
 import Navbar from './Component/Navbar/Navbar'
 import Home from './Component/Home/Home'
+import Active from './Component/Home/Batches'
 import MyCourses from './Component/MyCourses/MyCourses'
 import CourseView from './Component/MyCourses/CourseView'
 import { CourseBuilder } from '../features/course-builder'
@@ -9,6 +10,7 @@ import MyBatchs from './Component/MyBatchs/MyBatchs'
 import BatchDetails from './Component/MyBatchs/BatchDetails'
 import Profile from './Component/Profile/Profile'
 import EditProfile from './Component/Profile/EditProfile'
+import TrainerSettings from './Component/Settings/TrainerSettings'
 import './TrainerGlobal.css'
 import './TrainerApp.css'
 import { useTrainerBootstrap } from '../hooks/useTrainerBootstrap'
@@ -40,6 +42,9 @@ function Dashboard() {
         onNavigateToCreateCourse={() => navigate('/trainer-dashboard/courses/new')}
         onNavigateToMyCourses={() => navigate('/trainer-dashboard/courses')}
       />
+      <div id="trainer-content-section" className="trainer-dashboard-batches-wrap container">
+        <Active data={data} />
+      </div>
     </>
   );
 }
@@ -100,6 +105,7 @@ function TrainerApp() {
           <Route path="courses/:courseId" element={<CourseView />} />
           <Route path="profile" element={<Profile />} />
           <Route path="profile/edit" element={<EditProfile />} />
+          <Route path="settings" element={<Navigate to="/trainer-dashboard/profile?section=alerts" replace />} />
           <Route path="*" element={<Navigate to="/trainer-dashboard" replace />} />
         </Routes>
       </main>

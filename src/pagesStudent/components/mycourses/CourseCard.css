@@ -57,8 +57,8 @@
 
 .student-mycourses-page .mycourses-rail:hover,
 .student-mycourses-page .mycourses-rail:focus-within {
-    flex-basis: 268px;
-    width: 268px;
+    flex-basis: 280px;
+    width: 280px;
 }
 
 .student-mycourses-page .rail-nav {
@@ -66,10 +66,13 @@
     flex-direction: column;
     align-items: center;
     gap: 12px;
+    width: 100%;
     padding: 18px 0 24px;
     flex: 1;
+    background: #ffffff;
     overflow-y: auto;
     overflow-x: hidden;
+    transition: padding 0.22s ease;
 }
 
 .student-mycourses-page .mycourses-rail:hover .rail-nav,
@@ -629,6 +632,29 @@
     font-size: 13px;
     font-weight: 700;
     text-decoration: none;
+}
+
+.student-mycourses-page .student-live-meet-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #fff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+    transition: transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.35);
+}
+
+.student-mycourses-page .student-live-meet-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.45);
+    color: #fff;
 }
 
 .student-mycourses-page .large-progress-section {

@@ -42,32 +42,30 @@
 .trainer-brand {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    gap: 10px;
     cursor: pointer;
     user-select: none;
     text-decoration: none;
 }
 
-.brand-text {
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-extrabold);
-    color: var(--color-navbar-text);
-    letter-spacing: -0.5px;
-}
-
 .brand-logo {
-    height: 40px;
+    height: 38px;
     width: auto;
-    max-width: 140px;
     display: block;
     object-fit: contain;
+    transition: transform 0.2s ease;
+}
+
+.trainer-brand:hover .brand-logo {
+    transform: scale(1.05);
 }
 
 .brand-text {
     font-size: 1.5rem;
     font-weight: 800;
-    color: var(--color-navbar-text, #1e293b);
+    color: var(--color-navbar-text, #073B32);
     letter-spacing: -0.5px;
+    line-height: 1;
 }
 
 .brand-badge {
@@ -87,9 +85,8 @@
 .trainer-nav-menu {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     flex: 1;
-    margin-left: 60px;
+    margin-left: 48px;
 }
 
 .nav-items {
@@ -132,114 +129,228 @@
     font-weight: var(--font-weight-semibold);
 }
 
-.nav-actions {
-    display: flex;
+/* =========================================
+   TOP-RIGHT PROFILE ICON & DROPDOWN MENU
+   ========================================= */
+
+.trainer-profile-dropdown-wrapper {
+    position: relative;
+    display: inline-flex;
     align-items: center;
-    gap: 12px;
 }
 
-.theme-toggle-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid var(--color-border);
-    background: var(--color-surface);
-    color: var(--color-text-secondary);
+.trainer-profile-icon-btn {
+    position: relative;
+    width: 42px;
+    height: 42px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    border-radius: var(--radius-md, 10px);
+    border: 1px solid var(--color-border, #e2e8f0);
+    background: var(--color-surface, #ffffff);
+    color: var(--color-text-secondary, #475569);
     cursor: pointer;
-    font-size: 16px;
-    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    transition: all 0.2s ease;
+    padding: 0;
 }
 
-.theme-toggle-btn:hover {
-    background: var(--color-primary-light);
-    color: var(--color-primary);
-    border-color: var(--color-primary-muted);
+.trainer-profile-icon-btn i {
+    font-size: 1.35rem;
+    line-height: 1;
+    transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.trainer-profile-badge {
+.trainer-profile-icon-btn:hover,
+.trainer-profile-icon-btn.open,
+.trainer-profile-icon-btn.active {
+    border-color: var(--color-primary-muted, #7DCBB0);
+    color: var(--color-primary, #0B3D2E);
+    background: var(--color-primary-light, #f1f5f9);
+    box-shadow: 0 0 0 3px rgba(16, 168, 121, 0.12);
+}
+
+.trainer-profile-icon-btn:focus-visible {
+    outline: 2px solid var(--color-focus-ring, #10A879);
+    outline-offset: 2px;
+}
+
+/* Dropdown Card */
+.trainer-profile-menu-dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 250px;
+    background: #ffffff;
+    border: 1px solid var(--color-border, #e2e8f0);
+    border-radius: 14px;
+    box-shadow: 0 12px 28px -4px rgba(11, 61, 46, 0.14), 0 8px 12px -6px rgba(0, 0, 0, 0.05);
+    padding: 8px;
+    z-index: 1050;
+    animation: trainerProfileDropdownIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes trainerProfileDropdownIn {
+    from {
+        opacity: 0;
+        transform: translateY(-6px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.trainer-dropdown-header {
     display: flex;
     align-items: center;
     gap: 12px;
-    padding-right: 16px;
-    margin-right: 8px;
-    border-right: 1px solid var(--color-border);
+    padding: 10px 10px 12px;
 }
 
-.trainer-avatar {
+.trainer-dropdown-avatar {
     position: relative;
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background: var(--color-primary-bright);
+    background: var(--color-primary-bright, #10A879);
     color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 18px;
+    font-size: 17px;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.trainer-dropdown-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .trainer-status-dot {
     position: absolute;
-    bottom: -2px;
-    right: -2px;
-    width: 14px;
-    height: 14px;
-    background: var(--color-primary-muted);
-    border: 2px solid var(--color-surface);
+    bottom: -1px;
+    right: -1px;
+    width: 11px;
+    height: 11px;
+    background: #34d399;
+    border: 2px solid #ffffff;
     border-radius: 50%;
 }
 
-.trainer-info {
+.trainer-dropdown-user-info {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    min-width: 0;
     gap: 2px;
 }
 
-.trainer-name {
-    font-weight: 700;
+.trainer-dropdown-name {
     font-size: 14px;
-    color: var(--color-text);
-    line-height: 1;
-}
-
-.trainer-role-pill {
-    background: var(--color-primary-light);
-    color: var(--color-primary);
-    font-size: 11px;
-    font-weight: 600;
-    padding: 2px 8px;
-    border-radius: 12px;
-    display: inline-block;
+    font-weight: 700;
+    color: var(--color-text, #073B32);
     line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.trainer-logout-btn {
-    display: inline-flex;
+.trainer-dropdown-email {
+    font-size: 12px;
+    color: var(--color-text-secondary, #718096);
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.trainer-dropdown-role-badge {
+    align-self: flex-start;
+    margin-top: 2px;
+    background: #ecfdf5;
+    color: #047857;
+    border: 1px solid #a7f3d0;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 1px 7px;
+    border-radius: 999px;
+    line-height: 1.3;
+}
+
+.trainer-dropdown-divider {
+    height: 1px;
+    background: var(--color-border, #e2e8f0);
+    margin: 4px 0 6px;
+}
+
+.trainer-dropdown-items {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.trainer-dropdown-item {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    gap: var(--spacing-xs);
-    min-height: 40px;
-    padding: 8px 16px;
-    background: var(--color-primary-soft);
-    border: 1px solid var(--color-primary-muted);
-    color: var(--color-primary);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-semibold);
-    border-radius: var(--radius-full);
+    gap: 10px;
+    width: 100%;
+    padding: 9px 12px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--color-text, #073B32);
     cursor: pointer;
-    transition: background-color var(--transition-base), color var(--transition-base), transform var(--transition-base);
+    text-decoration: none;
+    text-align: left;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.trainer-logout-btn:hover {
-    background: var(--color-primary);
-    color: var(--color-text-on-primary);
-    border-color: var(--color-primary);
-    transform: translateY(-1px);
+.trainer-dropdown-item i {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    color: var(--color-text-secondary, #718096);
+    transition: color 0.15s ease;
+}
+
+.trainer-dropdown-item:hover,
+.trainer-dropdown-item.active {
+    background: var(--color-primary-light, #f1f5f9);
+    color: var(--color-primary, #0B3D2E);
+}
+
+.trainer-dropdown-item:hover i,
+.trainer-dropdown-item.active i {
+    color: var(--color-primary, #0B3D2E);
+}
+
+.trainer-dropdown-item.logout {
+    color: #dc2626;
+}
+
+.trainer-dropdown-item.logout i {
+    color: #dc2626;
+}
+
+.trainer-dropdown-item.logout:hover {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.trainer-dropdown-item.logout:hover i {
+    color: #b91c1c;
+}
+
+/* Mobile Drawer Footer (Hidden on desktop) */
+.mobile-drawer-footer {
+    display: none;
 }
 
 .trainer-menu-toggle {
@@ -326,15 +437,102 @@
         font-size: var(--font-size-base);
     }
 
-    .nav-actions {
+    .mobile-drawer-footer {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
         width: 100%;
         border-top: 1px solid var(--color-navbar-border);
         padding-top: var(--spacing-md);
+        margin-top: auto;
     }
 
-    .trainer-logout-btn {
-        width: 100%;
+    .mobile-drawer-user {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .mobile-drawer-user .trainer-avatar {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--color-primary-bright);
+        color: #ffffff;
+        display: flex;
+        align-items: center;
         justify-content: center;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .mobile-drawer-user .trainer-info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    .mobile-drawer-user .trainer-name {
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--color-text);
+    }
+
+    .mobile-drawer-user .trainer-role-pill {
+        background: var(--color-primary-light);
+        color: var(--color-primary);
+        font-size: 11px;
+        font-weight: 600;
+        padding: 2px 8px;
+        border-radius: 12px;
+    }
+
+    .mobile-drawer-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .mobile-drawer-item {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 10px;
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: var(--trainer-radius-md);
+        border: 1px solid var(--color-border);
+        background: var(--color-surface);
+        color: var(--color-text);
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .mobile-drawer-item i {
+        font-size: 16px;
+    }
+
+    .mobile-drawer-item:hover,
+    .mobile-drawer-item.active {
+        background: var(--color-primary-light);
+        color: var(--color-primary);
+        border-color: var(--color-primary-muted);
+    }
+
+    .mobile-drawer-item.logout {
+        color: #dc2626;
+        border-color: #fecaca;
+        background: #fef2f2;
+    }
+
+    .mobile-drawer-item.logout:hover {
+        background: #fee2e2;
+        color: #b91c1c;
     }
 
     .trainer-menu-toggle.active .bar:nth-child(1) {
@@ -360,6 +558,11 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
