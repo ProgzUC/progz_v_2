@@ -25,7 +25,7 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
     const instructorsList = usersArray.filter(isTrainerRole);
     const studentsList = usersArray.filter(isStudentRole);
 
-    const [batchData, setBatchData] = useState(emptyBatchForm);
+    const [batchData, setBatchData] = useState(() => emptyBatchForm());
     const [studentSearch, setStudentSearch] = useState("");
 
     const primaryCourseId = batchData.courseIds[0] || "";
@@ -205,7 +205,7 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
             }
         }
 
-        const payload = toBatchApiPayload(batchData);
+        const payload = toBatchApiPayload(batchData, { includeStudents: true });
 
         createBatchMutation(payload, {
             onSuccess: () => {

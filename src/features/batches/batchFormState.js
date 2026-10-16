@@ -80,7 +80,10 @@ export const emptyTrainerRow = () => ({
   isCurrent: true,
 });
 
-export const toBatchApiPayload = (batchData, { includeStatus = true } = {}) => {
+export const toBatchApiPayload = (
+  batchData,
+  { includeStatus = true, includeStudents = false } = {}
+) => {
   const courseIds = batchData.courseIds || [];
   const payload = {
     name: batchData.name,
@@ -100,8 +103,15 @@ export const toBatchApiPayload = (batchData, { includeStatus = true } = {}) => {
         toDate: t.toDate || undefined,
         isCurrent: !!t.isCurrent,
       })),
-    students: [...new Set((batchData.students || []).map(String).filter(Boolean))],
   };
+
+  // Only send students when create (or edit UI) explicitly includes them.
+  // Edit modal has no student picker — sending [] would wipe the roster.
+  if (includeStudents) {
+    payload.students = [
+      ...new Set((batchData.students || []).map(String).filter(Boolean)),
+    ];
+  }
 
   // Create previously omitted status → schema defaulted to "upcoming", so trainer
   // Active Batches (active-only) never showed newly created batches.
