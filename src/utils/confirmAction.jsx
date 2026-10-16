@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import "./toastDialog.css";
 
 /**
- * Yes/Cancel confirmation via react-toastify.
+ * Yes/Cancel confirmation as a normal react-toastify toast (top-right).
  * Returns true if the user confirms.
  */
 export async function confirmAction({
@@ -10,8 +10,6 @@ export async function confirmAction({
   text = "",
   confirmButtonText = "Yes",
   cancelButtonText = "Cancel",
-  confirmButtonColor = "#0B3D2E",
-  cancelButtonColor = "#718096",
 } = {}) {
   return new Promise((resolve) => {
     let settled = false;
@@ -23,18 +21,16 @@ export async function confirmAction({
       toast.dismiss(toastId);
     };
 
-    const toastId = toast(
+    const message = text ? `${title} — ${text}` : title;
+
+    const toastId = toast.warn(
       ({ closeToast }) => (
-        <div className="toast-dialog" role="alertdialog" aria-labelledby="toast-confirm-title">
-          <p id="toast-confirm-title" className="toast-dialog__title">
-            {title}
-          </p>
-          {text ? <p className="toast-dialog__text">{text}</p> : null}
-          <div className="toast-dialog__actions">
+        <div className="toast-confirm" role="alertdialog">
+          <span className="toast-confirm__msg">{message}</span>
+          <span className="toast-confirm__actions">
             <button
               type="button"
-              className="toast-dialog__btn toast-dialog__btn--cancel"
-              style={{ backgroundColor: cancelButtonColor }}
+              className="toast-confirm__btn"
               onClick={() => {
                 finish(false);
                 closeToast();
@@ -44,8 +40,7 @@ export async function confirmAction({
             </button>
             <button
               type="button"
-              className="toast-dialog__btn toast-dialog__btn--confirm"
-              style={{ backgroundColor: confirmButtonColor }}
+              className="toast-confirm__btn toast-confirm__btn--yes"
               onClick={() => {
                 finish(true);
                 closeToast();
@@ -53,16 +48,17 @@ export async function confirmAction({
             >
               {confirmButtonText}
             </button>
-          </div>
+          </span>
         </div>
       ),
       {
-        position: "top-center",
+        position: "top-right",
         autoClose: false,
         closeOnClick: false,
         draggable: false,
         closeButton: true,
-        className: "toast-dialog-container",
+        theme: "colored",
+        className: "toast-confirm-toast",
         onClose: () => finish(false),
       }
     );
