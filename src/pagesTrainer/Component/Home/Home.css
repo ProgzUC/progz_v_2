@@ -5,15 +5,16 @@
 
 .trainer-home.landing-hero {
     position: relative;
-    min-height: 100vh;
+    min-height: 0;
     background: radial-gradient(circle at 85% 20%, #0d4635 0%, #072a20 60%, #052119 100%);
     background-color: #072a20;
     color: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: calc(var(--navbar-height, 70px) + 2rem) 1.5rem 6.5rem;
+    justify-content: flex-start;
+    padding: calc(var(--navbar-height, 70px) + 2rem) 1.5rem 7.5rem;
+    gap: 1.5rem;
     overflow: hidden;
     box-sizing: border-box;
 }
@@ -406,7 +407,7 @@
     padding: 0.85rem 2rem;
     border-radius: 999px;
     box-shadow: 0 10px 32px rgba(0, 0, 0, 0.3);
-    margin-top: 2.5rem;
+    margin-top: 1rem;
 }
 
 .landing-stat-box {
@@ -439,8 +440,7 @@
 .trainer-home .hero-scroll-hint {
     position: relative;
     z-index: 3;
-    margin-top: 1.75rem;
-    margin-bottom: -1rem;
+    margin: 0;
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
@@ -512,8 +512,8 @@
 
 @media (max-width: 768px) {
     .trainer-home.landing-hero {
-        padding: calc(var(--navbar-height, 70px) + 1.25rem) 1.2rem 4rem;
-        min-height: auto;
+        padding: calc(var(--navbar-height, 70px) + 1.25rem) 1.2rem 5.5rem;
+        min-height: 0;
     }
 
     .landing-hero-title {

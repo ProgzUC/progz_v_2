@@ -31,9 +31,17 @@ const Unauthorized = () => (
 );
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
+  const location = useLocation();
   const { user, isAuthenticated } = getAuthData();
 
-  if (!isAuthenticated || !user) return <Navigate to="/login" replace />;
+  if (!isAuthenticated || !user) {
+    const next = `${location.pathname}${location.search || ""}`;
+    const loginPath =
+      next && next !== "/" && next.startsWith("/") && !next.startsWith("//")
+        ? `/login?next=${encodeURIComponent(next)}`
+        : "/login";
+    return <Navigate to={loginPath} replace />;
+  }
 
   const normalizedAllowed = allowedRoles.map((r) => {
     const role = String(r).toLowerCase();

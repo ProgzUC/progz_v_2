@@ -1,14 +1,29 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { FiMail, FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import pattern from "../../assets/login/pattern.png";
 import "./Auth.css";
 import { login, forgotPassword } from "../../api/authApi";
 import { showError, showSuccess } from "../../utils/toast";
 
+const safeNextPath = (value) => {
+  if (!value || typeof value !== "string") return null;
+  const next = value.trim();
+  if (!next.startsWith("/") || next.startsWith("//") || next.startsWith("/\\")) return null;
+  return next;
+};
+
+const homeForRole = (role) => {
+  const normalized = String(role || "").toLowerCase();
+  if (normalized === "admin") return "/admin";
+  if (normalized === "trainer" || normalized === "instructor") return "/trainer-dashboard/";
+  if (normalized === "student") return "/student-dashboard/";
+  return null;
+};
+
 const SignIn = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   // Views: 'login' | 'forgot'
   const [view, setView] = useState("login");
@@ -53,20 +68,19 @@ const SignIn = () => {
     try {
       const data = await login({ email: email.trim(), password }, rememberMe);
       const role = data.role ?? data.user?.role ?? data?.data?.user?.role ?? data?.data?.role;
-      const normalizedRole = String(role || "").toLowerCase();
-
-      if (normalizedRole === "admin") {
-        showSuccess("Logged in successfully");
-        navigate("/admin");
-      } else if (normalizedRole === "trainer" || normalizedRole === "instructor") {
-        showSuccess("Logged in successfully");
-        navigate("/trainer-dashboard");
-      } else if (normalizedRole === "student") {
-        showSuccess("Logged in successfully");
-        navigate("/student-dashboard");
-      } else {
+      const home = homeForRole(role);
+      if (!home) {
         showError("Invalid role");
+        return;
       }
+
+      const requested = safeNextPath(searchParams.get("next"));
+      const destination = requested?.startsWith(home.replace(/\/$/, "")) || requested === home
+        ? requested
+        : home;
+
+      showSuccess("Logged in successfully");
+      navigate(destination);
     } catch (err) {
       showError(err.message || "Login failed");
     } finally {

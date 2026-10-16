@@ -28,6 +28,15 @@ const formatTimingLabel = (batch) => {
     return "Not scheduled";
 };
 
+const formatClockTime = (value) => {
+    if (!value) return "—";
+    return new Date(value).toLocaleTimeString("en-IN", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+    });
+};
+
 export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSchedule }) {
     const [sessionOverride, setSessionOverride] = useState(null);
     const [attendanceOverride, setAttendanceOverride] = useState(null);
@@ -155,7 +164,7 @@ export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSc
             const absentCount = attendance.filter((a) => a.status === "Absent").length;
 
             showSuccess(
-                `Class ended (${endedSession.duration}). Present: ${presentCount}, Late: ${lateCount}, Absent: ${absentCount}`
+                `Class ended at ${formatClockTime(endedSession.endTime)} (${endedSession.duration}). Present: ${presentCount}, Late: ${lateCount}, Absent: ${absentCount}`
             );
         } catch (error) {
             showError(error.response?.data?.message || "Failed to end class");
@@ -271,11 +280,29 @@ export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSc
                         )}
                     </h3>
                     <p className="session-date">
-                        {new Date(activeSession.startTime).toLocaleString("en-IN", {
-                            dateStyle: "full",
-                            timeStyle: "short",
+                        {new Date(activeSession.startTime).toLocaleDateString("en-IN", {
+                            weekday: "long",
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
                         })}
                     </p>
+                    <div className="session-time-meta">
+                        <span className="session-time-chip">
+                            <i className="bi bi-box-arrow-in-right" aria-hidden="true"></i>
+                            Trainer joined:{" "}
+                            <strong>
+                                {formatClockTime(activeSession.trainerJoinedAt || activeSession.startTime)}
+                            </strong>
+                        </span>
+                        <span className="session-time-chip">
+                            <i className="bi bi-box-arrow-right" aria-hidden="true"></i>
+                            Class ended:{" "}
+                            <strong>
+                                {isEnded ? formatClockTime(activeSession.endTime) : "In progress"}
+                            </strong>
+                        </span>
+                    </div>
                 </div>
 
                 <div className="session-timer">

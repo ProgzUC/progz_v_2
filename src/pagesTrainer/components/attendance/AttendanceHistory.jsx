@@ -104,7 +104,8 @@ export default function AttendanceHistory({ batchId }) {
                             <thead>
                                 <tr>
                                     <th>Date & Session</th>
-                                    <th>Timing</th>
+                                    <th>Trainer Joined</th>
+                                    <th>Class Ended</th>
                                     <th>Trainer</th>
                                     <th>Duration</th>
                                     <th>Attendance Summary</th>
@@ -132,14 +133,18 @@ export default function AttendanceHistory({ batchId }) {
                                             </td>
                                             <td>
                                                 <div className="timing-info">
-                                                    <span>{formatTime(session.startTime)}</span>
-                                                    {session.endTime && (
-                                                        <>
-                                                            <span className="timing-dash">-</span>
-                                                            <span>{formatTime(session.endTime)}</span>
-                                                        </>
+                                                    <span>
+                                                        {formatTime(session.trainerJoinedAt || session.startTime)}
+                                                    </span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div className="timing-info">
+                                                    {session.endTime ? (
+                                                        <span>{formatTime(session.endTime)}</span>
+                                                    ) : (
+                                                        <span className="duration-live">In progress</span>
                                                     )}
-                                                    {!session.endTime && <span className="timing-dash">…</span>}
                                                 </div>
                                             </td>
                                             <td>

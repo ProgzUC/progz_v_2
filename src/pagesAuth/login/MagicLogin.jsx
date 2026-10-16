@@ -31,9 +31,9 @@ const MagicLogin = () => {
         setTimeout(() => {
           if (role === "admin") navigate("/admin", { replace: true });
           else if (role === "trainer" || role === "instructor") {
-            navigate("/trainer-dashboard", { replace: true });
+            navigate("/trainer-dashboard/", { replace: true });
           } else {
-            navigate("/student-dashboard", { replace: true });
+            navigate("/student-dashboard/", { replace: true });
           }
         }, 600);
       } catch (err) {

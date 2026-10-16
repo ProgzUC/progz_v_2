@@ -32,7 +32,10 @@
 }
 
 .trainer-dashboard-batches-wrap {
-  padding-top: 40px;
+  position: relative;
+  z-index: 2;
+  margin-top: -56px;
+  padding-top: 0;
   padding-bottom: 80px;
 }
 
@@ -55,6 +58,12 @@
 
   .trainer-app .main-content {
     padding-bottom: 20px;
+  }
+
+  .trainer-dashboard-batches-wrap {
+    margin-top: -40px;
+    padding-top: 0;
+    padding-bottom: 56px;
   }
 }
 
