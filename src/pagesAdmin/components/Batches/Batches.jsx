@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Batches.css";
 import "../Modal.css";
 import { LuUserPlus, LuEye, LuPencil, LuTrash2 } from "react-icons/lu";
-import Swal from "sweetalert2";
+import { confirmDelete } from "../../../utils/confirmDelete";
 import { useBatches, useDeleteBatch } from "../../../hooks/useBatches";
 import { useCourses } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
@@ -80,22 +80,13 @@ const Batches = () => {
     setShowEditModal(true);
   };
 
-  const handleDelete = (batch) => {
-    Swal.fire({
-      title: "Delete Batch?",
-      text: `Are you sure you want to delete "${batch.name}"? This action cannot be undone.`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete!",
-      background: "#fff",
-      color: "#333",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteBatchMutation(batch._id || batch.id);
-      }
-    });
+  const handleDelete = async (batch) => {
+    const ok = await confirmDelete(
+      "Delete Batch?",
+      `Are you sure you want to delete "${batch.name}"? This action cannot be undone.`
+    );
+    if (!ok) return;
+    deleteBatchMutation(batch._id || batch.id);
   };
 
   const getStatusClass = (status) => {

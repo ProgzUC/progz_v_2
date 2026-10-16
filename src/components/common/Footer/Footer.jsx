@@ -12,7 +12,7 @@ import {
     FaPaperPlane,
     FaEnvelope
 } from "react-icons/fa";
-import Swal from "sweetalert2";
+import { showSuccess } from "../../../utils/toast";
 
 const socialIcons = {
     facebook: <FaFacebook />,
@@ -37,14 +37,7 @@ const Footer = () => {
         e.preventDefault();
         if (!email) return;
 
-        Swal.fire({
-            icon: "success",
-            title: "Subscribed!",
-            text: "Thank you for subscribing to our newsletter.",
-            confirmButtonColor: "#0B3D2E",
-            timer: 3000,
-            timerProgressBar: true,
-        });
+        showSuccess("Thank you for subscribing to our newsletter.");
 
         setEmail("");
     };

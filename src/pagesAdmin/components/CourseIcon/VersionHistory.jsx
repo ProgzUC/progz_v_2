@@ -1,6 +1,6 @@
 import React from "react";
 import "./VersionHistory.css";
-import Swal from "sweetalert2";
+import { confirmAction } from "../../../utils/confirmAction";
 
 import { useCourseVersions } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
@@ -10,24 +10,17 @@ const VersionHistory = ({ courseId, isOpen, onClose, onRollback }) => {
 
     if (!isOpen) return null;
 
-    const handleRollbackClick = (version) => {
-        Swal.fire({
+    const handleRollbackClick = async (version) => {
+        const ok = await confirmAction({
             title: "Rollback to this version?",
             text: `Are you sure you want to revert to the version from ${new Date(version.createdAt).toLocaleString()}? Unsaved changes will be lost.`,
             icon: "warning",
-            showCancelButton: true,
             confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
             confirmButtonText: "Yes, rollback!",
-            background: "#fff",
-            color: "#333",
-            borderRadius: "15px"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                onRollback(version._id); // Pass ID
-                onClose();
-            }
         });
+        if (!ok) return;
+        onRollback(version._id);
+        onClose();
     };
 
     return (

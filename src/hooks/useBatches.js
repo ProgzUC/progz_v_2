@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchBatches, createBatch, enrollStudent, bulkEnrollStudents, deleteBatch, updateBatch, getBatch, fetchTrainerBatches } from "../api/batchApi";
 import { fetchBatchDetails, toggleSectionCompletion } from "../api/trainerApi";
-import Swal from "sweetalert2";
 import { getErrorMessage } from "../utils/apiError";
+import { showError, showSuccess } from "../utils/toast";
 
 export const useBatches = () =>
     useQuery({
@@ -61,10 +61,10 @@ export const useDeleteBatch = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["batches"] });
             queryClient.invalidateQueries({ queryKey: ["courses"] });
-            Swal.fire("Deleted!", "Batch has been deleted.", "success");
+            showSuccess("Batch has been deleted.");
         },
         onError: (err) => {
-            Swal.fire("Error", getErrorMessage(err, "Failed to delete batch"), "error");
+            showError(getErrorMessage(err, "Failed to delete batch"));
         }
     });
 };

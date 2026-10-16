@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { LuRotateCcw, LuTrash2 } from "react-icons/lu";
-import Swal from "sweetalert2";
+import { confirmAction } from "../../../utils/confirmAction";
+import { confirmDelete } from "../../../utils/confirmDelete";
 import { fetchBinItems, restoreBinItem, permanentlyDeleteBinItem } from "../../../api/userApi";
 import { ErrorState, Skeleton } from "../../../components/common/PageState";
 import { getErrorMessage } from "../../../utils/apiError";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import "./RecycleBin.css";
+
+import { showError, showSuccess } from "../../../utils/toast";
 
 const AVATAR_TONES = ["green", "blue", "orange", "purple", "teal", "rose"];
 
@@ -80,48 +83,37 @@ const RecycleBin = () => {
     currentPage * rowsPerPage
   );
 
-  const handleRestore = (id) => {
-    Swal.fire({
+  const handleRestore = async (id) => {
+    const ok = await confirmAction({
       title: "Restore Item?",
       text: "This item will be moved back to its original list.",
       icon: "question",
-      showCancelButton: true,
       confirmButtonColor: "#10A879",
-      cancelButtonColor: "#d33",
       confirmButtonText: "Yes, restore it!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await restoreBinItem(id);
-          Swal.fire("Restored!", "The item has been restored.", "success");
-          loadBinItems();
-        } catch (err) {
-          Swal.fire("Error!", err.message || "Failed to restore item.", "error");
-        }
-      }
     });
+    if (!ok) return;
+    try {
+      await restoreBinItem(id);
+      showSuccess("The item has been restored.");
+      loadBinItems();
+    } catch (err) {
+      showError(err.message || "Failed to restore item.");
+    }
   };
 
-  const handleDeleteForever = (id) => {
-    Swal.fire({
-      title: "Permanently Delete?",
-      text: "You won't be able to revert this! This item will be gone forever.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it forever!",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await permanentlyDeleteBinItem(id);
-          Swal.fire("Deleted!", "The item has been permanently deleted.", "success");
-          loadBinItems();
-        } catch (err) {
-          Swal.fire("Error!", err.message || "Failed to delete item.", "error");
-        }
-      }
-    });
+  const handleDeleteForever = async (id) => {
+    const ok = await confirmDelete(
+      "Permanently Delete?",
+      "You won't be able to revert this! This item will be gone forever."
+    );
+    if (!ok) return;
+    try {
+      await permanentlyDeleteBinItem(id);
+      showSuccess("The item has been permanently deleted.");
+      loadBinItems();
+    } catch (err) {
+      showError(err.message || "Failed to delete item.");
+    }
   };
 
   return (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { runManualSyncAndWait, fetchSyncStatus, fetchSyncLogs } from "../../../api/userApi";
-import Swal from "sweetalert2";
+import { showError, showInfo, showSuccess } from "../../../utils/toast";
 import { ErrorState } from "../../../components/common/PageState";
 import { getErrorMessage } from "../../../utils/apiError";
 import "./SyncFromZen.css";
@@ -40,33 +40,23 @@ const SyncFromZen = () => {
     if (loading) return;
     setLoading(true);
 
-    Swal.fire({
-      title: "Sync in progress",
-      text: "Sync started in the background. Waiting for Zen CRM to finish...",
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      }
-    });
+    showInfo("Sync started… waiting for Zen CRM to finish.");
 
     try {
       const result = await runManualSyncAndWait();
       const ok = result?.status === "success";
-      Swal.fire({
-        title: ok ? "Sync Completed" : "Sync Failed",
-        text: ok
-          ? `Instructors: ${result.instructorsSynced || 0}, Students: ${result.studentsSynced || 0}`
-          : (result?.errorsList?.[0] || "Sync finished with errors."),
-        icon: ok ? "success" : "error",
-        confirmButtonText: "Okay"
-      });
+      if (ok) {
+        showSuccess(
+          `Sync completed. Instructors: ${result.instructorsSynced || 0}, Students: ${
+            result.studentsSynced || 0
+          }`
+        );
+      } else {
+        showError(result?.errorsList?.[0] || "Sync finished with errors.");
+      }
       loadSyncDashboard();
     } catch (err) {
-      Swal.fire({
-        title: "Sync Failed",
-        text: getErrorMessage(err, "The Zen connection timed out. Try the sync again."),
-        icon: "error"
-      });
+      showError(getErrorMessage(err, "The Zen connection timed out. Try the sync again."));
     } finally {
       setLoading(false);
     }

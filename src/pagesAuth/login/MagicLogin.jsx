@@ -3,12 +3,12 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import pattern from "../../assets/login/pattern.png";
 import "./Auth.css";
 import { verifyMagicLogin } from "../../api/authApi";
+import { showError, showSuccess } from "../../utils/toast";
 
 const MagicLogin = () => {
   const { token } = useParams();
   const navigate = useNavigate();
   const [status, setStatus] = useState("loading"); // loading | success | error
-  const [error, setError] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -16,7 +16,7 @@ const MagicLogin = () => {
     const run = async () => {
       if (!token) {
         setStatus("error");
-        setError("Missing login token.");
+        showError("Missing login token.");
         return;
       }
 
@@ -25,6 +25,7 @@ const MagicLogin = () => {
         if (cancelled) return;
 
         setStatus("success");
+        showSuccess("Logged in successfully");
         const role = String(data.role ?? data.user?.role ?? "").toLowerCase();
 
         setTimeout(() => {
@@ -38,7 +39,7 @@ const MagicLogin = () => {
       } catch (err) {
         if (cancelled) return;
         setStatus("error");
-        setError(err.message || "This login link is invalid or has expired.");
+        showError(err.message || "This login link is invalid or has expired.");
       }
     };
 
@@ -69,9 +70,6 @@ const MagicLogin = () => {
 
           {status === "error" && (
             <>
-              <div className="admin-live-region" role="alert" aria-live="polite">
-                <p className="auth-error">{error}</p>
-              </div>
               <p className="auth-subtitle">
                 Request a new passwordless login link from the login page using your registered email.
               </p>

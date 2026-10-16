@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { showError, showSuccess } from '../../../utils/toast';
 import { useAdminCreateUser } from '../../../hooks/useAdminUsers';
 
 import Sidebar from './Sidebar';
@@ -35,24 +35,15 @@ const UserEnrollment = ({ subtitle }) => {
 
         createUser(payload, {
             onSuccess: () => {
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'Registration Created Successfully!',
-                    icon: 'success',
-                    confirmButtonColor: '#198754',
-                    confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.isConfirmed || result.isDismissed) {
-                        if (subtitle === "Add Student") {
-                            navigate('/admin/students');
-                        } else {
-                            navigate('/admin/instructors');
-                        }
-                    }
-                });
+                showSuccess('Registration created successfully!');
+                if (subtitle === "Add Student") {
+                    navigate('/admin/students');
+                } else {
+                    navigate('/admin/instructors');
+                }
             },
             onError: (err) => {
-                Swal.fire('Error', err?.message || 'Failed to create user', 'error');
+                showError(err?.message || 'Failed to create user');
             }
         });
     };

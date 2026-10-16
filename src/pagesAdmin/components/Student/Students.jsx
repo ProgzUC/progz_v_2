@@ -5,8 +5,9 @@ import { getErrorMessage } from "../../../utils/apiError";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import { useAllUsers, useDeleteUser } from "../../../hooks/useAdminUsers";
 import { LuEye, LuPencil, LuTrash2 } from "react-icons/lu";
-import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { confirmDelete } from "../../../utils/confirmDelete";
+import { showError, showSuccess } from "../../../utils/toast";
 
 const AVATAR_TONES = ["green", "blue", "orange", "purple", "teal", "rose"];
 
@@ -62,39 +63,19 @@ const Students = () => {
     currentPage * rowsPerPage
   );
 
-  const handleDelete = (user) => {
-    Swal.fire({
-      title: "Delete Student?",
-      text: `Are you sure you want to delete ${user.name}? This action cannot be undone.`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete!",
-      background: "#fff",
-      color: "#333",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteUser(user._id || user.id, {
-          onSuccess: () => {
-            Swal.fire({
-              title: "Deleted!",
-              text: "Student has been deleted.",
-              icon: "success",
-              confirmButtonColor: "#28a745",
-              timer: 1500,
-            });
-          },
-          onError: (err) => {
-            Swal.fire({
-              title: "Error!",
-              text: err.message || "Failed to delete student.",
-              icon: "error",
-              confirmButtonColor: "#d33",
-            });
-          },
-        });
-      }
+  const handleDelete = async (user) => {
+    const ok = await confirmDelete(
+      "Delete Student?",
+      `Are you sure you want to delete ${user.name}? This action cannot be undone.`
+    );
+    if (!ok) return;
+    deleteUser(user._id || user.id, {
+      onSuccess: () => {
+        showSuccess("Student has been deleted.");
+      },
+      onError: (err) => {
+        showError(getErrorMessage(err, "Failed to delete student"));
+      },
     });
   };
 

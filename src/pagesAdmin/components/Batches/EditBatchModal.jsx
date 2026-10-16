@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Swal from "sweetalert2";
 import { useUpdateBatch } from "../../../hooks/useBatches";
 import { useCourse } from "../../../hooks/useCourses";
 import { useAllUsers } from "../../../hooks/useAdminUsers";
@@ -14,6 +13,7 @@ import CourseMultiSelect from "./CourseMultiSelect";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import "../Modal.css";
 import "../EnrollStudent/EnrollStudents.css";
+import { showError, showSuccess } from "../../../utils/toast";
 
 const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
     const { mutate: updateBatchMutation } = useUpdateBatch();
@@ -137,45 +137,45 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
 
     const handleSubmit = () => {
         if (!batchData.name.trim()) {
-            Swal.fire("Error", "Batch Name is required", "error");
+            showError("Batch Name is required");
             return;
         }
         if (!batchData.courseIds.length) {
-            Swal.fire("Error", "Please select at least one course", "error");
+            showError("Please select at least one course");
             return;
         }
         if (!batchData.startDate || !batchData.endDate) {
-            Swal.fire("Error", "Start and End dates are required", "error");
+            showError("Start and End dates are required");
             return;
         }
 
         if (new Date(batchData.endDate) < new Date(batchData.startDate)) {
-            Swal.fire("Error", "End date cannot be before start date", "error");
+            showError("End date cannot be before start date");
             return;
         }
 
         if (!batchData.classTiming.startTime || !batchData.classTiming.endTime) {
-            Swal.fire("Error", "Class start and end times are required", "error");
+            showError("Class start and end times are required");
             return;
         }
         if (batchData.classTiming.endTime <= batchData.classTiming.startTime) {
-            Swal.fire("Error", "Class end time must be after start time", "error");
+            showError("Class end time must be after start time");
             return;
         }
 
         if (batchData.daysOfWeek.length === 0) {
-            Swal.fire("Error", "Please select at least one day for the batch", "error");
+            showError("Please select at least one day for the batch");
             return;
         }
 
         for (let i = 0; i < batchData.trainers.length; i++) {
             const t = batchData.trainers[i];
             if (!t.trainer) {
-                Swal.fire("Error", `Please select a trainer for row ${i + 1}`, "error");
+                showError(`Please select a trainer for row ${i + 1}`);
                 return;
             }
             if (t.fromDate && t.toDate && new Date(t.toDate) < new Date(t.fromDate)) {
-                Swal.fire("Error", `Trainer ${i + 1}: End date cannot be before start date`, "error");
+                showError(`Trainer ${i + 1}: End date cannot be before start date`);
                 return;
             }
         }
@@ -184,11 +184,11 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
 
         updateBatchMutation({ batchId: batch._id || batch.id, batchData: payload }, {
             onSuccess: () => {
-                Swal.fire("Success", "Batch Updated Successfully", "success");
+                showSuccess("Batch Updated Successfully");
                 onClose();
             },
             onError: (err) => {
-                Swal.fire("Error", getErrorMessage(err, "Failed to update batch"), "error");
+                showError(getErrorMessage(err, "Failed to update batch"));
             }
         });
     };

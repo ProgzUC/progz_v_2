@@ -4,6 +4,7 @@ import { FiLock, FiEye, FiEyeOff } from "react-icons/fi";
 import pattern from "../../assets/login/pattern.png";
 import "./Auth.css";
 import { resetPassword } from "../../api/authApi";
+import { showError, showSuccess } from "../../utils/toast";
 
 const ResetPassword = () => {
     const { token } = useParams();
@@ -20,8 +21,6 @@ const ResetPassword = () => {
     });
 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
 
     const resetFields = [
@@ -53,8 +52,6 @@ const ResetPassword = () => {
 
     const handleResetSubmit = async (e) => {
         e.preventDefault();
-        setError("");
-        setSuccessMessage("");
 
         const next = {};
         if (!resetData.newPassword) {
@@ -73,9 +70,10 @@ const ResetPassword = () => {
         setLoading(true);
         try {
             const res = await resetPassword({ password: resetData.newPassword }, token);
-            setSuccessMessage(res.msg || "Password reset successfully! You can now login.");
+            showSuccess(res.msg || "Password reset successfully! You can now login.");
+            navigate("/");
         } catch (err) {
-            setError(err.message || "Failed to reset password");
+            showError(err.message || "Failed to reset password");
         } finally {
             setLoading(false);
         }
@@ -118,42 +116,13 @@ const ResetPassword = () => {
         ));
     };
 
-    const SuccessPopup = ({ msg, actionName, onAction }) => (
-        <div className="auth-popup-overlay">
-            <div className="auth-popup">
-                <div className="popup-icon">✅</div>
-                <h3>Success</h3>
-                <p>{msg}</p>
-                <button
-                    onClick={() => {
-                        setSuccessMessage("");
-                        if (onAction) onAction();
-                    }}
-                    className="login-btn popup-btn"
-                >
-                    {actionName || "Close"}
-                </button>
-            </div>
-        </div>
-    );
-
     return (
         <div className="auth-page-layout">
         <div className="auth-container">
-            {/* SUCCESS POPUP */}
-            {successMessage && (
-                <SuccessPopup
-                    msg={successMessage}
-                    actionName="Back to Login"
-                    onAction={() => navigate("/")}
-                />
-            )}
-
             {/* LEFT PANEL */}
             <div className="auth-left">
                 <h2 className="auth-title">Reset Password 🔑</h2>
                 <p className="auth-subtitle">Enter your new password below.</p>
-                {error && <p className="auth-error">{error}</p>}
 
                 <form onSubmit={handleResetSubmit} className="auth-form">
                     {renderInputs(resetFields, handleResetDataChange)}

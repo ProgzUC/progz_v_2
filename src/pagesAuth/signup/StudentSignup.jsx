@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
 import { registerUser } from '../../api/userApi';
+import { showError, showSuccess } from '../../utils/toast';
 import { getErrorMessage } from '../../utils/apiError';
 import LeftSidebar from './LeftSidebar';
 import PersonalDetails from './PersonalDetails';
@@ -57,24 +57,10 @@ const StudentSignup = () => {
         try {
             await registerUser(completeData);
 
-            Swal.fire({
-                title: 'Registration Successful!',
-                text: 'Your registration is pending approval. You will be notified once approved.',
-                icon: 'success',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Go to Login'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    navigate('/login');
-                }
-            });
+            showSuccess('Your registration is pending approval. You will be notified once approved.');
+            navigate('/login');
         } catch (error) {
-            Swal.fire({
-                title: 'Registration Failed',
-                text: getErrorMessage(error, 'Something went wrong. Please try again.'),
-                icon: 'error',
-                confirmButtonColor: '#0B3D2E'
-            });
+            showError(getErrorMessage(error, 'Something went wrong. Please try again.'));
         }
     };
 

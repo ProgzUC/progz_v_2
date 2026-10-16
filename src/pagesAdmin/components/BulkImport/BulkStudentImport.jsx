@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import Swal from "sweetalert2";
+import { confirmAction } from "../../../utils/confirmAction";
+import { showError, showSuccess, showWarning } from "../../../utils/toast";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import Loader from "../../../components/common/Loader/Loader";
 import { useBatches } from "../../../hooks/useBatches";
@@ -81,16 +82,11 @@ const BulkStudentImport = ({
     setStudents(rows);
     setSummary(null);
     setErrors([]);
-    Swal.fire({
-      toast: true,
-      position: "top-end",
-      icon: rows.length ? "success" : "warning",
-      title: rows.length
-        ? `Loaded ${rows.length} students from ${sourceLabel}`
-        : `No valid emails found in ${sourceLabel}`,
-      showConfirmButton: false,
-      timer: 2800,
-    });
+    if (rows.length) {
+      showSuccess(`Loaded ${rows.length} students from ${sourceLabel}`);
+    } else {
+      showWarning(`No valid emails found in ${sourceLabel}`);
+    }
   };
 
   const handleFileUpload = (e) => {
@@ -106,14 +102,14 @@ const BulkStudentImport = ({
         try {
           applyRows(parseStudentRowsFromExcel(event.target.result), file.name);
         } catch {
-          Swal.fire("Error", "Failed to parse Excel file.", "error");
+          showError("Failed to parse Excel file.");
         } finally {
           setIsParsing(false);
         }
       };
       reader.onerror = () => {
         setIsParsing(false);
-        Swal.fire("Error", "Could not read the selected file.", "error");
+        showError("Could not read the selected file.");
       };
       reader.readAsArrayBuffer(file);
     } else {
@@ -122,14 +118,14 @@ const BulkStudentImport = ({
         try {
           applyRows(parseStudentRowsFromCsv(event.target.result), file.name);
         } catch {
-          Swal.fire("Error", "Failed to parse CSV file.", "error");
+          showError("Failed to parse CSV file.");
         } finally {
           setIsParsing(false);
         }
       };
       reader.onerror = () => {
         setIsParsing(false);
-        Swal.fire("Error", "Could not read the selected file.", "error");
+        showError("Could not read the selected file.");
       };
       reader.readAsText(file);
     }
@@ -151,26 +147,25 @@ const BulkStudentImport = ({
 
   const handleImport = async () => {
     if (!batchId) {
-      Swal.fire("Select a batch", "Choose the batch/course to assign students to.", "warning");
+      showWarning("Choose the batch/course to assign students to.");
       return;
     }
     if (!students.length) {
-      Swal.fire("No students", "Upload a CSV/Excel file or paste student emails first.", "warning");
+      showWarning("Upload a CSV/Excel file or paste student emails first.");
       return;
     }
 
-    const confirm = await Swal.fire({
+    const emailNote = sendWelcomeEmails ? " and send password setup emails" : "";
+    const ok = await confirmAction({
       title: "Import & Assign?",
-      html: `<p>Create/assign <b>${students.length}</b> student${students.length === 1 ? "" : "s"} to <b>${
+      text: `Create/assign ${students.length} student${students.length === 1 ? "" : "s"} to ${
         selectedBatch?.name || "selected batch"
-      }</b>${sendWelcomeEmails ? " and send password setup emails" : ""}.</p>`,
+      }${emailNote}.`,
       icon: "question",
-      showCancelButton: true,
       confirmButtonText: "Import & Assign",
-      cancelButtonText: "Cancel",
     });
 
-    if (!confirm.isConfirmed) return;
+    if (!ok) return;
 
     try {
       const result = await importStudents({
@@ -182,22 +177,17 @@ const BulkStudentImport = ({
       setErrors(Array.isArray(result.errors) ? result.errors : []);
 
       const s = result.summary || {};
-      await Swal.fire({
-        title: "Import complete",
-        html: `
-          <div style="text-align:left;font-size:14px;line-height:1.6">
-            <div>Total students: <b>${s.totalStudents ?? students.length}</b></div>
-            <div>Successfully created: <b>${s.successfullyCreated ?? 0}</b></div>
-            <div>Already existing: <b>${s.alreadyExisting ?? 0}</b></div>
-            <div>Successfully assigned: <b>${s.successfullyAssigned ?? 0}</b></div>
-            <div>Welcome emails sent: <b>${s.welcomeEmailsSent ?? s.welcomeEmailsQueued ?? 0}</b></div>
-            <div>Failed records: <b>${s.failedRecords ?? 0}</b></div>
-          </div>
-        `,
-        icon: (s.failedRecords || 0) > 0 ? "warning" : "success",
-      });
+      const failed = s.failedRecords ?? 0;
+      const welcome = s.welcomeEmailsSent ?? s.welcomeEmailsQueued ?? 0;
+      const summaryMsg = `Import complete: ${s.totalStudents ?? students.length} total, ${
+        s.successfullyCreated ?? 0
+      } created, ${s.alreadyExisting ?? 0} existing, ${
+        s.successfullyAssigned ?? 0
+      } assigned, ${welcome} welcome emails, ${failed} failed.`;
+      if (failed > 0) showWarning(summaryMsg);
+      else showSuccess(summaryMsg);
     } catch (err) {
-      Swal.fire("Import failed", getErrorMessage(err, "Could not import students"), "error");
+      showError(getErrorMessage(err, "Could not import students"));
     }
   };
 

@@ -3,7 +3,7 @@ import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import './Navbar.css';
 import { logout } from '../../../api/authApi';
 import NotificationBell from '../../../components/common/NotificationBell/NotificationBell';
-import { toast } from 'react-toastify';
+import { showSuccess } from '../../../utils/toast';
 import { useTrainerBootstrap } from '../../../hooks/useTrainerBootstrap';
 
 const links = [
@@ -76,9 +76,9 @@ const Navbar = () => {
         setIsMenuOpen(false);
         try {
             await logout();
-            toast.success("Logged out successfully");
+            showSuccess("Logged out successfully");
         } catch {
-            toast.success("Logged out successfully");
+            showSuccess("Logged out successfully");
         } finally {
             navigate('/');
         }

@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useMemo } from "react";
 import "./TrainerAttendancePanel.css";
 import { useStartClass, useMarkAttendance, useEndClass, useClassSessions } from "../../../hooks/useClassSession";
-import Swal from "sweetalert2";
 import Loader from "../../../components/common/Loader/Loader";
+import { confirmAction } from "../../../utils/confirmAction";
+import { showError, showSuccess } from "../../../utils/toast";
 
 const mapSessionAttendance = (session) =>
     (session?.attendance || []).map((a) => ({
@@ -75,11 +76,7 @@ export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSc
         const id = batch?._id || batch?.batchId;
 
         if (!batch || !id) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Batch information is not available. Please refresh the page.",
-            });
+            showError("Batch information is not available. Please refresh the page.");
             return;
         }
 
@@ -89,19 +86,9 @@ export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSc
             setAttendanceOverride(mapSessionAttendance(session));
             setNotesOverride(session.notes || "");
 
-            Swal.fire({
-                icon: "success",
-                title: "Class Started!",
-                text: "Good luck with today's session",
-                timer: 2000,
-                showConfirmButton: false,
-            });
+            showSuccess("Class started. Good luck with today's session.");
         } catch (error) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: error.response?.data?.message || error.message || "Failed to start class",
-            });
+            showError(error.response?.data?.message || error.message || "Failed to start class");
         }
     };
 
@@ -117,11 +104,7 @@ export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSc
                 attendance: [{ studentId, status: newStatus }],
             });
         } catch {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Failed to update attendance",
-            });
+            showError("Failed to update attendance");
         }
     };
 
@@ -142,61 +125,40 @@ export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSc
                 attendance: allPresent,
             });
 
-            Swal.fire({
-                icon: "success",
-                title: "Marked All Present",
-                timer: 1500,
-                showConfirmButton: false,
-            });
+            showSuccess("Marked all present");
         } catch {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Failed to mark all present",
-            });
+            showError("Failed to mark all present");
         }
     };
 
     const handleEndClass = async () => {
-        const result = await Swal.fire({
+        const confirmed = await confirmAction({
             title: "End Class?",
             text: "Are you sure you want to end this class session?",
             icon: "question",
-            showCancelButton: true,
-            confirmButtonColor: "#0B3D2E",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, End Class",
         });
 
-        if (result.isConfirmed) {
-            try {
-                const endedSession = await endClassMutation.mutateAsync({
-                    sessionId: activeSession._id,
-                    notes,
-                });
+        if (!confirmed) return;
 
-                setSessionOverride(endedSession);
+        try {
+            const endedSession = await endClassMutation.mutateAsync({
+                sessionId: activeSession._id,
+                notes,
+            });
 
-                const presentCount = attendance.filter((a) => a.status === "Present").length;
-                const lateCount = attendance.filter((a) => a.status === "Late").length;
-                const absentCount = attendance.filter((a) => a.status === "Absent").length;
+            setSessionOverride(endedSession);
 
-                Swal.fire({
-                    icon: "success",
-                    title: "Class Ended Successfully",
-                    html: `
-            <p><strong>Duration:</strong> ${endedSession.duration}</p>
-            <p><strong>Present:</strong> ${presentCount} | <strong>Late:</strong> ${lateCount} | <strong>Absent:</strong> ${absentCount}</p>
-          `,
-                    confirmButtonColor: "#0B3D2E",
-                });
-            } catch (error) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Error",
-                    text: error.response?.data?.message || "Failed to end class",
-                });
-            }
+            const presentCount = attendance.filter((a) => a.status === "Present").length;
+            const lateCount = attendance.filter((a) => a.status === "Late").length;
+            const absentCount = attendance.filter((a) => a.status === "Absent").length;
+
+            showSuccess(
+                `Class ended (${endedSession.duration}). Present: ${presentCount}, Late: ${lateCount}, Absent: ${absentCount}`
+            );
+        } catch (error) {
+            showError(error.response?.data?.message || "Failed to end class");
         }
     };
 

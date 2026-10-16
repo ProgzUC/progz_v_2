@@ -5,7 +5,8 @@ import "./EnrollStudents.css";
 import { useAllUsers, usePendingUsers } from "../../../hooks/useAdminUsers";
 import { useCourses } from "../../../hooks/useCourses";
 import { useBatches, useEnrollStudent, useBulkEnrollStudents } from "../../../hooks/useBatches";
-import Swal from "sweetalert2";
+import { confirmAction } from "../../../utils/confirmAction";
+import { showError, showInfo, showSuccess, showWarning } from "../../../utils/toast";
 import Loader from "../../../components/common/Loader/Loader";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import { createId } from "../../../utils/courseBuilder";
@@ -145,13 +146,13 @@ const EnrollStudents = () => {
 
   const handleEnroll = async () => {
     if (!selectedStudent) {
-      Swal.fire("Error", "Please select a student", "error");
+      showError("Please select a student");
       return;
     }
 
     const validSections = courseSections.filter((s) => s.courseId && s.batchId);
     if (validSections.length === 0) {
-      Swal.fire("Error", "Please select at least one Course and Batch", "error");
+      showError("Please select at least one Course and Batch");
       return;
     }
 
@@ -164,15 +165,13 @@ const EnrollStudents = () => {
           instructorId: section.instructorId || undefined,
         });
       }
-      Swal.fire("Success", "Student enrolled successfully!", "success");
+      showSuccess("Student enrolled successfully!");
       setSelectedStudent("");
       setCourseSections([{ id: createId(), courseId: "", instructorId: "", batchId: "" }]);
       handleRefreshData();
     } catch (err) {
-      Swal.fire(
-        "Error",
-        err.response?.data?.msg || err.response?.data?.message || "Enrollment failed",
-        "error"
+      showError(
+        err.response?.data?.msg || err.response?.data?.message || "Enrollment failed"
       );
     } finally {
       setIsSingleEnrolling(false);
@@ -181,34 +180,27 @@ const EnrollStudents = () => {
 
   const handleBulkEnroll = async () => {
     if (!bulkBatchId) {
-      Swal.fire("Warning", "Please select a target batch first.", "warning");
+      showWarning("Please select a target batch first.");
       return;
     }
 
     if (selectedActiveIds.size === 0 && selectedPendingIds.size === 0) {
-      Swal.fire("Warning", "No students selected. Tick checkboxes next to the names.", "warning");
+      showWarning("No students selected. Tick checkboxes next to the names.");
       return;
     }
 
-    const confirm = await Swal.fire({
+    const ok = await confirmAction({
       title: "Enroll selected students?",
-      html: `<p>${selectedActiveIds.size} active + ${selectedPendingIds.size} Zen CRM pending will be enrolled into <strong>${selectedBulkBatch?.name || "batch"}</strong>.</p>
-             <p class="text-secondary" style="font-size:0.85rem">Pending CRM leads are auto-approved on enroll.</p>`,
+      text: `${selectedActiveIds.size} active + ${selectedPendingIds.size} Zen CRM pending will be enrolled into ${
+        selectedBulkBatch?.name || "batch"
+      }. Pending CRM leads are auto-approved on enroll.`,
       icon: "question",
-      showCancelButton: true,
       confirmButtonColor: "#10A879",
       confirmButtonText: "Yes, enroll",
     });
-    if (!confirm.isConfirmed) return;
+    if (!ok) return;
 
-    Swal.fire({
-      title: "Enrolling Students",
-      text: "Adding selected students and auto-approving any pending CRM leads...",
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
+    showInfo("Enrolling students and auto-approving pending CRM leads...");
 
     try {
       const response = await bulkEnrollMutation({
@@ -217,29 +209,24 @@ const EnrollStudents = () => {
         pendingStudentIds: Array.from(selectedPendingIds),
       });
 
-      let html = `Successfully enrolled: <strong>${response.enrolledCount}</strong> students.<br/>Approved pending leads: <strong>${response.approvedCount}</strong>.`;
+      let msg = `Enrolled ${response.enrolledCount} students. Approved ${response.approvedCount} pending leads.`;
       if (response.errors?.length) {
-        html += `<br/><br/><div style="text-align:left;font-size:12px;color:#ef4444;max-height:100px;overflow-y:auto"><strong>Notes:</strong><br/>${response.errors.map((e) => `• ${e}`).join("<br/>")}</div>`;
+        msg += ` Notes: ${response.errors.join("; ")}`;
+        showWarning(msg);
+      } else {
+        showSuccess(msg);
       }
-
-      Swal.fire({
-        title: "Bulk Enrollment Complete",
-        html,
-        icon: response.errors?.length ? "info" : "success",
-      });
 
       setSelectedActiveIds(new Set());
       setSelectedPendingIds(new Set());
       setBulkSelectMode(false);
       handleRefreshData();
     } catch (err) {
-      Swal.fire(
-        "Error",
+      showError(
         err.response?.data?.msg ||
           err.response?.data?.message ||
           err.message ||
-          "Failed to process bulk enrollment",
-        "error"
+          "Failed to process bulk enrollment"
       );
     }
   };

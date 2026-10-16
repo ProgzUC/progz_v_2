@@ -9,7 +9,7 @@ import TrainerStatus from '../../components/TrainerStatus';
 import TrainerAttendancePanel from '../../components/attendance/TrainerAttendancePanel';
 import AttendanceHistory from '../../components/attendance/AttendanceHistory';
 import TrainerAnnouncePanel from './TrainerAnnouncePanel';
-import Swal from 'sweetalert2';
+import { showError, showInfo } from "../../../utils/toast";
 
 const BATCH_TABS = ['students', 'sections', 'attendance', 'announce'];
 
@@ -222,11 +222,7 @@ const BatchDetailsContent = ({
             }
             setActiveTab("attendance");
         } catch (err) {
-            Swal.fire({
-                icon: "error",
-                title: "Could not join class",
-                text: err.response?.data?.message || err.message || "Failed to join class",
-            });
+            showError(err.response?.data?.message || err.message || "Could not join class");
         }
     };
 
@@ -462,7 +458,7 @@ const BatchDetailsContent = ({
                                                                                 sectionIndex: item.sectionIndex,
                                                                             }, {
                                                                                 onError: (err) => {
-                                                                                    alert(`Failed to toggle: ${err?.response?.data?.message || err?.message || 'Unknown error'}`);
+                                                                                    showError(`Failed to toggle: ${err?.response?.data?.message || err?.message || 'Unknown error'}`);
                                                                                 }
                                                                             });
                                                                         }}
@@ -519,12 +515,7 @@ const BatchDetailsContent = ({
                                 || (batch.classTiming?.startTime || batch.classTiming?.endTime
                                     ? `${batch.classTiming?.startTime || ''} - ${batch.classTiming?.endTime || ''}`.trim()
                                     : 'Not scheduled');
-                            Swal.fire({
-                                icon: 'info',
-                                title: 'Class Schedule',
-                                html: `<p><strong>Days:</strong> ${schedule}</p><p><strong>Time:</strong> ${timing}</p>`,
-                                confirmButtonColor: '#0B3D2E',
-                            });
+                            showInfo(`Class schedule — Days: ${schedule}. Time: ${timing}.`);
                         }}
                     />
                     <AttendanceHistory batchId={batchId} />

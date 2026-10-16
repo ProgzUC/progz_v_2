@@ -27,6 +27,7 @@ import {
   Cell,
   CartesianGrid,
 } from "recharts";
+import { showError } from "../../../utils/toast";
 
 function useAccentPaint() {
   const { accentSwatch } = useAdminTheme();
@@ -215,7 +216,7 @@ function AttendanceTab() {
       setExporting(true);
       await downloadAttendanceCSV();
     } catch {
-      alert("Failed to export attendance logs.");
+      showError("Failed to export attendance logs.");
     } finally {
       setExporting(false);
     }

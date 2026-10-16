@@ -32,7 +32,7 @@ import {
     BiTrendingUp
 } from "react-icons/bi";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import Swal from "sweetalert2";
+import { showSuccess } from "../../../utils/toast";
 
 const THUMB_SKIP_WORDS = new Set([
     "complete", "course", "courses", "the", "a", "an", "and",
@@ -251,12 +251,7 @@ const EditProfileModel = ({ currentData, mode = "edit", onClose, onSave }) => {
                 onSuccess: (updatedData) => {
                     if (onSave) onSave(updatedData);
                     onClose();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Profile Updated',
-                        text: 'Your profile has been successfully updated!',
-                        confirmButtonColor: '#0F4C3A'
-                    });
+                    showSuccess("Profile Updated: Your profile has been successfully updated!");
                 },
                 onError: (err) => {
                     setError(getErrorMessage(err, "Failed to update profile."));

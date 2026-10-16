@@ -3,7 +3,7 @@ import './InstructorPreview.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useUpdateUser } from '../../../hooks/useAdminUsers';
-import Swal from 'sweetalert2';
+import { showError, showSuccess } from '../../../utils/toast';
 
 const InstructorPreview = ({ instructor, onCancel }) => {
     const location = useLocation();
@@ -87,22 +87,19 @@ const InstructorPreview = ({ instructor, onCancel }) => {
             {
                 onSuccess: () => {
                     const becameStudent = String(payload.role || "").toLowerCase() === "student";
-                    Swal.fire(
-                        "Success",
+                    showSuccess(
                         becameStudent
                             ? "User updated and role changed to Student"
-                            : "Instructor details updated successfully",
-                        "success"
-                    ).then(() => {
-                        if (becameStudent) {
-                            navigate("/admin/students");
-                        } else {
-                            setIsEditing(false);
-                        }
-                    });
+                            : "Instructor details updated successfully"
+                    );
+                    if (becameStudent) {
+                        navigate("/admin/students");
+                    } else {
+                        setIsEditing(false);
+                    }
                 },
                 onError: (err) => {
-                    Swal.fire("Error", err.response?.data?.msg || "Failed to update instructor", "error");
+                    showError(err.response?.data?.msg || "Failed to update instructor");
                 },
             }
         );

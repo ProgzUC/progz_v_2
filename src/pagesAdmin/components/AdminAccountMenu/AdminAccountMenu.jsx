@@ -1,9 +1,9 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import { logout } from "../../../api/authApi";
 import { getStoredUser } from "../../../utils/authStorage";
-import { toast } from "react-toastify";
+import { confirmAction } from "../../../utils/confirmAction";
+import { showSuccess } from "../../../utils/toast";
 import "./AdminAccountMenu.css";
 
 const getInitials = (name = "") => {
@@ -49,22 +49,19 @@ const AdminAccountMenu = ({ compact = false, className = "" }) => {
     };
   }, [open]);
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
     setOpen(false);
-    Swal.fire({
+    const ok = await confirmAction({
       title: "Sign out?",
       text: "Are you sure you want to sign out?",
       icon: "warning",
-      showCancelButton: true,
       confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, sign out",
-    }).then(async (result) => {
-      if (!result.isConfirmed) return;
-      await logout();
-      toast.success("Logged out successfully");
-      navigate("/", { replace: true });
     });
+    if (!ok) return;
+    await logout();
+    showSuccess("Logged out successfully");
+    navigate("/", { replace: true });
   };
 
   const goPreferences = () => {

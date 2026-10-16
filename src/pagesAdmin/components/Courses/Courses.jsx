@@ -1,13 +1,16 @@
 import React, { useState, useMemo } from "react";
 import "./Courses.css";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import { confirmDelete } from "../../../utils/confirmDelete";
+import { getErrorMessage } from "../../../utils/apiError";
 import { useCourses, useDeleteCourse } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
 import PersonStack from "../../../components/common/PersonStack/PersonStack";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import { LuEye, LuPencil, LuUserPlus, LuTrash2 } from "react-icons/lu";
+
+import { showError, showSuccess } from "../../../utils/toast";
 
 const Courses = () => {
   const navigate = useNavigate();
@@ -68,40 +71,19 @@ const Courses = () => {
     navigate(`/admin/course-users/${course._id}`);
   };
 
-  const deleteHandler = (course) => {
-    Swal.fire({
-      title: "Delete Course?",
-      text: `Are you sure you want to delete "${course.courseName}"? This action cannot be undone.`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete!",
-      background: "#fff",
-      color: "#333",
-      borderRadius: "15px",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        deleteCourseMutation(course._id, {
-          onSuccess: () => {
-            Swal.fire({
-              title: "Deleted!",
-              text: `"${course.courseName}" has been deleted successfully.`,
-              icon: "success",
-              confirmButtonColor: "#28a745",
-              timer: 1500,
-            });
-          },
-          onError: (err) => {
-            Swal.fire({
-              title: "Error!",
-              text: err.message || "Failed to delete course.",
-              icon: "error",
-              confirmButtonColor: "#d33",
-            });
-          },
-        });
-      }
+  const deleteHandler = async (course) => {
+    const ok = await confirmDelete(
+      "Delete Course?",
+      `Are you sure you want to delete "${course.courseName}"? This action cannot be undone.`
+    );
+    if (!ok) return;
+    deleteCourseMutation(course._id, {
+      onSuccess: () => {
+        showSuccess(`"${course.courseName}" has been deleted successfully.`);
+      },
+      onError: (err) => {
+        showError(getErrorMessage(err, "Failed to delete course"));
+      },
     });
   };
 

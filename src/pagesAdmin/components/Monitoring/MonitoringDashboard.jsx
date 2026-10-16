@@ -19,12 +19,14 @@ import {
   Cell,
   CartesianGrid
 } from "recharts";
-import Swal from "sweetalert2";
+import { confirmDelete } from "../../../utils/confirmDelete";
 import { motion, AnimatePresence } from "framer-motion";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import { ErrorState } from "../../../components/common/PageState";
 import { getErrorMessage } from "../../../utils/apiError";
 import "./MonitoringDashboard.css";
+
+import { showError, showSuccess } from "../../../utils/toast";
 
 const COLORS = ["#10A879", "#0B3D2E", "#718096", "#8B9AAB"];
 const PIE_COLORS = {
@@ -160,40 +162,26 @@ export default function MonitoringDashboard() {
     try {
       const newStatus = !currentStatus;
       await resolveErrorLog(id, newStatus);
-      Swal.fire({
-        toast: true,
-        position: "top-end",
-        icon: "success",
-        title: `Error marked as ${newStatus ? "resolved" : "unresolved"}`,
-        showConfirmButton: false,
-        timer: 2000
-      });
+      showSuccess(`Error marked as ${newStatus ? "resolved" : "unresolved"}`);
       loadErrorLogs();
     } catch (err) {
-      Swal.fire("Error", err.message || "Failed to update error status", "error");
+      showError(err.message || "Failed to update error status");
     }
   };
 
   const handleDeleteError = async (id) => {
-    Swal.fire({
-      title: "Delete Error Log?",
-      text: "Are you sure you want to permanently delete this error log entry?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DC2626",
-      cancelButtonColor: "#0B3D2E",
-      confirmButtonText: "Yes, delete!"
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await deleteErrorLog(id);
-          Swal.fire("Deleted", "Error entry deleted successfully", "success");
-          loadErrorLogs();
-        } catch (err) {
-          Swal.fire("Error", err.message || "Failed to delete error", "error");
-        }
-      }
-    });
+    const ok = await confirmDelete(
+      "Delete Error Log?",
+      "Are you sure you want to permanently delete this error log entry?"
+    );
+    if (!ok) return;
+    try {
+      await deleteErrorLog(id);
+      showSuccess("Error entry deleted successfully");
+      loadErrorLogs();
+    } catch (err) {
+      showError(err.message || "Failed to delete error");
+    }
   };
 
   const formatUptime = (seconds) => {

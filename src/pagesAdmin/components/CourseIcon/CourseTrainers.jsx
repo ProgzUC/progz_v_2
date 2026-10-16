@@ -19,7 +19,9 @@ import { useCourse, useUpdateCourse } from "../../../hooks/useCourses";
 import { useAllUsers } from "../../../hooks/useAdminUsers";
 import Loader from "../../../components/common/Loader/Loader";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
-import Swal from "sweetalert2";
+import { confirmAction } from "../../../utils/confirmAction";
+
+import { showError, showSuccess, showWarning } from "../../../utils/toast";
 
 const getInitials = (name = "") => {
   const parts = name.trim().split(/\s+/).filter(Boolean);
@@ -118,20 +120,14 @@ const CourseTrainers = () => {
       { id, data: payload },
       {
         onSuccess: () => {
-          Swal.fire({
-            title: "Updated",
-            text: "Instructors list updated successfully!",
-            icon: "success",
-            timer: 1500,
-            showConfirmButton: false,
-          });
+          showSuccess("Updated: Instructors list updated successfully!");
           setIsUpdating(false);
           setSelectedInstructorId("");
           setAddSearchTerm("");
           setActiveTab("list");
         },
         onError: (err) => {
-          Swal.fire("Error", err.message || "Failed to update instructors", "error");
+          showError(err.message || "Failed to update instructors");
           setIsUpdating(false);
         },
       }
@@ -140,7 +136,7 @@ const CourseTrainers = () => {
 
   const handleAddInstructor = () => {
     if (!selectedInstructorId) {
-      Swal.fire("Attention", "Please select an instructor from the list first.", "warning");
+      showWarning("Please select an instructor from the list first.");
       return;
     }
     const user = allUsers.find((u) => u._id === selectedInstructorId);
@@ -148,22 +144,18 @@ const CourseTrainers = () => {
     handleUpdateInstructors([...currentInstructors, user]);
   };
 
-  const handleRemoveInstructor = (instructor) => {
+  const handleRemoveInstructor = async (instructor) => {
     setOpenMenuId(null);
-    Swal.fire({
+    const ok = await confirmAction({
       title: "Remove Instructor?",
       text: `Remove ${instructor.name} from this course?`,
       icon: "warning",
-      showCancelButton: true,
       confirmButtonColor: "#dc2626",
-      cancelButtonColor: "#718096",
       confirmButtonText: "Remove",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const newList = currentInstructors.filter((inst) => inst._id !== instructor._id);
-        handleUpdateInstructors(newList);
-      }
     });
+    if (!ok) return;
+    const newList = currentInstructors.filter((inst) => inst._id !== instructor._id);
+    handleUpdateInstructors(newList);
   };
 
   const handleEditInstructor = (instructor) => {

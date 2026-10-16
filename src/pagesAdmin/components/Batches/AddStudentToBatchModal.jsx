@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Swal from "sweetalert2";
 import { useAllUsers } from "../../../hooks/useAdminUsers";
 import { useEnrollStudent } from "../../../hooks/useBatches";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import "../Modal.css";
+import { showError, showSuccess } from "../../../utils/toast";
 
 const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
     const [selectedStudentId, setSelectedStudentId] = useState("");
@@ -20,11 +20,11 @@ const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
 
     const handleEnroll = () => {
         if (!selectedStudentId) {
-            Swal.fire("Error", "Please select a student", "error");
+            showError("Please select a student");
             return;
         }
         if (!batch.course && !(Array.isArray(batch.courses) && batch.courses.length)) {
-            Swal.fire("Error", "Batch does not have a valid course linked", "error");
+            showError("Batch does not have a valid course linked");
             return;
         }
 
@@ -35,16 +35,12 @@ const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
 
         enrollStudentMutation(payload, {
             onSuccess: () => {
-                Swal.fire("Success", "Student Added to Batch Successfully!", "success");
+                showSuccess("Student Added to Batch Successfully!");
                 onClose();
                 setSelectedStudentId("");
             },
             onError: (err) => {
-                Swal.fire(
-                    "Error",
-                    err.response?.data?.message || err.response?.data?.msg || "Enrollment failed",
-                    "error"
-                );
+                showError(err.response?.data?.message || err.response?.data?.msg || "Enrollment failed");
             },
         });
     };

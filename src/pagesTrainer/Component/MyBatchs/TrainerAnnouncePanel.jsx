@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import Swal from "sweetalert2";
 import {
   createTrainerBatchAnnouncement,
   deleteTrainerBatchAnnouncement,
   fetchTrainerBatchAnnouncements,
   updateTrainerBatchAnnouncement,
 } from "../../../api/trainerApi";
+import { confirmAction } from "../../../utils/confirmAction";
+import { showError, showSuccess, showWarning } from "../../../utils/toast";
 import "./TrainerAnnouncePanel.css";
 
 const studentKey = (student) => String(student?._id || student?.id || "");
@@ -84,21 +85,11 @@ export default function TrainerAnnouncePanel({ batchId, students = [] }) {
 
   const publish = async () => {
     if (!title.trim()) {
-      Swal.fire({
-        icon: "warning",
-        title: "Title required",
-        text: "Add a short title for the announcement.",
-        confirmButtonColor: "#0B3D2E",
-      });
+      showWarning("Add a short title for the announcement.");
       return;
     }
     if (selected.size === 0) {
-      Swal.fire({
-        icon: "warning",
-        title: "Select students",
-        text: "Pick at least one student to notify.",
-        confirmButtonColor: "#0B3D2E",
-      });
+      showWarning("Pick at least one student to notify.");
       return;
     }
 
@@ -113,22 +104,10 @@ export default function TrainerAnnouncePanel({ batchId, students = [] }) {
       setTitle("");
       setBody("");
       setSelected(new Set());
-      await Swal.fire({
-        icon: "success",
-        title: "Announcement sent",
-        text: result?.message || "Students have been notified.",
-        timer: 2200,
-        showConfirmButton: false,
-        confirmButtonColor: "#0B3D2E",
-      });
+      showSuccess(result?.message || "Students have been notified.");
       await loadItems();
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Could not send",
-        text: err.response?.data?.message || err.message || "Failed to publish announcement",
-        confirmButtonColor: "#0B3D2E",
-      });
+      showError(err.response?.data?.message || err.message || "Failed to publish announcement");
     } finally {
       setSending(false);
     }
@@ -137,46 +116,28 @@ export default function TrainerAnnouncePanel({ batchId, students = [] }) {
   const toggleActive = async (item) => {
     try {
       const result = await updateTrainerBatchAnnouncement(item.id, { active: !item.active });
-      await Swal.fire({
-        icon: "success",
-        title: result?.message || "Updated",
-        timer: 1600,
-        showConfirmButton: false,
-        confirmButtonColor: "#0B3D2E",
-      });
+      showSuccess(result?.message || "Announcement updated.");
       await loadItems();
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Update failed",
-        text: err.response?.data?.message || "Failed to update announcement",
-        confirmButtonColor: "#0B3D2E",
-      });
+      showError(err.response?.data?.message || "Failed to update announcement");
     }
   };
 
   const removeItem = async (item) => {
-    const confirm = await Swal.fire({
-      icon: "warning",
+    const ok = await confirmAction({
       title: "Delete announcement?",
       text: "Students will no longer see this notice on the portal.",
-      showCancelButton: true,
       confirmButtonText: "Delete",
       confirmButtonColor: "#DC2626",
-      cancelButtonColor: "#0B3D2E",
     });
-    if (!confirm.isConfirmed) return;
+    if (!ok) return;
 
     try {
       await deleteTrainerBatchAnnouncement(item.id);
+      showSuccess("Announcement deleted.");
       await loadItems();
     } catch (err) {
-      Swal.fire({
-        icon: "error",
-        title: "Delete failed",
-        text: err.response?.data?.message || "Failed to delete announcement",
-        confirmButtonColor: "#0B3D2E",
-      });
+      showError(err.response?.data?.message || "Failed to delete announcement");
     }
   };
 

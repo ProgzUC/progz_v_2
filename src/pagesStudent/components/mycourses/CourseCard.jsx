@@ -11,7 +11,7 @@ import { BiCodeAlt } from "react-icons/bi";
 import { getLessonCompilerMode } from "../../../utils/compilerMode";
 import { formatNextClass } from "../../utils/formatNextClass";
 import { isHtmlEmpty } from "../../../components/common/RichTextEditor/richTextUtils";
-import Swal from "sweetalert2";
+import { showError, showSuccess } from "../../../utils/toast";
 
 const THUMB_SKIP_WORDS = new Set([
     "complete", "course", "courses", "the", "a", "an", "and",
@@ -79,22 +79,14 @@ function LargeCourseCard({ course, onContinue }) {
                 window.open(link, "_blank", "noopener,noreferrer");
             }
             if (result?.status) {
-                Swal.fire({
-                    icon: "success",
-                    title: `Marked ${result.status}`,
-                    text: result.joinedAt
-                        ? `Joined at ${new Date(result.joinedAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}`
-                        : "Attendance recorded",
-                    timer: 2000,
-                    showConfirmButton: false,
-                });
+                showSuccess(
+                    result.joinedAt
+                        ? `Marked ${result.status}: Joined at ${new Date(result.joinedAt).toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit" })}`
+                        : `Marked ${result.status}: Attendance recorded`
+                );
             }
         } catch (err) {
-            Swal.fire({
-                icon: "error",
-                title: "Could not join class",
-                text: err.response?.data?.message || err.message || "Failed to join class",
-            });
+            showError(err.response?.data?.message || err.message || "Could not join class");
         }
     };
 

@@ -7,7 +7,8 @@ import { approveUser, rejectUser } from "../../../api/userApi";
 import { ErrorState, Skeleton } from "../../../components/common/PageState";
 import { getErrorMessage } from "../../../utils/apiError";
 import PaginationBar from "../../../components/common/PaginationBar/PaginationBar";
-import Swal from "sweetalert2";
+import { confirmAction } from "../../../utils/confirmAction";
+import { showError, showSuccess, showWarning } from "../../../utils/toast";
 import "./ApproveUser.css";
 
 const AVATAR_TONES = ["green", "blue", "orange", "purple", "teal", "rose"];
@@ -121,17 +122,15 @@ const ApproveUser = () => {
     if (ids.length === 0) return;
 
     const isApprove = action === "approve";
-    const result = await Swal.fire({
+    const ok = await confirmAction({
       title: isApprove ? "Approve selected users?" : "Reject selected users?",
       text: `${ids.length} ${activeTab}(s) will be ${isApprove ? "approved" : "rejected"}.`,
       icon: isApprove ? "question" : "warning",
-      showCancelButton: true,
       confirmButtonColor: isApprove ? "#10A879" : "#d33",
-      cancelButtonColor: "#718096",
       confirmButtonText: isApprove ? "Yes, approve all" : "Yes, reject all",
     });
 
-    if (!result.isConfirmed) return;
+    if (!ok) return;
 
     setIsBulkProcessing(true);
     const outcomes = await Promise.allSettled(
@@ -151,17 +150,13 @@ const ApproveUser = () => {
     setIsBulkProcessing(false);
 
     if (failCount === 0) {
-      Swal.fire(
-        isApprove ? "Approved!" : "Rejected!",
-        `${successCount} user(s) ${isApprove ? "approved" : "rejected"} successfully.`,
-        "success"
+      showSuccess(
+        `${successCount} user(s) ${isApprove ? "approved" : "rejected"} successfully.`
       );
+    } else if (successCount > 0) {
+      showWarning(`${successCount} succeeded, ${failCount} failed.`);
     } else {
-      Swal.fire(
-        "Partially completed",
-        `${successCount} succeeded, ${failCount} failed.`,
-        successCount > 0 ? "warning" : "error"
-      );
+      showError(`${successCount} succeeded, ${failCount} failed.`);
     }
   };
 
@@ -172,38 +167,30 @@ const ApproveUser = () => {
     navigate("/admin/user-detail-view", { state: { user } });
   };
 
-  const handleApprove = (user) => {
-    Swal.fire({
+  const handleApprove = async (user) => {
+    const ok = await confirmAction({
       title: "Approve User?",
       text: `Are you sure you want to approve ${user.name}?`,
       icon: "question",
-      showCancelButton: true,
       confirmButtonColor: "#10A879",
-      cancelButtonColor: "#d33",
       confirmButtonText: "Yes, approve!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        approve(user._id || user.id);
-        Swal.fire("Approved!", "User has been approved.", "success");
-      }
     });
+    if (!ok) return;
+    approve(user._id || user.id);
+    showSuccess("User has been approved.");
   };
 
-  const handleReject = (user) => {
-    Swal.fire({
+  const handleReject = async (user) => {
+    const ok = await confirmAction({
       title: "Reject User?",
       text: `Are you sure you want to reject ${user.name}?`,
       icon: "warning",
-      showCancelButton: true,
       confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, reject!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        reject(user._id || user.id);
-        Swal.fire("Rejected!", "User has been rejected.", "success");
-      }
     });
+    if (!ok) return;
+    reject(user._id || user.id);
+    showSuccess("User has been rejected.");
   };
 
   return (
