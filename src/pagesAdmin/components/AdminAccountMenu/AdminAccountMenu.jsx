@@ -21,13 +21,19 @@ const formatRole = (role) => {
   return value.replace(/^\w/, (c) => c.toUpperCase());
 };
 
+const formatAdminDisplayName = (name) => {
+  const value = String(name || "").trim();
+  if (!value || /^super\s*admin$/i.test(value)) return "Admin";
+  return value;
+};
+
 const AdminAccountMenu = ({ compact = false, className = "" }) => {
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
   const menuId = useId();
   const navigate = useNavigate();
   const user = getStoredUser();
-  const displayName = user?.name?.trim() || "Admin";
+  const displayName = formatAdminDisplayName(user?.name);
   const roleLabel = formatRole(user?.role);
   const initials = getInitials(displayName);
 

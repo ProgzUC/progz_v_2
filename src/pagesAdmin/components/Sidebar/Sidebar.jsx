@@ -31,7 +31,8 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
   const expanded = hoverOpen || mobileOpen;
   const { branding } = useAdminTheme();
   const academyName = branding?.academyName?.trim() || "ProgZ Academy";
-  const tagline = branding?.tagline?.trim() || "Super Admin";
+  const rawTagline = branding?.tagline?.trim() || "Admin";
+  const tagline = /^super\s*admin$/i.test(rawTagline) ? "Admin" : rawTagline;
   const logoSrc = branding?.logoDataUrl || "/admin/logo.png";
 
   useEffect(() => {

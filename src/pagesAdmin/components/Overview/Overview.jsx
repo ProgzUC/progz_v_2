@@ -206,10 +206,10 @@ const Overview = () => {
   } = useAdminDashboard({ startDate: range.startDate, endDate: range.endDate });
 
   const user = getStoredUser();
-  const firstName = (user?.name || "Admin").split(" ")[0];
+  const rawName = String(user?.name || "Admin").trim();
+  const displayName = /^super\s*admin$/i.test(rawName) ? "Admin" : rawName;
+  const firstName = displayName.split(" ")[0] || "Admin";
 
-  const searchRef = useRef(null);
-  const [query, setQuery] = useState("");
   const [studentPopup, setStudentPopup] = useState(null);
 
   const numbers = readStats(stats);
@@ -233,19 +233,8 @@ const Overview = () => {
     ? Math.round((studentData.value / totalUsers) * 100)
     : 0;
 
-  const q = query.trim().toLowerCase();
-  const coursesList = (recentCourses || []).filter((c) => {
-    if (!q) return true;
-    return [c.course, c.courseName, c.instructor, c.status]
-      .filter(Boolean)
-      .some((v) => String(v).toLowerCase().includes(q));
-  });
-  const studentsList = (recentStudents || []).filter((s) => {
-    if (!q) return true;
-    return [s.name, s.email]
-      .filter(Boolean)
-      .some((v) => String(v).toLowerCase().includes(q));
-  });
+  const coursesList = recentCourses || [];
+  const studentsList = recentStudents || [];
 
   const handleGenerateReport = () => {
     const rows = [
@@ -302,10 +291,6 @@ const Overview = () => {
 
   useEffect(() => {
     const onKey = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
-        e.preventDefault();
-        searchRef.current?.focus();
-      }
       if (e.key === "Escape") setPickerOpen(false);
     };
     window.addEventListener("keydown", onKey);
@@ -392,21 +377,6 @@ const Overview = () => {
           <h1 className="dashboard-title">Dashboard</h1>
           <p className="dashboard-subtitle">Welcome back, {firstName}</p>
         </div>
-
-        <label className="dashboard-search">
-          <i className="bi bi-search"></i>
-          <input
-            ref={searchRef}
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search anything..."
-            aria-label="Search dashboard"
-            autoComplete="off"
-            spellCheck={false}
-          />
-          <kbd>Ctrl + K</kbd>
-        </label>
 
         <div className="dashboard-actions">
           <div

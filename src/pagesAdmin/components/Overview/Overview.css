@@ -11,9 +11,9 @@
 
 /* ── Header ── */
 .admin-overview-page .dashboard-header {
-  display: grid;
-  grid-template-columns: minmax(180px, 1fr) minmax(240px, 420px) auto;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--spacing-md);
 }
 
@@ -30,93 +30,6 @@
   margin: 4px 0 0;
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
-}
-
-.admin-overview-page .dashboard-search {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  height: 46px;
-  padding: 0 16px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.admin-overview-page .dashboard-search:focus-within {
-  border-color: var(--color-primary-muted);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 14%, transparent);
-}
-
-.admin-overview-page .dashboard-search i {
-  color: var(--color-text-muted);
-  font-size: 16px;
-  flex-shrink: 0;
-  pointer-events: none;
-}
-
-.admin-overview-page .dashboard-search:focus-within i {
-  color: var(--color-primary);
-}
-
-/* Paint input same as bar — kills nested fill + side lines */
-.admin-overview-page .dashboard-search input,
-.admin-overview-page .dashboard-search input:hover,
-.admin-overview-page .dashboard-search input:focus,
-.admin-overview-page .dashboard-search input:focus-visible,
-.admin-overview-page .dashboard-search input:active {
-  flex: 1;
-  width: 100%;
-  min-width: 0;
-  height: 28px;
-  padding: 0;
-  margin: 0;
-  border: none !important;
-  outline: none !important;
-  border-radius: 0 !important;
-  appearance: none !important;
-  -webkit-appearance: none !important;
-  -moz-appearance: none !important;
-  background: var(--color-surface) !important;
-  background-color: var(--color-surface) !important;
-  background-image: none !important;
-  color: var(--color-text) !important;
-  -webkit-text-fill-color: var(--color-text) !important;
-  caret-color: var(--color-primary);
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-sm);
-  box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
-  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
-}
-
-.admin-overview-page .dashboard-search input::placeholder {
-  color: var(--color-text-muted);
-  opacity: 1;
-  -webkit-text-fill-color: var(--color-text-muted);
-}
-
-.admin-overview-page .dashboard-search input:-webkit-autofill,
-.admin-overview-page .dashboard-search input:-webkit-autofill:hover,
-.admin-overview-page .dashboard-search input:-webkit-autofill:focus,
-.admin-overview-page .dashboard-search input:-webkit-autofill:active {
-  -webkit-text-fill-color: var(--color-text) !important;
-  caret-color: var(--color-primary);
-  transition: background-color 99999s ease-out 0s;
-  box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
-  -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
-}
-
-.admin-overview-page .dashboard-search kbd {
-  flex-shrink: 0;
-  font-family: var(--font-family-base);
-  font-size: 11px;
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
-  background: transparent;
-  border: none;
-  padding: 0;
-  white-space: nowrap;
 }
 
 .admin-overview-page .dashboard-actions {
@@ -813,12 +726,7 @@
 
 @media (max-width: 1200px) {
   .admin-overview-page .dashboard-header {
-    grid-template-columns: 1fr auto;
-  }
-
-  .admin-overview-page .dashboard-search {
-    grid-column: 1 / -1;
-    order: 3;
+    flex-wrap: wrap;
   }
 
   .admin-overview-page .quick-actions {
@@ -837,7 +745,11 @@
     padding: var(--spacing-md);
   }
 
-  .admin-overview-page .dashboard-header,
+  .admin-overview-page .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .admin-overview-page .quick-actions,
   .admin-overview-page .stats-row,
   .admin-overview-page .charts-row,
