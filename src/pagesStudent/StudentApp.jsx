@@ -11,6 +11,7 @@ import Dashboard from "./components/mycourses/CourseCard";
 import Introduction from "./components/Introduction/Introduction";
 import StudentAttendance from "./components/attendance/StudentAttendance";
 import CompilerPage from "./components/Compiler/CompilerPage";
+import MyBatches from "./components/MyBatches/MyBatches";
 
 import Header from "./components/Header/Header";
 import CourseDetails from "./components/CourseDetails/CourseDetails";
@@ -46,6 +47,7 @@ export default function StudentApp() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/certificate" element={<CertificateView />} />
           <Route path="/my-courses" element={<Dashboard />} />
+          <Route path="/my-batches" element={<MyBatches />} />
           <Route path="/compiler" element={<CompilerPage />} />
           <Route path="/my-attendance" element={<StudentAttendance />} />
         </Routes>

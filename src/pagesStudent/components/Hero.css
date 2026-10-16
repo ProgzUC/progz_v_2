@@ -437,6 +437,21 @@
     gap: 0.55rem;
 }
 
+.student-hero .landing-stat-box--link {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    text-align: left;
+}
+
+.student-hero .landing-stat-box--link:hover .landing-stat-name {
+    text-decoration: underline;
+}
+
 .student-hero .landing-stat-num {
     font-size: 1.75rem;
     font-weight: 800;

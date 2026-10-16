@@ -43,6 +43,7 @@ export const emptyBatchForm = () => ({
   endDate: "",
   status: "active",
   trainers: [],
+  students: [],
 });
 
 export const hydrateBatchForm = (batch) => ({
@@ -66,6 +67,9 @@ export const hydrateBatchForm = (batch) => ({
       toDate: t.toDate ? String(t.toDate).split("T")[0] : "",
       isCurrent: t.isCurrent !== undefined ? t.isCurrent : true,
     })) || [],
+  students: (batch?.students || [])
+    .map((s) => String(s?._id || s))
+    .filter(Boolean),
 });
 
 export const emptyTrainerRow = () => ({
@@ -76,7 +80,7 @@ export const emptyTrainerRow = () => ({
   isCurrent: true,
 });
 
-export const toBatchApiPayload = (batchData, { includeStatus = false } = {}) => {
+export const toBatchApiPayload = (batchData, { includeStatus = true } = {}) => {
   const courseIds = batchData.courseIds || [];
   const payload = {
     name: batchData.name,
@@ -96,10 +100,13 @@ export const toBatchApiPayload = (batchData, { includeStatus = false } = {}) => 
         toDate: t.toDate || undefined,
         isCurrent: !!t.isCurrent,
       })),
+    students: [...new Set((batchData.students || []).map(String).filter(Boolean))],
   };
 
-  if (includeStatus && batchData.status) {
-    payload.status = batchData.status;
+  // Create previously omitted status → schema defaulted to "upcoming", so trainer
+  // Active Batches (active-only) never showed newly created batches.
+  if (includeStatus) {
+    payload.status = batchData.status || "active";
   }
 
   return payload;
@@ -109,3 +116,6 @@ export const isTrainerRole = (user) => {
   const role = (user?.role || "").toLowerCase();
   return role === "trainer" || role === "instructor";
 };
+
+export const isStudentRole = (user) =>
+  String(user?.role || "").toLowerCase() === "student";

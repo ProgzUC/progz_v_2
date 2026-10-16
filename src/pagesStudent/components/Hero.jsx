@@ -167,10 +167,14 @@ export default function Hero() {
                     <span className="landing-stat-name">Enrolled Courses</span>
                 </div>
                 <div className="landing-stat-divider" />
-                <div className="landing-stat-box">
+                <button
+                    type="button"
+                    className="landing-stat-box landing-stat-box--link"
+                    onClick={() => navigate('/student-dashboard/my-batches')}
+                >
                     <span className="landing-stat-num">{activeBatches}</span>
                     <span className="landing-stat-name">Active Batches</span>
-                </div>
+                </button>
                 <div className="landing-stat-divider" />
                 <div className="landing-stat-box">
                     <span className="landing-stat-num">{completedLessons}</span>

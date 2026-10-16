@@ -8,12 +8,14 @@ import {
     emptyTrainerRow,
     toBatchApiPayload,
     isTrainerRole,
+    isStudentRole,
 } from "../../../features/batches/batchFormState";
 import CourseMultiSelect from "../Batches/CourseMultiSelect";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import "../Modal.css";
 import "./EnrollStudents.css";
-import { showError, showSuccess } from "../../../utils/toast";
+
+import { showError, showSuccess } from "../../../utils/toast";
 
 const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
     const { mutate: createBatchMutation } = useCreateBatch();
@@ -21,8 +23,10 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
 
     const usersArray = Array.isArray(users) ? users : [];
     const instructorsList = usersArray.filter(isTrainerRole);
+    const studentsList = usersArray.filter(isStudentRole);
 
     const [batchData, setBatchData] = useState(emptyBatchForm);
+    const [studentSearch, setStudentSearch] = useState("");
 
     const primaryCourseId = batchData.courseIds[0] || "";
     const { data: selectedCourse } = useCourse(primaryCourseId);
@@ -134,6 +138,28 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
         );
     };
 
+    const filteredStudents = studentsList.filter((s) => {
+        const q = studentSearch.trim().toLowerCase();
+        if (!q) return true;
+        return (
+            String(s.name || "").toLowerCase().includes(q) ||
+            String(s.email || "").toLowerCase().includes(q)
+        );
+    });
+
+    const toggleStudent = (studentId) => {
+        const id = String(studentId);
+        setBatchData((prev) => {
+            const has = prev.students.includes(id);
+            return {
+                ...prev,
+                students: has
+                    ? prev.students.filter((sid) => sid !== id)
+                    : [...prev.students, id],
+            };
+        });
+    };
+
     const handleSubmit = () => {
         if (!batchData.name.trim()) {
             showError("Batch Name is required");
@@ -186,6 +212,7 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
                 showSuccess("Batch Created Successfully");
                 onClose();
                 setBatchData(emptyBatchForm());
+                setStudentSearch("");
             },
             onError: (err) => {
                 showError(getErrorMessage(err, "Failed to create batch"));
@@ -411,6 +438,75 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
                         <p style={{ textAlign: "center", color: "#999", fontSize: "13px" }}>No trainers assigned yet.</p>
                     )}
 
+                </div>
+
+                <div style={{ marginTop: "20px", borderTop: "1px solid #eee", paddingTop: "20px" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "10px", gap: "12px", flexWrap: "wrap" }}>
+                        <h4 style={{ margin: 0 }}>
+                            Students
+                            {batchData.students.length > 0 && (
+                                <span style={{ fontWeight: 400, color: "#718096", marginLeft: 8 }}>
+                                    ({batchData.students.length} selected)
+                                </span>
+                            )}
+                        </h4>
+                        <input
+                            className="modal-input"
+                            style={{ maxWidth: "240px", margin: 0 }}
+                            placeholder="Search students…"
+                            value={studentSearch}
+                            onChange={(e) => setStudentSearch(e.target.value)}
+                            aria-label="Search students"
+                        />
+                    </div>
+                    <p style={{ margin: "0 0 12px", fontSize: "13px", color: "#64748b" }}>
+                        Selected students get this batch on their dashboard and a batch-assignment notification (same as trainers).
+                    </p>
+                    <div
+                        style={{
+                            maxHeight: "220px",
+                            overflowY: "auto",
+                            border: "1px solid #e2e8f0",
+                            borderRadius: "10px",
+                            padding: "8px 12px",
+                            background: "#f8fafc",
+                        }}
+                    >
+                        {filteredStudents.length === 0 ? (
+                            <p style={{ textAlign: "center", color: "#999", fontSize: "13px", margin: "12px 0" }}>
+                                No students found.
+                            </p>
+                        ) : (
+                            filteredStudents.map((s) => {
+                                const id = String(s._id);
+                                const checked = batchData.students.includes(id);
+                                return (
+                                    <label
+                                        key={id}
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            gap: "10px",
+                                            padding: "8px 4px",
+                                            borderBottom: "1px solid #eef2f7",
+                                            cursor: "pointer",
+                                            fontSize: "13px",
+                                        }}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            checked={checked}
+                                            onChange={() => toggleStudent(id)}
+                                        />
+                                        <span style={{ flex: 1 }}>
+                                            <strong>{s.name || "Student"}</strong>
+                                            <span style={{ color: "#64748b", marginLeft: 8 }}>{s.email}</span>
+                                        </span>
+                                    </label>
+                                );
+                            })
+                        )}
+                    </div>
                 </div>
 
                 <div className="modal-actions">

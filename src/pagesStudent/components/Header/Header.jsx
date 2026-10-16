@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Header.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { BiGridAlt, BiBookOpen, BiSearch, BiUserCircle, BiLogOut, BiCalendarCheck } from "react-icons/bi";
+import { BiGridAlt, BiBookOpen, BiSearch, BiUserCircle, BiLogOut, BiCalendarCheck, BiLayer } from "react-icons/bi";
 import NotificationBell from "../../../components/common/NotificationBell/NotificationBell";
 import { getAuthData } from "../../../utils/authStorage";
 import { useStudentProfile } from "../../../hooks/useStudentProfile";
@@ -21,6 +21,7 @@ function HeaderContent({ onLogout }) {
 
     const links = [
         { name: "Home", href: "/student-dashboard/", icon: <BiGridAlt /> },
+        { name: "My Batches", href: "/student-dashboard/my-batches", icon: <BiLayer /> },
         { name: "My Courses", href: "/student-dashboard/my-courses", icon: <BiBookOpen /> },
         { name: "Courses", href: "/student-dashboard/browse", icon: <BiSearch /> },
     ];

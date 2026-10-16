@@ -1,11 +1,23 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchStudentCourses, fetchCourseProgress, fetchStudentCatalog, fetchStudentCatalogCourse } from "../api/studentApi";
+import {
+    fetchStudentCourses,
+    fetchStudentBatches,
+    fetchCourseProgress,
+    fetchStudentCatalog,
+    fetchStudentCatalogCourse,
+} from "../api/studentApi";
 
 export const useStudentCourses = () =>
     useQuery({
         queryKey: ["studentCourses"],
         queryFn: fetchStudentCourses,
+    });
+
+export const useStudentBatches = () =>
+    useQuery({
+        queryKey: ["studentBatches"],
+        queryFn: fetchStudentBatches,
     });
 
 export const useStudentCatalog = () =>
