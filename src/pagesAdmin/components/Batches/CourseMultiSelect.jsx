@@ -19,16 +19,11 @@ const CourseMultiSelect = ({
     coursesList.length > 0 &&
     coursesList.every((c) => selectedSet.has(String(c._id)));
 
-  const selectedNames = coursesList
-    .filter((c) => selectedSet.has(String(c._id)))
-    .map((c) => c.courseName);
-
-  const summary =
-    selectedNames.length === 0
-      ? "Select courses"
-      : selectedNames.length <= 2
-        ? selectedNames.join(", ")
-        : `${selectedNames.slice(0, 2).join(", ")} +${selectedNames.length - 2} more`;
+  const selectedCourses = coursesList.filter((c) =>
+    selectedSet.has(String(c._id))
+  );
+  const visibleChips = selectedCourses.slice(0, 2);
+  const extraCount = Math.max(0, selectedCourses.length - visibleChips.length);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -60,10 +55,30 @@ const CourseMultiSelect = ({
         aria-haspopup="listbox"
         aria-expanded={open}
       >
-        <span className={`course-multi-select-text ${selectedNames.length ? "" : "placeholder"}`}>
-          {summary}
+        <span
+          className={`course-multi-select-text ${
+            selectedCourses.length ? "" : "placeholder"
+          }`}
+        >
+          {selectedCourses.length === 0 ? (
+            "Select courses…"
+          ) : (
+            <>
+              {visibleChips.map((c) => (
+                <span key={String(c._id)} className="course-multi-select-chip">
+                  {c.courseName}
+                </span>
+              ))}
+              {extraCount > 0 ? (
+                <span className="course-multi-select-chip more">+{extraCount} more</span>
+              ) : null}
+            </>
+          )}
         </span>
-        <span className={`course-multi-select-chevron ${open ? "open" : ""}`}>▾</span>
+        <i
+          className={`bi ${open ? "bi-chevron-up" : "bi-chevron-down"} course-multi-select-chevron`}
+          aria-hidden="true"
+        />
       </button>
 
       {open && (

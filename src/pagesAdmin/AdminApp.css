@@ -79,6 +79,20 @@
   background: var(--color-primary-light);
 }
 
+/* Form select triggers must stay white — do not paint the ash/soft hover fill */
+.layout .content .course-multi-select-trigger:hover,
+.layout .content .course-multi-select-trigger:active,
+.layout .content .course-multi-select-trigger:focus,
+.layout .content .course-multi-select-trigger:focus-visible,
+.layout .content .course-multi-select-trigger.open,
+.layout .content .app-select-trigger:hover,
+.layout .content .app-select-trigger:active,
+.layout .content .app-select-trigger:focus,
+.layout .content .app-select-trigger:focus-visible {
+  background: var(--color-surface, #fff) !important;
+  color: var(--color-text, #1a1a1a);
+}
+
 .layout .as-btn-primary:hover,
 .layout .or-btn-primary:hover {
   filter: brightness(1.06);

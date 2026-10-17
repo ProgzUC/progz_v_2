@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { useAllUsers } from "../../../hooks/useAdminUsers";
 import { useEnrollStudent } from "../../../hooks/useBatches";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
+import ModalPortal from "../../../components/common/ModalPortal";
 import "../Modal.css";
-import { showError, showSuccess } from "../../../utils/toast";
+
+import { showError, showSuccess } from "../../../utils/toast";
 
 const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
     const [selectedStudentId, setSelectedStudentId] = useState("");
@@ -46,6 +48,7 @@ const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
     };
 
     return (
+        <ModalPortal>
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "500px" }}>
                 <h3 className="modal-title">Add Student to {batch.name}</h3>
@@ -104,6 +107,7 @@ const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
                 )}
             </div>
         </div>
+        </ModalPortal>
     );
 };
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ModalPortal from "../ModalPortal";
 import "./CourseBuilder.css";
 
 const MAX_TITLE_LENGTH = 100;
@@ -14,6 +15,7 @@ export default function CourseTitleModal({ onContinue, onClose }) {
   };
 
   return (
+    <ModalPortal>
     <div className="course-title-modal-overlay">
       <div className="course-title-modal">
         <button type="button" className="course-title-modal-close" onClick={onClose} aria-label="Close">
@@ -49,5 +51,6 @@ export default function CourseTitleModal({ onContinue, onClose }) {
         </form>
       </div>
     </div>
+    </ModalPortal>
   );
 }

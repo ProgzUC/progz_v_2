@@ -10,6 +10,7 @@ import CoursePreviewModal from "../../../components/common/CoursePreviewModal/Co
 import CourseTitleModal from "../../../components/common/CourseBuilder/CourseTitleModal";
 import CourseBuilderShell from "../../../components/common/CourseBuilder/CourseBuilderShell";
 import CourseInformationPanel from "../../../components/common/CourseBuilder/CourseInformationPanel";
+import ModalPortal from "../../../components/common/ModalPortal";
 import "../../../components/common/CourseBuilder/CourseBuilder.css";
 import {
   emptyCourseState,
@@ -167,6 +168,7 @@ const CreateCourse = () => {
       )}
 
       {lightbox.isOpen && (
+        <ModalPortal>
         <div className="lightbox-overlay" onClick={closeLightbox}>
           <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
             <i className="bi bi-x-lg lightbox-close" onClick={closeLightbox}></i>
@@ -186,6 +188,7 @@ const CreateCourse = () => {
             )}
           </div>
         </div>
+        </ModalPortal>
       )}
     </>
   );

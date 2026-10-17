@@ -9,7 +9,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 999;
+    /* Above admin sidebar (1000) and account menu (1200) */
+    z-index: 2500;
     padding: 16px;
 }
 
@@ -124,6 +125,44 @@
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-text, #1a1a1a);
+}
+
+.modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.modal-header .modal-title {
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+}
+
+.modal-close-btn {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    margin: -4px -4px 0 0;
+    border: none;
+    border-radius: 10px;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 1.35rem;
+    line-height: 1;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.modal-close-btn:hover,
+.modal-close-btn:focus-visible {
+    background: #e2e8f0;
+    color: #0f172a;
+    outline: none;
 }
 
 .modal-field {

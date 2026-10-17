@@ -11,9 +11,11 @@ import {
 } from "../../../features/batches/batchFormState";
 import CourseMultiSelect from "./CourseMultiSelect";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
+import ModalPortal from "../../../components/common/ModalPortal";
 import "../Modal.css";
 import "../EnrollStudent/EnrollStudents.css";
-import { showError, showSuccess } from "../../../utils/toast";
+
+import { showError, showSuccess } from "../../../utils/toast";
 
 const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
     const { mutate: updateBatchMutation } = useUpdateBatch();
@@ -194,9 +196,28 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
     };
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content" style={{ maxWidth: "800px", maxHeight: "90vh", overflowY: "auto" }}>
-                <h3 className="modal-title">Edit Batch</h3>
+        <ModalPortal>
+        <div className="modal-overlay" onClick={onClose} role="presentation">
+            <div
+                className="modal-content"
+                style={{ maxWidth: "800px", maxHeight: "90vh", overflowY: "auto" }}
+                onClick={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="edit-batch-title"
+            >
+                <div className="modal-header">
+                    <h3 id="edit-batch-title" className="modal-title">Edit Batch</h3>
+                    <button
+                        type="button"
+                        className="modal-close-btn"
+                        onClick={onClose}
+                        aria-label="Close"
+                        title="Close"
+                    >
+                        ×
+                    </button>
+                </div>
 
                 <div className="modal-field">
                     <label className="modal-label">Batch Name</label>
@@ -433,6 +454,7 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
                 </div>
             </div>
         </div>
+        </ModalPortal>
     );
 };
 

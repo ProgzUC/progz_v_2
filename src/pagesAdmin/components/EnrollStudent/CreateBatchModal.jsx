@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCreateBatch } from "../../../hooks/useBatches";
 import { useCourse } from "../../../hooks/useCourses";
 import { useAllUsers } from "../../../hooks/useAdminUsers";
@@ -12,6 +12,7 @@ import {
 } from "../../../features/batches/batchFormState";
 import CourseMultiSelect from "../Batches/CourseMultiSelect";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
+import ModalPortal from "../../../components/common/ModalPortal";
 import "../Modal.css";
 import "./EnrollStudents.css";
 
@@ -30,6 +31,22 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
 
     const primaryCourseId = batchData.courseIds[0] || "";
     const { data: selectedCourse } = useCourse(primaryCourseId);
+
+    const handleClose = () => {
+        setBatchData(emptyBatchForm());
+        setStudentSearch("");
+        onClose();
+    };
+
+    useEffect(() => {
+        if (!isOpen) return undefined;
+        const onKey = (e) => {
+            if (e.key === "Escape") handleClose();
+        };
+        document.addEventListener("keydown", onKey);
+        return () => document.removeEventListener("keydown", onKey);
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- close resets local form only
+    }, [isOpen]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -210,9 +227,7 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
         createBatchMutation(payload, {
             onSuccess: () => {
                 showSuccess("Batch Created Successfully");
-                onClose();
-                setBatchData(emptyBatchForm());
-                setStudentSearch("");
+                handleClose();
             },
             onError: (err) => {
                 showError(getErrorMessage(err, "Failed to create batch"));
@@ -223,9 +238,32 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay">
-            <div className="modal-content" style={{ maxWidth: "800px", maxHeight: "90vh", overflowY: "auto" }}>
-                <h3 className="modal-title">Create New Batch</h3>
+        <ModalPortal>
+        <div
+            className="modal-overlay"
+            onClick={handleClose}
+            role="presentation"
+        >
+            <div
+                className="modal-content"
+                style={{ maxWidth: "800px", maxHeight: "90vh", overflowY: "auto" }}
+                onClick={(e) => e.stopPropagation()}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="create-batch-title"
+            >
+                <div className="modal-header">
+                    <h3 id="create-batch-title" className="modal-title">Create New Batch</h3>
+                    <button
+                        type="button"
+                        className="modal-close-btn"
+                        onClick={handleClose}
+                        aria-label="Close"
+                        title="Close"
+                    >
+                        ×
+                    </button>
+                </div>
 
                 <div className="modal-field">
                     <label className="modal-label">Batch Name</label>
@@ -510,11 +548,12 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
                 </div>
 
                 <div className="modal-actions">
-                    <button className="cancel-btn" onClick={onClose}>Cancel</button>
-                    <button className="create-btn" onClick={handleSubmit}>Create Batch</button>
+                    <button type="button" className="cancel-btn" onClick={handleClose}>Cancel</button>
+                    <button type="button" className="create-btn" onClick={handleSubmit}>Create Batch</button>
                 </div>
             </div>
         </div>
+        </ModalPortal>
     );
 };
 

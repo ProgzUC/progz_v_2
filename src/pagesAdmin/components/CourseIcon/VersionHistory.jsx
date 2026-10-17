@@ -1,6 +1,7 @@
 import React from "react";
 import "./VersionHistory.css";
 import { confirmAction } from "../../../utils/confirmAction";
+import ModalPortal from "../../../components/common/ModalPortal";
 
 import { useCourseVersions } from "../../../hooks/useCourses";
 import Loader from "../../../components/common/Loader/Loader";
@@ -24,6 +25,7 @@ const VersionHistory = ({ courseId, isOpen, onClose, onRollback }) => {
     };
 
     return (
+        <ModalPortal>
         <div className="vh-overlay" onClick={onClose}>
             <div className="vh-drawer" onClick={(e) => e.stopPropagation()}>
                 <div className="vh-header">
@@ -61,6 +63,7 @@ const VersionHistory = ({ courseId, isOpen, onClose, onRollback }) => {
                 </div>
             </div>
         </div>
+        </ModalPortal>
     );
 };
 
