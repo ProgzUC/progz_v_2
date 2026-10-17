@@ -130,10 +130,19 @@ export default function LiveClassReminder() {
       toast.info("Trainer has not shared the Google Meet link yet.");
       return;
     }
-    navigator.clipboard.writeText(classInfo.meetLink);
-    setCopied(true);
-    toast.success("Meeting link copied to clipboard!");
-    setTimeout(() => setCopied(false), 2000);
+    const link = classInfo.meetLink;
+    const markCopied = () => {
+      setCopied(true);
+      toast.success("Meeting link copied to clipboard!");
+      setTimeout(() => setCopied(false), 2000);
+    };
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(link).then(markCopied).catch(() => {
+        toast.info(`Meet link: ${link}`);
+      });
+    } else {
+      toast.info(`Meet link: ${link}`);
+    }
   };
 
   const handleJoinClass = (e) => {

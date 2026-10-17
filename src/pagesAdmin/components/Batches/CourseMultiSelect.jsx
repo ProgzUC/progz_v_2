@@ -35,7 +35,10 @@ const CourseMultiSelect = ({
     };
 
     const handleEscape = (e) => {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key !== "Escape") return;
+      e.stopPropagation();
+      e.preventDefault();
+      setOpen(false);
     };
 
     document.addEventListener("mousedown", handleOutside);

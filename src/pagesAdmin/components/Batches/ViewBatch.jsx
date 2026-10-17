@@ -262,10 +262,19 @@ const ViewBatch = () => {
                         {batch.students.map((student, idx) => (
                             <div key={idx} className="student-card">
                                 <div className="student-avatar">
-                                    {(typeof student === 'object' ? student.name : 'S').charAt(0).toUpperCase()}
+                                    {(typeof student === "object"
+                                        ? student.name || student.email || "S"
+                                        : "S"
+                                    )
+                                        .charAt(0)
+                                        .toUpperCase()}
                                 </div>
                                 <div className="student-info">
-                                    <h4>{typeof student === 'object' ? student.name : student}</h4>
+                                    <h4>
+                                        {typeof student === "object"
+                                            ? student.name || student.email || "Unknown"
+                                            : student}
+                                    </h4>
                                     {typeof student === 'object' && student.email && (
                                         <span className="student-email">{student.email}</span>
                                     )}

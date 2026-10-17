@@ -12,6 +12,7 @@ import SortableItem from "../../components/common/Sortable/SortableItem";
 import FileDropZone from "../../components/common/FileDropZone/FileDropZone";
 import AppSelect from "../../components/common/AppSelect/AppSelect";
 import CoursePreviewModal from "../../components/common/CoursePreviewModal/CoursePreviewModal";
+import ModalPortal from "../../components/common/ModalPortal";
 import RichTextEditor from "../../components/common/RichTextEditor/RichTextEditor";
 import { COURSE_FILE_ACCEPT } from "../../utils/fileDrop";
 import {
@@ -799,29 +800,31 @@ const CourseBuilder = ({ onBack, onSave, initialData, isEditMode = false, course
 
       {/* LIGHTBOX MODAL */}
       {lightbox.isOpen && (
-        <div className="lightbox-overlay" onClick={() => setLightbox({ ...lightbox, isOpen: false })}>
-          <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
-            <BiX className="lightbox-close" onClick={() => setLightbox({ ...lightbox, isOpen: false })} />
-            {lightbox.type === "image" && (
-              <img src={lightbox.src} alt="Full Preview" className="lightbox-image" />
-            )}
-            {lightbox.type === "video" && (
-              <iframe
-                width="100%"
-                height="100%"
-                src={
-                  getGoogleDriveFileId(lightbox.src)
-                    ? lightbox.src
-                    : `https://www.youtube.com/embed/${lightbox.src}?autoplay=1`
-                }
-                title="Video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            )}
+        <ModalPortal>
+          <div className="lightbox-overlay" onClick={() => setLightbox({ ...lightbox, isOpen: false })}>
+            <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+              <BiX className="lightbox-close" onClick={() => setLightbox({ ...lightbox, isOpen: false })} />
+              {lightbox.type === "image" && (
+                <img src={lightbox.src} alt="Full Preview" className="lightbox-image" />
+              )}
+              {lightbox.type === "video" && (
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={
+                    getGoogleDriveFileId(lightbox.src)
+                      ? lightbox.src
+                      : `https://www.youtube.com/embed/${lightbox.src}?autoplay=1`
+                  }
+                  title="Video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              )}
+            </div>
           </div>
-        </div>
+        </ModalPortal>
       )}
     </>
   );

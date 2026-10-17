@@ -41,7 +41,10 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
     useEffect(() => {
         if (!isOpen) return undefined;
         const onKey = (e) => {
-            if (e.key === "Escape") handleClose();
+            if (e.key !== "Escape") return;
+            // Nested dropdowns (courses / selects) handle Escape first
+            if (e.defaultPrevented) return;
+            handleClose();
         };
         document.addEventListener("keydown", onKey);
         return () => document.removeEventListener("keydown", onKey);
@@ -151,7 +154,8 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
 
     const isModuleAssignedToOther = (currentTrainerIndex, moduleIndex) => {
         return batchData.trainers.some((trainer, idx) =>
-            idx !== currentTrainerIndex && trainer.assignedModules.includes(moduleIndex)
+            idx !== currentTrainerIndex &&
+            (trainer.assignedModules || []).includes(moduleIndex)
         );
     };
 
@@ -437,7 +441,7 @@ const CreateBatchModal = ({ isOpen, onClose, coursesList, weekDays }) => {
                                     <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                                         {selectedCourse.modules.map((mod, modIdx) => {
                                             const isAssignedToOther = isModuleAssignedToOther(index, modIdx);
-                                            const isAssignedToCurrent = t.assignedModules.includes(modIdx);
+                                            const isAssignedToCurrent = (t.assignedModules || []).includes(modIdx);
                                             return (
                                                 <label
                                                     key={modIdx}

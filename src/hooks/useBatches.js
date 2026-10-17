@@ -2,7 +2,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchBatches, createBatch, enrollStudent, bulkEnrollStudents, deleteBatch, updateBatch, getBatch, fetchTrainerBatches } from "../api/batchApi";
 import { fetchBatchDetails, toggleSectionCompletion } from "../api/trainerApi";
 import { getErrorMessage } from "../utils/apiError";
-import { showError, showSuccess } from "../utils/toast";
+
+import { showError, showSuccess } from "../utils/toast";
 
 export const useBatches = () =>
     useQuery({
@@ -73,8 +74,11 @@ export const useUpdateBatch = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: ({ batchId, batchData }) => updateBatch(batchId, batchData),
-        onSuccess: () => {
+        onSuccess: (_data, variables) => {
             queryClient.invalidateQueries({ queryKey: ["batches"] });
+            if (variables?.batchId) {
+                queryClient.invalidateQueries({ queryKey: ["batch", variables.batchId] });
+            }
         },
     });
 };

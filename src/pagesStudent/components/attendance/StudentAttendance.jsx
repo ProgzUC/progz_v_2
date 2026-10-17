@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import "./StudentAttendance.css";
 import { useStudentAttendance } from "../../../hooks/useStudentAttendance";
+import { useStudentBatches } from "../../../hooks/useStudentCourses";
 import Loader from "../../../components/common/Loader/Loader";
 import { ErrorState } from "../../../components/common/PageState";
 
@@ -46,17 +47,29 @@ function summarize(rows) {
 
 export default function StudentAttendance() {
     const { data, isLoading, isError, refetch } = useStudentAttendance();
+    const { data: batchesData } = useStudentBatches();
     const [searchParams, setSearchParams] = useSearchParams();
     const selectedBatchId = searchParams.get("batchId") || "";
-    const attendanceHistory = data?.attendanceHistory || [];
+    const attendanceHistory = useMemo(
+        () => data?.attendanceHistory || [],
+        [data?.attendanceHistory]
+    );
     const batches = useMemo(() => {
         const map = new Map();
+        (batchesData?.activeBatches || []).forEach((batch) => {
+            if (!batch?.batchId) return;
+            map.set(String(batch.batchId), batch.batchName || "Batch");
+        });
+        (batchesData?.completedBatches || []).forEach((batch) => {
+            if (!batch?.batchId) return;
+            map.set(String(batch.batchId), batch.batchName || "Batch");
+        });
         attendanceHistory.forEach((row) => {
             if (!row.batchId) return;
-            map.set(String(row.batchId), row.batchName || "Batch");
+            map.set(String(row.batchId), row.batchName || map.get(String(row.batchId)) || "Batch");
         });
         return Array.from(map, ([id, name]) => ({ id, name }));
-    }, [attendanceHistory]);
+    }, [attendanceHistory, batchesData]);
 
     const visibleHistory = selectedBatchId
         ? attendanceHistory.filter((row) => String(row.batchId) === String(selectedBatchId))
@@ -244,11 +257,11 @@ export default function StudentAttendance() {
                                             </td>
                                             <td>{session.duration || "N/A"}</td>
                                             <td>
-                                                <span className={`status-badge ${session.status.toLowerCase()}`}>
+                                                <span className={`status-badge ${(session.status || "unknown").toLowerCase()}`}>
                                                     {session.status === "Present" && <i className="bi bi-check-circle-fill"></i>}
                                                     {session.status === "Late" && <i className="bi bi-clock-fill"></i>}
                                                     {session.status === "Absent" && <i className="bi bi-x-circle-fill"></i>}
-                                                    {session.status}
+                                                    {session.status || "Unknown"}
                                                 </span>
                                             </td>
                                         </tr>

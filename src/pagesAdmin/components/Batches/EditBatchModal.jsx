@@ -133,7 +133,8 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
 
     const isModuleAssignedToOther = (currentTrainerIndex, moduleIndex) => {
         return batchData.trainers.some((trainer, idx) =>
-            idx !== currentTrainerIndex && trainer.assignedModules.includes(moduleIndex)
+            idx !== currentTrainerIndex &&
+            (trainer.assignedModules || []).includes(moduleIndex)
         );
     };
 
@@ -407,7 +408,7 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
                                     <div style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}>
                                         {selectedCourse.modules.map((mod, modIdx) => {
                                             const isAssignedToOther = isModuleAssignedToOther(index, modIdx);
-                                            const isAssignedToCurrent = t.assignedModules.includes(modIdx);
+                                            const isAssignedToCurrent = (t.assignedModules || []).includes(modIdx);
                                             return (
                                                 <label
                                                     key={modIdx}

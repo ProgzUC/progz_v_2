@@ -8,7 +8,6 @@ import Loader from "../../../components/common/Loader/Loader";
 import { EmptyState, ErrorState, Skeleton } from "../../../components/common/PageState";
 import ImageWithFallback from "../../../components/common/ImageWithFallback/ImageWithFallback";
 import { BiCodeAlt } from "react-icons/bi";
-import { getLessonCompilerMode } from "../../../utils/compilerMode";
 import { formatNextClass } from "../../utils/formatNextClass";
 import { isHtmlEmpty } from "../../../components/common/RichTextEditor/richTextUtils";
 import { showError, showSuccess } from "../../../utils/toast";
@@ -196,9 +195,6 @@ function LargeCourseCard({ course, onContinue }) {
    LESSON ROW
 ---------------------------------------------- */
 function LessonRow({ title, isLocked, onOpen, section }) {
-    const navigate = useNavigate();
-    const mode = getLessonCompilerMode(section);
-
     const handlePractice = (e) => {
         e.stopPropagation();
         if (isLocked) return;

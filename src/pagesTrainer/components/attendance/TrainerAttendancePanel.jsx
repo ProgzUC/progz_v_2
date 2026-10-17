@@ -6,12 +6,23 @@ import { confirmAction } from "../../../utils/confirmAction";
 import { showError, showSuccess } from "../../../utils/toast";
 
 const mapSessionAttendance = (session) =>
-    (session?.attendance || []).map((a) => ({
-        studentId: a.student._id,
-        studentName: a.student.name,
-        status: a.status,
-        joinedAt: a.joinedAt || null,
-    }));
+    (session?.attendance || [])
+        .map((a) => {
+            const student = a?.student;
+            if (!student) return null;
+            const studentId =
+                typeof student === "object" ? student._id || student.id : student;
+            if (!studentId) return null;
+            const studentName =
+                (typeof student === "object" && student.name) || "Unknown";
+            return {
+                studentId,
+                studentName,
+                status: a.status || "Absent",
+                joinedAt: a.joinedAt || null,
+            };
+        })
+        .filter(Boolean);
 
 const formatDaysLabel = (days) => {
     if (!days?.length) return "No schedule set";
@@ -57,7 +68,11 @@ export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSc
         [sessionsData]
     );
 
-    const activeSession = sessionOverride ?? serverActiveSession;
+    // Ended override must not block Start Class for the next session
+    const activeSession =
+        sessionOverride && !sessionOverride.endTime
+            ? sessionOverride
+            : serverActiveSession;
     const attendance = attendanceOverride ?? mapSessionAttendance(activeSession);
     const notes = notesOverride ?? (activeSession?.notes || "");
 
@@ -157,7 +172,10 @@ export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSc
                 notes,
             });
 
-            setSessionOverride(endedSession);
+            setSessionOverride(null);
+            setAttendanceOverride(null);
+            setNotesOverride(null);
+            setElapsedTime(0);
 
             const presentCount = attendance.filter((a) => a.status === "Present").length;
             const lateCount = attendance.filter((a) => a.status === "Late").length;
@@ -172,7 +190,9 @@ export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSc
     };
 
     const filteredAttendance = attendance.filter((a) =>
-        a.studentName.toLowerCase().includes(searchQuery.toLowerCase())
+        String(a.studentName || "")
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
     );
 
     const studentCount = batch.students?.length || 0;
@@ -368,7 +388,9 @@ export default function TrainerAttendancePanel({ batch, onViewStudents, onViewSc
                 {filteredAttendance.map((student, index) => (
                     <div key={student.studentId} className="student-attendance-row">
                         <div className="student-info">
-                            <div className="student-avatar">{student.studentName.charAt(0).toUpperCase()}</div>
+                            <div className="student-avatar">
+                                {(student.studentName || "?").charAt(0).toUpperCase()}
+                            </div>
                             <div className="student-details">
                                 <span className="student-name">{student.studentName}</span>
                                 <span className="student-number">

@@ -107,11 +107,9 @@ export default function MyBatches() {
   };
 
   const openCourse = (courseId) => {
-    if (!courseId) {
-      navigate("/student-dashboard/my-courses");
-      return;
-    }
-    navigate(`/student-dashboard/course-details/${courseId}`);
+    navigate("/student-dashboard/my-courses", {
+      state: courseId ? { courseId } : undefined,
+    });
   };
 
   const BatchCard = ({ batch }) => {
