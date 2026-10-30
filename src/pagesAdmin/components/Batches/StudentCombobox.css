@@ -1,0 +1,366 @@
+.student-combo {
+  --sc-border: #e2e8f0;
+  --sc-border-strong: #cbd5e1;
+  --sc-border-focus: #10a879;
+  --sc-ring: rgba(16, 168, 121, 0.16);
+  --sc-text: #0f172a;
+  --sc-muted: #64748b;
+  --sc-faint: #94a3b8;
+  --sc-surface: #ffffff;
+  --sc-soft: #f8fafc;
+  --sc-soft-hover: #f1f5f9;
+  --sc-mint: #ecfdf5;
+  --sc-mint-strong: #d1fae5;
+  --sc-accent: #0b3d2e;
+  --sc-accent-bright: #10a879;
+  --sc-divider: #eef2f6;
+
+  position: relative;
+  width: 100%;
+  font-family: inherit;
+}
+
+.student-combo.is-disabled {
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* ── Connected shell (search + panel) ── */
+.student-combo-shell {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--sc-border);
+  border-radius: 12px;
+  background: var(--sc-surface);
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.student-combo-shell:hover {
+  border-color: var(--sc-border-strong);
+}
+
+.student-combo-shell.is-open {
+  border-color: var(--sc-border-focus);
+  box-shadow: 0 0 0 3px var(--sc-ring);
+}
+
+/* ── Search row ── */
+.student-combo-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 12px 0 14px;
+  background: var(--sc-surface);
+}
+
+.student-combo-shell.is-open .student-combo-search {
+  border-bottom: 1px solid var(--sc-divider);
+}
+
+.student-combo-search-icon {
+  flex-shrink: 0;
+  color: var(--sc-faint);
+  font-size: 14px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.student-combo-shell.is-open .student-combo-search-icon {
+  color: var(--sc-accent-bright);
+}
+
+.student-combo-input,
+.student-combo-input:hover,
+.student-combo-input:focus,
+.student-combo-input:focus-visible,
+.student-combo-input:active {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background: transparent !important;
+  background-color: transparent !important;
+  color: var(--sc-text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.4;
+  caret-color: var(--sc-accent-bright);
+}
+
+.student-combo-input::placeholder {
+  color: var(--sc-faint);
+  font-weight: 400;
+  opacity: 1;
+}
+
+.student-combo-clear {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  background: var(--sc-soft-hover);
+  color: var(--sc-muted);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 0;
+  line-height: 1;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.student-combo-clear:hover,
+.student-combo-clear:focus-visible {
+  background: #e2e8f0 !important;
+  color: var(--sc-text) !important;
+  outline: none;
+}
+
+/* ── Selected student card ── */
+.student-combo-selected {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 52px;
+  padding: 6px 8px 6px 6px;
+  box-sizing: border-box;
+  border: 1px solid #bfe5d4;
+  border-radius: 12px;
+  background: var(--sc-mint);
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.student-combo-selected:hover,
+.student-combo-selected:focus-within {
+  border-color: #86d4b5;
+  background: var(--sc-mint-strong);
+  box-shadow: 0 0 0 3px var(--sc-ring);
+}
+
+.student-combo-selected-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 6px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.student-combo-selected-main:hover,
+.student-combo-selected-main:focus-visible {
+  background: transparent !important;
+  color: inherit !important;
+  outline: none;
+}
+
+.student-combo-selected-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.student-combo-selected-name {
+  font-size: 0.9rem;
+  font-weight: 650;
+  color: var(--sc-accent);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.student-combo-selected-email {
+  font-size: 0.75rem;
+  color: var(--sc-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Results panel (attached) ── */
+.student-combo-panel {
+  background: var(--sc-surface);
+  animation: student-combo-fade 0.14s ease-out;
+}
+
+@keyframes student-combo-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.student-combo-panel-meta {
+  padding: 10px 14px 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--sc-faint);
+}
+
+.student-combo-menu {
+  max-height: 220px;
+  overflow-y: auto;
+  padding: 4px 6px 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #d0d7e0 transparent;
+}
+
+.student-combo-menu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.student-combo-menu::-webkit-scrollbar-thumb {
+  background: #d0d7e0;
+  border-radius: 999px;
+}
+
+/* ── Options ── */
+.student-combo-option {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 9px 10px;
+  margin: 0;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition: background 0.1s ease;
+}
+
+.student-combo-option:hover,
+.student-combo-option.is-active {
+  background: var(--sc-soft) !important;
+  color: inherit !important;
+}
+
+.student-combo-option.is-selected {
+  background: var(--sc-mint) !important;
+}
+
+.student-combo-option.is-selected.is-active,
+.student-combo-option.is-selected:hover {
+  background: var(--sc-mint-strong) !important;
+}
+
+.student-combo-avatar {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #e8f5ef 0%, #d5ebe2 100%);
+  color: var(--sc-accent);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 0.02em;
+}
+
+.student-combo-avatar.is-solid {
+  background: var(--sc-accent);
+  color: #fff;
+}
+
+.student-combo-option-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.student-combo-option-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--sc-text);
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.student-combo-option-email {
+  font-size: 0.74rem;
+  font-weight: 400;
+  color: var(--sc-muted);
+  line-height: 1.25;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.student-combo-mark {
+  background: #bbf7d0;
+  color: inherit;
+  border-radius: 3px;
+  padding: 0 1px;
+  font-weight: 700;
+}
+
+.student-combo-check {
+  flex-shrink: 0;
+  color: var(--sc-accent-bright);
+  font-size: 16px;
+}
+
+.student-combo-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 28px 16px 24px;
+  color: var(--sc-faint);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.student-combo-empty i {
+  font-size: 22px;
+  opacity: 0.65;
+  margin-bottom: 2px;
+}
+
+.student-combo-empty-clear {
+  margin-top: 6px;
+  border: none;
+  background: transparent;
+  color: var(--sc-accent-bright);
+  font-size: 0.8rem;
+  font-weight: 650;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.student-combo-empty-clear:hover {
+  background: var(--sc-mint) !important;
+  color: var(--sc-accent) !important;
+}

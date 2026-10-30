@@ -19,6 +19,7 @@ import { useCourse, useUpdateCourse } from "../../../hooks/useCourses";
 import { useAllUsers } from "../../../hooks/useAdminUsers";
 import Loader from "../../../components/common/Loader/Loader";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
+import StudentCombobox from "../Batches/StudentCombobox";
 import { confirmAction } from "../../../utils/confirmAction";
 
 import { showError, showSuccess, showWarning } from "../../../utils/toast";
@@ -42,8 +43,6 @@ const CourseTrainers = () => {
   const [listSearch, setListSearch] = useState("");
   const [sortBy, setSortBy] = useState("latest");
   const [selectedInstructorId, setSelectedInstructorId] = useState("");
-  const [addSearchTerm, setAddSearchTerm] = useState("");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null);
   const menuRef = useRef(null);
@@ -61,19 +60,14 @@ const CourseTrainers = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const availableCandidates = useMemo(() => {
+  const availableInstructors = useMemo(() => {
     return (allUsers || []).filter((user) => {
       const isAlreadyAssigned = currentInstructors.some((inst) => inst._id === user._id);
       const role = (user.role || "").toLowerCase();
       const isInstructor = role === "trainer" || role === "instructor";
-      const searchLower = addSearchTerm.toLowerCase();
-      const matchesSearch =
-        !addSearchTerm ||
-        user.name?.toLowerCase().includes(searchLower) ||
-        user.email?.toLowerCase().includes(searchLower);
-      return !isAlreadyAssigned && isInstructor && matchesSearch;
+      return !isAlreadyAssigned && isInstructor;
     });
-  }, [allUsers, currentInstructors, addSearchTerm]);
+  }, [allUsers, currentInstructors]);
 
   const displayedInstructors = useMemo(() => {
     const term = listSearch.toLowerCase().trim();
@@ -123,7 +117,6 @@ const CourseTrainers = () => {
           showSuccess("Updated: Instructors list updated successfully!");
           setIsUpdating(false);
           setSelectedInstructorId("");
-          setAddSearchTerm("");
           setActiveTab("list");
         },
         onError: (err) => {
@@ -410,49 +403,15 @@ const CourseTrainers = () => {
               Select instructor to assign
             </label>
             <div className="mi-add-row">
-              <div className="mi-searchable">
-                <LuSearch className="mi-search-icon" aria-hidden="true" />
-                <input
+              <div className="mi-instructor-picker">
+                <StudentCombobox
                   id="mi-add-search"
-                  type="text"
-                  className="mi-searchable-input"
-                  placeholder="Type to search instructor..."
-                  value={addSearchTerm}
-                  onChange={(e) => {
-                    setAddSearchTerm(e.target.value);
-                    setSelectedInstructorId("");
-                    setIsDropdownOpen(true);
-                  }}
-                  onFocus={() => setIsDropdownOpen(true)}
-                  onBlur={() => setTimeout(() => setIsDropdownOpen(false), 200)}
-                  autoComplete="off"
+                  students={availableInstructors}
+                  value={selectedInstructorId}
+                  onChange={setSelectedInstructorId}
+                  placeholder="Search instructor by name or email…"
+                  disabled={isUpdating}
                 />
-                {isDropdownOpen && (
-                  <ul className="mi-dropdown" role="listbox">
-                    {availableCandidates.length > 0 ? (
-                      availableCandidates.map((inst) => (
-                        <li
-                          key={inst._id}
-                          role="option"
-                          aria-selected={selectedInstructorId === inst._id}
-                          className={
-                            selectedInstructorId === inst._id ? "is-selected" : ""
-                          }
-                          onMouseDown={() => {
-                            setSelectedInstructorId(inst._id);
-                            setAddSearchTerm(`${inst.name} (${inst.email})`);
-                            setIsDropdownOpen(false);
-                          }}
-                        >
-                          <span className="mi-dropdown-name">{inst.name}</span>
-                          <span className="mi-dropdown-email">{inst.email}</span>
-                        </li>
-                      ))
-                    ) : (
-                      <li className="mi-dropdown-empty">No matching instructors found</li>
-                    )}
-                  </ul>
-                )}
               </div>
               <button
                 type="button"

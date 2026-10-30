@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAllUsers } from "../../../hooks/useAdminUsers";
 import { useEnrollStudent } from "../../../hooks/useBatches";
-import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import ModalPortal from "../../../components/common/ModalPortal";
+import StudentCombobox from "./StudentCombobox";
 import "../Modal.css";
+import "./AddStudentToBatchModal.css";
 
 import { showError, showSuccess } from "../../../utils/toast";
 
@@ -12,13 +13,20 @@ const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
     const [selectedStudentId, setSelectedStudentId] = useState("");
 
     const { data: users, isLoading } = useAllUsers();
-    const { mutate: enrollStudentMutation } = useEnrollStudent();
+    const { mutate: enrollStudentMutation, isPending } = useEnrollStudent();
+
+    useEffect(() => {
+        if (!isOpen) setSelectedStudentId("");
+    }, [isOpen]);
+
+    const studentsList = useMemo(() => {
+        const usersArray = Array.isArray(users) ? users : [];
+        return usersArray.filter((u) => (u.role || "").toLowerCase() === "student");
+    }, [users]);
 
     if (!isOpen || !batch) return null;
 
     const batchId = batch._id || batch.id;
-    const usersArray = Array.isArray(users) ? users : [];
-    const studentsList = usersArray.filter((u) => (u.role || "").toLowerCase() === "student");
 
     const handleEnroll = () => {
         if (!selectedStudentId) {
@@ -30,83 +38,98 @@ const AddStudentToBatchModal = ({ batch, isOpen, onClose }) => {
             return;
         }
 
-        const payload = {
-            batchId,
-            studentId: selectedStudentId,
-        };
-
-        enrollStudentMutation(payload, {
-            onSuccess: () => {
-                showSuccess("Student Added to Batch Successfully!");
-                onClose();
-                setSelectedStudentId("");
-            },
-            onError: (err) => {
-                showError(err.response?.data?.message || err.response?.data?.msg || "Enrollment failed");
-            },
-        });
+        enrollStudentMutation(
+            { batchId, studentId: selectedStudentId },
+            {
+                onSuccess: () => {
+                    showSuccess("Student Added to Batch Successfully!");
+                    onClose();
+                    setSelectedStudentId("");
+                },
+                onError: (err) => {
+                    showError(
+                        err.response?.data?.message ||
+                            err.response?.data?.msg ||
+                            "Enrollment failed"
+                    );
+                },
+            }
+        );
     };
 
     return (
         <ModalPortal>
-        <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: "500px" }}>
-                <h3 className="modal-title">Add Student to {batch.name}</h3>
-
-                {isLoading ? (
-                    <p>Loading data...</p>
-                ) : (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-                        <div className="modal-field">
-                            <label className="modal-label">Select Student</label>
-                            <AppSelect
-                                className="modal-input"
-                                value={selectedStudentId}
-                                onChange={(e) => setSelectedStudentId(e.target.value)}
-                                aria-label="Select Student"
-                                icon="bi-person"
-                                options={[
-                                    { value: "", label: "-- Choose Student --" },
-                                    ...studentsList.map((s) => ({
-                                        value: s._id,
-                                        label: `${s.name} (${s.email})`,
-                                    })),
-                                ]}
-                            />
+            <div className="modal-overlay" onClick={onClose}>
+                <div
+                    className="modal-content asb-modal"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <div className="asb-header">
+                        <div>
+                            <p className="asb-eyebrow">Enroll student</p>
+                            <h3 className="modal-title asb-title">{batch.name}</h3>
                         </div>
-
-                        <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--color-text-muted, #718096)" }}>
-                            Need a college email list?{" "}
-                            <Link
-                                to={`/admin/enroll?tab=import&batchId=${batchId}`}
-                                onClick={onClose}
-                                style={{ color: "#10A879", fontWeight: 600 }}
-                            >
-                                Import & invite
-                            </Link>
-                            {" · "}
-                            <Link
-                                to={`/admin/enroll?tab=bulk&batchId=${batchId}`}
-                                onClick={onClose}
-                                style={{ color: "#10A879", fontWeight: 600 }}
-                            >
-                                Bulk select existing
-                            </Link>
-                            .
-                        </p>
-
-                        <div className="modal-actions">
-                            <button type="button" className="cancel-btn" onClick={onClose}>
-                                Cancel
-                            </button>
-                            <button type="button" className="create-btn" onClick={handleEnroll}>
-                                Add Student
-                            </button>
-                        </div>
+                        <button
+                            type="button"
+                            className="modal-close-btn"
+                            aria-label="Close"
+                            onClick={onClose}
+                        >
+                            ×
+                        </button>
                     </div>
-                )}
+
+                    {isLoading ? (
+                        <p className="asb-loading">Loading students…</p>
+                    ) : (
+                        <div className="asb-body">
+                            <div className="asb-field">
+                                <label className="modal-label" htmlFor="asb-combo-input">
+                                    Student
+                                </label>
+                                <StudentCombobox
+                                    id="asb-combo-input"
+                                    students={studentsList}
+                                    value={selectedStudentId}
+                                    onChange={setSelectedStudentId}
+                                    placeholder="Search by name or email…"
+                                />
+                            </div>
+
+                            <p className="asb-hint">
+                                Need a college email list?{" "}
+                                <Link
+                                    to={`/admin/enroll?tab=import&batchId=${batchId}`}
+                                    onClick={onClose}
+                                >
+                                    Import & invite
+                                </Link>
+                                {" · "}
+                                <Link
+                                    to={`/admin/enroll?tab=bulk&batchId=${batchId}`}
+                                    onClick={onClose}
+                                >
+                                    Bulk select existing
+                                </Link>
+                            </p>
+
+                            <div className="asb-actions">
+                                <button type="button" className="asb-btn asb-btn-ghost" onClick={onClose}>
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    className="asb-btn asb-btn-primary"
+                                    onClick={handleEnroll}
+                                    disabled={!selectedStudentId || isPending}
+                                >
+                                    {isPending ? "Adding…" : "Add to batch"}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
         </ModalPortal>
     );
 };

@@ -88,8 +88,30 @@
 .layout .content .app-select-trigger:hover,
 .layout .content .app-select-trigger:active,
 .layout .content .app-select-trigger:focus,
-.layout .content .app-select-trigger:focus-visible {
-  background: var(--color-surface, #fff) !important;
+.layout .content .app-select-trigger:focus-visible,
+.layout .content .student-combo-selected-main:hover,
+.layout .content .student-combo-selected-main:active,
+.layout .content .student-combo-selected-main:focus,
+.layout .content .student-combo-selected-main:focus-visible {
+  background: transparent !important;
+  color: var(--color-text, #1a1a1a);
+}
+
+.layout .content .student-combo-option:hover,
+.layout .content .student-combo-option:active,
+.layout .content .student-combo-option:focus,
+.layout .content .student-combo-option:focus-visible,
+.layout .content .student-combo-option.is-active {
+  background: #f8fafc !important;
+  color: var(--color-text, #1a1a1a);
+  border-color: transparent;
+}
+
+.layout .content .student-combo-option.is-selected,
+.layout .content .student-combo-option.is-selected:hover,
+.layout .content .student-combo-option.is-selected:active,
+.layout .content .student-combo-option.is-selected.is-active {
+  background: #ecfdf5 !important;
   color: var(--color-text, #1a1a1a);
 }
 
@@ -208,7 +230,19 @@
 .layout .as-search input,
 .layout .as-search input:hover,
 .layout .as-search input:focus,
-.layout .as-search input:focus-visible {
+.layout .as-search input:focus-visible,
+.layout .student-combo-input,
+.layout .student-combo-input:hover,
+.layout .student-combo-input:focus,
+.layout .student-combo-input:focus-visible,
+.layout .app-select-search-input,
+.layout .app-select-search-input:hover,
+.layout .app-select-search-input:focus,
+.layout .app-select-search-input:focus-visible,
+.layout .course-multi-select-search-input,
+.layout .course-multi-select-search-input:hover,
+.layout .course-multi-select-search-input:focus,
+.layout .course-multi-select-search-input:focus-visible {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;

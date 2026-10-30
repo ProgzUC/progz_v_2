@@ -9,6 +9,7 @@ import { confirmAction } from "../../../utils/confirmAction";
 import { showError, showInfo, showSuccess, showWarning } from "../../../utils/toast";
 import Loader from "../../../components/common/Loader/Loader";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
+import StudentCombobox from "../Batches/StudentCombobox";
 import { createId } from "../../../utils/courseBuilder";
 import BulkStudentImport from "../BulkImport/BulkStudentImport";
 
@@ -412,23 +413,16 @@ const EnrollStudents = () => {
 
         {activeTab === "single" && (
           <div className="tab-pane-content">
-            <div className="section-block">
+            <div className="section-block enroll-student-picker">
               <label className="section-label" htmlFor="enroll-student-select">
                 Select student profile
               </label>
-              <AppSelect
+              <StudentCombobox
                 id="enroll-student-select"
-                className="input-select"
+                students={studentsList}
                 value={selectedStudent}
-                onChange={(e) => setSelectedStudent(e.target.value)}
-                aria-label="Select student profile"
-                options={[
-                  { value: "", label: "Select student" },
-                  ...studentsList.map((s) => ({
-                    value: s._id,
-                    label: `${s.name} (${s.email})`,
-                  })),
-                ]}
+                onChange={setSelectedStudent}
+                placeholder="Search by name or email…"
               />
             </div>
 
@@ -463,6 +457,8 @@ const EnrollStudents = () => {
                       value={section.courseId}
                       onChange={(e) => updateSection(section.id, "courseId", e.target.value)}
                       aria-label="Select course"
+                      searchable
+                      searchPlaceholder="Search courses…"
                       options={[
                         { value: "", label: "Select course" },
                         ...coursesList.map((c) => ({
@@ -480,6 +476,8 @@ const EnrollStudents = () => {
                       value={section.instructorId}
                       onChange={(e) => updateSection(section.id, "instructorId", e.target.value)}
                       aria-label="Select instructor"
+                      searchable
+                      searchPlaceholder="Search instructors…"
                       options={[
                         { value: "", label: "Select instructor" },
                         ...instructorsList.map((ins) => ({
@@ -497,6 +495,8 @@ const EnrollStudents = () => {
                       value={section.batchId}
                       onChange={(e) => updateSection(section.id, "batchId", e.target.value)}
                       aria-label="Select batch"
+                      searchable
+                      searchPlaceholder="Search batches…"
                       options={[
                         { value: "", label: "Select batch" },
                         ...batchesList
@@ -558,6 +558,8 @@ const EnrollStudents = () => {
                   setSearchParams(next, { replace: true });
                 }}
                 aria-label="Select target batch"
+                searchable
+                searchPlaceholder="Search batches…"
                 options={[
                   { value: "", label: "Choose batch..." },
                   ...batchesList.map((b) => ({

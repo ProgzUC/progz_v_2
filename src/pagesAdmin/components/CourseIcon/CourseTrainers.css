@@ -450,6 +450,11 @@
   gap: 12px;
 }
 
+.mi-instructor-picker {
+  flex: 1;
+  min-width: 0;
+}
+
 .mi-searchable {
   position: relative;
   flex: 1;

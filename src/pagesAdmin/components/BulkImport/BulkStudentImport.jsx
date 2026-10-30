@@ -272,6 +272,8 @@ const BulkStudentImport = ({
           placeholder="Select batch to assign"
           disabled={isImporting}
           aria-label="Select batch"
+          searchable
+          searchPlaceholder="Search batches…"
         />
         {selectedBatch && (
           <p className="batch-hint">

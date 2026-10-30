@@ -146,6 +146,12 @@
   margin-bottom: 16px;
 }
 
+.admin-enroll-students-page .enroll-student-picker {
+  position: relative;
+  z-index: 2;
+  max-width: 520px;
+}
+
 .admin-enroll-students-page .section-label {
   display: block;
   font-size: 12px;

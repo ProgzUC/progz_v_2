@@ -363,6 +363,8 @@ const EditBatchForm = ({ onClose, batch, coursesList, weekDays }) => {
                                         onChange={(e) => updateTrainer(index, "trainer", e.target.value)}
                                         aria-label="Trainer"
                                         icon="bi-person"
+                                        searchable
+                                        searchPlaceholder="Search trainers…"
                                         options={[
                                             { value: "", label: "Select Trainer" },
                                             ...instructorsList.map((ins) => ({
