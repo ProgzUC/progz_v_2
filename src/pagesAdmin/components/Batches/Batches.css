@@ -190,6 +190,7 @@
   width: 100%;
   border-collapse: collapse;
   min-width: 960px;
+  table-layout: fixed;
 }
 
 .admin-batches-page .data-table thead th {
@@ -198,8 +199,10 @@
   font-weight: 500;
   font-size: 12px;
   letter-spacing: 0.01em;
-  padding: 12px 10px 14px;
+  padding: 12px 10px;
   border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 .admin-batches-page .data-table tbody tr {
@@ -216,8 +219,9 @@
 }
 
 .admin-batches-page .data-table tbody td {
-  padding: 18px 10px;
+  padding: 12px 10px;
   vertical-align: middle;
+  white-space: nowrap;
   color: var(--color-text-secondary);
   font-size: 14px;
 }
@@ -227,6 +231,24 @@
   width: 56px;
   font-weight: 500;
 }
+
+/* Fixed column widths — S.No | Batch | Course | Instructors | Start Date | Students | Status | Actions */
+.admin-batches-page .data-table th:nth-child(1),
+.admin-batches-page .data-table td:nth-child(1) { width: 56px; }
+.admin-batches-page .data-table th:nth-child(2),
+.admin-batches-page .data-table td:nth-child(2) { width: 18%; white-space: normal; }
+.admin-batches-page .data-table th:nth-child(3),
+.admin-batches-page .data-table td:nth-child(3) { width: 16%; white-space: normal; }
+.admin-batches-page .data-table th:nth-child(4),
+.admin-batches-page .data-table td:nth-child(4) { width: 16%; white-space: normal; }
+.admin-batches-page .data-table th:nth-child(5),
+.admin-batches-page .data-table td:nth-child(5) { width: 13%; }
+.admin-batches-page .data-table th:nth-child(6),
+.admin-batches-page .data-table td:nth-child(6) { width: 10%; }
+.admin-batches-page .data-table th:nth-child(7),
+.admin-batches-page .data-table td:nth-child(7) { width: 10%; }
+.admin-batches-page .data-table th:nth-child(8),
+.admin-batches-page .data-table td:nth-child(8) { width: 160px; text-align: center; }
 
 .admin-batches-page .col-batch {
   color: var(--color-text) !important;
@@ -293,7 +315,7 @@
 }
 
 .admin-batches-page .actions-cell {
-  text-align: left;
+  text-align: center;
   width: 160px;
 }
 

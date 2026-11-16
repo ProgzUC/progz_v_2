@@ -16,6 +16,17 @@
   overflow: visible;
 }
 
+/* Disable sidebar hover and interactions when a modal/dialog overlay is active */
+body:has(.mi-overlay) .admin-sidebar,
+body:has(.modal-overlay) .admin-sidebar,
+body:has(.audit-modal-overlay) .admin-sidebar,
+body:has(.sync-details-modal-overlay) .admin-sidebar,
+body:has(.course-preview-overlay) .admin-sidebar,
+body:has(.vh-overlay) .admin-sidebar,
+body:has([role="dialog"]) .admin-sidebar {
+  pointer-events: none !important;
+}
+
 .admin-sidebar.collapsed {
   width: var(--sidebar-collapsed);
 }

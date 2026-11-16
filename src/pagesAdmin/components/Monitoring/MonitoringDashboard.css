@@ -619,10 +619,11 @@ select.glass-input {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
+  table-layout: fixed;
 }
 
 .monitor-table th {
-  padding: 12px 16px;
+  padding: 12px 10px;
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text-secondary);
   font-size: var(--font-size-xs);
@@ -630,14 +631,17 @@ select.glass-input {
   letter-spacing: 0.05em;
   font-weight: var(--font-weight-semibold);
   background: var(--color-bg-muted);
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 .monitor-table td {
-  padding: 14px 16px;
+  padding: 12px 10px;
   border-bottom: 1px solid var(--color-border);
   font-size: var(--font-size-sm);
   color: var(--color-text);
   vertical-align: middle;
+  white-space: nowrap;
 }
 
 .monitor-table tbody tr:hover td {
@@ -647,6 +651,23 @@ select.glass-input {
 .monitor-table tr:last-child td {
   border-bottom: none;
 }
+
+/* API Logs table col widths: Time | Method | Endpoint | Status | Latency */
+.monitor-table:not(.errors-table) th:nth-child(1),
+.monitor-table:not(.errors-table) td:nth-child(1) { width: 170px; }
+.monitor-table:not(.errors-table) th:nth-child(2),
+.monitor-table:not(.errors-table) td:nth-child(2) { width: 90px; }
+.monitor-table:not(.errors-table) th:nth-child(3),
+.monitor-table:not(.errors-table) td:nth-child(3) { width: auto; white-space: normal; }
+.monitor-table:not(.errors-table) th:nth-child(4),
+.monitor-table:not(.errors-table) td:nth-child(4) { width: 110px; text-align: center; }
+.monitor-table:not(.errors-table) th:nth-child(5),
+.monitor-table:not(.errors-table) td:nth-child(5) { width: 100px; text-align: right; }
+/* Audit Log extras: Role | Action | Target | IP | Details */
+.monitor-table:not(.errors-table) th:nth-child(6),
+.monitor-table:not(.errors-table) td:nth-child(6) { width: 110px; }
+.monitor-table:not(.errors-table) th:nth-child(7),
+.monitor-table:not(.errors-table) td:nth-child(7) { width: auto; white-space: normal; }
 
 /* Badges */
 .status-badge {

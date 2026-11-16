@@ -224,6 +224,7 @@
   width: 100%;
   border-collapse: collapse;
   min-width: 780px;
+  table-layout: fixed;
 }
 
 .admin-approve-user-page .data-table thead th {
@@ -232,8 +233,10 @@
   font-weight: 500;
   font-size: 12px;
   letter-spacing: 0.01em;
-  padding: 12px 10px 14px;
+  padding: 12px 10px;
   border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 .admin-approve-user-page .data-table tbody tr {
@@ -254,8 +257,9 @@
 }
 
 .admin-approve-user-page .data-table tbody td {
-  padding: 18px 10px;
+  padding: 12px 10px;
   vertical-align: middle;
+  white-space: nowrap;
   color: var(--color-text-secondary);
   font-size: 14px;
 }
@@ -279,6 +283,23 @@
   width: 56px;
   font-weight: 500;
 }
+
+/* Fixed column widths — Checkbox | S.No | Name | Source | [Zen Course] | Requested | Actions */
+/* Note: Zen Course column is conditionally rendered for student tab only */
+.admin-approve-user-page .data-table th:nth-child(1),
+.admin-approve-user-page .data-table td:nth-child(1) { width: 44px; }
+.admin-approve-user-page .data-table th:nth-child(2),
+.admin-approve-user-page .data-table td:nth-child(2) { width: 56px; }
+.admin-approve-user-page .data-table th:nth-child(3),
+.admin-approve-user-page .data-table td:nth-child(3) { width: 25%; white-space: normal; }
+.admin-approve-user-page .data-table th:nth-child(4),
+.admin-approve-user-page .data-table td:nth-child(4) { width: 12%; }
+.admin-approve-user-page .data-table th:nth-child(5),
+.admin-approve-user-page .data-table td:nth-child(5) { width: 18%; white-space: normal; }
+.admin-approve-user-page .data-table th:nth-child(6),
+.admin-approve-user-page .data-table td:nth-child(6) { width: 15%; }
+.admin-approve-user-page .data-table th:nth-child(7),
+.admin-approve-user-page .data-table td:nth-child(7) { width: 130px; text-align: center; }
 
 .admin-approve-user-page .person-chip {
   display: inline-flex;
@@ -335,7 +356,7 @@
 }
 
 .admin-approve-user-page .actions-cell {
-  text-align: left;
+  text-align: center;
   width: 130px;
 }
 

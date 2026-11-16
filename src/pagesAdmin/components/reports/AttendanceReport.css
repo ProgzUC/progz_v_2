@@ -247,14 +247,33 @@
 .report-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
+
+/* Column widths: # | Student Name | Email | Present | Late | Absent | Total | Percentage */
+.report-table th:nth-child(1),
+.report-table td:nth-child(1) { width: 50px; }
+.report-table th:nth-child(2),
+.report-table td:nth-child(2) { width: 22%; white-space: normal; }
+.report-table th:nth-child(3),
+.report-table td:nth-child(3) { width: 25%; }
+.report-table th:nth-child(4),
+.report-table td:nth-child(4) { width: 8%; text-align: center; }
+.report-table th:nth-child(5),
+.report-table td:nth-child(5) { width: 7%; text-align: center; }
+.report-table th:nth-child(6),
+.report-table td:nth-child(6) { width: 7%; text-align: center; }
+.report-table th:nth-child(7),
+.report-table td:nth-child(7) { width: 7%; text-align: center; }
+.report-table th:nth-child(8),
+.report-table td:nth-child(8) { width: auto; }
 
 .report-table thead tr {
     background: var(--color-surface);
 }
 
 .report-table th {
-    padding: 14px 12px;
+    padding: 12px 10px;
     text-align: left;
     font-size: 13px;
     font-weight: 600;
@@ -262,6 +281,8 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-bottom: 2px solid #dee2e6;
+    vertical-align: middle;
+    white-space: nowrap;
 }
 
 .report-table tbody tr {
@@ -274,9 +295,11 @@
 }
 
 .report-table td {
-    padding: 16px 12px;
+    padding: 12px 10px;
     font-size: 14px;
     color: #495057;
+    vertical-align: middle;
+    white-space: nowrap;
 }
 
 /* Student Name Cell */

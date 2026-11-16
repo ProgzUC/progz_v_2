@@ -1,6 +1,7 @@
 import React, { useMemo, useState, useRef, useEffect } from "react";
 import "./CourseTrainers.css";
 import { useParams, useNavigate } from "react-router-dom";
+import ModalPortal from "../../../components/common/ModalPortal";
 import {
   LuUsers,
   LuGraduationCap,
@@ -18,7 +19,6 @@ import {
 import { useCourse, useUpdateCourse } from "../../../hooks/useCourses";
 import { useAllUsers } from "../../../hooks/useAdminUsers";
 import Loader from "../../../components/common/Loader/Loader";
-import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import StudentCombobox from "../Batches/StudentCombobox";
 import { confirmAction } from "../../../utils/confirmAction";
 
@@ -41,7 +41,6 @@ const CourseTrainers = () => {
 
   const [activeTab, setActiveTab] = useState("list"); // list | add
   const [listSearch, setListSearch] = useState("");
-  const [sortBy, setSortBy] = useState("latest");
   const [selectedInstructorId, setSelectedInstructorId] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null);
@@ -58,6 +57,16 @@ const CourseTrainers = () => {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        handleClose();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   const availableInstructors = useMemo(() => {
@@ -81,18 +90,16 @@ const CourseTrainers = () => {
       );
     }
 
-    if (sortBy === "name") {
-      list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-    } else if (sortBy === "latest") {
-      // Assigned list grows by append — newest is last, so reverse for latest-first
-      list = list.reverse();
-    }
-    // "oldest" keeps API / assignment order
-
     return list;
-  }, [currentInstructors, listSearch, sortBy]);
+  }, [currentInstructors, listSearch]);
 
-  const handleClose = () => navigate(-1);
+  const handleClose = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/admin/courses");
+    }
+  };
 
   const handleUpdateInstructors = (newInstructorList) => {
     setIsUpdating(true);
@@ -167,28 +174,41 @@ const CourseTrainers = () => {
 
   if (isLoading) {
     return (
-      <div className="mi-overlay">
-        <Loader />
-      </div>
+      <ModalPortal>
+        <div className="mi-overlay">
+          <Loader />
+        </div>
+      </ModalPortal>
     );
   }
 
   if (!course) {
     return (
-      <div className="mi-overlay">
-        <div className="mi-modal mi-modal--error">
-          <p>Course not found</p>
-          <button type="button" className="mi-btn mi-btn--ghost" onClick={handleClose}>
-            Close
-          </button>
+      <ModalPortal>
+        <div className="mi-overlay">
+          <div className="mi-modal mi-modal--error">
+            <p>Course not found</p>
+            <button type="button" className="mi-btn mi-btn--ghost" onClick={handleClose}>
+              Close
+            </button>
+          </div>
         </div>
-      </div>
+      </ModalPortal>
     );
   }
 
   return (
-    <div className="mi-overlay" role="dialog" aria-modal="true" aria-labelledby="mi-title">
-      <div className={`mi-modal ${isUpdating ? "mi-modal--busy" : ""}`}>
+    <ModalPortal>
+      <div
+        className="mi-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="mi-title"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) handleClose();
+        }}
+      >
+        <div className={`mi-modal ${isUpdating ? "mi-modal--busy" : ""}`}>
         {isUpdating && (
           <div className="mi-updating" aria-live="polite">
             Updating…
@@ -273,19 +293,6 @@ const CourseTrainers = () => {
                 {displayedInstructors.length} Instructor
                 {displayedInstructors.length !== 1 ? "s" : ""}
               </span>
-              <label className="mi-sort">
-                Sort by:
-                <AppSelect
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  aria-label="Sort instructors"
-                  options={[
-                    { value: "latest", label: "Latest added" },
-                    { value: "oldest", label: "Oldest first" },
-                    { value: "name", label: "Name A–Z" },
-                  ]}
-                />
-              </label>
             </div>
 
             {displayedInstructors.length === 0 ? (
@@ -440,6 +447,7 @@ const CourseTrainers = () => {
         </footer>
       </div>
     </div>
+    </ModalPortal>
   );
 };
 

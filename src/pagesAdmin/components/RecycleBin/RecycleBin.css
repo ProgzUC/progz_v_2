@@ -182,6 +182,7 @@
   width: 100%;
   border-collapse: collapse;
   min-width: 720px;
+  table-layout: fixed;
 }
 
 .admin-recycle-bin-page .data-table thead th {
@@ -190,8 +191,10 @@
   font-weight: 500;
   font-size: 12px;
   letter-spacing: 0.01em;
-  padding: 12px 10px 14px;
+  padding: 12px 10px;
   border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 .admin-recycle-bin-page .data-table tbody tr {
@@ -208,8 +211,9 @@
 }
 
 .admin-recycle-bin-page .data-table tbody td {
-  padding: 18px 10px;
+  padding: 12px 10px;
   vertical-align: middle;
+  white-space: nowrap;
   color: var(--color-text-secondary);
   font-size: 14px;
 }
@@ -219,6 +223,18 @@
   width: 56px;
   font-weight: 500;
 }
+
+/* Fixed column widths — S.No | Type | Name | Deleted Date | Actions */
+.admin-recycle-bin-page .data-table th:nth-child(1),
+.admin-recycle-bin-page .data-table td:nth-child(1) { width: 56px; }
+.admin-recycle-bin-page .data-table th:nth-child(2),
+.admin-recycle-bin-page .data-table td:nth-child(2) { width: 12%; }
+.admin-recycle-bin-page .data-table th:nth-child(3),
+.admin-recycle-bin-page .data-table td:nth-child(3) { width: 40%; white-space: normal; }
+.admin-recycle-bin-page .data-table th:nth-child(4),
+.admin-recycle-bin-page .data-table td:nth-child(4) { width: 20%; }
+.admin-recycle-bin-page .data-table th:nth-child(5),
+.admin-recycle-bin-page .data-table td:nth-child(5) { width: 110px; text-align: center; }
 
 .admin-recycle-bin-page .type-badge {
   display: inline-flex;
@@ -289,7 +305,7 @@
 }
 
 .admin-recycle-bin-page .actions-cell {
-  text-align: left;
+  text-align: center;
   width: 110px;
 }
 

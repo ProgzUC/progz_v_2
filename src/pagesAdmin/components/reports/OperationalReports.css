@@ -234,7 +234,22 @@
 .or-table {
   width: 100%;
   border-collapse: collapse;
+  table-layout: fixed;
 }
+
+/* Column widths — applied broadly across all or-table variants */
+/* 4-col: Date(18%) | Batch(28%,normal) | Trainer(28%,normal) | Attendance(auto) */
+/* 5-col: Student/Course(28%,normal) | Email/Total(22%) | Batch/Active(15%) | Attendance/Completed(15%) | P·L·A/Completion(auto) */
+.or-table th:nth-child(1),
+.or-table td:nth-child(1) { width: 18%; }
+.or-table th:nth-child(2),
+.or-table td:nth-child(2) { width: 26%; white-space: normal; }
+.or-table th:nth-child(3),
+.or-table td:nth-child(3) { width: 22%; white-space: normal; }
+.or-table th:nth-child(4),
+.or-table td:nth-child(4) { width: 15%; }
+.or-table th:nth-child(5),
+.or-table td:nth-child(5) { width: auto; }
 
 .or-table th,
 .or-table td {
@@ -242,7 +257,8 @@
   text-align: left;
   border-bottom: 1px solid var(--color-border);
   font-size: 0.88rem;
-  vertical-align: top;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 .or-table th {

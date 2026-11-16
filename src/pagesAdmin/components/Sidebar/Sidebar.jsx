@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useAdminTheme } from "../../context/AdminThemeContext";
 import "./Sidebar.css";
 
@@ -28,12 +28,17 @@ const canHoverExpand = () =>
 
 const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
   const [hoverOpen, setHoverOpen] = useState(false);
+  const location = useLocation();
   const expanded = hoverOpen || mobileOpen;
   const { branding } = useAdminTheme();
   const academyName = branding?.academyName?.trim() || "ProgZ Academy";
   const rawTagline = branding?.tagline?.trim() || "Admin";
   const tagline = /^super\s*admin$/i.test(rawTagline) ? "Admin" : rawTagline;
   const logoSrc = branding?.logoDataUrl || "/admin/logo.png";
+
+  useEffect(() => {
+    setHoverOpen(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     const layout = document.querySelector(".layout");
@@ -54,6 +59,13 @@ const Sidebar = ({ mobileOpen = false, onMobileClose }) => {
 
   const handleMouseEnter = () => {
     if (mobileOpen) return;
+    if (
+      document.querySelector(
+        ".mi-overlay, .modal-overlay, .audit-modal-overlay, .sync-details-modal-overlay, .course-preview-overlay, .vh-overlay, [role='dialog']"
+      )
+    ) {
+      return;
+    }
     if (canHoverExpand()) setHoverOpen(true);
   };
 

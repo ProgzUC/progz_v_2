@@ -1,6 +1,9 @@
 .mi-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: var(--sidebar-collapsed, 85px);
+  right: 0;
+  bottom: 0;
   background: rgba(15, 23, 42, 0.45);
   display: flex;
   align-items: center;
@@ -8,6 +11,17 @@
   padding: 20px;
   z-index: 9999;
   font-family: var(--font-family-base), system-ui, sans-serif;
+}
+
+/* When sidebar is hover-expanded, push overlay further right */
+.layout.sidebar-hover-expanded .mi-overlay {
+  left: var(--sidebar-width, 280px);
+}
+
+@media (max-width: 768px) {
+  .mi-overlay {
+    left: 0;
+  }
 }
 
 .mi-modal {

@@ -24,6 +24,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import AppSelect from "../../../components/common/AppSelect/AppSelect";
 import { ErrorState } from "../../../components/common/PageState";
 import { getErrorMessage } from "../../../utils/apiError";
+import ModalPortal from "../../../components/common/ModalPortal";
 import "./MonitoringDashboard.css";
 
 import { showError, showSuccess } from "../../../utils/toast";
@@ -886,56 +887,58 @@ export default function MonitoringDashboard() {
       {/* INSPECT AUDIT LOG MODAL */}
       <AnimatePresence>
         {selectedAudit && (
-          <div className="audit-modal-overlay" onClick={() => setSelectedAudit(null)}>
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="audit-modal glass"
-            >
-              <div className="modal-header">
-                <h2>Audit Event Details</h2>
-                <button className="close-btn" onClick={() => setSelectedAudit(null)}>
-                  <i className="bi bi-x-lg"></i>
-                </button>
-              </div>
-              <div className="modal-body">
-                <div className="detail-row">
-                  <strong>Activity ID:</strong>
-                  <span className="monospace">{selectedAudit._id}</span>
+          <ModalPortal>
+            <div className="audit-modal-overlay" onClick={() => setSelectedAudit(null)}>
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+                className="audit-modal glass"
+              >
+                <div className="modal-header">
+                  <h2>Audit Event Details</h2>
+                  <button className="close-btn" onClick={() => setSelectedAudit(null)}>
+                    <i className="bi bi-x-lg"></i>
+                  </button>
                 </div>
-                <div className="detail-row">
-                  <strong>Timestamp:</strong>
-                  <span>{new Date(selectedAudit.timestamp).toLocaleString()}</span>
+                <div className="modal-body">
+                  <div className="detail-row">
+                    <strong>Activity ID:</strong>
+                    <span className="monospace">{selectedAudit._id}</span>
+                  </div>
+                  <div className="detail-row">
+                    <strong>Timestamp:</strong>
+                    <span>{new Date(selectedAudit.timestamp).toLocaleString()}</span>
+                  </div>
+                  <div className="detail-row">
+                    <strong>Action:</strong>
+                    <span className={`badge-text ${getActionBadgeClass(selectedAudit.action)}`}>
+                      {selectedAudit.action.replace(/_/g, " ")}
+                    </span>
+                  </div>
+                  <div className="detail-row">
+                    <strong>Target Resource:</strong>
+                    <span>{selectedAudit.targetType} ({selectedAudit.targetId || "N/A"})</span>
+                  </div>
+                  <div className="detail-row">
+                    <strong>Actor:</strong>
+                    <span>{selectedAudit.userName} ({selectedAudit.userEmail}) - <span className="text-xs uppercase">{selectedAudit.userRole}</span></span>
+                  </div>
+                  <div className="detail-row">
+                    <strong>IP / Agent:</strong>
+                    <span>{selectedAudit.ipAddress} <span className="agent-text">({selectedAudit.userAgent})</span></span>
+                  </div>
+                  <div className="detail-metadata">
+                    <h4>Metadata Payload:</h4>
+                    <pre className="monospace">
+                      {JSON.stringify(selectedAudit.details || {}, null, 2)}
+                    </pre>
+                  </div>
                 </div>
-                <div className="detail-row">
-                  <strong>Action:</strong>
-                  <span className={`badge-text ${getActionBadgeClass(selectedAudit.action)}`}>
-                    {selectedAudit.action.replace(/_/g, " ")}
-                  </span>
-                </div>
-                <div className="detail-row">
-                  <strong>Target Resource:</strong>
-                  <span>{selectedAudit.targetType} ({selectedAudit.targetId || "N/A"})</span>
-                </div>
-                <div className="detail-row">
-                  <strong>Actor:</strong>
-                  <span>{selectedAudit.userName} ({selectedAudit.userEmail}) - <span className="text-xs uppercase">{selectedAudit.userRole}</span></span>
-                </div>
-                <div className="detail-row">
-                  <strong>IP / Agent:</strong>
-                  <span>{selectedAudit.ipAddress} <span className="agent-text">({selectedAudit.userAgent})</span></span>
-                </div>
-                <div className="detail-metadata">
-                  <h4>Metadata Payload:</h4>
-                  <pre className="monospace">
-                    {JSON.stringify(selectedAudit.details || {}, null, 2)}
-                  </pre>
-                </div>
-              </div>
-            </motion.div>
-          </div>
+              </motion.div>
+            </div>
+          </ModalPortal>
         )}
       </AnimatePresence>
     </div>

@@ -153,6 +153,7 @@
   width: 100%;
   border-collapse: collapse;
   min-width: 780px;
+  table-layout: fixed;
 }
 
 .admin-instructors-page .data-table thead th {
@@ -161,8 +162,10 @@
   font-weight: 500;
   font-size: 12px;
   letter-spacing: 0.01em;
-  padding: 12px 10px 14px;
+  padding: 12px 10px;
   border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 .admin-instructors-page .data-table tbody tr {
@@ -179,10 +182,11 @@
 }
 
 .admin-instructors-page .data-table tbody td {
-  padding: 18px 10px;
+  padding: 12px 10px;
   vertical-align: middle;
   color: var(--color-text-secondary);
   font-size: 14px;
+  white-space: nowrap;
 }
 
 .admin-instructors-page .col-sno {
@@ -190,6 +194,20 @@
   width: 56px;
   font-weight: 500;
 }
+
+/* Fixed column widths so headers and data always align */
+.admin-instructors-page .data-table th:nth-child(1),
+.admin-instructors-page .data-table td:nth-child(1) { width: 56px; }   /* S.No */
+.admin-instructors-page .data-table th:nth-child(2),
+.admin-instructors-page .data-table td:nth-child(2) { width: 22%; }   /* Instructor */
+.admin-instructors-page .data-table th:nth-child(3),
+.admin-instructors-page .data-table td:nth-child(3) { width: 28%; }   /* E-mail */
+.admin-instructors-page .data-table th:nth-child(4),
+.admin-instructors-page .data-table td:nth-child(4) { width: 16%; }   /* Mobile No */
+.admin-instructors-page .data-table th:nth-child(5),
+.admin-instructors-page .data-table td:nth-child(5) { width: 18%; white-space: normal; } /* Qualification */
+.admin-instructors-page .data-table th:nth-child(6),
+.admin-instructors-page .data-table td:nth-child(6) { width: 130px; text-align: center; } /* Actions */
 
 .admin-instructors-page .person-chip {
   display: inline-flex;
@@ -231,7 +249,7 @@
 }
 
 .admin-instructors-page .actions-cell {
-  text-align: left;
+  text-align: center;
   width: 130px;
 }
 

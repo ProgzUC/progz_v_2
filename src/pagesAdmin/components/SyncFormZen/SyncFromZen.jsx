@@ -3,6 +3,7 @@ import { runManualSyncAndWait, fetchSyncStatus, fetchSyncLogs } from "../../../a
 import { showError, showInfo, showSuccess } from "../../../utils/toast";
 import { ErrorState } from "../../../components/common/PageState";
 import { getErrorMessage } from "../../../utils/apiError";
+import ModalPortal from "../../../components/common/ModalPortal";
 import "./SyncFromZen.css";
 
 const SyncFromZen = () => {
@@ -201,10 +202,11 @@ const SyncFromZen = () => {
                         </td>
                         <td>{log.duplicatesDetected || 0}</td>
                         <td>{log.executionTimeMs ? `${log.executionTimeMs}ms` : "N/A"}</td>
-                        <td>
+                        <td style={{ textAlign: "center" }}>
                           <button
                             onClick={() => setSelectedLog(log)}
                             className="btn btn-sm glass-btn d-flex align-items-center gap-1"
+                            style={{ margin: "0 auto" }}
                           >
                             <i className="bi bi-journal-text"></i> Details
                           </button>
@@ -246,64 +248,66 @@ const SyncFromZen = () => {
 
       {/* SYNC RUN DETAILS MODAL */}
       {selectedLog && (
-        <div className="sync-details-modal-overlay" onClick={() => setSelectedLog(null)}>
-          <div className="sync-details-modal glass-card" onClick={e => e.stopPropagation()}>
-            <div className="modal-header d-flex justify-content-between align-items-center p-3 border-bottom border-secondary">
-              <h4 className="m-0">Sync Event Diagnostics</h4>
-              <button className="close-btn" onClick={() => setSelectedLog(null)}>
-                <i className="bi bi-x-lg"></i>
-              </button>
-            </div>
-            <div className="modal-body p-4">
-              <div className="details-grid mb-4">
-                <div className="details-item">
-                  <span className="lbl">Log ID:</span>
-                  <span className="val monospace">{selectedLog._id}</span>
-                </div>
-                <div className="details-item">
-                  <span className="lbl">Start Time:</span>
-                  <span className="val">{formatTime(selectedLog.startTime)}</span>
-                </div>
-                <div className="details-item">
-                  <span className="lbl">Duration:</span>
-                  <span className="val">{selectedLog.executionTimeMs ? `${selectedLog.executionTimeMs}ms` : "N/A"}</span>
-                </div>
-                <div className="details-item">
-                  <span className="lbl">Trigger:</span>
-                  <span className="val text-uppercase">{selectedLog.triggerType}</span>
-                </div>
+        <ModalPortal>
+          <div className="sync-details-modal-overlay" onClick={() => setSelectedLog(null)}>
+            <div className="sync-details-modal glass-card" onClick={e => e.stopPropagation()}>
+              <div className="modal-header d-flex justify-content-between align-items-center p-3 border-bottom border-secondary">
+                <h4 className="m-0">Sync Event Diagnostics</h4>
+                <button className="close-btn" onClick={() => setSelectedLog(null)}>
+                  <i className="bi bi-x-lg"></i>
+                </button>
               </div>
+              <div className="modal-body p-4">
+                <div className="details-grid mb-4">
+                  <div className="details-item">
+                    <span className="lbl">Log ID:</span>
+                    <span className="val monospace">{selectedLog._id}</span>
+                  </div>
+                  <div className="details-item">
+                    <span className="lbl">Start Time:</span>
+                    <span className="val">{formatTime(selectedLog.startTime)}</span>
+                  </div>
+                  <div className="details-item">
+                    <span className="lbl">Duration:</span>
+                    <span className="val">{selectedLog.executionTimeMs ? `${selectedLog.executionTimeMs}ms` : "N/A"}</span>
+                  </div>
+                  <div className="details-item">
+                    <span className="lbl">Trigger:</span>
+                    <span className="val text-uppercase">{selectedLog.triggerType}</span>
+                  </div>
+                </div>
 
-              <div className="details-summary-row mb-4">
-                <div className="summ-box">
-                  <strong>{selectedLog.studentsSynced || 0}</strong>
-                  <span>Students Synced</span>
+                <div className="details-summary-row mb-4">
+                  <div className="summ-box">
+                    <strong>{selectedLog.studentsSynced || 0}</strong>
+                    <span>Students Synced</span>
+                  </div>
+                  <div className="summ-box">
+                    <strong>{selectedLog.instructorsSynced || 0}</strong>
+                    <span>Instructors Synced</span>
+                  </div>
+                  <div className="summ-box">
+                    <strong>{selectedLog.duplicatesDetected || 0}</strong>
+                    <span>Duplicates Detected</span>
+                  </div>
                 </div>
-                <div className="summ-box">
-                  <strong>{selectedLog.instructorsSynced || 0}</strong>
-                  <span>Instructors Synced</span>
-                </div>
-                <div className="summ-box">
-                  <strong>{selectedLog.duplicatesDetected || 0}</strong>
-                  <span>Duplicates Detected</span>
-                </div>
+
+                {selectedLog.errors && selectedLog.errors.length > 0 ? (
+                  <div className="errors-log-box">
+                    <h5 className="text-danger mb-2">Sync Run Exceptions & Warnings ({selectedLog.errors.length}):</h5>
+                    <pre className="monospace p-3 bg-dark text-danger-emphasis border border-danger-subtle rounded">
+                      {selectedLog.errors.map((err, idx) => `[Err ${idx + 1}] ${err}`).join("\n")}
+                    </pre>
+                  </div>
+                ) : (
+                  <div className="alert alert-success d-flex align-items-center gap-2">
+                    <i className="bi bi-check-circle-fill"></i> No execution errors logged for this synchronization run.
+                  </div>
+                )}
               </div>
-
-              {selectedLog.errors && selectedLog.errors.length > 0 ? (
-                <div className="errors-log-box">
-                  <h5 className="text-danger mb-2">Sync Run Exceptions & Warnings ({selectedLog.errors.length}):</h5>
-                  <pre className="monospace p-3 bg-dark text-danger-emphasis border border-danger-subtle rounded">
-                    {selectedLog.errors.map((err, idx) => `[Err ${idx + 1}] ${err}`).join("\n")}
-                  </pre>
-                </div>
-              ) : (
-                <div className="alert alert-success d-flex align-items-center gap-2">
-                  <i className="bi bi-check-circle-fill"></i> No execution errors logged for this synchronization run.
-                </div>
-              )}
             </div>
           </div>
-        </div>
+        </ModalPortal>
       )}
     </div>
   );
