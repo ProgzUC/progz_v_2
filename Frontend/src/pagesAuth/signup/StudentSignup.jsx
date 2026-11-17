@@ -1,0 +1,119 @@
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../../api/userApi';
+import { showError, showSuccess } from '../../utils/toast';
+import { getErrorMessage } from '../../utils/apiError';
+import LeftSidebar from './LeftSidebar';
+import PersonalDetails from './PersonalDetails';
+import Role from './Role';
+import EducationEmployment from './EducationEmployment';
+import './StudentSignup.css';
+
+const StudentSignup = () => {
+    const navigate = useNavigate();
+    const [activeStep, setActiveStep] = useState(1);
+    const [completedSteps, setCompletedSteps] = useState([]);
+
+    // State to store data from all steps
+    const [formData, setFormData] = useState({
+        personalDetails: {},
+        role: '',
+        educationEmployment: {}
+    });
+
+    const handleNextStep = (stepData) => {
+        // Save the current step's data
+        if (activeStep === 1) {
+            setFormData(prev => ({ ...prev, personalDetails: stepData }));
+        } else if (activeStep === 2) {
+            setFormData(prev => ({ ...prev, role: stepData }));
+        }
+
+        if (activeStep < 3) {
+            setCompletedSteps([...completedSteps, activeStep]);
+            setActiveStep(activeStep + 1);
+        }
+    };
+
+    const handlePreviousStep = () => {
+        if (activeStep > 1) {
+            setActiveStep(activeStep - 1);
+            setCompletedSteps(completedSteps.filter(step => step !== activeStep - 1));
+        } else {
+            navigate('/login');
+        }
+    };
+
+    const handleFinalSubmit = async (educationData) => {
+        const personal = { ...(formData.personalDetails || {}) };
+        delete personal.confirmPassword;
+
+        const completeData = {
+            ...personal,
+            role: formData.role,
+            ...educationData,
+        };
+
+        try {
+            await registerUser(completeData);
+
+            showSuccess('Your registration is pending approval. You will be notified once approved.');
+            navigate('/login');
+        } catch (error) {
+            showError(getErrorMessage(error, 'Something went wrong. Please try again.'));
+        }
+    };
+
+    const renderCurrentStep = () => {
+        switch (activeStep) {
+            case 1:
+                return (
+                    <PersonalDetails
+                        initialValues={formData.personalDetails}
+                        onNext={handleNextStep}
+                        onCancel={handlePreviousStep}
+                    />
+                );
+            case 2:
+                return (
+                    <Role
+                        initialRole={formData.role}
+                        onNext={handleNextStep}
+                        onCancel={handlePreviousStep}
+                    />
+                );
+            case 3:
+                return (
+                    <EducationEmployment
+                        initialValues={formData.educationEmployment}
+                        onCancel={handlePreviousStep}
+                        onSubmit={(data) => {
+                            setFormData((prev) => ({ ...prev, educationEmployment: data }));
+                            handleFinalSubmit(data);
+                        }}
+                    />
+                );
+            default:
+                return (
+                    <PersonalDetails
+                        initialValues={formData.personalDetails}
+                        onNext={handleNextStep}
+                        onCancel={handlePreviousStep}
+                    />
+                );
+        }
+    };
+
+    return (
+        <div className="signup-page-layout">
+        <div className="signup-container">
+            <LeftSidebar activeStep={activeStep} completedSteps={completedSteps} />
+            <div className="main-content">
+                {renderCurrentStep()}
+            </div>
+        </div>
+        </div>
+    );
+};
+
+export default StudentSignup;

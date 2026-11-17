@@ -1,0 +1,25 @@
+{
+    "personalDetails": {
+        "fullName": "Sarah Marie Anderson",
+        "email": "sarah.anderson@company.com",
+        "mobileNumber": "+1 (555) 123-4567",
+        "alternateMobileNumber": "+1 (555) 987-6543",
+        "dateOfBirth": "1990-03-15",
+        "gender": "Female",
+        "password": "**************",
+        "address": "123 Design Street, Suite 400, San Francisco, CA 94102",
+        "city": "San Francisco",
+        "state": "CA",
+        "country": "USA",
+        "avatar": "https://i.pravatar.cc/150?u=sarah",
+        "role": "Trainer"
+    },
+    "educationEmployment": {
+        "education": "Master of Design",
+        "university": "Stanford University",
+        "profession": "Lead Product Designer",
+        "experience": "8 Years",
+        "employmentStatus": "Work",
+        "skills": "UI/UX, React, Figma, Node.js"
+    }
+}

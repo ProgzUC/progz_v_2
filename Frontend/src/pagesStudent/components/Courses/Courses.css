@@ -1,0 +1,302 @@
+.home-catalog {
+  padding: 12px 0 72px;
+  background: var(--color-bg);
+}
+
+.home-catalog-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.home-catalog-head h2 {
+  margin: 0 0 8px;
+  color: var(--color-text);
+  font-size: clamp(28px, 3vw, 40px);
+  letter-spacing: -0.8px;
+}
+
+.home-catalog-head p {
+  margin: 0;
+  max-width: 520px;
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+}
+
+.home-catalog-tabs {
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+}
+
+.home-catalog-tabs button {
+  border: 0;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+
+.home-catalog-tabs button.is-active {
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+.home-catalog-tabs button:hover:not(.is-active) {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.home-course-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.home-course-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 22px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  animation: homeCardIn 0.6s ease both;
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.home-course-card:hover,
+.home-course-card:focus-visible {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-card-hover);
+  outline: none;
+}
+
+.home-course-cover {
+  position: relative;
+  height: 132px;
+  display: grid;
+  place-items: center;
+  color: var(--color-text-on-primary);
+  overflow: hidden;
+}
+
+.home-course-cover::after {
+  content: "";
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  right: -20px;
+  bottom: -28px;
+  background: color-mix(in srgb, white 16%, transparent);
+}
+
+.tone-0 .home-course-cover { background: var(--color-primary); }
+.tone-1 .home-course-cover { background: var(--color-primary-bright); }
+.tone-2 .home-course-cover { background: var(--color-primary-muted); color: var(--color-primary); }
+.tone-3 .home-course-cover { background: var(--color-primary-gradient); }
+
+.home-course-mark {
+  position: relative;
+  z-index: 1;
+  font-size: 34px;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.home-course-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.home-course-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  padding: 16px 16px 14px;
+}
+
+.home-course-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.home-course-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.home-course-body h3 {
+  margin: 2px 0 0;
+  color: var(--color-text);
+  font-size: 18px;
+  line-height: 1.3;
+  letter-spacing: -0.3px;
+}
+
+.home-course-by {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+
+.home-course-progress small {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.home-course-track {
+  height: 6px;
+  margin-bottom: 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-primary-light);
+  overflow: hidden;
+}
+
+.home-course-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--color-primary-bright);
+}
+
+.home-course-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 10px;
+  color: var(--color-primary);
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.home-course-arrow {
+  transition: transform 0.25s ease;
+}
+
+.home-course-card:hover .home-course-arrow {
+  transform: translateX(4px);
+}
+
+.home-catalog-status,
+.home-catalog-more {
+  text-align: center;
+  color: var(--color-text-secondary);
+  padding: 12px 0 8px;
+}
+
+.home-catalog-more .student-btn-primary {
+  display: inline-flex;
+  text-decoration: none;
+}
+
+.home-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 28px;
+  padding: 28px 32px;
+  border-radius: 28px;
+  color: var(--color-text-on-primary);
+  background: var(--color-primary-gradient);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  position: relative;
+}
+
+.home-cta::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  right: -40px;
+  top: -70px;
+  border-radius: 50%;
+  background: color-mix(in srgb, white 12%, transparent);
+}
+
+.home-cta h3 {
+  margin: 0 0 6px;
+  font-size: 28px;
+  letter-spacing: -0.5px;
+}
+
+.home-cta p {
+  margin: 0;
+  max-width: 560px;
+  color: color-mix(in srgb, white 86%, transparent);
+}
+
+.home-cta-btn {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 14px;
+  background: var(--color-surface);
+  color: var(--color-primary);
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 0.25s ease;
+}
+
+.home-cta-btn:hover {
+  transform: translateY(-3px);
+}
+
+@keyframes homeCardIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 1100px) {
+  .home-course-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 760px) {
+  .home-catalog-head,
+  .home-cta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .home-course-grid { grid-template-columns: 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-course-card { animation: none; }
+  .home-course-card:hover { transform: none; }
+}

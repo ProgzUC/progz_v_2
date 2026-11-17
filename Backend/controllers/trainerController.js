@@ -1,0 +1,469 @@
+import Batch from "../models/Batch.js";
+import Course from "../models/Course.js";
+import User from "../models/User.js";
+import bcrypt from "bcryptjs";
+import { getNextClassDate } from "../utils/getNextClassDate.js";
+import { validatePassword } from "../utils/passwordValidation.js";
+import { revokeRefreshToken } from "../utils/refreshTokenStore.js";
+import { clearAuthCookies } from "../utils/cookieAuth.js";
+import { canManageBatch, denyAccess } from "../utils/authorizationHelpers.js";
+import {
+  findSectionProgressIndex,
+  matchesSectionProgress,
+} from "../utils/batchCourses.js";
+
+export const trainerBootstrap = async (req, res) => {
+  try {
+    const trainerId = req.user.id;
+
+    const trainer = await User.findById(trainerId)
+      .select("name email")
+      .lean();
+    const batches = await Batch.find({ "trainers.trainer": trainerId })
+      .populate("course", "courseName courseDuration modules")
+      .populate("courses", "courseName")
+      .lean();
+
+    let totalStudents = 0;
+    let activeBatches = [];
+    let completedBatches = [];
+    let upcomingClasses = [];
+
+    batches.forEach(batch => {
+      totalStudents += batch.students?.length || 0;
+
+      // Prefer primary course; fall back to first entry in courses[] for multi-course batches
+      const course =
+        batch.course && (batch.course.modules || batch.course.courseName)
+          ? batch.course
+          : (batch.courses || []).find((c) => c && (c.modules || c.courseName)) ||
+            null;
+      if (!course) {
+        console.warn("Course not populated for batch:", batch._id);
+        return;
+      }
+
+      const modules = course.modules || [];
+      const primaryName = course.courseName;
+      const courseNameList = [
+        primaryName,
+        ...(batch.courses || [])
+          .map((c) => c?.courseName)
+          .filter((n) => n && n !== primaryName),
+      ].filter(Boolean);
+      const courseNamesLabel = courseNameList.join(", ") || "Untitled course";
+
+      const totalSections = modules.reduce(
+        (acc, m) => acc + (m.sections?.length || 0),
+        0
+      );
+
+      const completedSections =
+        batch.sectionProgress?.filter(s => s.isCompleted).length || 0;
+
+      const completionPercentage =
+        totalSections === 0
+          ? 0
+          : Math.round((completedSections / totalSections) * 100);
+
+      // Show assigned work that is running or about to start (create often saved as upcoming)
+      if (batch.status === "active" || batch.status === "upcoming") {
+        // compose human-friendly timing string from classTiming object
+        const timingStr = batch.classTiming
+          ? `${batch.classTiming.startTime} - ${batch.classTiming.endTime} ${batch.classTiming.timezone || ""}`.trim()
+          : null;
+
+        // get trainer-specific assignment data (assignedModules, isCurrent)
+        const trainerAssign = batch.trainers?.find(t => String(t.trainer) === String(trainerId)) || null;
+
+        activeBatches.push({
+          batchId: batch._id,
+          batchName: batch.name,
+          courseName: courseNamesLabel,
+          duration: course.courseDuration,
+          studentsCount: batch.students?.length || 0,
+          timing: timingStr,
+          startDate: batch.startDate,
+          endDate: batch.endDate,
+          status: batch.status,
+          meetLink: batch.meetLink,
+          completionPercentage,
+          trainerAssignment: trainerAssign
+            ? {
+              assignedModules: trainerAssign.assignedModules || [],
+              isCurrent: !!trainerAssign.isCurrent,
+              fromDate: trainerAssign.fromDate || null,
+              toDate: trainerAssign.toDate || null,
+            }
+            : null,
+        });
+
+        const nextClassDate = getNextClassDate(batch.daysOfWeek, batch.classTiming);
+
+        if (nextClassDate) {
+          upcomingClasses.push({
+            batchId: batch._id,
+            batchName: batch.name,
+            courseName: courseNamesLabel,
+            timing: timingStr,
+            meetLink: batch.meetLink,
+            nextClassAt: nextClassDate,
+          });
+        }
+      }
+
+      if (batch.status === "completed") {
+        completedBatches.push({
+          batchId: batch._id,
+          batchName: batch.name,
+          courseName: courseNamesLabel,
+          startDate: batch.startDate,
+          endDate: batch.endDate,
+          status: batch.status
+        });
+      }
+    });
+
+
+    // only 3 upcoming classes
+    upcomingClasses.sort(
+      (a, b) => new Date(a.nextClassAt) - new Date(b.nextClassAt)
+    );
+
+    upcomingClasses = upcomingClasses.slice(0, 3);
+
+
+    res.json({
+      trainer: {
+        id: req.user.id,
+        name: trainer.name,
+        email: trainer.email
+      },
+      stats: {
+        totalStudents,
+        activeBatches: activeBatches.length,
+        completedBatches: completedBatches.length
+      },
+      activeBatches,
+      completedBatches,
+      upcomingClasses
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Trainer bootstrap failed" });
+  }
+};
+
+export const getTrainerBatchDetails = async (req, res) => {
+  try {
+    const { batchId } = req.params;
+    const trainerId = req.user.id;
+
+    const batch = await Batch.findOne({
+      _id: batchId,
+      "trainers.trainer": trainerId,
+    })
+      .populate("course", "courseName modules")
+      .populate("courses", "courseName modules")
+      .populate("students", "name email phone education")
+      .lean();
+
+    if (!batch) {
+      return res.status(404).json({ message: "Batch not found" });
+    }
+
+    const timingStr = batch.classTiming
+      ? `${batch.classTiming.startTime} - ${batch.classTiming.endTime} ${batch.classTiming.timezone || ""}`.trim()
+      : null;
+
+    const trainerAssign = batch.trainers?.find(t => String(t.trainer) === String(trainerId)) || null;
+
+    // Build multi-course curriculum list (primary first, then others)
+    const courseMap = new Map();
+    if (batch.course?._id) {
+      courseMap.set(String(batch.course._id), batch.course);
+    }
+    (batch.courses || []).forEach((c) => {
+      if (c?._id) courseMap.set(String(c._id), c);
+    });
+
+    const curricula = [...courseMap.values()].map((c) => ({
+      courseId: c._id,
+      courseName: c.courseName,
+      modules: c.modules || [],
+    }));
+
+    const courseNameList = curricula.map((c) => c.courseName).filter(Boolean);
+
+    res.json({
+      batchId: batch._id,
+      batchName: batch.name,
+      courseName: courseNameList.join(", "),
+      primaryCourseId: batch.course?._id || null,
+      classTiming: batch.classTiming,
+      timing: timingStr,
+      startDate: batch.startDate,
+      students: batch.students,
+      // Keep legacy flat curriculum for primary course
+      curriculum: batch.course?.modules || curricula[0]?.modules || [],
+      curricula,
+      sectionProgress: batch.sectionProgress,
+      meetLink: batch.meetLink,
+      daysOfWeek: batch.daysOfWeek,
+      status: batch.status,
+      trainerAssignment: trainerAssign
+        ? {
+          assignedModules: trainerAssign.assignedModules || [],
+          isCurrent: !!trainerAssign.isCurrent,
+          fromDate: trainerAssign.fromDate || null,
+          toDate: trainerAssign.toDate || null,
+        }
+        : null,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Batch details error" });
+  }
+};
+
+export const getTrainerCourses = async (req, res) => {
+  try {
+    const trainerId = req.user.id;
+
+    // Find all courses where this trainer is an instructor
+    const courses = await Course.find({
+      instructor: trainerId,
+    })
+      .select("courseName courseDescription modules enrolledStudents thumbnail")
+      .lean();
+
+    if (!courses.length) {
+      return res.json([]);
+    }
+
+    const courseIds = courses.map((c) => c._id);
+
+    // Fetch batches for these courses to get "real-time" unique student enrollment
+    const batches = await Batch.find({
+      $or: [
+        { course: { $in: courseIds } },
+        { courses: { $in: courseIds } },
+      ],
+    })
+      .select("course courses students")
+      .lean();
+
+    // Map courseId to unique students across all its batches
+    const studentMap = {};
+    batches.forEach((b) => {
+      const linkedCourseIds = [
+        b.course,
+        ...(Array.isArray(b.courses) ? b.courses : []),
+      ]
+        .filter(Boolean)
+        .map((c) => c.toString());
+
+      linkedCourseIds.forEach((cid) => {
+        if (!studentMap[cid]) studentMap[cid] = new Set();
+        (b.students || []).forEach((sid) => studentMap[cid].add(sid.toString()));
+      });
+    });
+
+    const response = courses.map((c) => {
+      const courseIdStr = c._id.toString();
+      // Use set size if available, otherwise fallback to enrolledStudents.length or 0
+      const batchStudentCount = studentMap[courseIdStr]?.size || 0;
+      const staticEnrolledCount = c.enrolledStudents?.length || 0;
+
+      return {
+        courseId: c._id,
+        courseName: c.courseName,
+        courseDescription: c.courseDescription || "",
+        thumbnail: c.thumbnail,
+        totalStudents: Math.max(batchStudentCount, staticEnrolledCount),
+        totalSections: c.modules.reduce((acc, m) => acc + (m.sections?.length || 0), 0),
+      };
+    });
+
+    res.json(response);
+  } catch (err) {
+    console.error("getTrainerCourses error:", err);
+    res.status(500).json({ message: "Failed to fetch trainer courses" });
+  }
+};
+
+export const getTrainerprofile = async (req, res) => {
+  const trainerId = req.user.id;
+
+  const trainer = await User.findById(trainerId).select("-password").lean();
+  res.json(trainer);
+};
+
+export const updateTrainerprofile = async (req, res) => {
+  try {
+    const trainerId = req.user.id;
+    const input = { ...(req.body || {}) };
+    const currentPassword = input.currentPassword;
+    const isPasswordUpdateRequested =
+      (input.newPassword != null && String(input.newPassword).trim() !== "") ||
+      (input.password != null && String(input.password).trim() !== "");
+
+    // Frontend edit forms often send newPassword instead of password
+    if (input.newPassword != null && input.password == null) {
+      input.password = input.newPassword;
+    }
+    delete input.newPassword;
+    delete input.currentPassword;
+    delete input.confirmPassword;
+
+    // Protected fields that should not be updatable by the trainer themself
+    const protectedFields = new Set([
+      "_id",
+      "email",
+      "role",
+      "enrolledCourses",
+      "refreshTokenHash",
+      "refreshTokenExpires",
+      "resetPasswordToken",
+      "resetPasswordExpires",
+      "createdAt",
+      "updatedAt",
+      "__v",
+    ]);
+
+    // Build allowed fields dynamically from schema to avoid drifting
+    const schemaKeys = Object.keys(User.schema.paths || {});
+    const allowedFields = schemaKeys.filter(k => !protectedFields.has(k));
+
+    const updates = {};
+    for (const key of allowedFields) {
+      if (Object.prototype.hasOwnProperty.call(input, key)) {
+        updates[key] = input[key];
+      }
+    }
+
+    // If password is being updated, hash it
+    if (updates.password) {
+      if (!currentPassword) {
+        return res.status(400).json({
+          message: "Current password is required to set a new password",
+        });
+      }
+
+      const passwordCheck = validatePassword(updates.password);
+      if (!passwordCheck.ok) {
+        return res.status(400).json({ message: passwordCheck.message });
+      }
+
+      const trainerUser = await User.findById(trainerId).select("password");
+      if (!trainerUser) {
+        return res.status(404).json({ message: "Trainer not found" });
+      }
+
+      const isMatch = await bcrypt.compare(currentPassword, trainerUser.password);
+      if (!isMatch) {
+        return res.status(401).json({ message: "Current password is incorrect" });
+      }
+
+      const salt = await bcrypt.genSalt(10);
+      updates.password = await bcrypt.hash(updates.password, salt);
+      await revokeRefreshToken(trainerId);
+      clearAuthCookies(res);
+    }
+
+    // If nothing to update, return current profile
+    if (Object.keys(updates).length === 0) {
+      const current = await User.findById(trainerId).select("-password").lean();
+      return res.json(current);
+    }
+
+    const trainer = await User.findOneAndUpdate(
+      { _id: trainerId },
+      { $set: updates },
+      { new: true, runValidators: true, context: "query" }
+    )
+      .select("-password")
+      .lean();
+
+    res.json({
+      ...trainer,
+      ...(isPasswordUpdateRequested
+        ? {
+            message: "Password updated successfully. Please log in again.",
+            reauthRequired: true,
+          }
+        : {}),
+    });
+  } catch (err) {
+    console.error("updateTrainerprofile error:", err);
+    res.status(500).json({ message: "Update failed" });
+  }
+};
+
+export const toggleSectionCompletion = async (req, res) => {
+  try {
+    let { batchId, moduleIndex, sectionIndex, courseId } = req.body;
+    const trainerId = req.user.id;
+
+    if (!batchId) return res.status(400).json({ message: "batchId required" });
+    moduleIndex = moduleIndex !== undefined ? parseInt(moduleIndex, 10) : undefined;
+    sectionIndex = sectionIndex !== undefined ? parseInt(sectionIndex, 10) : undefined;
+
+    if (moduleIndex === undefined || Number.isNaN(moduleIndex) || sectionIndex === undefined || Number.isNaN(sectionIndex)) {
+      return res.status(400).json({ message: "moduleIndex and sectionIndex must be valid integers" });
+    }
+
+    const batch = await Batch.findById(batchId);
+    if (!batch) return res.status(404).json({ message: "Batch not found" });
+
+    if (!canManageBatch(req, batch)) {
+      return denyAccess(res, "You do not have permission to update section progress for this batch");
+    }
+
+    const primaryCourseId = String(batch.course?._id || batch.course);
+    const resolvedCourseId = courseId ? String(courseId) : primaryCourseId;
+    const matchOpts = {
+      courseId: resolvedCourseId,
+      moduleIndex,
+      sectionIndex,
+      primaryCourseId,
+    };
+
+    const progressIndex = findSectionProgressIndex(batch.sectionProgress, matchOpts);
+
+    if (progressIndex > -1) {
+      const currentStatus = !!batch.sectionProgress[progressIndex].isCompleted;
+      batch.sectionProgress[progressIndex].isCompleted = !currentStatus;
+      if (!batch.sectionProgress[progressIndex].courseId) {
+        batch.sectionProgress[progressIndex].courseId = resolvedCourseId;
+      }
+
+      if (!currentStatus) {
+        batch.sectionProgress[progressIndex].completedBy = trainerId;
+        batch.sectionProgress[progressIndex].completionTime = new Date();
+      } else {
+        batch.sectionProgress[progressIndex].completedBy = undefined;
+        batch.sectionProgress[progressIndex].completionTime = undefined;
+      }
+    } else {
+      batch.sectionProgress.push({
+        courseId: resolvedCourseId,
+        moduleIndex,
+        sectionIndex,
+        isCompleted: true,
+        completedBy: trainerId,
+        completionTime: new Date(),
+      });
+    }
+
+    await batch.save();
+
+    const updatedEntry = batch.sectionProgress.find((p) =>
+      matchesSectionProgress(p, matchOpts)
+    );
+
+    res.json({ msg: "Section progress updated", sectionProgress: updatedEntry, batchId: batch._id });
+  } catch (err) {
+    console.error("Toggle error:", err);
+    res.status(500).json({ message: "Toggle failed" });
+  }
+};

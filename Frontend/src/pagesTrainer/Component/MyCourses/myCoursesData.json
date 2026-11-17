@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "title": "React Fundamentals & Hooks",
+        "modules": 12,
+        "students": 320,
+        "progress": 0,
+        "color": "#E3F2FD",
+        "description": "Master React concepts starting from the basics to advanced hooks."
+    },
+    {
+        "id": 2,
+        "title": "Advanced TypeScript Patterns",
+        "modules": 8,
+        "students": 150,
+        "progress": 0,
+        "color": "#E8EAED",
+        "description": "Deep dive into TypeScript's advanced type system and patterns."
+    },
+    {
+        "id": 3,
+        "title": "UI/UX Design Principles",
+        "modules": 15,
+        "students": 450,
+        "progress": 0,
+        "color": "#F3E5F5",
+        "description": "Learn the core principles of designing intuitive user interfaces."
+    },
+    {
+        "id": 4,
+        "title": "Node.js Backend Architecture",
+        "modules": 20,
+        "students": 210,
+        "progress": 0,
+        "color": "#E8F5E9",
+        "description": "Build scalable and robust backends with Node.js."
+    },
+    {
+        "id": 5,
+        "title": "Fullstack Next.js Development",
+        "modules": 18,
+        "students": 85,
+        "progress": 0,
+        "color": "#F3F4F6",
+        "description": "Create production-ready fullstack applications with Next.js."
+    },
+    {
+        "id": 6,
+        "title": "Python for Data Science",
+        "modules": 24,
+        "students": 520,
+        "progress": 0,
+        "color": "#FFF9C4",
+        "description": "Analyze data and build models using Python's data science stack."
+    }
+]
