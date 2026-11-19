@@ -74,7 +74,7 @@ const ActiveBatches = () => {
           <span className="batch-card__avatar" aria-hidden="true">{initials(batch.batchName || title)}</span>
           <div className="batch-card__copy">
             <span className="batch-card__batch">{batch.batchName}</span>
-            <h3 className="batch-card__title">{title}</h3>
+            <h3 className="batch-card__title" title={title}>{title}</h3>
           </div>
           <span className={`batch-card__status ${batch.status}`}>
             <span className="batch-card__dot" />
@@ -83,43 +83,43 @@ const ActiveBatches = () => {
         </div>
 
         <div className="batch-card__details">
-          {Number.isFinite(students) && (
-            <div className="batch-card__row">
-              <span className="batch-card__icon"><BsPeople /></span>
-              <span>{students} {students === 1 ? "Student" : "Students"}</span>
-            </div>
-          )}
-          {date && (
-            <div className="batch-card__row">
-              <span className="batch-card__icon"><HiOutlineCalendar /></span>
-              <span>{date}</span>
-            </div>
-          )}
-          {duration && (
-            <div className="batch-card__row">
-              <span className="batch-card__icon"><BsHourglassSplit /></span>
-              <span>{duration}</span>
-            </div>
-          )}
-          {timing && (
-            <div className="batch-card__row">
-              <span className="batch-card__icon"><HiOutlineClock /></span>
-              <span>{timing}</span>
-            </div>
-          )}
+          <div className="batch-card__row">
+            <span className="batch-card__icon"><BsPeople /></span>
+            <span>
+              {Number.isFinite(students)
+                ? `${students} ${students === 1 ? "Student" : "Students"}`
+                : "—"}
+            </span>
+          </div>
+          <div className="batch-card__row">
+            <span className="batch-card__icon"><HiOutlineCalendar /></span>
+            <span>{date || "—"}</span>
+          </div>
+          <div className="batch-card__row">
+            <span className="batch-card__icon"><BsHourglassSplit /></span>
+            <span>{duration || "—"}</span>
+          </div>
+          <div className="batch-card__row">
+            <span className="batch-card__icon"><HiOutlineClock /></span>
+            <span>{timing || "—"}</span>
+          </div>
         </div>
 
-        {hasProgress && (
-          <div className="batch-card__progress">
-            <div className="batch-card__progress-label">
-              <span>Completion</span>
-              <strong>{pct}%</strong>
-            </div>
-            <div className="batch-card__bar" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
-              <span style={{ width: `${Math.max(0, Math.min(100, pct))}%` }} />
-            </div>
+        <div className="batch-card__progress">
+          <div className="batch-card__progress-label">
+            <span>Completion</span>
+            <strong>{hasProgress ? `${pct}%` : "—"}</strong>
           </div>
-        )}
+          <div
+            className="batch-card__bar"
+            role="progressbar"
+            aria-valuenow={hasProgress ? pct : 0}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            <span style={{ width: `${hasProgress ? Math.max(0, Math.min(100, pct)) : 0}%` }} />
+          </div>
+        </div>
 
         <span className="batch-card__go">{isActive ? "Open batch" : "View details"}</span>
       </button>

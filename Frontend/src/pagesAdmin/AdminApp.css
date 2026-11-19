@@ -301,3 +301,52 @@
   box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
   -webkit-box-shadow: 0 0 0 1000px var(--color-surface) inset !important;
 }
+
+/* Shared professional table action controls */
+.admin-action-group {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 4px !important;
+  padding: 3px !important;
+  background: #f8fafc !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+}
+
+.admin-action-btn {
+  width: 34px !important;
+  min-width: 34px !important;
+  height: 34px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  border: none !important;
+  border-radius: 9px !important;
+  background: transparent !important;
+  color: #64748b !important;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+
+.admin-action-btn:hover {
+  background: #fff !important;
+  color: #0f766e !important;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.admin-action-btn--success:hover {
+  background: #ecfdf5 !important;
+  color: #059669 !important;
+}
+
+.admin-action-btn--danger:hover {
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
+}
+
+.admin-action-btn svg {
+  width: 16px !important;
+  height: 16px !important;
+  stroke-width: 1.8;
+}

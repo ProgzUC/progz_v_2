@@ -89,6 +89,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 16px;
+  align-items: stretch;
 }
 
 .trainer-active-batches-page .batches-empty-state {
@@ -122,6 +123,8 @@
   flex-direction: column;
   gap: 14px;
   width: 100%;
+  height: 100%;
+  min-height: 100%;
   padding: 18px;
   text-align: left;
   font: inherit;
@@ -192,6 +195,7 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
+  min-height: 72px;
 }
 
 .trainer-active-batches-page .batch-card__avatar {
@@ -234,6 +238,12 @@
   font-weight: 400;
   line-height: 1.4;
   letter-spacing: -0.01em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  min-height: calc(1.4em * 2);
 }
 
 .trainer-active-batches-page .batch-card__status {
@@ -276,15 +286,25 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  min-height: calc((13px * 1.4 * 4) + (8px * 3));
+  flex: 1 1 auto;
 }
 
 .trainer-active-batches-page .batch-card__row {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-height: 20px;
   color: var(--color-text-secondary);
   font-size: 13px;
   font-weight: 400;
+}
+
+.trainer-active-batches-page .batch-card__row span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .trainer-active-batches-page .batch-card__icon {
@@ -292,6 +312,11 @@
   display: inline-flex;
   justify-content: center;
   color: var(--color-primary);
+}
+
+.trainer-active-batches-page .batch-card__progress {
+  flex-shrink: 0;
+  min-height: 36px;
 }
 
 .trainer-active-batches-page .batch-card__progress-label {
@@ -327,6 +352,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   min-height: 42px;
   border-radius: 14px;
   background: var(--color-primary-gradient);

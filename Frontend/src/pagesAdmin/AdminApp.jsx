@@ -20,7 +20,6 @@ import ViewBatch from "./components/Batches/ViewBatch.jsx";
 import RecycleBin from "./components/RecycleBin/RecycleBin.jsx";
 import AttendanceReport from "./components/reports/AttendanceReport.jsx";
 import OperationalReports from "./components/reports/OperationalReports.jsx";
-import MonitoringDashboard from "./components/Monitoring/MonitoringDashboard.jsx";
 import Settings from "./components/Settings/Settings.jsx";
 
 // AUTH COMPONENTS (legacy — routes commented; real auth is pagesAuth/login)
@@ -92,7 +91,6 @@ export default function AdminApp() {
                   <Route path="batches/:id" element={<ViewBatch />} />
                   <Route path="instructor-preview" element={<InstructorPreview />} />
                   <Route path="recycle-bin" element={<RecycleBin />} />
-                  <Route path="monitoring" element={<MonitoringDashboard />} />
                   <Route path="settings" element={<Settings />} />
                   <Route path="reports" element={<OperationalReports />} />
                   <Route path="reports/operational" element={<OperationalReports />} />

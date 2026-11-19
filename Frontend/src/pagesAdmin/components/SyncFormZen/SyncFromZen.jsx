@@ -69,29 +69,29 @@ const SyncFromZen = () => {
   };
 
   return (
-    <div className="sync-dashboard-container p-4">
-      <div className="sync-header">
+    <div className="admin-sync-page">
+      <div className="page-hero">
         <div>
-          <h2>Zen CRM Data Synchronization</h2>
-          <p className="text-secondary">Manage integrations, view pipeline history, and resolve sync errors</p>
+          <h1 className="page-title">Zen CRM Data Synchronization</h1>
+          <p className="page-subtitle">
+            Manage integrations, view pipeline history, and resolve sync errors
+          </p>
         </div>
-      </div>
-      
-      <div className="d-flex justify-content-end mb-4">
         <button
+          type="button"
           onClick={handleManualSync}
           disabled={loading}
-          className="btn btn-emerald sync-trigger-btn d-flex align-items-center gap-2"
+          className="sync-trigger-btn"
         >
-          <i className={`bi bi-arrow-repeat ${loading ? "spin-icon" : ""}`}></i>
+          <i className={`bi bi-arrow-repeat ${loading ? "spin-icon" : ""}`} aria-hidden="true" />
           {loading ? "Syncing..." : "Sync Now"}
         </button>
       </div>
 
       {fetching ? (
-        <div className="sync-loader-wrapper py-5 text-center">
-          <div className="spinner-border text-emerald" role="status"></div>
-          <p className="mt-2 text-secondary">Loading sync metrics...</p>
+        <div className="sync-loader-wrapper">
+          <div className="spinner-border" role="status" aria-label="Loading" />
+          <p>Loading sync metrics...</p>
         </div>
       ) : loadError ? (
         <ErrorState
@@ -101,11 +101,12 @@ const SyncFromZen = () => {
         />
       ) : (
         <>
-          {/* Latest Sync Status Dashboard */}
           {syncStatus ? (
-            <div className="sync-status-cards mb-4">
-              <div className="sync-metric-card glass-card">
-                <div className="metric-icon success"><i className="bi bi-cloud-check"></i></div>
+            <div className="sync-status-cards">
+              <div className="sync-metric-card">
+                <div className="metric-icon success">
+                  <i className="bi bi-cloud-check" aria-hidden="true" />
+                </div>
                 <div className="metric-info">
                   <span className="label">Latest Sync Status</span>
                   <strong className={`value ${syncStatus.status}`}>
@@ -115,12 +116,16 @@ const SyncFromZen = () => {
                         ? "In progress"
                         : "Failed"}
                   </strong>
-                  <span className="subtext">{formatTime(syncStatus.endTime || syncStatus.startTime)}</span>
+                  <span className="subtext">
+                    {formatTime(syncStatus.endTime || syncStatus.startTime)}
+                  </span>
                 </div>
               </div>
 
-              <div className="sync-metric-card glass-card">
-                <div className="metric-icon info"><i className="bi bi-person-video3"></i></div>
+              <div className="sync-metric-card">
+                <div className="metric-icon info">
+                  <i className="bi bi-person-video3" aria-hidden="true" />
+                </div>
                 <div className="metric-info">
                   <span className="label">Instructors Synced</span>
                   <strong className="value">{syncStatus.instructorsSynced || 0}</strong>
@@ -128,8 +133,10 @@ const SyncFromZen = () => {
                 </div>
               </div>
 
-              <div className="sync-metric-card glass-card">
-                <div className="metric-icon info"><i className="bi bi-mortarboard"></i></div>
+              <div className="sync-metric-card">
+                <div className="metric-icon info">
+                  <i className="bi bi-mortarboard" aria-hidden="true" />
+                </div>
                 <div className="metric-info">
                   <span className="label">Students Synced</span>
                   <strong className="value">{syncStatus.studentsSynced || 0}</strong>
@@ -137,8 +144,10 @@ const SyncFromZen = () => {
                 </div>
               </div>
 
-              <div className="sync-metric-card glass-card">
-                <div className="metric-icon warning"><i className="bi bi-files"></i></div>
+              <div className="sync-metric-card">
+                <div className="metric-icon warning">
+                  <i className="bi bi-files" aria-hidden="true" />
+                </div>
                 <div className="metric-info">
                   <span className="label">Duplicates Skipped</span>
                   <strong className="value">{syncStatus.duplicatesDetected || 0}</strong>
@@ -147,14 +156,20 @@ const SyncFromZen = () => {
               </div>
             </div>
           ) : (
-            <div className="alert alert-warning mb-4">
-              <i className="bi bi-exclamation-triangle-fill"></i> No synchronization history recorded yet. Trigger a manual sync to initiate logs.
+            <div className="sync-empty-alert" role="status">
+              <i className="bi bi-exclamation-triangle-fill" aria-hidden="true" />
+              <span>
+                No synchronization history recorded yet. Trigger a manual sync to initiate logs.
+              </span>
             </div>
           )}
 
-          {/* Sync History Table */}
-          <div className="sync-history-panel glass-card p-4">
-            <h3 className="panel-title mb-3">Sync Execution Logs</h3>
+          <div className="content-card">
+            <div className="card-title-row">
+              <h2 className="card-title">Sync Execution Logs</h2>
+              <span className="card-count">{syncLogs.length} shown</span>
+            </div>
+
             <div className="table-responsive">
               <table className="sync-history-table">
                 <thead>
@@ -186,7 +201,7 @@ const SyncFromZen = () => {
                               <span>{log.triggeredBy.email}</span>
                             </div>
                           ) : (
-                            <span className="text-secondary">System Scheduler</span>
+                            <span>System Scheduler</span>
                           )}
                         </td>
                         <td>
@@ -196,47 +211,60 @@ const SyncFromZen = () => {
                         </td>
                         <td>
                           <div className="imports-badge">
-                            <span>🎓 {log.studentsSynced || 0}</span>
-                            <span>💼 {log.instructorsSynced || 0}</span>
+                            <span>
+                              <i className="bi bi-mortarboard" aria-hidden="true" />
+                              {log.studentsSynced || 0}
+                            </span>
+                            <span>
+                              <i className="bi bi-briefcase" aria-hidden="true" />
+                              {log.instructorsSynced || 0}
+                            </span>
                           </div>
                         </td>
                         <td>{log.duplicatesDetected || 0}</td>
                         <td>{log.executionTimeMs ? `${log.executionTimeMs}ms` : "N/A"}</td>
-                        <td style={{ textAlign: "center" }}>
+                        <td>
                           <button
+                            type="button"
                             onClick={() => setSelectedLog(log)}
-                            className="btn btn-sm glass-btn d-flex align-items-center gap-1"
-                            style={{ margin: "0 auto" }}
+                            className="details-btn"
+                            aria-label="View sync details"
                           >
-                            <i className="bi bi-journal-text"></i> Details
+                            <i className="bi bi-journal-text" aria-hidden="true" />
+                            Details
                           </button>
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="8" className="text-center py-4 text-secondary">No sync logs found.</td>
+                      <td colSpan="8" style={{ textAlign: "center", padding: "32px 10px" }}>
+                        No sync logs found.
+                      </td>
                     </tr>
                   )}
                 </tbody>
               </table>
             </div>
 
-            {/* Pagination controls */}
             {totalPages > 1 && (
-              <div className="sync-pagination d-flex justify-content-center align-items-center gap-3 mt-4">
+              <div className="sync-pagination">
                 <button
+                  type="button"
                   disabled={page === 1}
-                  onClick={() => setPage(prev => Math.max(prev - 1, 1))}
-                  className="btn glass-btn"
+                  onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+                  className="page-btn"
                 >
                   Previous
                 </button>
-                <span>Page {page} of {totalPages}</span>
+                <span>
+                  Page {page} of {totalPages}
+                </span>
                 <button
+                  type="button"
                   disabled={page >= totalPages}
-                  onClick={() => setPage(prev => prev + 1)}
-                  className="btn glass-btn"
+                  onClick={() => setPage((prev) => prev + 1)}
+                  className="page-btn"
                 >
                   Next
                 </button>
@@ -246,38 +274,56 @@ const SyncFromZen = () => {
         </>
       )}
 
-      {/* SYNC RUN DETAILS MODAL */}
       {selectedLog && (
         <ModalPortal>
-          <div className="sync-details-modal-overlay" onClick={() => setSelectedLog(null)}>
-            <div className="sync-details-modal glass-card" onClick={e => e.stopPropagation()}>
-              <div className="modal-header d-flex justify-content-between align-items-center p-3 border-bottom border-secondary">
-                <h4 className="m-0">Sync Event Diagnostics</h4>
-                <button className="close-btn" onClick={() => setSelectedLog(null)}>
-                  <i className="bi bi-x-lg"></i>
+          <div
+            className="sync-details-modal-overlay"
+            onClick={() => setSelectedLog(null)}
+            role="presentation"
+          >
+            <div
+              className="sync-details-modal"
+              onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="sync-details-title"
+            >
+              <div className="modal-header">
+                <h4 id="sync-details-title">Sync Event Diagnostics</h4>
+                <button
+                  type="button"
+                  className="close-btn"
+                  onClick={() => setSelectedLog(null)}
+                  aria-label="Close"
+                >
+                  <i className="bi bi-x-lg" aria-hidden="true" />
                 </button>
               </div>
-              <div className="modal-body p-4">
-                <div className="details-grid mb-4">
+              <div className="modal-body">
+                <div className="details-grid">
                   <div className="details-item">
-                    <span className="lbl">Log ID:</span>
+                    <span className="lbl">Log ID</span>
                     <span className="val monospace">{selectedLog._id}</span>
                   </div>
                   <div className="details-item">
-                    <span className="lbl">Start Time:</span>
+                    <span className="lbl">Start Time</span>
                     <span className="val">{formatTime(selectedLog.startTime)}</span>
                   </div>
                   <div className="details-item">
-                    <span className="lbl">Duration:</span>
-                    <span className="val">{selectedLog.executionTimeMs ? `${selectedLog.executionTimeMs}ms` : "N/A"}</span>
+                    <span className="lbl">Duration</span>
+                    <span className="val">
+                      {selectedLog.executionTimeMs ? `${selectedLog.executionTimeMs}ms` : "N/A"}
+                    </span>
                   </div>
                   <div className="details-item">
-                    <span className="lbl">Trigger:</span>
-                    <span className="val text-uppercase">{selectedLog.triggerType}</span>
+                    <span className="lbl">Trigger</span>
+                    <span className="val" style={{ textTransform: "uppercase" }}>
+                      {selectedLog.triggerType}
+                    </span>
                   </div>
                 </div>
 
-                <div className="details-summary-row mb-4">
+                <div className="details-summary-row">
                   <div className="summ-box">
                     <strong>{selectedLog.studentsSynced || 0}</strong>
                     <span>Students Synced</span>
@@ -294,14 +340,19 @@ const SyncFromZen = () => {
 
                 {selectedLog.errors && selectedLog.errors.length > 0 ? (
                   <div className="errors-log-box">
-                    <h5 className="text-danger mb-2">Sync Run Exceptions & Warnings ({selectedLog.errors.length}):</h5>
-                    <pre className="monospace p-3 bg-dark text-danger-emphasis border border-danger-subtle rounded">
-                      {selectedLog.errors.map((err, idx) => `[Err ${idx + 1}] ${err}`).join("\n")}
+                    <h5>
+                      Sync Run Exceptions & Warnings ({selectedLog.errors.length})
+                    </h5>
+                    <pre className="monospace">
+                      {selectedLog.errors
+                        .map((err, idx) => `[Err ${idx + 1}] ${err}`)
+                        .join("\n")}
                     </pre>
                   </div>
                 ) : (
-                  <div className="alert alert-success d-flex align-items-center gap-2">
-                    <i className="bi bi-check-circle-fill"></i> No execution errors logged for this synchronization run.
+                  <div className="sync-ok-banner">
+                    <i className="bi bi-check-circle-fill" aria-hidden="true" />
+                    No execution errors logged for this synchronization run.
                   </div>
                 )}
               </div>

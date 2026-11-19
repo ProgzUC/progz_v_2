@@ -296,7 +296,11 @@ const ApproveUser = () => {
               tabIndex={0}
               aria-label="Pending registrations table"
             >
-              <table className="data-table admin-data-table">
+              <table
+                className={`data-table admin-data-table${selectMode ? " is-select-mode" : ""}${
+                  activeTab === "student" ? " is-student-tab" : " is-trainer-tab"
+                }`}
+              >
                 <caption className="sr-only">Pending {activeTab} registrations</caption>
                 <thead>
                   <tr>
@@ -314,12 +318,14 @@ const ApproveUser = () => {
                         />
                       </th>
                     )}
-                    <th scope="col">S.No</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Source</th>
-                    {activeTab === "student" && <th scope="col">Zen Course</th>}
-                    <th scope="col">Requested</th>
-                    <th scope="col">Actions</th>
+                    <th className="col-sno" scope="col">S.No</th>
+                    <th className="col-name" scope="col">Name</th>
+                    <th className="col-source" scope="col">Source</th>
+                    {activeTab === "student" && (
+                      <th className="col-zen" scope="col">Zen Course</th>
+                    )}
+                    <th className="col-date" scope="col">Requested</th>
+                    <th className="actions-cell" scope="col">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -351,7 +357,7 @@ const ApproveUser = () => {
                           <td className="col-sno">
                             {(currentPage - 1) * rowsPerPage + index + 1}
                           </td>
-                          <td>
+                          <td className="col-name">
                             <div
                               className="person-chip person-chip--selectable"
                               onDoubleClick={() => openSelectMode(userId)}
@@ -379,9 +385,9 @@ const ApproveUser = () => {
                               <span className="person-name">{name}</span>
                             </div>
                           </td>
-                          <td>{user.source || "—"}</td>
+                          <td className="col-source">{user.source || "—"}</td>
                           {activeTab === "student" && (
-                            <td>{user.zenCourseName || "—"}</td>
+                            <td className="col-zen">{user.zenCourseName || "—"}</td>
                           )}
                           <td className="col-date">
                             {new Date(user.date || user.createdAt).toLocaleString("en-US", {

@@ -47,6 +47,7 @@
   cursor: pointer;
   user-select: none;
   text-decoration: none;
+  justify-self: start;
 }
 
 .student-brand .brand-logo {

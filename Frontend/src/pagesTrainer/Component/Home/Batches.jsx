@@ -21,7 +21,6 @@ const Active = ({ data }) => {
 
     const recentCourse = (courses && courses.length > 0) ? courses[0] : null;
 
-    // Pick upcoming class from data.upcomingClasses, or fall back to the first active batch
     const nextClass = (data?.upcomingClasses && data.upcomingClasses.length > 0)
         ? data.upcomingClasses[0]
         : (batches.length > 0 ? {
@@ -34,6 +33,7 @@ const Active = ({ data }) => {
         } : null);
 
     const firstBatchId = batches[0]?.batchId;
+    const previewBatches = batches.slice(0, 4);
 
     const handleCopyMeetLink = () => {
         const meetLink = nextClass?.meetLink || batches[0]?.meetLink;
@@ -51,359 +51,323 @@ const Active = ({ data }) => {
     };
 
     return (
-        <section className="trainer-dashboard-split-layout">
-            {/* Left Side (65% width): Active Batches + Recent Course Overview */}
-            <div className="trainer-split-main">
-                {/* Active Batches Section */}
-                <div className="trainer-home-batches-card">
-                    <div className="batches-head">
+        <section className="trainer-dashboard-stack">
+            {/* 1. Featured Live Session */}
+            <article className="td-live">
+                <header className="td-live-head">
+                    <div className="td-live-brand">
+                        <span className="td-live-icon" aria-hidden="true">
+                            <BiVideo />
+                        </span>
                         <div>
-                            <p className="batches-kicker">In progress</p>
-                            <h2 className="batches-title">Active batches</h2>
+                            <p className="td-eyebrow">Live session</p>
+                            <h2 className="td-section-title">Next live class</h2>
                         </div>
-                        <button
-                            type="button"
-                            className="batches-view-all"
-                            onClick={() => navigate('/trainer-dashboard/batches')}
-                        >
-                            View all
-                        </button>
                     </div>
-
-                    {batches.length === 0 ? (
-                        <p className="batches-empty">No active batch yet. They will appear here once a class is assigned to you.</p>
-                    ) : (
-                        <div className="batches-batch-grid">
-                            {batches.map((batch) => {
-                                const pct = Number(batch.completionPercentage) || 0;
-                                const students = Number(batch.studentsCount) || 0;
-
-                                return (
-                                    <div
-                                        key={batch.batchId}
-                                        className="batches-batch-card"
-                                        onClick={() => {
-                                            if (!batch.batchId) return;
-                                            navigate(`/trainer-dashboard/batches/${batch.batchId}`);
-                                        }}
-                                        role="button"
-                                        tabIndex={0}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter' || e.key === ' ') {
-                                                navigate(`/trainer-dashboard/batches/${batch.batchId}`);
-                                            }
-                                        }}
-                                        aria-label={`View ${batch.batchName}`}
-                                    >
-                                        <div className="batches-batch-head">
-                                            <span className="batches-batch-avatar" aria-hidden="true">
-                                                {getBatchInitials(batch.batchName)}
-                                            </span>
-                                            <div className="batches-batch-copy">
-                                                <div className="batches-title-row">
-                                                    <h3 className="batches-batch-title">{batch.batchName}</h3>
-                                                    <span className="batches-status-pill active">
-                                                        <span className="batches-status-dot" />
-                                                        {batch.status ? batch.status.toUpperCase() : 'ACTIVE'}
-                                                    </span>
-                                                </div>
-                                                {batch.courseName ? (
-                                                    <p className="batches-course-name" title={batch.courseName}>{batch.courseName}</p>
-                                                ) : null}
-                                                <div className="batches-meta-row">
-                                                    <div className="batches-batch-info-item">
-                                                        <BsPeople className="meta-icon" />
-                                                        <span>{students} {students === 1 ? 'Student' : 'Students'}</span>
-                                                    </div>
-                                                    {batch.timing && (
-                                                        <div className="batches-batch-info-item">
-                                                            <HiOutlineClock className="meta-icon" />
-                                                            <span>{batch.timing}</span>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="batches-progress-container">
-                                            <div className="batches-progress-label">
-                                                <span>Avg. Completion</span>
-                                                <span className="batches-progress-value">{pct}%</span>
-                                            </div>
-                                            <div className="batches-progress-bar" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
-                                                <div className="batches-progress-fill" style={{ width: `${pct}%` }} />
-                                            </div>
-                                        </div>
-
-                                        <div className="batches-card-footer">
-                                            <span className="batches-open-btn">
-                                                <span>Open batch</span>
-                                                <BsArrowRight />
-                                            </span>
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    )}
-                </div>
-
-                {/* Recent Course Overview Section */}
-                <div className="trainer-overview-card recent-course-card">
-                    <div className="overview-card-head">
-                        <div>
-                            <p className="overview-kicker">Course studio</p>
-                            <h3 className="overview-title">Recent Course Overview</h3>
-                        </div>
-                        <button
-                            type="button"
-                            className="overview-link-btn"
-                            onClick={() => navigate('/trainer-dashboard/courses')}
-                        >
-                            <span>All courses</span>
-                            <BsArrowRight />
-                        </button>
-                    </div>
-
-                    {recentCourse ? (
-                        <div className="recent-course-body">
-                            <div className="recent-course-main">
-                                <div className="recent-course-icon-box">
-                                    <BiBookOpen className="recent-course-icon" />
-                                </div>
-                                <div className="recent-course-details">
-                                    <div className="recent-course-badge-row">
-                                        <span className="recent-course-tag">Active Curriculum</span>
-                                        {recentCourse.category && <span className="recent-course-cat">{recentCourse.category}</span>}
-                                    </div>
-                                    <h4 className="recent-course-title">{recentCourse.courseName}</h4>
-                                    {recentCourse.courseDescription && (
-                                        <p className="recent-course-desc">
-                                            {String(recentCourse.courseDescription).replace(/<[^>]+>/g, '').slice(0, 110)}...
-                                        </p>
-                                    )}
-                                    <div className="recent-course-stats-row">
-                                        <span className="rc-stat-item">
-                                            <strong className="rc-stat-num">{recentCourse.totalSections || 0}</strong> Sections
-                                        </span>
-                                        <span className="rc-stat-dot">•</span>
-                                        <span className="rc-stat-item">
-                                            <strong className="rc-stat-num">{recentCourse.totalStudents || 0}</strong> Students enrolled
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="recent-course-actions">
-                                <button
-                                    type="button"
-                                    className="rc-action-btn primary"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        navigate(`/trainer-dashboard/courses/${recentCourse.courseId || recentCourse._id || recentCourse.id}`);
-                                    }}
-                                >
-                                    <span>View Course</span>
-                                    <BsArrowRight />
-                                </button>
-                                <button
-                                    type="button"
-                                    className="rc-action-btn secondary"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        navigate(`/trainer-dashboard/courses/${recentCourse.courseId || recentCourse._id || recentCourse.id}/edit`);
-                                    }}
-                                >
-                                    Edit Curriculum
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="recent-course-empty">
-                            <div className="rc-empty-icon">
-                                <BiBookOpen />
-                            </div>
-                            <div className="rc-empty-copy">
-                                <h4>No courses created yet</h4>
-                                <p>Build your first curriculum and start organizing modules for your batches.</p>
-                            </div>
-                            <button
-                                type="button"
-                                className="rc-create-btn"
-                                onClick={() => navigate('/trainer-dashboard/courses/new')}
-                            >
-                                <BiPlus /> <span>Create Course</span>
-                            </button>
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* Right Side (35% width - Trainer Sidebar Widget): Widget 1 + Widget 2 */}
-            <aside className="trainer-split-sidebar">
-                {/* Widget 1: Next Live Class */}
-                <div className="trainer-sidebar-widget next-class-widget">
-                    <div className="widget-header">
-                        <div className="widget-header-title">
-                            <span className="widget-icon-pill video-pill">
-                                <BiVideo />
-                            </span>
-                            <div>
-                                <span className="widget-kicker">Live Session</span>
-                                <h3 className="widget-title">Next Live Class</h3>
-                            </div>
-                        </div>
-                        {nextClass && (
-                            <span className="live-status-pill">
-                                <span className="live-pulse-dot" />
-                                Scheduled
-                            </span>
-                        )}
-                    </div>
-
                     {nextClass ? (
-                        <div className="next-class-content">
-                            <div className="next-class-top-row">
-                                <span className="next-class-batch-badge">{nextClass.batchName}</span>
-                            </div>
-                            {nextClass.courseName && (
-                                <h4 className="next-class-topic" title={nextClass.courseName}>
+                        <span className="td-live-badge">
+                            <span className="td-live-dot" />
+                            Scheduled
+                        </span>
+                    ) : null}
+                </header>
+
+                {nextClass ? (
+                    <div className="td-live-body">
+                        <div className="td-live-info">
+                            <span className="td-live-batch">{nextClass.batchName}</span>
+                            {nextClass.courseName ? (
+                                <p className="td-live-course" title={nextClass.courseName}>
                                     {nextClass.courseName}
-                                </h4>
-                            )}
-                            <div className="next-class-time-box">
-                                <HiOutlineClock className="time-box-icon" />
-                                <div className="time-box-details">
-                                    <span className="time-box-label">Class Schedule</span>
-                                    <span className="time-box-value">{nextClass.timing || 'Daily Scheduled Session'}</span>
+                                </p>
+                            ) : null}
+                            <div className="td-live-schedule">
+                                <HiOutlineClock aria-hidden="true" />
+                                <div>
+                                    <span className="td-live-schedule-label">Class schedule</span>
+                                    <strong>{nextClass.timing || 'Daily Scheduled Session'}</strong>
                                 </div>
                             </div>
+                        </div>
 
+                        <div className="td-live-actions">
                             {nextClass.meetLink ? (
                                 <a
                                     href={nextClass.meetLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="join-meet-btn active"
+                                    className="td-btn td-btn-primary"
                                 >
-                                    <BiVideo className="btn-icon" />
-                                    <span>Join Live Class</span>
+                                    <BiVideo aria-hidden="true" />
+                                    Join live class
                                 </a>
                             ) : (
-                                <button
-                                    type="button"
-                                    className="join-meet-btn disabled"
-                                    disabled
-                                    title="No Google Meet / Zoom link configured for this batch"
-                                >
-                                    <BiVideo className="btn-icon" />
-                                    <span>Join Class (No Link)</span>
+                                <button type="button" className="td-btn td-btn-muted" disabled>
+                                    <BiVideo aria-hidden="true" />
+                                    Meet link not set
                                 </button>
                             )}
+                            <button
+                                type="button"
+                                className="td-btn td-btn-ghost"
+                                onClick={handleCopyMeetLink}
+                            >
+                                <BiCopy aria-hidden="true" />
+                                Copy link
+                            </button>
                         </div>
-                    ) : (
-                        <div className="next-class-empty">
-                            <div className="empty-calendar-icon">
-                                <HiOutlineCalendar />
-                            </div>
-                            <p className="empty-title">No upcoming live classes</p>
-                            <p className="empty-sub">All clear for today. New scheduled classes will appear here automatically.</p>
+                    </div>
+                ) : (
+                    <div className="td-live-empty">
+                        <HiOutlineCalendar aria-hidden="true" />
+                        <div>
+                            <strong>No upcoming live class</strong>
+                            <p>You’re clear for now. Scheduled sessions will show up here.</p>
                         </div>
-                    )}
-                </div>
+                    </div>
+                )}
+            </article>
 
-                {/* Widget 2: Quick Actions */}
-                <div className="trainer-sidebar-widget quick-actions-widget">
-                    <div className="widget-header">
-                        <div className="widget-header-title">
-                            <span className="widget-icon-pill lightning-pill">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                                </svg>
+            {/* 2. Active Batches */}
+            <section className="td-panel">
+                <header className="td-panel-head">
+                    <div>
+                        <p className="td-eyebrow">In progress</p>
+                        <h2 className="td-section-title">Active batches</h2>
+                    </div>
+                    <button
+                        type="button"
+                        className="td-link-btn"
+                        onClick={() => navigate('/trainer-dashboard/batches')}
+                    >
+                        View all
+                        <BsArrowRight aria-hidden="true" />
+                    </button>
+                </header>
+
+                {previewBatches.length === 0 ? (
+                    <p className="td-empty-copy">
+                        No active batch yet. Assigned classes will appear here.
+                    </p>
+                ) : (
+                    <div className="td-batch-grid">
+                        {previewBatches.map((batch) => {
+                            const pct = Number(batch.completionPercentage) || 0;
+                            const students = Number(batch.studentsCount) || 0;
+
+                            return (
+                                <button
+                                    key={batch.batchId}
+                                    type="button"
+                                    className="td-batch-card"
+                                    onClick={() => {
+                                        if (!batch.batchId) return;
+                                        navigate(`/trainer-dashboard/batches/${batch.batchId}`);
+                                    }}
+                                    aria-label={`Open ${batch.batchName}`}
+                                >
+                                    <div className="td-batch-top">
+                                        <span className="td-batch-avatar" aria-hidden="true">
+                                            {getBatchInitials(batch.batchName)}
+                                        </span>
+                                        <div className="td-batch-copy">
+                                            <div className="td-batch-title-row">
+                                                <h3>{batch.batchName}</h3>
+                                                <span className="td-status">Active</span>
+                                            </div>
+                                            {batch.courseName ? (
+                                                <p title={batch.courseName}>{batch.courseName}</p>
+                                            ) : null}
+                                        </div>
+                                    </div>
+
+                                    <div className="td-batch-meta">
+                                        <span>
+                                            <BsPeople aria-hidden="true" />
+                                            {students} {students === 1 ? 'student' : 'students'}
+                                        </span>
+                                        {batch.timing ? (
+                                            <span>
+                                                <HiOutlineClock aria-hidden="true" />
+                                                {batch.timing}
+                                            </span>
+                                        ) : null}
+                                    </div>
+
+                                    <div className="td-batch-progress">
+                                        <div className="td-batch-progress-label">
+                                            <span>Completion</span>
+                                            <strong>{pct}%</strong>
+                                        </div>
+                                        <div
+                                            className="td-batch-bar"
+                                            role="progressbar"
+                                            aria-valuenow={pct}
+                                            aria-valuemin={0}
+                                            aria-valuemax={100}
+                                        >
+                                            <span style={{ width: `${pct}%` }} />
+                                        </div>
+                                    </div>
+
+                                    <span className="td-batch-go">
+                                        Open batch
+                                        <BsArrowRight aria-hidden="true" />
+                                    </span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
+            </section>
+
+            {/* 3. Quick Actions */}
+            <section className="td-panel td-actions-panel">
+                <header className="td-panel-head td-panel-head--compact">
+                    <div>
+                        <p className="td-eyebrow">Shortcuts</p>
+                        <h2 className="td-section-title">Quick actions</h2>
+                    </div>
+                </header>
+
+                <div className="td-actions-grid">
+                    <button
+                        type="button"
+                        className="td-action"
+                        onClick={() => {
+                            if (firstBatchId) navigate(`/trainer-dashboard/batches/${firstBatchId}`);
+                            else navigate('/trainer-dashboard/batches');
+                        }}
+                    >
+                        <span className="td-action-icon emerald"><BsCheck2Square /></span>
+                        <span>
+                            <strong>Mark attendance</strong>
+                            <em>Update today’s presence</em>
+                        </span>
+                    </button>
+                    <button
+                        type="button"
+                        className="td-action"
+                        onClick={() => navigate('/trainer-dashboard/courses/new')}
+                    >
+                        <span className="td-action-icon violet"><BiPlus /></span>
+                        <span>
+                            <strong>Create course</strong>
+                            <em>Start a new curriculum</em>
+                        </span>
+                    </button>
+                    <button
+                        type="button"
+                        className="td-action"
+                        onClick={() => navigate('/trainer-dashboard/courses')}
+                    >
+                        <span className="td-action-icon sky"><BiBookOpen /></span>
+                        <span>
+                            <strong>Course studio</strong>
+                            <em>Browse your courses</em>
+                        </span>
+                    </button>
+                    <button
+                        type="button"
+                        className="td-action"
+                        onClick={handleCopyMeetLink}
+                    >
+                        <span className="td-action-icon teal"><BiCopy /></span>
+                        <span>
+                            <strong>Copy meet link</strong>
+                            <em>Share class invite</em>
+                        </span>
+                    </button>
+                </div>
+            </section>
+
+            {/* 4. Recent Course */}
+            <section className="td-panel">
+                <header className="td-panel-head">
+                    <div>
+                        <p className="td-eyebrow">Course studio</p>
+                        <h2 className="td-section-title">Recent course</h2>
+                    </div>
+                    <button
+                        type="button"
+                        className="td-link-btn"
+                        onClick={() => navigate('/trainer-dashboard/courses')}
+                    >
+                        All courses
+                        <BsArrowRight aria-hidden="true" />
+                    </button>
+                </header>
+
+                {recentCourse ? (
+                    <div className="td-course">
+                        <div className="td-course-main">
+                            <span className="td-course-icon" aria-hidden="true">
+                                <BiBookOpen />
                             </span>
                             <div>
-                                <span className="widget-kicker">Shortcuts</span>
-                                <h3 className="widget-title">Quick Actions</h3>
+                                <div className="td-course-tags">
+                                    <span>Active curriculum</span>
+                                    {recentCourse.category ? <span>{recentCourse.category}</span> : null}
+                                </div>
+                                <h3>{recentCourse.courseName}</h3>
+                                {recentCourse.courseDescription ? (
+                                    <p>
+                                        {String(recentCourse.courseDescription)
+                                            .replace(/<[^>]+>/g, '')
+                                            .slice(0, 120)}
+                                        …
+                                    </p>
+                                ) : null}
+                                <div className="td-course-stats">
+                                    <span><strong>{recentCourse.totalSections || 0}</strong> sections</span>
+                                    <span><strong>{recentCourse.totalStudents || 0}</strong> students</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div className="quick-actions-grid">
-                        <button
-                            type="button"
-                            className="quick-action-item"
-                            onClick={() => {
-                                if (firstBatchId) {
-                                    navigate(`/trainer-dashboard/batches/${firstBatchId}`);
-                                } else {
-                                    navigate('/trainer-dashboard/batches');
+                        <div className="td-course-actions">
+                            <button
+                                type="button"
+                                className="td-btn td-btn-primary"
+                                onClick={() =>
+                                    navigate(
+                                        `/trainer-dashboard/courses/${recentCourse.courseId || recentCourse._id || recentCourse.id}`
+                                    )
                                 }
-                            }}
-                        >
-                            <div className="action-icon-wrap emerald">
-                                <BsCheck2Square />
-                            </div>
-                            <div className="action-copy">
-                                <span className="action-title">Mark Attendance</span>
-                                <span className="action-desc">Update daily presence</span>
-                            </div>
-                            <span className="action-arrow">
-                                <BsArrowRight />
-                            </span>
-                        </button>
-
+                            >
+                                View course
+                                <BsArrowRight aria-hidden="true" />
+                            </button>
+                            <button
+                                type="button"
+                                className="td-btn td-btn-ghost"
+                                onClick={() =>
+                                    navigate(
+                                        `/trainer-dashboard/courses/${recentCourse.courseId || recentCourse._id || recentCourse.id}/edit`
+                                    )
+                                }
+                            >
+                                Edit curriculum
+                            </button>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="td-course-empty">
+                        <BiBookOpen aria-hidden="true" />
+                        <div>
+                            <strong>No courses yet</strong>
+                            <p>Create your first curriculum to get started.</p>
+                        </div>
                         <button
                             type="button"
-                            className="quick-action-item"
+                            className="td-btn td-btn-primary"
                             onClick={() => navigate('/trainer-dashboard/courses/new')}
                         >
-                            <div className="action-icon-wrap violet">
-                                <BiPlus />
-                            </div>
-                            <div className="action-copy">
-                                <span className="action-title">Create Course</span>
-                                <span className="action-desc">Add new curriculum</span>
-                            </div>
-                            <span className="action-arrow">
-                                <BsArrowRight />
-                            </span>
-                        </button>
-
-                        <button
-                            type="button"
-                            className="quick-action-item"
-                            onClick={() => navigate('/trainer-dashboard/courses')}
-                        >
-                            <div className="action-icon-wrap sky">
-                                <BiBookOpen />
-                            </div>
-                            <div className="action-copy">
-                                <span className="action-title">Course Studio</span>
-                                <span className="action-desc">Browse all courses</span>
-                            </div>
-                            <span className="action-arrow">
-                                <BsArrowRight />
-                            </span>
-                        </button>
-
-                        <button
-                            type="button"
-                            className="quick-action-item"
-                            onClick={handleCopyMeetLink}
-                        >
-                            <div className="action-icon-wrap teal">
-                                <BiCopy />
-                            </div>
-                            <div className="action-copy">
-                                <span className="action-title">Copy Meet Link</span>
-                                <span className="action-desc">Share class invite</span>
-                            </div>
-                            <span className="action-arrow">
-                                <BsArrowRight />
-                            </span>
+                            <BiPlus aria-hidden="true" />
+                            Create course
                         </button>
                     </div>
-                </div>
-            </aside>
+                )}
+            </section>
         </section>
     );
 };

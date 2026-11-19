@@ -45,7 +45,7 @@ export const waitForSyncCompletion = async ({
         await sleep(intervalMs);
     }
     throw new Error(
-        "Sync is still running. Check the Sync page or Monitoring shortly."
+        "Sync is still running. Check the Sync page shortly."
     );
 };
 

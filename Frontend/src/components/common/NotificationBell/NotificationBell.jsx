@@ -27,7 +27,7 @@ const PREF_FIELDS = [
   { key: "emailEnabled", label: "Email alerts", desc: "Send matching notices to your inbox" },
   { key: "approvalAlerts", label: "Approvals", desc: "Account approved, rejected, or pending review" },
   { key: "batchAssignment", label: "Batch assignment", desc: "Added to or removed from a batch" },
-  { key: "classReminders", label: "Class reminders", desc: "Upcoming class start times" },
+  { key: "classReminders", label: "Class reminders", desc: "Email only — upcoming class start times" },
   { key: "attendanceWarnings", label: "Attendance warnings", desc: "When attendance falls below 75%" },
   { key: "adminEvents", label: "Admin notices", desc: "Announcements and important academy events" },
 ];
@@ -86,17 +86,23 @@ export default function NotificationBell({
   const buttonRef = useRef(null);
   const panelRef = useRef(null);
 
-  const { data: listData, isLoading } = useNotifications(open);
+  const isAdmin = variant === "admin";
+  const { data: listData, isLoading } = useNotifications(open, {
+    unreadOnly: true,
+  });
   const { data: unreadData } = useUnreadCount(true);
   const { data: prefsData } = useNotificationPrefs(open && showPrefs && !settingsHref);
   const markRead = useMarkNotificationRead();
   const markAll = useMarkAllNotificationsRead();
   const updatePrefs = useUpdateNotificationPrefs();
 
-  const items = listData?.items || [];
+  const items = useMemo(() => {
+    const list = listData?.items || [];
+    return list.filter((item) => !item.read);
+  }, [listData?.items]);
   const unreadCount = unreadData?.unreadCount ?? listData?.unreadCount ?? 0;
   const prefs = prefsData?.prefs || {};
-  const fields = variant === "admin" ? ADMIN_PREF_FIELDS : PREF_FIELDS;
+  const fields = isAdmin ? ADMIN_PREF_FIELDS : PREF_FIELDS;
 
   const updatePosition = () => {
     if (!buttonRef.current) return;
@@ -222,7 +228,7 @@ export default function NotificationBell({
                 {isLoading ? (
                   <p className="notify-empty">Loading notices…</p>
                 ) : items.length === 0 ? (
-                  <p className="notify-empty">No notifications yet.</p>
+                  <p className="notify-empty">No important alerts right now.</p>
                 ) : (
                   items.map((item) => {
                     const meta = TYPE_META[item.type] || TYPE_META.admin_event;

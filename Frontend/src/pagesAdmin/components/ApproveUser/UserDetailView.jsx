@@ -20,133 +20,85 @@ const UserDetailView = () => {
     profession: "N/A",
     experience: "0",
     employmentStatus: "N/A",
+    skills: "",
+    zenCourseName: "",
+    zenCourseType: "",
   };
 
+  const initials = String(user.name || "U")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase() || "")
+    .join("") || "U";
+
+  const Field = ({ label, value, full = false }) => (
+    <div className={`ud-field ${full ? "is-full" : ""}`}>
+      <label>{label}</label>
+      <p>{value || "—"}</p>
+    </div>
+  );
+
   return (
-    <div className="ud-container">
+    <div className="ud-page">
+      <button type="button" className="ud-back" onClick={() => navigate(-1)}>
+        <i className="bi bi-arrow-left" aria-hidden="true" />
+        Back
+      </button>
 
-      {/* BACK BUTTON */}
-      <div className="ud-back" onClick={() => navigate(-1)}>
-        <i className="bi bi-chevron-left"></i> Back
+      <div className="ud-shell">
+        <header className="ud-hero">
+          <div className="ud-avatar" aria-hidden="true">
+            {initials}
+          </div>
+          <div>
+            <p className="ud-kicker">Pending approval</p>
+            <h1>{user.name || "User"}</h1>
+            <p className="ud-email">{user.email || "—"}</p>
+          </div>
+        </header>
+
+        <section className="ud-card">
+          <h2>Personal details</h2>
+          <div className="ud-grid">
+            <Field label="Name" value={user.name} />
+            <Field label="Email" value={user.email} />
+            <Field label="Phone" value={user.phone} />
+            <Field label="Alternate phone" value={user.alternatePhone || user.altPhone} />
+            <Field label="Date of birth" value={user.dob} />
+            <Field label="Gender" value={user.gender} />
+            <Field label="Address" value={user.address} full />
+          </div>
+        </section>
+
+        <section className="ud-card">
+          <h2>Role</h2>
+          <div className="ud-grid">
+            <Field label="Requested role" value={user.role} />
+          </div>
+        </section>
+
+        <section className="ud-card">
+          <h2>Education & employment</h2>
+          <div className="ud-grid">
+            <Field label="Education" value={user.education} />
+            <Field label="Profession" value={user.profession} />
+            <Field label="Experience" value={user.experience} />
+            <Field label="Employment status" value={user.employmentStatus} />
+            <Field label="University / school" value={user.university} full />
+            <Field label="Skills" value={user.skills} full />
+          </div>
+        </section>
+
+        <section className="ud-card">
+          <h2>Zen course details</h2>
+          <div className="ud-grid">
+            <Field label="Zen course name" value={user.zenCourseName} />
+            <Field label="Zen course type" value={user.zenCourseType} />
+          </div>
+        </section>
       </div>
-
-      {/* ---------- PERSONAL DETAILS ---------- */}
-      <h3 className="ud-section-title">Personal Details</h3>
-
-      <div className="ud-row">
-        <div className="ud-field">
-          <label>Name</label>
-          <p>{user.name}</p>
-        </div>
-
-        <div className="ud-field">
-          <label>E-mail</label>
-          <p>{user.email}</p>
-        </div>
-      </div>
-
-      <div className="ud-row">
-        <div className="ud-field">
-          <label>Phone Number</label>
-          <p>{user.phone}</p>
-        </div>
-
-        <div className="ud-field">
-          <label>Alternative Number</label>
-          <p>{user.altPhone || user.alternatePhone || "N/A"}</p>
-        </div>
-      </div>
-
-      <div className="ud-row">
-        <div className="ud-field">
-          <label>Date of Birth</label>
-          <p>{user.dob}</p>
-        </div>
-      </div>
-
-      <div className="ud-row">
-        <div className="ud-field full">
-          <label>Address</label>
-          <p>{user.address || "N/A"}</p>
-        </div>
-      </div>
-
-      <div className="ud-row">
-        <div className="ud-field">
-          <label>Gender</label>
-          <p>{user.gender || "N/A"}</p>
-        </div>
-        <div className="ud-field">
-          <label>Source</label>
-          <p>{user.source || "N/A"}</p>
-        </div>
-      </div>
-
-      {/* ---------- ROLE ---------- */}
-      <h3 className="ud-section-title">Role</h3>
-
-      <div className="ud-row">
-        <div className="ud-field">
-          <label>Role</label>
-          <p>{user.role}</p>
-        </div>
-      </div>
-
-      {/* ---------- EDUCATION ---------- */}
-      <h3 className="ud-section-title">Education & Employment Details</h3>
-
-      <div className="ud-row">
-        <div className="ud-field">
-          <label>Education</label>
-          <p>{user.education || user.qualification || "N/A"}</p>
-        </div>
-
-        <div className="ud-field">
-          <label>University/School</label>
-          <p>{user.university || "N/A"}</p>
-        </div>
-      </div>
-
-      <div className="ud-row">
-        <div className="ud-field">
-          <label>Profession</label>
-          <p>{user.profession || "N/A"}</p>
-        </div>
-
-        <div className="ud-field">
-          <label>Experience</label>
-          <p>{user.experience || "N/A"}</p>
-        </div>
-      </div>
-
-      <div className="ud-row">
-        <div className="ud-field full">
-          <label>Employment Status</label>
-          <p>{user.employmentStatus || "N/A"}</p>
-        </div>
-      </div>
-
-      <div className="ud-row">
-        <div className="ud-field full">
-          <label>Skills</label>
-          <p>{user.skills || "N/A"}</p>
-        </div>
-      </div>
-
-      {/* ---------- ZEN COURSE ---------- */}
-      <h3 className="ud-section-title">Zen Course Details</h3>
-      <div className="ud-row">
-        <div className="ud-field">
-          <label>Zen Course Name</label>
-          <p>{user.zenCourseName || "N/A"}</p>
-        </div>
-
-        <div className="ud-field">
-          <label>Zen Course Type</label>
-          <p>{user.zenCourseType || "N/A"}</p>
-        </div>
-      </div>
-
     </div>
   );
 };

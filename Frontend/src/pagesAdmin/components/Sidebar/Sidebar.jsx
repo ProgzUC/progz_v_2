@@ -14,7 +14,6 @@ const NAV_ITEMS = [
   { to: "/admin/recycle-bin", icon: "bi-trash", label: "Recycle Bin" },
   { to: "/admin/reports", icon: "bi-pie-chart", label: "Reports & Analytics", end: true },
   { to: "/admin/reports/attendance", icon: "bi-calendar-check", label: "Attendance Reports" },
-  { to: "/admin/monitoring", icon: "bi-activity", label: "Monitoring" },
 ];
 
 const FOOTER_ITEMS = [

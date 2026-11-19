@@ -337,17 +337,29 @@
 }
 
 .bulk-import-layout.embedded {
-  gap: 16px;
+  gap: 20px;
 }
 
 .bulk-import-panel.embedded-panel {
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
+  border: none;
+  background: #f8fafc;
   box-shadow: none;
+  border-radius: 14px;
+  padding: 18px 18px 20px;
 }
 
 .bulk-import-embedded {
   margin-top: 4px;
+}
+
+.bulk-import-embedded .mode-pills {
+  background: #fff;
+  border-color: #e8edf3;
+}
+
+.bulk-import-embedded .upload-label {
+  background: #fff;
+  border-color: #d7dee8;
 }
 
 @media (max-width: 960px) {

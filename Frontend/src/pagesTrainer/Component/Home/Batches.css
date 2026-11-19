@@ -1,1005 +1,691 @@
 /* ==========================================================================
-   TRAINER DASHBOARD 2-COLUMN SPLIT LAYOUT (Desktop Balance)
-   Left Side (65%): Active Batches + Recent Course Overview
-   Right Side (35%): Trainer Sidebar Widgets (Next Live Class + Quick Actions)
+   Trainer dashboard content — below hero
    ========================================================================== */
 
-.trainer-dashboard-split-layout {
-    display: grid;
-    grid-template-columns: calc(65% - 14px) calc(35% - 14px);
-    gap: 28px;
-    align-items: stretch;
+.trainer-dashboard-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-    animation: trainerSectionFade 0.6s ease-out;
+    animation: trainerSectionFade 0.55s ease-out;
 }
 
 @keyframes trainerSectionFade {
     from {
         opacity: 0;
-        transform: translateY(16px);
+        transform: translateY(12px);
     }
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: none;
     }
 }
 
-/* ==========================================================================
-   LEFT COLUMN (65%)
-   ========================================================================== */
-
-.trainer-split-main {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    min-width: 0;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-}
-
-/* Base Card for Left Column Sections */
-.trainer-home-batches-card,
-.trainer-overview-card {
-    background: var(--color-surface, #ffffff);
-    border: 1px solid var(--color-border, #e2e8f0);
-    border-radius: 24px;
-    padding: 24px;
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
-    box-sizing: border-box;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.trainer-home-batches-card {
-    flex: 1 1 auto;
-}
-
-/* Section Header Styles */
-.batches-head,
-.overview-card-head {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.batches-kicker,
-.overview-kicker {
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: var(--trainer-primary, #10a879);
+.td-eyebrow {
     margin: 0 0 4px;
-}
-
-.batches-title,
-.overview-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--trainer-text, #0f172a);
-    margin: 0;
-    letter-spacing: -0.02em;
-}
-
-.batches-view-all,
-.overview-link-btn {
-    border: none;
-    background: #ecfdf5;
-    color: #047857;
-    border-radius: 999px;
-    padding: 7px 16px;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.2s ease;
-}
-
-.batches-view-all:hover,
-.overview-link-btn:hover {
-    background: #10a879;
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(16, 168, 121, 0.25);
-}
-
-.batches-empty {
-    margin: 12px 0 0;
-    color: #64748b;
-    font-size: 14px;
-    line-height: 1.55;
-}
-
-/* ==========================================================================
-   ACTIVE BATCHES CARDS
-   ========================================================================== */
-
-.batches-batch-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 16px;
-    flex: 1 1 auto;
-}
-
-.batches-batch-card {
-    position: relative;
-    overflow: hidden;
-    background: #ffffff;
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    border-radius: 18px;
-    padding: 18px 20px 18px;
-    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-                box-shadow 0.3s ease,
-                border-color 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    width: 100%;
-    flex: 1 1 auto;
-    box-sizing: border-box;
-    text-align: left;
-    cursor: pointer;
-    font: inherit;
-    color: inherit;
-}
-
-/* Completely remove left-side green line on hover */
-.batches-batch-card::before {
-    display: none !important;
-}
-
-.batches-batch-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 14px 32px rgba(16, 168, 121, 0.12),
-                0 4px 12px rgba(15, 23, 42, 0.04);
-    border-color: rgba(16, 168, 121, 0.35);
-}
-
-.batches-batch-card:focus-visible {
-    outline: 2px solid #10a879;
-    outline-offset: 2px;
-}
-
-.batches-batch-head {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-}
-
-/* Static avatar with NO shake animation */
-.batches-batch-avatar {
-    flex-shrink: 0;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(145deg, #0b3d2e 0%, #10a879 100%);
-    color: #ffffff;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    box-shadow: 0 4px 12px rgba(11, 61, 46, 0.2);
-    transform: none !important;
-    transition: none !important;
-    animation: none !important;
-}
-
-.batches-batch-copy {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.batches-title-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-/* Bold batch name */
-.batches-batch-title {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0;
-    color: #0f172a;
-    line-height: 1.3;
-    letter-spacing: -0.02em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: color 0.25s ease;
-}
-
-.batches-batch-card:hover .batches-batch-title {
-    color: #10a879;
-}
-
-/* Bold ACTIVE status pill */
-.batches-status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 3px 9px;
-    border-radius: 999px;
-    background: #ecfdf5;
-    color: #047857;
     font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.04em;
-    line-height: 1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #059669;
 }
 
-.batches-status-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: #10a879;
-}
-
-/* Course details: normal font weight and black/dark text */
-.batches-course-name {
+.td-section-title {
     margin: 0;
+    font-size: 1.35rem;
+    font-weight: 750;
+    letter-spacing: -0.02em;
     color: #0f172a;
-    font-size: 13.5px;
-    font-weight: 400;
-    line-height: 1.45;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-/* Batch stats row */
-.batches-meta-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-top: 2px;
-}
-
-.batches-batch-info-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    color: #64748b;
-    font-weight: 500;
-}
-
-.batches-batch-info-item .meta-icon {
-    font-size: 15px;
-    color: #10a879;
-    flex-shrink: 0;
-}
-
-/* Progress bar */
-.batches-progress-container {
-    margin: 0;
-    padding-top: 12px;
-    border-top: 1px solid #f1f5f9;
-}
-
-.batches-progress-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    margin-bottom: 6px;
-    color: #64748b;
-    font-weight: 500;
-}
-
-.batches-progress-value {
-    font-weight: 700;
-    color: #0f172a;
-    font-variant-numeric: tabular-nums;
-}
-
-.batches-progress-bar {
-    height: 7px;
-    background: #e2e8f0;
-    border-radius: 999px;
-    overflow: hidden;
-}
-
-.batches-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #0b3d2e 0%, #10a879 100%);
-    border-radius: 999px;
-    transition: width 0.35s ease;
-}
-
-.batches-batch-card:hover .batches-progress-fill {
-    filter: brightness(1.08);
-}
-
-/* Card footer with Open Batch button */
-.batches-card-footer {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-top: auto;
-    padding-top: 8px;
-}
-
-.batches-open-btn {
+.td-btn,
+.td-link-btn {
     display: inline-flex;
     align-items: center;
-    gap: 7px;
-    font-size: 13px;
-    font-weight: 700;
-    color: #10a879;
-    background: #f0fdf4;
-    padding: 6px 14px;
-    border-radius: 999px;
-    border: 1px solid rgba(16, 168, 121, 0.2);
-    transition: all 0.25s ease;
-}
-
-.batches-batch-card:hover .batches-open-btn {
-    background: #10a879;
-    color: #ffffff;
-    border-color: #10a879;
-    transform: translateX(2px);
-    box-shadow: 0 4px 10px rgba(16, 168, 121, 0.25);
-}
-
-/* ==========================================================================
-   RECENT COURSE OVERVIEW (Left Side)
-   ========================================================================== */
-
-.recent-course-body {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 18px;
-    padding: 18px 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    transition: all 0.25s ease;
-}
-
-.recent-course-body:hover {
-    background: #ffffff;
-    border-color: rgba(16, 168, 121, 0.35);
-    box-shadow: 0 10px 24px rgba(16, 168, 121, 0.08);
-}
-
-.recent-course-main {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-}
-
-.recent-course-icon-box {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    background: #ecfdf5;
-    color: #10a879;
-    display: flex;
-    align-items: center;
     justify-content: center;
-    font-size: 22px;
-    flex-shrink: 0;
-    box-shadow: 0 4px 10px rgba(16, 168, 121, 0.15);
-}
-
-.recent-course-details {
-    flex: 1;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.recent-course-badge-row {
-    display: flex;
-    align-items: center;
     gap: 8px;
-    flex-wrap: wrap;
-}
-
-.recent-course-tag {
-    display: inline-flex;
-    align-items: center;
-    font-size: 11px;
+    border: none;
+    font: inherit;
     font-weight: 700;
-    color: #047857;
-    background: #ecfdf5;
-    padding: 2px 8px;
-    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
-.recent-course-cat {
-    font-size: 11.5px;
-    font-weight: 600;
-    color: #64748b;
+.td-btn {
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 12px;
+    font-size: 0.92rem;
 }
 
-.recent-course-title {
-    font-size: 17px;
-    font-weight: 700;
+.td-btn-primary {
+    background: linear-gradient(135deg, #0b3d2e 0%, #10a879 100%);
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(16, 168, 121, 0.22);
+}
+
+.td-btn-primary:hover {
+    transform: translateY(-1px);
+}
+
+.td-btn-ghost {
+    background: #f8fafc;
     color: #0f172a;
-    margin: 0;
-    line-height: 1.35;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    border: 1px solid #e2e8f0;
 }
 
-.recent-course-desc {
-    font-size: 13px;
+.td-btn-ghost:hover {
+    background: #fff;
+    border-color: #cbd5e1;
+}
+
+.td-btn-muted {
+    background: #f1f5f9;
     color: #64748b;
+    cursor: not-allowed;
+}
+
+.td-link-btn {
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: #ecfdf5;
+    color: #047857;
+    font-size: 0.85rem;
+}
+
+.td-link-btn:hover {
+    background: #10a879;
+    color: #fff;
+}
+
+.td-empty-copy {
     margin: 0;
+    color: #64748b;
+    font-size: 0.95rem;
     line-height: 1.5;
 }
 
-.recent-course-stats-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12.5px;
-    color: #475569;
-    margin-top: 4px;
+/* --------------------------------------------------------------------------
+   1. Live session featured card
+   -------------------------------------------------------------------------- */
+
+.td-live {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 22px;
+    padding: 24px 26px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
 }
 
-.rc-stat-num {
-    font-weight: 700;
-    color: #0f172a;
-}
-
-.rc-stat-dot {
-    color: #cbd5e1;
-}
-
-.recent-course-actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-top: 12px;
-    border-top: 1px solid #eef2f6;
-}
-
-.rc-action-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 700;
-    padding: 8px 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
-    font-family: inherit;
-}
-
-.rc-action-btn.primary {
-    background: #10a879;
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(16, 168, 121, 0.25);
-}
-
-.rc-action-btn.primary:hover {
-    background: #0b3d2e;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(11, 61, 46, 0.2);
-}
-
-.rc-action-btn.secondary {
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    color: #334155;
-}
-
-.rc-action-btn.secondary:hover {
-    background: #f8fafc;
-    border-color: #94a3b8;
-}
-
-/* Empty State for Recent Course */
-.recent-course-empty {
-    padding: 24px 18px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
-    border-radius: 16px;
-}
-
-.rc-empty-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: #ecfdf5;
-    color: #10a879;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-}
-
-.rc-empty-copy h4 {
-    font-size: 15px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 0 0 4px;
-}
-
-.rc-empty-copy p {
-    font-size: 13px;
-    color: #64748b;
-    margin: 0;
-}
-
-.rc-create-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border-radius: 10px;
-    background: #10a879;
-    color: #ffffff;
-    border: none;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.rc-create-btn:hover {
-    background: #0b3d2e;
-    transform: translateY(-1px);
-}
-
-/* ==========================================================================
-   RIGHT SIDEBAR (35%) - Trainer Sidebar Widgets
-   ========================================================================== */
-
-.trainer-split-sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    position: sticky;
-    top: calc(var(--navbar-height, 70px) + 16px);
-    min-width: 0;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-}
-
-.trainer-sidebar-widget {
-    background: var(--color-surface, #ffffff);
-    border: 1px solid var(--color-border, #e2e8f0);
-    border-radius: 24px;
-    padding: 22px;
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
-    box-sizing: border-box;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-.trainer-sidebar-widget:first-child {
-    flex: 1 1 auto;
-}
-
-.widget-header {
+.td-live-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 16px;
+    gap: 12px;
+    margin-bottom: 18px;
 }
 
-.widget-header-title {
+.td-live-brand {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.widget-icon-pill {
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    display: flex;
+.td-live-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    background: #ecfdf5;
+    color: #059669;
+    font-size: 1.25rem;
     flex-shrink: 0;
 }
 
-.widget-icon-pill.video-pill {
-    background: #ecfdf5;
-    color: #10a879;
-    font-size: 20px;
-}
-
-.widget-icon-pill.lightning-pill {
-    background: #fef3c7;
-    color: #d97706;
-    font-size: 18px;
-}
-
-.widget-kicker {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #64748b;
-    display: block;
-    line-height: 1.2;
-}
-
-.widget-title {
-    font-size: 17px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 2px 0 0;
-    letter-spacing: -0.01em;
-}
-
-.live-status-pill {
+.td-live-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 11.5px;
-    font-weight: 700;
-    color: #047857;
-    background: #ecfdf5;
-    padding: 4px 10px;
+    padding: 6px 12px;
     border-radius: 999px;
+    background: #ecfdf5;
+    color: #047857;
+    font-size: 0.75rem;
+    font-weight: 750;
 }
 
-@keyframes livePulse {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.4;
-        transform: scale(1.3);
-    }
-}
-
-.live-pulse-dot {
+.td-live-dot {
     width: 7px;
     height: 7px;
     border-radius: 50%;
     background: #10a879;
-    animation: livePulse 1.8s ease-in-out infinite;
+    box-shadow: 0 0 0 4px rgba(16, 168, 121, 0.2);
 }
 
-/* Next Live Class Widget Content */
-.next-class-content {
+.td-live-body {
     display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    gap: 14px;
-    min-height: 0;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
 }
 
-.next-class-content .join-meet-btn {
-    margin-top: auto;
-}
-
-.next-class-batch-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    background: #f1f5f9;
-    border-radius: 8px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #0f172a;
-}
-
-.next-class-topic {
-    font-size: 15px;
-    font-weight: 600;
-    color: #1e293b;
-    margin: 0;
-    line-height: 1.4;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.next-class-time-box {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    padding: 12px 14px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.next-class-time-box .time-box-icon {
-    font-size: 22px;
-    color: #10a879;
-    flex-shrink: 0;
-}
-
-.time-box-details {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.time-box-label {
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #64748b;
-}
-
-.time-box-value {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: #0f172a;
-}
-
-.join-meet-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    min-height: 44px;
-    padding: 11px 18px;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 700;
-    text-decoration: none;
-    border: none;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    box-sizing: border-box;
-    font-family: inherit;
-}
-
-.join-meet-btn .btn-icon {
-    font-size: 19px;
-}
-
-.join-meet-btn.active {
-    background: linear-gradient(135deg, #10a879 0%, #059669 100%);
-    color: #ffffff;
-    box-shadow: 0 4px 14px rgba(16, 168, 121, 0.35);
-}
-
-.join-meet-btn.active:hover {
-    background: linear-gradient(135deg, #0b3d2e 0%, #047857 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(11, 61, 46, 0.28);
-    color: #ffffff;
-}
-
-.join-meet-btn.disabled {
-    background: #f1f5f9;
-    color: #94a3b8;
-    cursor: not-allowed;
-}
-
-.next-class-empty {
-    padding: 20px 14px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
-    border-radius: 14px;
-}
-
-.empty-calendar-icon {
-    font-size: 28px;
-    color: #94a3b8;
-}
-
-.empty-title {
-    font-size: 14px;
-    font-weight: 700;
-    color: #0f172a;
-    margin: 0;
-}
-
-.empty-sub {
-    font-size: 12px;
-    color: #64748b;
-    margin: 0;
-}
-
-/* Quick Actions Widget Content */
-.quick-actions-grid {
+.td-live-info {
+    flex: 1 1 320px;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.quick-action-item {
+.td-live-batch {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 5px 10px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #0f172a;
+    font-size: 0.78rem;
+    font-weight: 750;
+}
+
+.td-live-course {
+    margin: 0;
+    color: #334155;
+    font-size: 0.98rem;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+}
+
+.td-live-schedule {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    max-width: 420px;
+}
+
+.td-live-schedule svg {
+    font-size: 1.35rem;
+    color: #10a879;
+    flex-shrink: 0;
+}
+
+.td-live-schedule-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #94a3b8;
+}
+
+.td-live-schedule strong {
+    display: block;
+    margin-top: 2px;
+    color: #0f172a;
+    font-size: 0.92rem;
+}
+
+.td-live-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.td-live-empty {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px;
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    color: #64748b;
+}
+
+.td-live-empty svg {
+    font-size: 1.5rem;
+    color: #94a3b8;
+    margin-top: 2px;
+}
+
+.td-live-empty strong {
+    display: block;
+    color: #0f172a;
+    margin-bottom: 4px;
+}
+
+.td-live-empty p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.45;
+}
+
+/* --------------------------------------------------------------------------
+   Shared panels
+   -------------------------------------------------------------------------- */
+
+.td-panel {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 22px;
+    padding: 24px 26px;
+    box-shadow: 0 6px 22px rgba(15, 23, 42, 0.04);
+}
+
+.td-panel-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.td-panel-head--compact {
+    margin-bottom: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   2. Active batches
+   -------------------------------------------------------------------------- */
+
+.td-batch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    align-items: stretch;
+}
+
+.td-batch-card {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    height: 100%;
+    padding: 16px;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.td-batch-card:hover {
+    border-color: rgba(16, 168, 121, 0.4);
+    box-shadow: 0 12px 28px rgba(16, 168, 121, 0.1);
+    transform: translateY(-3px);
+}
+
+.td-batch-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    min-height: 64px;
+}
+
+.td-batch-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: linear-gradient(145deg, #0b3d2e, #10a879);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 800;
+}
+
+.td-batch-copy {
+    min-width: 0;
+    flex: 1;
+}
+
+.td-batch-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.td-batch-title-row h3 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 750;
+    color: #0f172a;
+}
+
+.td-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #ecfdf5;
+    color: #047857;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.td-batch-copy p {
+    margin: 6px 0 0;
+    color: #64748b;
+    font-size: 0.84rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    min-height: calc(1.4em * 2);
+}
+
+.td-batch-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+    color: #64748b;
+    font-size: 0.82rem;
+}
+
+.td-batch-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.td-batch-meta svg {
+    color: #10a879;
+}
+
+.td-batch-progress {
+    margin-top: auto;
+}
+
+.td-batch-progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.td-batch-progress-label strong {
+    color: #0f172a;
+}
+
+.td-batch-bar {
+    height: 7px;
+    border-radius: 999px;
+    background: #e2e8f0;
+    overflow: hidden;
+}
+
+.td-batch-bar span {
+    display: block;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #0b3d2e, #10a879);
+}
+
+.td-batch-go {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #059669;
+    font-size: 0.85rem;
+    font-weight: 750;
+}
+
+.td-batch-card:hover .td-batch-go {
+    color: #047857;
+}
+
+/* --------------------------------------------------------------------------
+   3. Quick actions
+   -------------------------------------------------------------------------- */
+
+.td-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.td-action {
     display: flex;
     align-items: center;
     gap: 12px;
     width: 100%;
-    padding: 11px 14px;
+    padding: 14px;
+    text-align: left;
+    font: inherit;
+    color: inherit;
     background: #f8fafc;
     border: 1px solid #e2e8f0;
-    border-radius: 14px;
-    text-align: left;
+    border-radius: 16px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
-    font-family: inherit;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
-.quick-action-item:hover {
-    background: #ffffff;
-    border-color: rgba(16, 168, 121, 0.4);
-    transform: translateX(3px);
-    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
+.td-action:hover {
+    background: #fff;
+    border-color: rgba(16, 168, 121, 0.35);
+    transform: translateY(-2px);
 }
 
-.action-icon-wrap {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    display: flex;
+.td-action-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
     flex-shrink: 0;
+    font-size: 1.05rem;
 }
 
-.action-icon-wrap.emerald {
-    background: #ecfdf5;
-    color: #10a879;
-}
+.td-action-icon.emerald { background: #ecfdf5; color: #059669; }
+.td-action-icon.violet { background: #f5f3ff; color: #7c3aed; }
+.td-action-icon.sky { background: #f0f9ff; color: #0284c7; }
+.td-action-icon.teal { background: #f0fdfa; color: #0d9488; }
 
-.action-icon-wrap.violet {
-    background: #f5f3ff;
-    color: #7c3aed;
-}
-
-.action-icon-wrap.sky {
-    background: #f0f9ff;
-    color: #0284c7;
-}
-
-.action-icon-wrap.teal {
-    background: #f0fdfa;
-    color: #0d9488;
-}
-
-.action-copy {
-    flex: 1;
-    min-width: 0;
+.td-action span:last-child {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    min-width: 0;
 }
 
-.action-title {
-    font-size: 13.5px;
-    font-weight: 700;
+.td-action strong {
+    font-size: 0.9rem;
     color: #0f172a;
-    line-height: 1.3;
 }
 
-.action-desc {
-    font-size: 11.5px;
+.td-action em {
+    font-style: normal;
+    font-size: 0.75rem;
     color: #64748b;
-    line-height: 1.2;
 }
 
-.action-arrow {
-    margin-left: auto;
-    color: #94a3b8;
-    font-size: 14px;
-    transition: transform 0.2s ease, color 0.2s ease;
+/* --------------------------------------------------------------------------
+   4. Recent course
+   -------------------------------------------------------------------------- */
+
+.td-course {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 16px;
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.td-course-main {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    flex: 1 1 320px;
+    min-width: 0;
+}
+
+.td-course-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #ecfdf5;
+    color: #059669;
+    font-size: 1.35rem;
     flex-shrink: 0;
 }
 
-.quick-action-item:hover .action-arrow {
-    color: #10a879;
-    transform: translateX(3px);
+.td-course-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
 }
 
-/* ==========================================================================
-   RESPONSIVE MEDIA QUERIES
-   ========================================================================== */
+.td-course-tags span {
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+    font-size: 0.72rem;
+    font-weight: 700;
+}
 
-@media (max-width: 1024px) {
-    .trainer-dashboard-split-layout {
-        grid-template-columns: 1fr;
-        gap: 24px;
-    }
+.td-course h3 {
+    margin: 0 0 6px;
+    font-size: 1.05rem;
+    color: #0f172a;
+}
 
-    .trainer-split-sidebar {
-        position: static;
+.td-course p {
+    margin: 0 0 10px;
+    color: #64748b;
+    font-size: 0.88rem;
+    line-height: 1.45;
+}
+
+.td-course-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    color: #475569;
+    font-size: 0.85rem;
+}
+
+.td-course-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.td-course-empty {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding: 18px;
+    border-radius: 16px;
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+}
+
+.td-course-empty svg {
+    font-size: 1.6rem;
+    color: #94a3b8;
+}
+
+.td-course-empty strong {
+    display: block;
+    color: #0f172a;
+    margin-bottom: 2px;
+}
+
+.td-course-empty p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.88rem;
+}
+
+.td-course-empty .td-btn {
+    margin-left: auto;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 980px) {
+    .td-actions-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }
 
 @media (max-width: 768px) {
-    .trainer-home-batches-card,
-    .trainer-overview-card,
-    .trainer-sidebar-widget {
+    .trainer-dashboard-stack {
+        gap: 16px;
+    }
+
+    .td-live,
+    .td-panel {
         padding: 18px;
-        border-radius: 20px;
+        border-radius: 18px;
     }
 
-    .batches-title,
-    .overview-title {
-        font-size: 20px;
-    }
-
-    .batches-batch-card {
-        padding: 16px;
-    }
-
-    .batches-batch-title {
-        font-size: 16px;
-    }
-
-    .recent-course-main {
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .recent-course-actions {
-        flex-direction: column;
+    .td-live-body,
+    .td-course {
         align-items: stretch;
     }
 
-    .rc-action-btn {
+    .td-live-actions,
+    .td-course-actions {
         width: 100%;
-        justify-content: center;
     }
-}
 
-@media (max-width: 480px) {
-    .batches-head,
-    .overview-card-head {
+    .td-live-actions .td-btn,
+    .td-course-actions .td-btn {
+        flex: 1 1 auto;
+    }
+
+    .td-batch-grid,
+    .td-actions-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .td-panel-head {
         flex-direction: column;
         align-items: flex-start;
-        gap: 10px;
     }
 
-    .batches-view-all,
-    .overview-link-btn {
+    .td-course-empty .td-btn {
+        margin-left: 0;
         width: 100%;
-        justify-content: center;
-    }
-
-    .batches-batch-head {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .batches-meta-row {
-        gap: 10px;
-    }
-
-    .quick-action-item {
-        padding: 10px 12px;
     }
 }

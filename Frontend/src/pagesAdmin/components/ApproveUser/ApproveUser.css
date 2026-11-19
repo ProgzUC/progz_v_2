@@ -284,22 +284,41 @@
   font-weight: 500;
 }
 
-/* Fixed column widths — Checkbox | S.No | Name | Source | [Zen Course] | Requested | Actions */
-/* Note: Zen Course column is conditionally rendered for student tab only */
-.admin-approve-user-page .data-table th:nth-child(1),
-.admin-approve-user-page .data-table td:nth-child(1) { width: 44px; }
-.admin-approve-user-page .data-table th:nth-child(2),
-.admin-approve-user-page .data-table td:nth-child(2) { width: 56px; }
-.admin-approve-user-page .data-table th:nth-child(3),
-.admin-approve-user-page .data-table td:nth-child(3) { width: 25%; white-space: normal; }
-.admin-approve-user-page .data-table th:nth-child(4),
-.admin-approve-user-page .data-table td:nth-child(4) { width: 12%; }
-.admin-approve-user-page .data-table th:nth-child(5),
-.admin-approve-user-page .data-table td:nth-child(5) { width: 18%; white-space: normal; }
-.admin-approve-user-page .data-table th:nth-child(6),
-.admin-approve-user-page .data-table td:nth-child(6) { width: 15%; }
-.admin-approve-user-page .data-table th:nth-child(7),
-.admin-approve-user-page .data-table td:nth-child(7) { width: 130px; text-align: center; }
+/* Class-based widths so select-mode / Zen Course columns don't shift Actions */
+.admin-approve-user-page .data-table .col-name {
+  width: 25%;
+  white-space: normal;
+}
+
+.admin-approve-user-page .data-table .col-source {
+  width: 12%;
+}
+
+.admin-approve-user-page .data-table .col-zen {
+  width: 18%;
+  white-space: normal;
+}
+
+.admin-approve-user-page .data-table .col-date {
+  width: 15%;
+}
+
+.admin-approve-user-page .data-table.is-trainer-tab .col-name {
+  width: 32%;
+}
+
+.admin-approve-user-page .data-table.is-trainer-tab .col-source {
+  width: 16%;
+}
+
+.admin-approve-user-page .data-table.is-trainer-tab .col-date {
+  width: 20%;
+}
+
+.admin-approve-user-page .data-table .actions-cell {
+  width: 130px;
+  text-align: center;
+}
 
 .admin-approve-user-page .person-chip {
   display: inline-flex;
@@ -358,48 +377,16 @@
 .admin-approve-user-page .actions-cell {
   text-align: center;
   width: 130px;
+  vertical-align: middle;
 }
 
 .admin-approve-user-page .admin-action-group {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 2px;
-  background: transparent;
-  border: none;
-  border-radius: 0;
-  overflow: visible;
-}
-
-.admin-approve-user-page .admin-action-btn {
-  width: 34px;
-  min-width: 34px;
-  height: 34px;
-  border: none;
-  border-radius: 8px;
-  background: transparent;
-  color: #8B9AAB;
-  border-right: none;
-}
-
-.admin-approve-user-page .admin-action-btn:hover {
-  background: var(--color-bg-muted);
-  color: #718096;
-}
-
-.admin-approve-user-page .admin-action-btn--success:hover {
-  background: var(--color-primary-light);
-  color: var(--color-primary-bright);
-}
-
-.admin-approve-user-page .admin-action-btn--danger:hover {
-  background: var(--color-error-bg);
-  color: var(--color-error);
-}
-
-.admin-approve-user-page .admin-action-btn svg {
-  width: 17px;
-  height: 17px;
-  stroke-width: 1.6;
+  margin: 0 auto;
+  vertical-align: middle;
 }
 
 .admin-approve-user-page .empty-row {

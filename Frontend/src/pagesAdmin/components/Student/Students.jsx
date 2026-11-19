@@ -88,41 +88,42 @@ const Students = () => {
         </p>
       </header>
 
-      <div className="top-row">
-        <div className="search-actions">
-          <div className="search-box">
-            <i className="bi bi-search" aria-hidden="true"></i>
-            <input
-              type="text"
-              placeholder="Search students"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              aria-label="Search students"
-            />
+      <div className="content-card">
+        <div className="card-toolbar">
+          <div className="toolbar-copy">
+            <p className="card-kicker">Directory</p>
+            <div className="card-title-row">
+              <h2 className="card-title">All students</h2>
+              <span className="card-count">{filtered.length} shown</span>
+            </div>
           </div>
 
-          <button
-            type="button"
-            className="create-btn"
-            onClick={() => navigate("/admin/enroll?tab=import")}
-            style={{ marginRight: 8 }}
-          >
-            Import & invite
-          </button>
-          <button
-            type="button"
-            className="create-btn"
-            onClick={() => navigate("/admin/add-student")}
-          >
-            + Add student
-          </button>
-        </div>
-      </div>
-
-      <div className="content-card">
-        <div className="card-title-row">
-          <h2 className="card-title">All students</h2>
-          <span className="card-count">{filtered.length} shown</span>
+          <div className="toolbar-actions">
+            <div className="search-box">
+              <i className="bi bi-search" aria-hidden="true"></i>
+              <input
+                type="text"
+                placeholder="Search students"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                aria-label="Search students"
+              />
+            </div>
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={() => navigate("/admin/enroll?tab=import")}
+            >
+              Import & invite
+            </button>
+            <button
+              type="button"
+              className="create-btn"
+              onClick={() => navigate("/admin/add-student")}
+            >
+              + Add student
+            </button>
+          </div>
         </div>
 
         {isLoading ? (

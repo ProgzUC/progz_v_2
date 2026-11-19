@@ -354,15 +354,29 @@ const EnrollStudents = () => {
   return (
     <div className="admin-enroll-students-page">
       <header className="page-hero">
-        <h1 className="page-title">Student course enrollment</h1>
+        <h1 className="page-title">Enroll students</h1>
         <p className="page-subtitle">
-          Enroll existing students, or import a college email list to create accounts and send
-          passwordless login links.
+          Enroll existing students, or import emails to create accounts and send login links.
         </p>
       </header>
 
-      <div className="top-row">
-        <div className="search-actions">
+      {pendingStudentsList.length > 0 && activeTab !== "single" && (
+        <div className="zen-crm-banner">
+          <i className="bi bi-cloud-download" aria-hidden="true"></i>
+          <div>
+            <strong>{pendingStudentsList.length} Zen CRM synced lead(s)</strong> awaiting
+            enrollment. Pending students are auto-approved when enrolled here.{" "}
+            <Link to="/admin/approve-users">Review in Approve Users</Link>
+          </div>
+        </div>
+      )}
+
+      <div className="content-card">
+        <div className="card-toolbar">
+          <div>
+            <p className="card-kicker">Enrollment</p>
+            <h2 className="card-title">{paneTitles[activeTab]}</h2>
+          </div>
           <div className="tab-pills" role="tablist" aria-label="Enrollment mode">
             <button
               type="button"
@@ -392,23 +406,6 @@ const EnrollStudents = () => {
               Import & invite
             </button>
           </div>
-        </div>
-      </div>
-
-      {pendingStudentsList.length > 0 && activeTab !== "single" && (
-        <div className="zen-crm-banner">
-          <i className="bi bi-cloud-download" aria-hidden="true"></i>
-          <div>
-            <strong>{pendingStudentsList.length} Zen CRM synced lead(s)</strong> awaiting
-            enrollment. Pending students are auto-approved when enrolled here.{" "}
-            <Link to="/admin/approve-users">Review in Approve Users</Link>
-          </div>
-        </div>
-      )}
-
-      <div className="content-card">
-        <div className="card-title-row">
-          <h2 className="card-title">{paneTitles[activeTab]}</h2>
         </div>
 
         {activeTab === "single" && (

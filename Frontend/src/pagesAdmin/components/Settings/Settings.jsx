@@ -897,19 +897,19 @@ function NotificationsPanel() {
             checked={draft.attendanceWarnings}
             onChange={(v) => patchDraft({ attendanceWarnings: v })}
             label="Attendance warnings"
-            description="Students falling below 75% attendance"
+            description="Email/student alerts when attendance falls below 75% (not shown in admin bell)"
           />
           <Toggle
             checked={draft.adminEvents}
             onChange={(v) => patchDraft({ adminEvents: v })}
             label="Administrative events"
-            description="Announcements, sync failures, and batch status changes"
+            description="Critical alerts like Zen sync failures"
           />
           <Toggle
             checked={draft.emailDigest}
             onChange={(v) => patchDraft({ emailDigest: v })}
             label="Weekly digest"
-            description="Monday summary of pending approvals and attendance"
+            description="Monday email summary only — does not appear in the notification bell"
           />
         </div>
       </section>
@@ -954,6 +954,8 @@ const TITLES = {
   notifications: ["Notifications", "Email and alert preferences"],
 };
 
+const ALL_NAV_ITEMS = NAV_GROUPS.flatMap((group) => group.items);
+
 export default function Settings() {
   const [searchParams] = useSearchParams();
   const initialSection = searchParams.get("section");
@@ -962,68 +964,62 @@ export default function Settings() {
   );
   const [query, setQuery] = useState("");
 
-  const filteredGroups = useMemo(() => {
+  const filteredItems = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return NAV_GROUPS;
-    return NAV_GROUPS.map((group) => ({
-      ...group,
-      items: group.items.filter(
-        (item) =>
-          item.label.toLowerCase().includes(q) ||
-          item.desc.toLowerCase().includes(q)
-      ),
-    })).filter((group) => group.items.length > 0);
+    if (!q) return ALL_NAV_ITEMS;
+    return ALL_NAV_ITEMS.filter(
+      (item) =>
+        item.label.toLowerCase().includes(q) ||
+        item.desc.toLowerCase().includes(q)
+    );
   }, [query]);
+
+  useEffect(() => {
+    if (!filteredItems.some((item) => item.id === active) && filteredItems[0]) {
+      setActive(filteredItems[0].id);
+    }
+  }, [filteredItems, active]);
 
   const Panel = PANELS[active] || AppearancePanel;
   const [title, subtitle] = TITLES[active] || TITLES.appearance;
 
   return (
     <div className="admin-settings-shell">
-      <aside className="as-nav" aria-label="Settings sections">
-        <header className="as-nav-head">
+      <header className="as-page-head">
+        <div className="as-page-head-text">
           <h1>Settings</h1>
-        </header>
+          <p>Manage how the academy portal looks and behaves.</p>
+        </div>
+        <label className="as-search">
+          <i className="bi bi-search" aria-hidden="true" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search settings"
+            aria-label="Search settings"
+          />
+        </label>
+      </header>
 
-        <nav className="as-nav-groups">
-          {filteredGroups.map((group) => (
-            <div key={group.id} className="as-nav-group">
-              <p className="as-nav-group-label">{group.label}</p>
-              <ul>
-                {group.items.map((item) => (
-                  <li key={item.id}>
-                    <button
-                      type="button"
-                      className={`as-nav-item ${active === item.id ? "is-active" : ""}`}
-                      onClick={() => setActive(item.id)}
-                    >
-                      <i className={`bi ${item.icon}`} aria-hidden="true" />
-                      <span>
-                        <strong>{item.label}</strong>
-                        <em>{item.desc}</em>
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </nav>
-      </aside>
+      <nav className="as-tabs" aria-label="Settings sections">
+        {filteredItems.length === 0 ? (
+          <p className="as-tabs-empty">No matching settings.</p>
+        ) : (
+          filteredItems.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={`as-tab ${active === item.id ? "is-active" : ""}`}
+              onClick={() => setActive(item.id)}
+            >
+              <i className={`bi ${item.icon}`} aria-hidden="true" />
+              <span>{item.label}</span>
+            </button>
+          ))
+        )}
+      </nav>
 
       <section className="as-main">
-        <header className="as-main-top">
-          <label className="as-search">
-            <i className="bi bi-search" aria-hidden="true" />
-            <input
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search settings"
-              aria-label="Search settings"
-            />
-          </label>
-        </header>
-
         <div className="as-main-title">
           <h2>{title}</h2>
           <p>{subtitle}</p>

@@ -31,11 +31,12 @@
   width: 100%;
 }
 
-.trainer-dashboard-batches-wrap {
+/* Higher specificity than `.trainer-app .container` so top spacing is not wiped */
+.trainer-app .trainer-dashboard-batches-wrap.container {
   position: relative;
   z-index: 2;
-  margin-top: -56px;
-  padding-top: 0;
+  margin-top: 28px;
+  padding-top: 4px;
   padding-bottom: 80px;
 }
 
@@ -60,9 +61,9 @@
     padding-bottom: 20px;
   }
 
-  .trainer-dashboard-batches-wrap {
-    margin-top: -40px;
-    padding-top: 0;
+  .trainer-app .trainer-dashboard-batches-wrap.container {
+    margin-top: 24px;
+    padding-top: 4px;
     padding-bottom: 56px;
   }
 }

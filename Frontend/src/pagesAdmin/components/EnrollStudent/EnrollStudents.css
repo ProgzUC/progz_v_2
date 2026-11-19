@@ -11,43 +11,25 @@
 }
 
 .admin-enroll-students-page .page-hero {
-  margin-bottom: 18px;
-  padding-right: 280px;
+  margin-bottom: 16px;
 }
 
 .admin-enroll-students-page .page-title {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 1.65rem;
+  font-weight: 800;
   color: var(--color-text);
   margin: 0 0 6px;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   line-height: 1.25;
 }
 
 .admin-enroll-students-page .page-subtitle {
   margin: 0;
-  font-size: 14px;
+  font-size: 0.92rem;
   font-weight: 400;
   color: var(--color-text-secondary);
   line-height: 1.45;
   max-width: 560px;
-}
-
-.admin-enroll-students-page .top-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  gap: 14px;
-}
-
-.admin-enroll-students-page .search-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  width: 100%;
 }
 
 .admin-enroll-students-page .tab-pills {
@@ -55,9 +37,9 @@
   align-items: center;
   gap: 4px;
   padding: 4px;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
 }
 
 .admin-enroll-students-page .tab-pill {
@@ -88,13 +70,14 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 14px 18px;
-  margin-bottom: 16px;
-  background: #f1f5f9;
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  background: #f8fafc;
+  border: none;
+  border-left: 3px solid #10a879;
+  border-radius: 0 10px 10px 0;
   color: var(--color-text);
-  font-size: 14px;
+  font-size: 0.9rem;
   line-height: 1.45;
 }
 
@@ -116,34 +99,55 @@
 }
 
 .admin-enroll-students-page .content-card {
-  background: var(--color-surface);
-  padding: 24px 28px 28px;
-  border-radius: 16px;
-  border: 1px solid var(--color-border);
-  box-shadow: 0 1px 3px rgba(17, 24, 39, 0.04);
+  background: #fff;
+  padding: 22px 24px 26px;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
   min-height: 420px;
 }
 
-.admin-enroll-students-page .card-title-row {
+.admin-enroll-students-page .card-toolbar {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin-bottom: 20px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.admin-enroll-students-page .card-kicker {
+  margin: 0 0 4px;
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #059669;
 }
 
 .admin-enroll-students-page .card-title {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 1.1rem;
+  font-weight: 750;
   color: var(--color-text);
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .admin-enroll-students-page .section-block {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  padding: 18px;
-  margin-bottom: 16px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0 0 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-enroll-students-page .section-block:last-of-type {
+  border-bottom: none;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
 }
 
 .admin-enroll-students-page .enroll-student-picker {
@@ -154,15 +158,15 @@
 
 .admin-enroll-students-page .section-label {
   display: block;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--color-text-muted);
-  margin-bottom: 8px;
+  font-size: 0.75rem;
+  font-weight: 650;
+  color: #64748b;
+  margin-bottom: 6px;
 }
 
 .admin-enroll-students-page .section-title {
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 0.92rem;
+  font-weight: 700;
   color: var(--color-text);
   margin: 0;
 }
@@ -172,7 +176,7 @@
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   flex-wrap: wrap;
 }
 
@@ -366,8 +370,8 @@
 }
 
 .admin-enroll-students-page .search-box input:focus {
-  border-color:  var(--color-primary-muted) !important;
-  box-shadow:  0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 14%, transparent);
+  border-color: var(--color-primary-muted) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary-bright) 14%, transparent);
 }
 
 .admin-enroll-students-page .search-box i {
@@ -437,12 +441,12 @@
   white-space: nowrap;
   cursor: pointer;
   margin: 0;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 10px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
   color: var(--color-text-secondary);
   font-size: 13px;
-  padding: 0 14px;
+  padding: 0 4px;
   min-height: 44px;
 }
 
@@ -486,23 +490,27 @@
 }
 
 .admin-enroll-students-page .clear-btn {
-  background: var(--color-bg-muted);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  color: var(--color-text);
-  padding: 6px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: var(--color-text-secondary);
+  padding: 4px 0;
   font-size: 13px;
+  font-weight: 600;
   cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .admin-enroll-students-page .clear-btn:hover {
-  background: var(--color-border);
+  color: var(--color-text);
+  background: transparent;
 }
 
 .admin-enroll-students-page .bulk-selection-list {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+  background: #f8fafc;
+  border: none;
+  border-radius: 14px;
   max-height: 400px;
   overflow-y: auto;
   display: flex;
@@ -513,8 +521,8 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 16px;
-  border-bottom: 1px solid #f1f5f9;
+  padding: 12px 14px;
+  border-bottom: 1px solid #eef2f7;
   transition: background 0.15s;
 }
 
@@ -523,11 +531,11 @@
 }
 
 .admin-enroll-students-page .student-select-row:hover {
-  background: var(--color-surface);
+  background: #fff;
 }
 
 .admin-enroll-students-page .student-select-row.selected {
-  background: var(--color-primary-light);
+  background: #ecfdf5;
 }
 
 .admin-enroll-students-page .student-checkbox {
@@ -601,22 +609,24 @@
 }
 
 .admin-enroll-students-page .status-pill {
-  padding: 5px 12px;
-  border-radius: 999px;
+  padding: 0;
+  border-radius: 0;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 650;
   flex-shrink: 0;
   white-space: nowrap;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .admin-enroll-students-page .status-pill.active {
-  background: var(--color-primary-light);
-  color: var(--color-primary-bright);
+  background: transparent;
+  color: #059669;
 }
 
 .admin-enroll-students-page .status-pill.pending {
-  background: #f1f5f9;
-  color: #718096;
+  background: transparent;
+  color: #64748b;
 }
 
 .admin-enroll-students-page .empty-bulk {
@@ -632,7 +642,9 @@
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  margin-top: 18px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #f1f5f9;
 }
 
 .admin-enroll-students-page .summary-text {
