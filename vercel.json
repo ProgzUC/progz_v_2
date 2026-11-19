@@ -1,9 +1,9 @@
 {
   "version": 2,
+  "framework": "vite",
   "installCommand": "npm install --prefix Frontend",
   "buildCommand": "npm run build --prefix Frontend",
   "outputDirectory": "Frontend/dist",
-  "framework": null,
   "headers": [
     {
       "source": "/.well-known/assetlinks.json",
