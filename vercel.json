@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "installCommand": "npm install --prefix Frontend",
+  "buildCommand": "npm run build --prefix Frontend",
+  "outputDirectory": "Frontend/dist",
+  "framework": null,
+  "headers": [
+    {
+      "source": "/.well-known/assetlinks.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/.well-known/assetlinks.json",
+      "destination": "/.well-known/assetlinks.json"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://api.progz.urbancode.in/api/:path*"
+    },
+    {
+      "source": "/auth/:path*",
+      "destination": "https://api.progz.urbancode.in/auth/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
